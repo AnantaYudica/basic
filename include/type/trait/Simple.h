@@ -7,6 +7,8 @@ namespace basic
 {
 namespace type
 {
+namespace trait
+{
 
 template<typename T>
 struct Simple
@@ -203,6 +205,8 @@ struct Simple<T(Targs...) const volatile &&>
     typedef typename Simple<T>::Type Type;
     typedef typename Simple<T>::type type;
 };
+
+} //!trait
 
 } //!type
 
