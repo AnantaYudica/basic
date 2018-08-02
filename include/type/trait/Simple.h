@@ -43,6 +43,26 @@ struct Simple<T*>
     typedef typename Simple<T>::type type;
 };
 
+template<typename T>
+struct Simple<T*const>
+{
+    typedef typename Simple<T>::Type Type;
+    typedef typename Simple<T>::type type;
+};
+
+template<typename T>
+struct Simple<T*volatile>
+{
+    typedef typename Simple<T>::Type Type;
+    typedef typename Simple<T>::type type;
+};
+
+template<typename T>
+struct Simple<T*const volatile>
+{
+    typedef typename Simple<T>::Type Type;
+    typedef typename Simple<T>::type type;
+};
 
 template<typename T, typename Tc>
 struct Simple<T Tc::*>
