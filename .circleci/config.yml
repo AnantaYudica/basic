@@ -23,3 +23,6 @@ jobs:
        - run: |
             cd ~/project/Build
             make
+       - run: |
+            cd ~/project/Build
+            make test
