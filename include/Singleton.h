@@ -1,5 +1,5 @@
-#ifndef SINGLETON_H_
-#define SINGLETON_H_
+#ifndef BASIC_SINGLETON_H_
+#define BASIC_SINGLETON_H_
 
 #include <type_traits>
 #include <cstdlib>
@@ -515,4 +515,4 @@ using Singleton = _helper::_basic::_Singleton<T>;
 
 } //!basic
 
-#endif //!SINGLETON_H_
+#endif //!BASIC_SINGLETON_H_

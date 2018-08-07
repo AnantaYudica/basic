@@ -1,5 +1,5 @@
-#ifndef TYPE_TRAIT_SIMPLE_H_
-#define TYPE_TRAIT_SIMPLE_H_
+#ifndef BASIC_TYPE_TRAIT_SIMPLE_H_
+#define BASIC_TYPE_TRAIT_SIMPLE_H_
 
 #include <cstddef>
 
@@ -212,4 +212,4 @@ struct Simple<T(Targs...) const volatile &&>
 
 } //!basic
 
-#endif //!TYPE_TRAIT_SIMPLE_H_
+#endif //!BASIC_TYPE_TRAIT_SIMPLE_H_

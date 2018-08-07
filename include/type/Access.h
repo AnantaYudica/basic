@@ -1,5 +1,5 @@
-#ifndef TYPE_ACCESS_H_
-#define TYPE_ACCESS_H_
+#ifndef BASIC_TYPE_ACCESS_H_
+#define BASIC_TYPE_ACCESS_H_
 
 #include <type_traits>
 #include "../macro/IsBaseOf.h"
@@ -105,4 +105,4 @@ using Private = _helper::_basic::_type::_access::
 
 } //!basic
 
-#endif //!TYPE_ACCESS_H_
+#endif //!BASIC_TYPE_ACCESS_H_

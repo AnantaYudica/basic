@@ -1,5 +1,5 @@
-#ifndef TYPE_TRAIT_REM_POINTER_H_
-#define TYPE_TRAIT_REM_POINTER_H_
+#ifndef BASIC_TYPE_TRAIT_REM_POINTER_H_
+#define BASIC_TYPE_TRAIT_REM_POINTER_H_
 
 namespace basic
 {
@@ -53,4 +53,4 @@ struct Pointer<T*const volatile>
 
 } //!basic
 
-#endif //!TYPE_TRAIT_REM_POINTER_H_
+#endif //!BASIC_TYPE_TRAIT_REM_POINTER_H_
