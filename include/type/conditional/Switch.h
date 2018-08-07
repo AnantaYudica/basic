@@ -62,11 +62,12 @@ namespace conditional
 template<typename Td, typename... Targs>
 struct Switch
 {
-    typedef typename _helper::
+    typedef typename _helper::_basic::_type::_conditional::
         template _Switch<true, Td, Td, -1, Targs...>::Type Type;
 	typedef typename Switch<Td, Targs...>::Type type;
 	static constexpr std::size_t Index =
-		_helper::_Switch<true, Td, Td, -1, Targs...>::Index;
+		_helper::_basic::_type::_conditional::_Switch<true, Td,
+			Td, -1, Targs...>::Index;
 	static constexpr std::size_t index = Switch<Td, Targs...>::Index;
 	static constexpr std::size_t Size = sizeof...(Targs);
 	static constexpr std::size_t size = Switch<Td, Targs...>::Size;
