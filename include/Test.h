@@ -22,8 +22,8 @@ namespace _basic
 namespace _test
 {
 
-template<typename... Targs>
-struct Empty {};
+template<typename>
+struct Void1T {};
 
 } //!_test
 
@@ -36,7 +36,7 @@ namespace basic
 
 template<typename Ts = test::Status, 
     template<typename> class To = test::Output, 
-    template<typename> class Tmem = _helper::_basic::_test::Empty>
+    template<typename> class Tmem = _helper::_basic::_test::Void1T>
 class Test
 {
 public:
