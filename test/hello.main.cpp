@@ -1,6 +1,6 @@
-#include <iostream>
+#include "Test.h"
 
 int main()
 {
-    std::cout << "hello world";
+    Info("hello world\n");
 }
