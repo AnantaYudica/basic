@@ -1,5 +1,5 @@
-#ifndef MACRO_MEMBERFUNCTION_H_
-#define MACRO_MEMBERFUNCTION_H_
+#ifndef BASIC_MACRO_MEMBERFUNCTION_H_
+#define BASIC_MACRO_MEMBERFUNCTION_H_
 
 #include <type_traits>
 #include "../type/trait/Simple.h"
@@ -332,4 +332,4 @@ __DEFINE_MMBR_FUNC_(__STRUCT_NAME__, __T_NAME__, __T_RET_NAME__,\
     __T_ARGS_NAME__,,, T_NAME_,, T_RET_NAME_,, ALIAS_TYPE_,, PTR_,, PTR_RET_,,\
     __MMBR_FUNC_NAME__,##__VA_ARGS__)
 
-#endif //!MACRO_MEMBERFUNCTION_H_
+#endif //!BASIC_MACRO_MEMBERFUNCTION_H_

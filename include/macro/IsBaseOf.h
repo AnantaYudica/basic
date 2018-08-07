@@ -1,5 +1,5 @@
-#ifndef MACRO_ISBASEOF_H_
-#define MACRO_ISBASEOF_H_
+#ifndef BASIC_MACRO_ISBASEOF_H_
+#define BASIC_MACRO_ISBASEOF_H_
 
 #include <type_traits>
 
@@ -120,4 +120,4 @@ __DEFINE_IS_BASE_OF_(__STRUCT_NAME__, __PROTO_FUNC_NAME__, __T_NAME__,,,,,\
     PROTO_FUNC_T_NAME_,, __BASE_TYPE__,##__VA_ARGS__)
 
 
-#endif //!MACRO_ISBASEOF_H_
+#endif //!BASIC_MACRO_ISBASEOF_H_
