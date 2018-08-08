@@ -222,12 +222,12 @@ void operator delete[]( void* p, const std::nothrow_t& tag )
 
 #ifndef Info
 #define Info(__INFO_MESSAGE__, ...)\
-    BasicTest::GetInstance().m_output.Info(__INFO_MESSAGE__,##__VA_ARGS__)
+    BasicTest::Info(__INFO_MESSAGE__,##__VA_ARGS__)
 #endif //!Info
 
 #ifndef Assert
 #define Assert(__ERROR_MESSAGE__, __TEST_BOOL__, ...)\
-    BasicTest::GetInstance().m_output.Assert(__TEST_BOOL__,##__VA_ARGS__,\
+    BasicTest::Assert(__TEST_BOOL__,##__VA_ARGS__,\
         __ERROR_MESSAGE__, __FILE__, __LINE__)
 #endif //!Assert
 
