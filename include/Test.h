@@ -98,7 +98,7 @@ template<typename... Targs>
 void Test<Ts, To, Tmem>::Info(const char* info_msg_cstr,
     Targs&&... args)
 {
-    GetInstance().m_output.Info(info_msg_cstr, std::forward(args)...);
+    GetInstance().m_output.Info(info_msg_cstr, args...);
 }
 
 template<typename Ts, template<typename> class To,
