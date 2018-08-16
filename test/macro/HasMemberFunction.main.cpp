@@ -238,7 +238,7 @@ struct TestHasMmbrFunc : BaseTest
  *  template<typename T, typename Tr, typename... Targs>
  *  constexpr std::false_type _HasRValMmbrFunc1(...);
  *  template<typename T, typename Tr, typename... Targs>
- *  struct HasLMmbrFunc1
+ *  struct HasMmbrFunc1
  *  {
  *      typedef bool value_type;
  *      typedef bool ValueType;
@@ -721,8 +721,20 @@ TestRegister t20(new TestHasMmbrFunc<HasMmbrFunc6_2_t, C2<std::false_type>,
  *              std::declval<typename std::remove_cv<typename basic::type::
  *                  trait::rem::ptr::Recursive<T>::type>::type>(), 
  *              std::declval<typename std::remove_cv<Targs...>::type>()
+ *          ))::value || decltype(_HasRValMmbrFunc7<
+ *          typename basic::type::trait::rem::ptr::Recursive<T>::type,
+ *                  T1, Tr, Targs...>(
+ *              std::declval<typename std::remove_cv<typename basic::type::
+ *                  trait::rem::ptr::Recursive<T>::type>::type>(), 
+ *              std::declval<typename std::remove_cv<Targs...>::type>()
  *          ))::value;
  *      static constexpr ValueType Value = decltype(_HasLValMmbrFunc7<
+ *          typename basic::type::trait::rem::ptr::Recursive<T>::type,
+ *                  T1, Tr, Targs...>(
+ *              std::declval<typename std::remove_cv<typename basic::type::
+ *                  trait::rem::ptr::Recursive<T>::type>::type>(), 
+ *              std::declval<typename std::remove_cv<Targs...>::type>()
+ *          ))::value || decltype(_HasRValMmbrFunc7<
  *          typename basic::type::trait::rem::ptr::Recursive<T>::type,
  *                  T1, Tr, Targs...>(
  *              std::declval<typename std::remove_cv<typename basic::type::
