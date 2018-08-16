@@ -291,23 +291,24 @@ TestRegister t4(new TestHasLValMmbrFunc<HasLValMmbrFunc2_t, B, bool, false,
  *      decltype(Tr(t.Foo1(args...)), std::true_type());
  *  template<typename T, typename Tr, typename... Targs>
  *  constexpr std::false_type _HasLValMmbrFunc3(...);
- *  template<template<typename> class T, typename Tr, typename... Targs>
+ *  template<template<typename> class T, typename T1, 
+ *      typename Tr, typename... Targs>
  *  struct HasLValMmbrFunc3
  *  {
  *      typedef bool value_type;
  *      typedef bool ValueType;
  *      static constexpr value_type value = decltype(_HasLValMmbrFunc3<
- *          typename basic::type::trait::rem::ptr::Recursive<T>::type,
+ *          typename basic::type::trait::rem::ptr::Recursive<T<T1>>::type,
  *                  Tr, Targs...>(
  *              std::declval<typename std::remove_cv<typename basic::type::
- *                  trait::rem::ptr::Recursive<T>::type>::type>(), 
+ *                  trait::rem::ptr::Recursive<T<T1>>::type>::type>(), 
  *              std::declval<typename std::remove_cv<Targs...>::type>()
  *          ))::value;
  *      static constexpr ValueType Value = decltype(_HasLValMmbrFunc3<
- *          typename basic::type::trait::rem::ptr::Recursive<T>::type,
+ *          typename basic::type::trait::rem::ptr::Recursive<T<T1>>::type,
  *                  Tr, Targs...>(
  *              std::declval<typename std::remove_cv<typename basic::type::
- *                  trait::rem::ptr::Recursive<T>::type>::type>(), 
+ *                  trait::rem::ptr::Recursive<T<T1>>::type>::type>(), 
  *              std::declval<typename std::remove_cv<Targs...>::type>()
  *          ))::value;
  *  };
@@ -528,7 +529,8 @@ TestRegister t12(new TestHasLValMmbrFunc<HasLValMmbrFunc6_t,
  *  template<typename T, typename T1, template<typename> class Tr,
  *      typename... Targs>
  *  constexpr std::false_type _HasLValMmbrFunc7(...);
- *  template<typename T, typename T1, typename Tr, typename... Targs>
+ *  template<typename T, typename T1, template<typename> class Tr, 
+ *      typename... Targs>
  *  struct HasLValMmbrFunc7
  *  {
  *      typedef bool value_type;
