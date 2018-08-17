@@ -55,25 +55,45 @@ typename __T_NAME__
 #define __DEFINE_IS_BASE_OF_ALIAS_VAL_(__ALIAS_VAL_NAME__)\
 typedef bool __ALIAS_VAL_NAME__
 
-#define __DEFINE_IS_BASE_OF_PROTO_FUNC_TMPL_ARG_LIST_(__T_NAME__)\
+#define __DEFINE_IS_BASE_OF_PROTO_FUNC_TMPL_ARG_LIST_(\
+    __T_NAME__,\
+    __T_TYPE__, ...)\
+__T_TYPE__,##__VA_ARGS__
+
+#define __DEFINE_IS_BASE_OF_T_NAME_(\
+    __T_NAME__, ...)\
 __T_NAME__
+
+#define __DEFINE_IS_BASE_OF_T_NAME_TMPL_(\
+    __T_NAME__,\
+    __T_NAME_TMPL_ARG_LIST_POSTFIX__)\
+__T_NAME__<__DEFINE_IS_BASE_OF_T_NAME_TMPL_ARG_LIST_\
+    ##__T_NAME_TMPL_ARG_LIST_POSTFIX__()>
 
 #define __DEFINE_IS_BASE_OF_VAL_(\
     __VAL_NAME__,\
     __ALIAS_VAL_NAME__,\
     __T_NAME__,\
     __PROTO_FUNC_NAME__,\
+    __T_NAME_OR_T_NAME_TMPL__,\
+    __T_NAME_TMPL_ARG_LIST_POSTFIX__,\
     __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__)\
 static constexpr __ALIAS_VAL_NAME__ __VAL_NAME__ = decltype(\
     __PROTO_FUNC_NAME__<__DEFINE_IS_BASE_OF_PROTO_FUNC_TMPL_ARG_LIST_\
-        ##__PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__(__T_NAME__)>(\
-            std::declval<typename std::remove_cv<__T_NAME__>::type>()))::value
+        ##__PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__(__T_NAME__,\
+            __DEFINE_IS_BASE_OF_##__T_NAME_OR_T_NAME_TMPL__(__T_NAME__,\
+                __T_NAME_TMPL_ARG_LIST_POSTFIX__))>(\
+            std::declval<typename std::remove_cv<__DEFINE_IS_BASE_OF_\
+                ##__T_NAME_OR_T_NAME_TMPL__(__T_NAME__,\
+                    __T_NAME_TMPL_ARG_LIST_POSTFIX__)>::type>()))::value
 
 #define __DEFINE_IS_BASE_OF_STRUCT_(\
     __STRUCT_NAME__,\
     __PROTO_FUNC_NAME__,\
     __T_NAME__,\
     __TMPL_PARAM_LIST_POSTFIX__,\
+    __T_NAME_OR_T_NAME_TMPL__,\
+    __T_NAME_TMPL_ARG_LIST_POSTFIX__,\
     __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__,\
     __BASE_TYPE__, ...)\
 template<__DEFINE_IS_BASE_OF_TMPL_PARAM_LIST_\
@@ -83,9 +103,13 @@ struct __STRUCT_NAME__\
     __DEFINE_IS_BASE_OF_ALIAS_VAL_(value_type);\
     __DEFINE_IS_BASE_OF_ALIAS_VAL_(ValueType);\
     __DEFINE_IS_BASE_OF_VAL_(value, value_type, __T_NAME__,\
-        __PROTO_FUNC_NAME__, __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__);\
-    __DEFINE_IS_BASE_OF_VAL_(Value, ValueType, __T_NAME__,\
-        __PROTO_FUNC_NAME__, __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__);\
+        __PROTO_FUNC_NAME__, __T_NAME_OR_T_NAME_TMPL__,\
+        __T_NAME_TMPL_ARG_LIST_POSTFIX__,\
+        __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__);\
+    __DEFINE_IS_BASE_OF_VAL_(Value, ValueType,  __T_NAME__,\
+        __PROTO_FUNC_NAME__, __T_NAME_OR_T_NAME_TMPL__,\
+        __T_NAME_TMPL_ARG_LIST_POSTFIX__,\
+        __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__);\
 }
 
 #define __DEFINE_IS_BASE_OF_(\
@@ -93,6 +117,8 @@ struct __STRUCT_NAME__\
     __PROTO_FUNC_NAME__,\
     __T_NAME__,\
     __TMPL_PARAM_LIST_POSTFIX__,\
+    __T_NAME_OR_T_NAME_TMPL__,\
+    __T_NAME_TMPL_ARG_LIST_POSTFIX__,\
     __PROTO_FUNC_TRUE_TMPL_PARAM_LIST_POSTFIX__,\
     __PROTO_FUNC_FALSE_TMPL_PARAM_LIST_POSTFIX__,\
     __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__,\
@@ -108,16 +134,17 @@ __DEFINE_IS_BASE_OF_PROTO_FUNC_(__PROTO_FUNC_NAME__, __T_NAME__,\
     FALSE_ ,__PROTO_FUNC_FALSE_TMPL_PARAM_LIST_POSTFIX__,,,\
         __BASE_TYPE__,##__VA_ARGS__);\
 __DEFINE_IS_BASE_OF_STRUCT_(__STRUCT_NAME__, __PROTO_FUNC_NAME__, __T_NAME__,\
-    __TMPL_PARAM_LIST_POSTFIX__, __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__,\
-        __BASE_TYPE__,##__VA_ARGS__)
+    __TMPL_PARAM_LIST_POSTFIX__, __T_NAME_OR_T_NAME_TMPL__,\
+    __T_NAME_TMPL_ARG_LIST_POSTFIX__, __PROTO_FUNC_TMPL_ARG_LIST_POSTFIX__,\
+    __BASE_TYPE__,##__VA_ARGS__)
 
 #define __DEFINE_IS_BASE_OF_DEFAULT_(\
     __STRUCT_NAME__,\
     __PROTO_FUNC_NAME__,\
     __T_NAME__,\
     __BASE_TYPE__, ...)\
-__DEFINE_IS_BASE_OF_(__STRUCT_NAME__, __PROTO_FUNC_NAME__, __T_NAME__,,,,,\
-    PROTO_FUNC_T_NAME_,, __BASE_TYPE__,##__VA_ARGS__)
+__DEFINE_IS_BASE_OF_(__STRUCT_NAME__, __PROTO_FUNC_NAME__, __T_NAME__,,\
+    T_NAME_,,,,, PROTO_FUNC_T_NAME_,, __BASE_TYPE__,##__VA_ARGS__)
 
 
 #endif //!BASIC_MACRO_ISBASEOF_H_
