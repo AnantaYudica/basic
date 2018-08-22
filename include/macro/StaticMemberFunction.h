@@ -10,7 +10,7 @@ typename __T_NAME__, typename __T_RET_NAME__, typename... __T_ARGS_NAME__
 __T_NAME__
 
 #define __DEFINE_STATIC_MMBR_FUNC_T_NAME_TMPL_(\
-    __T_NAME_,\
+    __T_NAME__,\
     __T_NAME_TMPL_ARG_LIST_POSTFIX__)\
 __T_NAME__<__DEFINE_STATIC_MMBR_FUNC_T_NAME_TMPL_ARG_LIST_\
     ##__T_NAME_TMPL_ARG_LIST_POSTFIX__()>
