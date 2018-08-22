@@ -86,6 +86,8 @@ __DEFINE_NAME_(bool);
 __DEFINE_NAME_(A);
 __DEFINE_NAME_(B<void>);
 __DEFINE_NAME_(void(*)());
+__DEFINE_NAME_(B<void> (*)());
+
 
 struct BaseTest
 {
