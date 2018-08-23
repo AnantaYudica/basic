@@ -149,7 +149,7 @@ void TestIndex()
     error_msg += "::Index";
     std::string info_msg = "Test compare between ";
     info_msg += Name<Ts>::Value;
-    info_msg += "::index is not same with ";
+    info_msg += "::index and ";
     info_msg += Name<Ts>::Value;
     info_msg += "::Index : ";
     Info(info_msg.c_str());
@@ -184,7 +184,7 @@ void TestSize()
     error_msg += "::Size";
     std::string info_msg = "Test compare between ";
     info_msg += Name<Ts>::Value;
-    info_msg += "::size is not same with ";
+    info_msg += "::size and ";
     info_msg += Name<Ts>::Value;
     info_msg += "::Size : ";
     Info(info_msg.c_str());
