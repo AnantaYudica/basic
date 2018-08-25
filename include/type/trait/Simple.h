@@ -115,11 +115,54 @@ struct Simple<T[]>
     typedef typename Simple<T>::type type;
 };
 
+template<typename T>
+struct Simple<const T[]>
+{
+    typedef typename Simple<const T>::Type Type;
+    typedef typename Simple<const T>::type type;
+};
+
+template<typename T>
+struct Simple<volatile T[]>
+{
+    typedef typename Simple<volatile T>::Type Type;
+    typedef typename Simple<volatile T>::type type;
+};
+
+
+template<typename T>
+struct Simple<const volatile T[]>
+{
+    typedef typename Simple<const volatile T>::Type Type;
+    typedef typename Simple<const volatile T>::type type;
+};
+
 template<typename T, std::size_t N>
 struct Simple<T[N]>
 {
     typedef typename Simple<T>::Type Type;
     typedef typename Simple<T>::type type;
+};
+
+template<typename T, std::size_t N>
+struct Simple<const T[N]>
+{
+    typedef typename Simple<const T>::Type Type;
+    typedef typename Simple<const T>::type type;
+};
+
+template<typename T, std::size_t N>
+struct Simple<volatile T[N]>
+{
+    typedef typename Simple<volatile T>::Type Type;
+    typedef typename Simple<volatile T>::type type;
+};
+
+template<typename T, std::size_t N>
+struct Simple<const volatile T[N]>
+{
+    typedef typename Simple<const volatile T>::Type Type;
+    typedef typename Simple<const volatile T>::type type;
 };
 
 template<typename T, typename... Targs>
