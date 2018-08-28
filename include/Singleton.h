@@ -54,7 +54,7 @@ __DEFINE_MMBR_DEFN_DEFAULT_(__AccessHasInstance, T,
     AccessHasInstanceType);
 
 __DEFINE_MMBR_DEFN_DEFAULT_(__AccessGetInstance, T, 
-    AccessHasInstanceType);
+    AccessGetInstanceType);
     
 #define __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_()\
 type
