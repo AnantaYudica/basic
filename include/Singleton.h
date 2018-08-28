@@ -65,24 +65,24 @@ __DEFINE_CONDITIONAL_DEFAULT_TRUE_TYPE_MMBR_DEFN_FALSE_TYPE_DEFN_(
 #undef __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_
 
 template<typename T, typename Td>
-using _AccessConstructInstance = typename _DefaultConditional<_has_member::
+using _AccessConstructInstance = _DefaultConditional<_has_member::
     _defn::_AccessConstructInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessConstructInstance<Td>, void>::type;
+        __AccessConstructInstance<Td>, void>;
 
 template<typename T, typename Td>
-using _AccessDestroyInstance = typename _DefaultConditional<_has_member::
+using _AccessDestroyInstance = _DefaultConditional<_has_member::
     _defn::_AccessDestroyInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessDestroyInstance<Td>, void>::type;
+        __AccessDestroyInstance<Td>, void>;
 
 template<typename T, typename Td>
-using _AccessHasInstance = typename _DefaultConditional<_has_member::_defn::
+using _AccessHasInstance = _DefaultConditional<_has_member::_defn::
     _AccessHasInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessHasInstance<Td>, void>::type;
+        __AccessHasInstance<Td>, void>;
 
 template<typename T, typename Td>
-using _AccessGetInstance = typename _DefaultConditional<_has_member::_defn::
+using _AccessGetInstance = _DefaultConditional<_has_member::_defn::
     _AccessGetInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessGetInstance<Td>, void>::type;
+        __AccessGetInstance<Td>, void>;
 
 } //!_defn
 
