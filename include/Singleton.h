@@ -56,13 +56,13 @@ __DEFINE_MMBR_DEFN_DEFAULT_(__AccessHasInstance, T,
 __DEFINE_MMBR_DEFN_DEFAULT_(__AccessGetInstance, T, 
     AccessHasInstanceType);
     
-#define __DEFINE_CONDITIONAL_DEFAULT_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_()\
+#define __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_()\
 type
 
 __DEFINE_CONDITIONAL_DEFAULT_TRUE_TYPE_MMBR_DEFN_FALSE_TYPE_DEFN_(
     _DefaultConditional, BoolTest, Ttrue, Tfalse, TYPE_);
 
-#undef __DEFINE_CONDITIONAL_DEFAULT_TRUE_TYPE_MMBR_DEFN_FALSE_TYPE_DEFN_TYPE_
+#undef __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_
 
 template<typename T, typename Td>
 using _AccessConstructInstance = typename _DefaultConditional<_has_member::
