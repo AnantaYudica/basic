@@ -43,7 +43,7 @@ public:
     typedef Ts StatusType;
     typedef To<StatusType> OutputType;
     typedef Tmem<OutputType> MemoryType;
-private:
+public:
     static Test<Ts, To, Tmem> ms_instance;
 public:
     StatusType m_status;
