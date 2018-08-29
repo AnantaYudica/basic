@@ -52,9 +52,10 @@ struct TestRegister
 {
     static std::vector<BaseTestConditional*> List;
     BaseTestConditional* m_ptr;
-    TestRegister(BaseTestConditional* ptr)
+    TestRegister(BaseTestConditional* ptr) :
+        m_ptr(ptr)
     {
-        List.push_back(ptr);
+        List.push_back(m_ptr);
     }
     ~TestRegister()
     {

@@ -72,9 +72,10 @@ struct TestRegister
 {
     static std::vector<BaseTest*> List;
     BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr)
+    TestRegister(BaseTest* ptr) :
+        m_ptr(ptr)
     {
-        List.push_back(ptr);
+        List.push_back(m_ptr);
     }
     ~TestRegister()
     {
@@ -1057,8 +1058,6 @@ TestRegister t1_24_33(new TestName<basic::type::Name,
 int main()
 { 
     Info("BeginTest:\n");
-    Info(basic::type::Name<int A::*const volatile*const>::ToString().c_str());
-    Info(basic::type::Name<int (A::*const volatile*const)()>::ToString().c_str());
     for (auto t : TestRegister::List)
     {
         t->Test();

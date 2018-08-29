@@ -83,9 +83,10 @@ struct TestRegister
 {
     static std::vector<BaseTest*> List;
     BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr)
+    TestRegister(BaseTest* ptr) :
+        m_ptr(ptr)
     {
-        List.push_back(ptr);
+        List.push_back(m_ptr);
     }
     ~TestRegister()
     {
