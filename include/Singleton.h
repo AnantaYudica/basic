@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <cstdlib>
 #include <memory>
+#include <utility>
 
 #include "macro/Conditional.h"
 #include "macro/HasMemberDefinition.h"
@@ -401,7 +402,7 @@ typename basic::type::access::enable_if::Public<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>
@@ -437,7 +438,7 @@ typename basic::type::access::enable_if::Protected<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>
@@ -473,7 +474,7 @@ typename basic::type::access::enable_if::Private<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>
