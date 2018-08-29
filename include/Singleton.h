@@ -401,7 +401,7 @@ T& _Singleton<T>::_GetInstance()
     {
         return ConstructInstance();
     }
-    return dynamic_cast<T&>(*ms_instance);
+    return (T&)(*ms_instance);
 }
 
 template<typename T>
