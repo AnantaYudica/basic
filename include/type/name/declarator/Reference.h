@@ -2,7 +2,7 @@
 #define BASIC_TYPE_NAME_DECLARATOR_REFERENCE_H_
 
 #include <string>
-#include <stack>
+#include <ostream>
 
 #include "../Declarator.h"
 
@@ -12,37 +12,120 @@ namespace type
 {
 namespace name
 {
+namespace decltor
+{
+namespace ref
+{
+
+static const char LValue[] = "&";
+static const char RValue[] = "&&";
+static const char OpenBracket[] = "(";
+static const char CloseBracket[] = ")";
+
+} //!ref
+
+} //!decltor
 
 template<typename T>
-struct Declarator<T&>
+class Declarator<T&> :
+    public Declarator<T>
 {
+protected:
+    typedef typename Declarator<T>::BaseType BaseType;
+public:
     typedef typename Declarator<T>::RemovedType RemovedType;
-    static void ToString(std::string& str, 
-        std::stack<std::string>& str_stack);
+public:
+    constexpr Declarator();
+protected:
+    constexpr Declarator(const decltor::Type& first, const char& flags);
+public:
+    template<typename CharT, typename Traits, typename Td>
+    static std::basic_ostream<CharT, Traits>& 
+        Backward(std::basic_ostream<CharT, Traits>& o, Td&& d);
+    template<typename CharT, typename Traits, typename Td>
+    static std::basic_ostream<CharT, Traits>& 
+        Forward(std::basic_ostream<CharT, Traits>& o, Td&& d);
 };
 
 template<typename T>
-struct Declarator<T&&>
+class Declarator<T&&> :
+    public Declarator<T>
 {
+protected:
+    typedef typename Declarator<T>::BaseType BaseType;
+public:
     typedef typename Declarator<T>::RemovedType RemovedType;
-    static void ToString(std::string& str, 
-        std::stack<std::string>& str_stack);
+public:
+    constexpr Declarator();
+protected:
+    constexpr Declarator(const decltor::Type& first, const char& flags);
+public:
+    template<typename CharT, typename Traits, typename Td>
+    static std::basic_ostream<CharT, Traits>& 
+        Backward(std::basic_ostream<CharT, Traits>& o, Td&& d);
+    template<typename CharT, typename Traits, typename Td>
+    static std::basic_ostream<CharT, Traits>& 
+        Forward(std::basic_ostream<CharT, Traits>& o, Td&& d);
 };
 
 template<typename T>
-void Declarator<T&>::
-    ToString(std::string& str, std::stack<std::string>& str_stack)
+constexpr Declarator<T&>::Declarator() :
+    Declarator<T>(decltor::Type::reference_flag, decltor::Type::reference_flag)
+{}
+
+template<typename T>
+constexpr Declarator<T&>::Declarator(const decltor::Type& first, 
+     const char& flags) :
+        Declarator<T>(first, flags | decltor::Type::reference_flag)
+{}
+
+template<typename T>
+template<typename CharT, typename Traits, typename Td>
+std::basic_ostream<CharT, Traits>& 
+    Declarator<T&>::Backward(std::basic_ostream<CharT, Traits>& o, Td&& d)
 {
-    str_stack.push("&");
-    Declarator<T>::ToString(str, str_stack);
+    Declarator<T>::Backward(o, d);
+    o << decltor::ref::LValue;
+    return o;
 }
 
 template<typename T>
-void Declarator<T&&>::
-    ToString(std::string& str, std::stack<std::string>& str_stack)
+template<typename CharT, typename Traits, typename Td>
+std::basic_ostream<CharT, Traits>& 
+    Declarator<T&>::Forward(std::basic_ostream<CharT, Traits>& o, Td&& d)
 {
-    str_stack.push("&&");
-    Declarator<T>::ToString(str, str_stack);
+    Declarator<T>::Forward(o, d);
+    return o;
+}
+
+template<typename T>
+constexpr Declarator<T&&>::Declarator() :
+    Declarator<T>(decltor::Type::reference_flag, decltor::Type::reference_flag)
+{}
+
+template<typename T>
+constexpr Declarator<T&&>::Declarator(const decltor::Type& first, 
+     const char& flags) :
+        Declarator<T>(first, flags | decltor::Type::reference_flag)
+{}
+
+template<typename T>
+template<typename CharT, typename Traits, typename Td>
+std::basic_ostream<CharT, Traits>& 
+    Declarator<T&&>::Backward(std::basic_ostream<CharT, Traits>& o, Td&& d)
+{
+    Declarator<T>::Backward(o, d);
+    o << decltor::ref::RValue;
+    return o;
+}
+
+template<typename T>
+template<typename CharT, typename Traits, typename Td>
+std::basic_ostream<CharT, Traits>& 
+    Declarator<T&&>::Forward(std::basic_ostream<CharT, Traits>& o, Td&& d)
+{
+    Declarator<T>::Forward(o, d);
+    return o;
 }
 
 } //!name
