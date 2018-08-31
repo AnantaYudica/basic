@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <cstdlib>
 #include <memory>
+#include <utility>
 
 #include "macro/Conditional.h"
 #include "macro/HasMemberDefinition.h"
@@ -54,35 +55,43 @@ __DEFINE_MMBR_DEFN_DEFAULT_(__AccessHasInstance, T,
     AccessHasInstanceType);
 
 __DEFINE_MMBR_DEFN_DEFAULT_(__AccessGetInstance, T, 
-    AccessHasInstanceType);
+    AccessGetInstanceType);
     
-#define __DEFINE_CONDITIONAL_DEFAULT_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_()\
+#define __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_()\
 type
 
 __DEFINE_CONDITIONAL_DEFAULT_TRUE_TYPE_MMBR_DEFN_FALSE_TYPE_DEFN_(
     _DefaultConditional, BoolTest, Ttrue, Tfalse, TYPE_);
 
-#undef __DEFINE_CONDITIONAL_DEFAULT_TRUE_TYPE_MMBR_DEFN_FALSE_TYPE_DEFN_TYPE_
+#undef __DEFINE_CONDITIONAL_T_TRUE_DEFN_TYPE_MMBR_NAME_TYPE_
 
 template<typename T, typename Td>
-using _AccessConstructInstance = typename _DefaultConditional<_has_member::
-    _defn::_AccessConstructInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessConstructInstance<Td>, void>::type;
+using _AccessConstructInstance = _DefaultConditional<_has_member::
+    _defn::_AccessConstructInstance<typename basic::type::trait::
+        Simple<Td>::type>::value && std::is_same<T, Td>::value,
+            __AccessConstructInstance<typename basic::type::trait::
+                Simple<Td>::type>, void>;
 
 template<typename T, typename Td>
-using _AccessDestroyInstance = typename _DefaultConditional<_has_member::
-    _defn::_AccessDestroyInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessDestroyInstance<Td>, void>::type;
+using _AccessDestroyInstance = _DefaultConditional<_has_member::
+    _defn::_AccessDestroyInstance<typename basic::type::trait::
+        Simple<Td>::type>::value && std::is_same<T, Td>::value,
+            __AccessDestroyInstance<typename basic::type::trait::
+                Simple<Td>::type>, void>;
 
 template<typename T, typename Td>
-using _AccessHasInstance = typename _DefaultConditional<_has_member::_defn::
-    _AccessHasInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessHasInstance<Td>, void>::type;
+using _AccessHasInstance = _DefaultConditional<_has_member::_defn::
+    _AccessHasInstance<typename basic::type::trait::
+        Simple<Td>::type>::value && std::is_same<T, Td>::value,
+            __AccessHasInstance<typename basic::type::trait::
+                Simple<Td>::type>, void>;
 
 template<typename T, typename Td>
-using _AccessGetInstance = typename _DefaultConditional<_has_member::_defn::
-    _AccessGetInstance<Td>::value && std::is_same<T, Td>::value,
-        __AccessGetInstance<Td>, void>::type;
+using _AccessGetInstance = _DefaultConditional<_has_member::_defn::
+    _AccessGetInstance<typename basic::type::trait::
+        Simple<Td>::type>::value && std::is_same<T, Td>::value,
+            __AccessGetInstance<typename basic::type::trait::
+                Simple<Td>::type>, void>;
 
 } //!_defn
 
@@ -392,7 +401,7 @@ T& _Singleton<T>::_GetInstance()
     {
         return ConstructInstance();
     }
-    return dynamic_cast<T&>(*ms_instance);
+    return (T&)(*ms_instance);
 }
 
 template<typename T>
@@ -401,7 +410,7 @@ typename basic::type::access::enable_if::Public<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>
@@ -437,7 +446,7 @@ typename basic::type::access::enable_if::Protected<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>
@@ -473,7 +482,7 @@ typename basic::type::access::enable_if::Private<typename _singleton::
     _member::_defn::_AccessConstructInstance<T, Td>::type, T&>::type 
         _Singleton<T>::ConstructInstance(Targs&&... args)
 {
-    return _ConstructInstance(std::forward(args)...);
+    return _ConstructInstance(std::forward<Targs>(args)...);
 }
 
 template<typename T>

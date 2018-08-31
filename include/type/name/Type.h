@@ -3,8 +3,8 @@
 
 #include <cstddef>
 #include <string>
-#include <stack>
 #include <typeinfo>
+#include <ostream>
 
 #include "Parameter.h"
 
@@ -14,37 +14,59 @@ namespace type
 {
 namespace name
 {
-    
+namespace type
+{
+namespace tmpl
+{
+
+static const char OpenBracket[] = "<";
+static const char CloseBracket[] = ">";
+
+} //!tmpl
+
+static const char Void[] = "void";
+static const char Nullptr[] = "std::nullptr_t";
+static const char Bool[] = "bool";
+static const char Char[] = "char";
+static const char UnsignedChar[] = "unsigned char";
+static const char Short[] = "short";
+static const char UnsignedShort[] = "unsigned short";
+static const char Int[] = "int";
+static const char UnsignedInt[] = "unsigned int";
+static const char Long[] = "long";
+static const char UnsignedLong[] = "unsigned long";
+static const char LongLong[] = "long long";
+static const char UnsignedLongLong[] = "unsigned long long";
+static const char Float[] = "float";
+static const char Double[] = "double";
+static const char LongDouble[] = "long double";
+
+
+} //!type
+
 template<typename T>
 struct Type
-{
-    static void ToString(std::string& str, 
-        std::stack<std::string>& str_stack);
-};
+{};
 
-template<template<typename...> class T, typename... Targs>
-struct Type<T<Targs...>>
+template<typename T, typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<T>&&)
 {
-    static void ToString(std::string& str,
-        std::stack<std::string>& str_stack);
-};
-
-template<typename T>
-void Type<T>::ToString(std::string& str,
-    std::stack<std::string>& str_stack)
-{
-    str += typeid(T).name();
+    o << typeid(T).name();
+    return o;
 }
 
-template<template<typename...> class T, typename... Targs>
-void Type<T<Targs...>>::ToString(std::string& str,
-    std::stack<std::string>& str_stack)
+template<template<typename...> class T, typename CharT, typename Traits,
+    typename... Targs>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<T<Targs...>>&&)
 {
-    str += typeid(T<Targs...>).name();
-    str += "<";
-    name::Parameter<Targs...>::ToString(str, str_stack);
-    str += ">";
-};
+    o << typeid(T<Targs...>).name();
+    o << type::tmpl::OpenBracket;
+    o << Parameter<Targs...>();
+    o << type::tmpl::CloseBracket;
+    return o;
+}
 
 } //!name
 
@@ -61,149 +83,133 @@ namespace type
 namespace name
 {
 
-template<>
-struct Type<void>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<void>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "void";
-    }
-};
+    o << type::Void;
+    return o;
+}
 
-template<>
-struct Type<std::nullptr_t>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<std::nullptr_t>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "std::nullptr_t";
-    }
-};
+    o << type::Nullptr;
+    return o;
+}
 
-template<>
-struct Type<bool>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<bool>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "bool";
-    }
-};
+    o << type::Bool;
+    return o;
+}
 
-template<>
-struct Type<unsigned char>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<char>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "unsigned char";
-    }
-};
+    o << type::Char;
+    return o;
+}
 
-template<>
-struct Type<char>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<unsigned char>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "char";
-    }
-};
+    o << type::UnsignedChar;
+    return o;
+}
 
-template<>
-struct Type<unsigned short>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<short>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "unsigned short";
-    }
-};
+    o << type::Short;
+    return o;
+}
 
-template<>
-struct Type<short>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<unsigned short>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "short";
-    }
-};
+    o << type::UnsignedShort;
+    return o;
+}
 
-template<>
-struct Type<unsigned int>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<int>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "unsigned int";
-    }
-};
+    o << type::Int;
+    return o;
+}
 
-template<>
-struct Type<int>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<unsigned int>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "int";
-    }
-};
+    o << type::UnsignedInt;
+    return o;
+}
 
-template<>
-struct Type<unsigned long>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<long>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "unsigned long";
-    }
-};
+    o << type::Long;
+    return o;
+}
 
-template<>
-struct Type<long>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<unsigned long>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "long";
-    }
-};
+    o << type::UnsignedLong;
+    return o;
+}
 
-template<>
-struct Type<unsigned long long>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<long long>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "unsigned long long";
-    }
-};
+    o << type::LongLong;
+    return o;
+}
 
-template<>
-struct Type<long long>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<unsigned long long>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "long long";
-    }
-};
+    o << type::UnsignedLongLong;
+    return o;
+}
 
-template<>
-struct Type<float>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<float>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "float";
-    }
-};
+    o << type::Float;
+    return o;
+}
 
-template<>
-struct Type<double>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<double>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "double";
-    }
-};
+    o << type::Double;
+    return o;
+}
 
-template<>
-struct Type<long double>
+template<typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Type<long double>&&)
 {
-    static void ToString(std::string& str, std::stack<std::string>& str_stack)
-    {
-        str += "long double";
-    }
-};
+    o << type::LongDouble;
+    return o;
+}
 
 } //!name
 

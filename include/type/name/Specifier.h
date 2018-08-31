@@ -1,7 +1,7 @@
 #ifndef BASIC_TYPE_NAME_SPECIFIER_H_
 #define BASIC_TYPE_NAME_SPECIFIER_H_
 
-#include <string>
+#include <ostream>
 
 namespace basic
 {
@@ -9,55 +9,73 @@ namespace type
 {
 namespace name
 {
+namespace specifier
+{
+
+static const char NoPostfix[] = "";
+static const char Postfix[] = " ";
+static const char Empty[] = "";
+static const char Const[] = "const";
+static const char Volatile[] = "volatile";
+static const char ConstVolatile[] = "const volatile";
+
+}
     
 template<typename T>
 struct Specifier
 {
     typedef T RemovedType;
-    static void ToString(std::string& str);
 };
 
 template<typename T>
 struct Specifier<const T>
 {
     typedef T RemovedType;
-    static void ToString(std::string& str);
 };
 
 template<typename T>
 struct Specifier<volatile T>
 {
     typedef T RemovedType;
-    static void ToString(std::string& str);
 };
 
 template<typename T>
 struct Specifier<const volatile T>
 {
     typedef T RemovedType;
-    static void ToString(std::string& str);
 };
 
-template<typename T>
-void Specifier<T>::ToString(std::string& str)
-{}
-
-template<typename T>
-void Specifier<const T>::ToString(std::string& str)
+template<typename T, typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Specifier<T>&&)
 {
-    str += "const ";
+    o << specifier::Empty << specifier::NoPostfix;
+    return o;
 }
 
-template<typename T>
-void Specifier<volatile T>::ToString(std::string& str)
+template<typename T, typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Specifier<const T>&&)
 {
-    str += "volatile ";
+    o << specifier::Const << specifier::Postfix;
+    return o;
 }
 
-template<typename T>
-void Specifier<const volatile T>::ToString(std::string& str)
+template<typename T, typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, Specifier<volatile T>&&)
 {
-    str += "const volatile ";
+    o << specifier::Volatile << specifier::Postfix;
+    return o;
+}
+
+template<typename T, typename CharT, typename Traits>
+std::basic_ostream<CharT, Traits>& 
+    operator<<(std::basic_ostream<CharT, Traits>& o, 
+        Specifier<const volatile T>&&)
+{
+    o << specifier::ConstVolatile << specifier::Postfix;
+    return o;
 }
 
 } //!name

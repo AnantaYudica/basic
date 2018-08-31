@@ -9,7 +9,7 @@ typename __T_NAME__
 __T_NAME__
 
 #define __DEFINE_MMBR_DEFN_T_NAME_TMPL_(\
-    __T_NAME_,\
+    __T_NAME__,\
     __T_NAME_TMPL_ARG_LIST_POSTFIX__)\
 __T_NAME__<__DEFINE_MMBR_DEFN_T_NAME_TMPL_ARG_LIST_\
     ##__T_NAME_TMPL_ARG_LIST_POSTFIX__()>

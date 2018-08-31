@@ -4,11 +4,13 @@
 #include "test/Status.h"
 #include "test/Output.h"
 #include "test/Memory.h"
+#include "test/Base.h"
+#include "test/Register.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <utility>
-
+#include <vector>
 
 #ifndef BASIC_TEST_OUTPUT_FILENAME
 #define BASIC_TEST_OUTPUT_FILENAME_EMPTY
@@ -43,54 +45,43 @@ public:
     typedef Ts StatusType;
     typedef To<StatusType> OutputType;
     typedef Tmem<OutputType> MemoryType;
-private:
-    static Test<Ts, To, Tmem> ms_instance;
 public:
-    StatusType m_status;
-    OutputType m_output;
-    MemoryType m_mem;
+    static Test<Ts, To, Tmem> Instance;
+public:
+    StatusType Status;
+    OutputType Output;
+    MemoryType Memory;
+    std::vector<test::Register<Test<Ts, To, Tmem>>*> List;
 private:
     Test();
 public:
-    static Test<Ts, To, Tmem>& GetInstance();
-    static const int& GetStatus();
     template<typename... Targs>
     static void Info(const char* info_msg_cstr, Targs&&... args);
     static bool Assert(bool test, const char* error_msg_cstr, 
         const char* file, const int& line);
+    template<typename... Targs>
+    static void Debug(const char* debug_msg_cstr, Targs&&... args);
+public:
+    static const int& Run();
 };
 
 template<typename Ts, template<typename> class To,
     template<typename> class Tmem>
-Test<Ts, To, Tmem> Test<Ts, To, Tmem>::ms_instance;
+Test<Ts, To, Tmem> Test<Ts, To, Tmem>::Instance;
 
 template<typename Ts, template<typename> class To,
     template<typename> class Tmem>
 Test<Ts, To, Tmem>::Test() :
-    m_status(),
+    Status(),
 #ifdef BASIC_TEST_OUTPUT_FILENAME_EMPTY
-    m_output(m_status)
+    Output(Status)
 #else //!BASIC_TEST_OUTPUT_FILENAME_EMPTY
-    m_output(m_status, BASIC_TEST_OUTPUT_FILENAME)
+    Output(Status, BASIC_TEST_OUTPUT_FILENAME)
 #endif
 #ifdef USING_BASIC_TEST_MEMORY
-    ,m_mem(m_output)
+    ,Memory(Output)
 #endif //USING_BASIC_TEST_MEMORY
 {}
-
-template<typename Ts, template<typename> class To,
-    template<typename> class Tmem>
-Test<Ts, To, Tmem>& Test<Ts, To, Tmem>::GetInstance()
-{
-    return ms_instance;
-}
-
-template<typename Ts, template<typename> class To,
-    template<typename> class Tmem>
-const int& Test<Ts, To, Tmem>::GetStatus()
-{
-    return GetInstance().m_status.Get();
-}
 
 template<typename Ts, template<typename> class To,
     template<typename> class Tmem>
@@ -98,7 +89,8 @@ template<typename... Targs>
 void Test<Ts, To, Tmem>::Info(const char* info_msg_cstr,
     Targs&&... args)
 {
-    GetInstance().m_output.Info(info_msg_cstr, std::forward(args)...);
+    Instance.Output.Info(info_msg_cstr, 
+        std::forward<Targs>(args)...);
 }
 
 template<typename Ts, template<typename> class To,
@@ -108,11 +100,45 @@ bool Test<Ts, To, Tmem>::Assert(bool test, const char* error_msg_cstr,
 {
     if (!test)
     {
-        GetInstance().m_output.Error("Error : %s file %s line %i\n", 
+        Instance.Output.Error("error %s file %s line %i\n", 
             error_msg_cstr, file, line);
+        auto trace = Instance.Output.GetTrace();
+        while (!trace.empty())
+        {
+            Instance.Output.Error(" from file %s line %i\n", 
+            trace.top().File, trace.top().Line);
+            trace.pop();
+        }
     }
     return test;
-}    
+}
+
+template<typename Ts, template<typename> class To,
+    template<typename> class Tmem>
+template<typename... Targs>
+void Test<Ts, To, Tmem>::Debug(const char* debug_msg_cstr, 
+        Targs&&...args)
+{
+    Instance.Output.Debug(debug_msg_cstr, 
+        std::forward<Targs>(args)...);
+}
+
+template<typename Ts, template<typename> class To,
+    template<typename> class Tmem>
+const int& Test<Ts, To, Tmem>::Run()
+{
+    std::size_t i = 0, s = Instance.List.size();
+    for (auto t : Instance.List)
+    {
+        Debug("Test %u of %u : \n", i, s);
+        Instance.Output.Push(test::out::Trace(t->File(),
+            t->Line()));
+        t->Run();
+        Instance.Output.Pop();
+        ++i;
+    }
+    return Instance.Status.Get();
+}
 
 } //!basic
 
@@ -131,14 +157,14 @@ bool Test<Ts, To, Tmem>::Assert(bool test, const char* error_msg_cstr,
 void* operator new(std::size_t sz)
 {
     auto p = std::malloc(sz);
-    BasicTest::GetInstance().m_mem.Register(p, sz);
+    BasicTest::Instance.Memory.Register(p, sz);
     return p;
 }
 
 void* operator new[]( std::size_t sz)
 {
     auto p = std::malloc(sz);
-    BasicTest::GetInstance().m_mem.Register(p, sz);
+    BasicTest::Instance.Memory.Register(p, sz);
     return p;
 }
 
@@ -146,7 +172,7 @@ template<std::size_t N>
 void* operator new(std::size_t sz, const char (&file)[N], const int& line) 
 {
     auto p = std::malloc(sz);
-    BasicTest::GetInstance().m_mem.Register(p, sz, file, line);
+    BasicTest::Instance.Memory.Register(p, sz, file, line);
     return p;
 }
 
@@ -154,7 +180,7 @@ template<std::size_t N>
 void* operator new[]( std::size_t sz, const char (&file)[N], const int& line)
 {
     auto p = std::malloc(sz);
-    BasicTest::GetInstance().m_mem.Register(p, sz, file, line);
+    BasicTest::Instance.Memory.Register(p, sz, file, line);
     return p;
 }
 
@@ -163,7 +189,7 @@ void* operator new (std::size_t sz, const std::nothrow_t& tag,
     const char (&file)[N], const int& line)
 {
     auto p = ::operator new(sz, tag);
-    BasicTest::GetInstance().m_mem.Register(p, sz, file, line);
+    BasicTest::Instance.Memory.Register(p, sz, file, line);
     return p;
 }
 
@@ -172,7 +198,7 @@ void* operator new[]( std::size_t sz, const std::nothrow_t& tag,
     const char (&file)[N], const int& line)
 {
     auto p = ::operator new[](sz, tag);
-    BasicTest::GetInstance().m_mem.Register(p, sz, file, line);
+    BasicTest::Instance.Memory.Register(p, sz, file, line);
     return p;
 }
 
@@ -194,25 +220,25 @@ void* operator new[]( std::size_t sz, void* ptr,
 
 void operator delete(void* p) noexcept
 {
-    BasicTest::GetInstance().m_mem.Unregister(p);
+    BasicTest::Instance.Memory.Unregister(p);
     std::free(p);
 }
 
 void operator delete[](void* p) noexcept
 {
-    BasicTest::GetInstance().m_mem.Unregister(p);
+    BasicTest::Instance.Memory.Unregister(p);
     std::free(p);
 }
 
 void operator delete ( void* p, const std::nothrow_t& tag )
 {
-    BasicTest::GetInstance().m_mem.Unregister(p);
+    BasicTest::Instance.Memory.Unregister(p);
     std::free(p);
 }
 
 void operator delete[]( void* p, const std::nothrow_t& tag )
 {
-    BasicTest::GetInstance().m_mem.Unregister(p);
+    BasicTest::Instance.Memory.Unregister(p);
     std::free(p);
 }
 
@@ -231,8 +257,21 @@ void operator delete[]( void* p, const std::nothrow_t& tag )
         __ERROR_MESSAGE__, __FILE__, __LINE__)
 #endif //!Assert
 
-#ifndef ResultStatus
-#define ResultStatus BasicTest::GetInstance().m_status.Get();
+#ifndef TestStatus
+#define TestStatus BasicTest::Instance.Status.Get()
 #endif //!ResultStatus
+
+#ifndef RegisterTest
+#define RegisterTest(Name, Test, ...) basic::test::Register<BasicTest> \
+    Name(Test,##__VA_ARGS__, __FILE__, __LINE__)
+#endif //!RegisterTest
+
+#ifndef TestRun
+#define TestRun() BasicTest::Run()
+#endif //!TestRun
+
+#ifndef BasicTestConstruct
+#define BasicTestConstruct BasicTest& __test_instance = BasicTest::Instance
+#endif //!BasicTestConstruct
 
 #endif //!BASIC_TEST_H_
