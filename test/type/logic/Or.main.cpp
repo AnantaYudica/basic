@@ -1,6 +1,8 @@
 #include "type/logic/Or.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <typeinfo>
 #include <type_traits>
 #include <string>
@@ -44,29 +46,6 @@ struct Name<__VA_ARGS__>\
 __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename... Targs>
 struct NameParameterTmpl 
@@ -123,7 +102,7 @@ void TestValue()
 }
 
 template<typename Ta, typename Ttv, Ttv TtvValuee>
-struct TestOr : BaseTest
+struct TestOr : basic::test::Base
 {
     void Test() 
     {
@@ -142,8 +121,8 @@ using Or1_2_d = basic::type::logic::Or<std::true_type, std::true_type>;
 __DEFINE_NAME_(basic::type::logic::Or<std::true_type, std::false_type>);
 __DEFINE_NAME_(basic::type::logic::Or<std::true_type, std::true_type>);
 
-TestRegister t1_1(new TestOr<Or1_1_d, bool, false>());
-TestRegister t1_2(new TestOr<Or1_2_d, bool, true>());
+RegisterTest(t1_1, new TestOr<Or1_1_d, bool, false>());
+RegisterTest(t1_2, new TestOr<Or1_2_d, bool, true>());
 
 using Or2_1_d = basic::type::logic::Or<std::true_type, 
     std::false_type, std::false_type>;
@@ -163,10 +142,10 @@ __DEFINE_NAME_(basic::type::logic::Or<std::true_type,
 __DEFINE_NAME_(basic::type::logic::Or<std::true_type, 
     std::true_type, std::true_type>);
 
-TestRegister t2_1(new TestOr<Or2_1_d, bool, false>());
-TestRegister t2_2(new TestOr<Or2_2_d, bool, true>());
-TestRegister t2_3(new TestOr<Or2_3_d, bool, true>());
-TestRegister t2_4(new TestOr<Or2_4_d, bool, true>());
+RegisterTest(t2_1, new TestOr<Or2_1_d, bool, false>());
+RegisterTest(t2_2, new TestOr<Or2_2_d, bool, true>());
+RegisterTest(t2_3, new TestOr<Or2_3_d, bool, true>());
+RegisterTest(t2_4, new TestOr<Or2_4_d, bool, true>());
 
 using Or4_1_d = basic::type::logic::Or<std::true_type, 
     std::false_type, std::false_type, std::false_type, std::false_type>;
@@ -234,31 +213,24 @@ __DEFINE_NAME_(basic::type::logic::Or<std::true_type,
 __DEFINE_NAME_(basic::type::logic::Or<std::true_type, 
     std::true_type, std::true_type, std::true_type, std::true_type>);
 
-TestRegister t3_1(new TestOr<Or4_1_d, bool, false>());
-TestRegister t3_2(new TestOr<Or4_2_d, bool, true>());
-TestRegister t3_3(new TestOr<Or4_3_d, bool, true>());
-TestRegister t3_4(new TestOr<Or4_4_d, bool, true>());
-TestRegister t3_5(new TestOr<Or4_5_d, bool, true>());
-TestRegister t3_6(new TestOr<Or4_6_d, bool, true>());
-TestRegister t3_7(new TestOr<Or4_7_d, bool, true>());
-TestRegister t3_8(new TestOr<Or4_8_d, bool, true>());
-TestRegister t3_9(new TestOr<Or4_9_d, bool, true>());
-TestRegister t3_10(new TestOr<Or4_10_d, bool, true>());
-TestRegister t3_11(new TestOr<Or4_11_d, bool, true>());
-TestRegister t3_12(new TestOr<Or4_12_d, bool, true>());
-TestRegister t3_13(new TestOr<Or4_13_d, bool, true>());
-TestRegister t3_14(new TestOr<Or4_14_d, bool, true>());
-TestRegister t3_15(new TestOr<Or4_15_d, bool, true>());
-TestRegister t3_16(new TestOr<Or4_16_d, bool, true>());
+RegisterTest(t3_1, new TestOr<Or4_1_d, bool, false>());
+RegisterTest(t3_2, new TestOr<Or4_2_d, bool, true>());
+RegisterTest(t3_3, new TestOr<Or4_3_d, bool, true>());
+RegisterTest(t3_4, new TestOr<Or4_4_d, bool, true>());
+RegisterTest(t3_5, new TestOr<Or4_5_d, bool, true>());
+RegisterTest(t3_6, new TestOr<Or4_6_d, bool, true>());
+RegisterTest(t3_7, new TestOr<Or4_7_d, bool, true>());
+RegisterTest(t3_8, new TestOr<Or4_8_d, bool, true>());
+RegisterTest(t3_9, new TestOr<Or4_9_d, bool, true>());
+RegisterTest(t3_10, new TestOr<Or4_10_d, bool, true>());
+RegisterTest(t3_11, new TestOr<Or4_11_d, bool, true>());
+RegisterTest(t3_12, new TestOr<Or4_12_d, bool, true>());
+RegisterTest(t3_13, new TestOr<Or4_13_d, bool, true>());
+RegisterTest(t3_14, new TestOr<Or4_14_d, bool, true>());
+RegisterTest(t3_15, new TestOr<Or4_15_d, bool, true>());
+RegisterTest(t3_16, new TestOr<Or4_16_d, bool, true>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

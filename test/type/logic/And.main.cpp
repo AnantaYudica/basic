@@ -1,6 +1,8 @@
 #include "type/logic/And.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <typeinfo>
 #include <type_traits>
 #include <string>
@@ -44,29 +46,6 @@ struct Name<__VA_ARGS__>\
 __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename... Targs>
 struct NameParameterTmpl 
@@ -123,7 +102,7 @@ void TestValue()
 }
 
 template<typename Ta, typename Ttv, Ttv TtvValuee>
-struct TestAnd : BaseTest
+struct TestAnd : basic::test::Base
 {
     void Test() 
     {
@@ -142,8 +121,8 @@ using And1_2_d = basic::type::logic::And<std::true_type, std::true_type>;
 __DEFINE_NAME_(basic::type::logic::And<std::true_type, std::false_type>);
 __DEFINE_NAME_(basic::type::logic::And<std::true_type, std::true_type>);
 
-TestRegister t1_1(new TestAnd<And1_1_d, bool, false>());
-TestRegister t1_2(new TestAnd<And1_2_d, bool, true>());
+RegisterTest(t1_1, new TestAnd<And1_1_d, bool, false>());
+RegisterTest(t1_2, new TestAnd<And1_2_d, bool, true>());
 
 using And2_1_d = basic::type::logic::And<std::true_type, 
     std::false_type, std::false_type>;
@@ -163,10 +142,10 @@ __DEFINE_NAME_(basic::type::logic::And<std::true_type,
 __DEFINE_NAME_(basic::type::logic::And<std::true_type, 
     std::true_type, std::true_type>);
 
-TestRegister t2_1(new TestAnd<And2_1_d, bool, false>());
-TestRegister t2_2(new TestAnd<And2_2_d, bool, false>());
-TestRegister t2_3(new TestAnd<And2_3_d, bool, false>());
-TestRegister t2_4(new TestAnd<And2_4_d, bool, true>());
+RegisterTest(t2_1, new TestAnd<And2_1_d, bool, false>());
+RegisterTest(t2_2, new TestAnd<And2_2_d, bool, false>());
+RegisterTest(t2_3, new TestAnd<And2_3_d, bool, false>());
+RegisterTest(t2_4, new TestAnd<And2_4_d, bool, true>());
 
 using And4_1_d = basic::type::logic::And<std::true_type, 
     std::false_type, std::false_type, std::false_type, std::false_type>;
@@ -234,31 +213,24 @@ __DEFINE_NAME_(basic::type::logic::And<std::true_type,
 __DEFINE_NAME_(basic::type::logic::And<std::true_type, 
     std::true_type, std::true_type, std::true_type, std::true_type>);
 
-TestRegister t3_1(new TestAnd<And4_1_d, bool, false>());
-TestRegister t3_2(new TestAnd<And4_2_d, bool, false>());
-TestRegister t3_3(new TestAnd<And4_3_d, bool, false>());
-TestRegister t3_4(new TestAnd<And4_4_d, bool, false>());
-TestRegister t3_5(new TestAnd<And4_5_d, bool, false>());
-TestRegister t3_6(new TestAnd<And4_6_d, bool, false>());
-TestRegister t3_7(new TestAnd<And4_7_d, bool, false>());
-TestRegister t3_8(new TestAnd<And4_8_d, bool, false>());
-TestRegister t3_9(new TestAnd<And4_9_d, bool, false>());
-TestRegister t3_10(new TestAnd<And4_10_d, bool, false>());
-TestRegister t3_11(new TestAnd<And4_11_d, bool, false>());
-TestRegister t3_12(new TestAnd<And4_12_d, bool, false>());
-TestRegister t3_13(new TestAnd<And4_13_d, bool, false>());
-TestRegister t3_14(new TestAnd<And4_14_d, bool, false>());
-TestRegister t3_15(new TestAnd<And4_15_d, bool, false>());
-TestRegister t3_16(new TestAnd<And4_16_d, bool, true>());
+RegisterTest(t3_1, new TestAnd<And4_1_d, bool, false>());
+RegisterTest(t3_2, new TestAnd<And4_2_d, bool, false>());
+RegisterTest(t3_3, new TestAnd<And4_3_d, bool, false>());
+RegisterTest(t3_4, new TestAnd<And4_4_d, bool, false>());
+RegisterTest(t3_5, new TestAnd<And4_5_d, bool, false>());
+RegisterTest(t3_6, new TestAnd<And4_6_d, bool, false>());
+RegisterTest(t3_7, new TestAnd<And4_7_d, bool, false>());
+RegisterTest(t3_8, new TestAnd<And4_8_d, bool, false>());
+RegisterTest(t3_9, new TestAnd<And4_9_d, bool, false>());
+RegisterTest(t3_10, new TestAnd<And4_10_d, bool, false>());
+RegisterTest(t3_11, new TestAnd<And4_11_d, bool, false>());
+RegisterTest(t3_12, new TestAnd<And4_12_d, bool, false>());
+RegisterTest(t3_13, new TestAnd<And4_13_d, bool, false>());
+RegisterTest(t3_14, new TestAnd<And4_14_d, bool, false>());
+RegisterTest(t3_15, new TestAnd<And4_15_d, bool, false>());
+RegisterTest(t3_16, new TestAnd<And4_16_d, bool, true>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

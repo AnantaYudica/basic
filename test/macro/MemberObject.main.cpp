@@ -1,6 +1,8 @@
 #include "macro/MemberObject.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <sstream>
@@ -88,29 +90,6 @@ __DEFINE_NAME_(B<void>);
 __DEFINE_NAME_(int B<void>::*);
 __DEFINE_NAME_(C);
 __DEFINE_NAME_(B<void> C::*);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 struct AliasType;
 struct AliasTypeTmpl;
@@ -353,7 +332,7 @@ void TestPointerTmpl()
 template<typename Tio, template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename = AliasType, typename = Pointer,
     typename... Targs>
-struct TestMmbrObj : BaseTest
+struct TestMmbrObj : basic::test::Base
 {
     void Test() 
     {
@@ -367,7 +346,7 @@ struct TestMmbrObj : BaseTest
 template<typename Tio, template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestMmbrObj<Tio, Tmf, T, Tta, Ttp, TtpValue, 
-    AliasType, PointerTmpl, Targs...> : BaseTest
+    AliasType, PointerTmpl, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -381,7 +360,7 @@ struct TestMmbrObj<Tio, Tmf, T, Tta, Ttp, TtpValue,
 template<typename Tio, template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestMmbrObj<Tio, Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, Pointer, Targs...> : BaseTest
+    AliasTypeTmpl, Pointer, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -395,7 +374,7 @@ struct TestMmbrObj<Tio, Tmf, T, Tta, Ttp, TtpValue,
 template<typename Tio, template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestMmbrObj<Tio, Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, PointerTmpl, Targs...> : BaseTest
+    AliasTypeTmpl, PointerTmpl, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -431,7 +410,7 @@ using MmbrObj1_t = MmbrObj1<T, int>;
 
 __DEFINE_NAME_(MmbrObj1<A, int>);
 
-TestRegister t1_1(new TestMmbrObj<InputObject<A>, MmbrObj1_t, A, 
+RegisterTest(t1_1, new TestMmbrObj<InputObject<A>, MmbrObj1_t, A, 
     int A::*, int A::*, &A::Obj1>());
 
 /**
@@ -464,7 +443,7 @@ using MmbrObj2_t = MmbrObj2<T, int, void>;
 
 __DEFINE_NAME_(MmbrObj2<A, int, void>);
 
-TestRegister t2_1(new TestMmbrObj<InputObject<A>, MmbrObj2_t, A, 
+RegisterTest(t2_1, new TestMmbrObj<InputObject<A>, MmbrObj2_t, A, 
     int A::*, int A::*, &A::Obj1>());
 
 /**
@@ -500,7 +479,7 @@ using MmbrObj3_t = MmbrObj3<B, int, T>;
 
 __DEFINE_NAME_(MmbrObj3<B, int, void>);
 
-TestRegister t3_1(new TestMmbrObj<InputObject<B<void>>, MmbrObj3_t, void, 
+RegisterTest(t3_1, new TestMmbrObj<InputObject<B<void>>, MmbrObj3_t, void, 
     int B<void>::*, int B<void>::*, &B<void>::Obj2>());
 
 /**
@@ -536,7 +515,7 @@ using MmbrObj4_t = MmbrObj4<T, B, void>;
 
 __DEFINE_NAME_(MmbrObj4<C, B, void>);
 
-TestRegister t4_1(new TestMmbrObj<InputObject<C>, MmbrObj4_t, C, 
+RegisterTest(t4_1, new TestMmbrObj<InputObject<C>, MmbrObj4_t, C, 
     B<void> C::*, B<void> C::*, &C::Obj3>());
 
 /**
@@ -576,7 +555,7 @@ using MmbrObj5_t = MmbrObj5<T, B>;
 
 __DEFINE_NAME_(MmbrObj5<C, B>);
 
-TestRegister t5_1(new TestMmbrObj<InputObject<C>, MmbrObj5_t, C, 
+RegisterTest(t5_1, new TestMmbrObj<InputObject<C>, MmbrObj5_t, C, 
     B<void> C::*, B<void> C::*, &C::Obj3, AliasTypeTmpl, Pointer, void>());
 
 /**
@@ -609,7 +588,7 @@ using MmbrObj6_t = MmbrObj6<T, int>;
 
 __DEFINE_NAME_(MmbrObj6<A, int>);
 
-TestRegister t6_1(new TestMmbrObj<InputObject<A>, MmbrObj6_t, A, 
+RegisterTest(t6_1, new TestMmbrObj<InputObject<A>, MmbrObj6_t, A, 
     int A::*, int A::*, &A::Obj1, AliasType, PointerTmpl, void>());
 
 /**
@@ -645,7 +624,7 @@ using MmbrObj7_t = MmbrObj7<T, B>;
 
 __DEFINE_NAME_(MmbrObj7<C, B>);
 
-TestRegister t7_1(new TestMmbrObj<InputObject<C>, MmbrObj7_t, C, 
+RegisterTest(t7_1, new TestMmbrObj<InputObject<C>, MmbrObj7_t, C, 
     B<void> C::*, B<void> C::*, &C::Obj3, AliasTypeTmpl, Pointer, void>());
 
 /**
@@ -680,17 +659,10 @@ using MmbrObj8_t = MmbrObj8<T, B>;
 
 __DEFINE_NAME_(MmbrObj8<C, B>);
 
-TestRegister t8_1(new TestMmbrObj<InputObject<C>, MmbrObj8_t, C, 
+RegisterTest(t8_1, new TestMmbrObj<InputObject<C>, MmbrObj8_t, C, 
     B<void> C::*, B<void> C::*, &C::Obj3, AliasTypeTmpl, PointerTmpl, void>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/Conditional.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <typeinfo>
 #include <type_traits>
 #include <string>
@@ -41,30 +43,6 @@ struct Name<__VA_ARGS__>\
 __DEFINE_NAME_CONDITIONAL_(std::true_type);
 __DEFINE_NAME_CONDITIONAL_(std::false_type);
 __DEFINE_NAME_CONDITIONAL_(void);
-
-struct BaseTestConditional
-{
-    virtual ~BaseTestConditional() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTestConditional*> List;
-    BaseTestConditional* m_ptr;
-    TestRegister(BaseTestConditional* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTestConditional*> TestRegister::List;
-
 
 struct TrueFalseAliasType;
 struct TrueAliasTypeTmpl;
@@ -188,7 +166,7 @@ void TestAliasTypeTmpl()
 
 template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
     typename Ta = TrueFalseAliasType, typename... Targs>
-struct TestConditional : BaseTestConditional
+struct TestConditional : basic::test::Base
 {
     void Test() 
     {
@@ -202,7 +180,7 @@ struct TestConditional : BaseTestConditional
 template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
     typename... Targs>
 struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    TrueAliasTypeTmpl, Targs...> : BaseTestConditional
+    TrueAliasTypeTmpl, Targs...> : basic::test::Base
 {
 void Test() 
     {
@@ -216,7 +194,7 @@ void Test()
 template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
     typename... Targs>
 struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    FalseAliasTypeTmpl, Targs...> : BaseTestConditional
+    FalseAliasTypeTmpl, Targs...> : basic::test::Base
 {
 void Test() 
     {
@@ -230,7 +208,7 @@ void Test()
 template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
     typename... Targs>
 struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    TrueFalseAliasTypeTmpl, Targs...> : BaseTestConditional
+    TrueFalseAliasTypeTmpl, Targs...> : basic::test::Base
 {
 void Test() 
     {
@@ -269,7 +247,7 @@ typedef Conditional1<false, std::true_type, std::false_type>
 __DEFINE_NAME_CONDITIONAL_(Conditional1<true, std::true_type, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional1<false, std::true_type, std::false_type>);
 
-TestRegister t1(new TestConditional<TrueConditional1_t, 
+RegisterTest(t1, new TestConditional<TrueConditional1_t, 
     FalseConditional1_t, std::true_type, std::false_type>());
 
 /**
@@ -304,7 +282,7 @@ typedef Conditional2<false> FalseConditiona2_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional2<true>);
 __DEFINE_NAME_CONDITIONAL_(Conditional2<false>);
 
-TestRegister t2(new TestConditional<TrueConditional2_t, 
+RegisterTest(t2, new TestConditional<TrueConditional2_t, 
     FalseConditiona2_t, std::true_type, std::false_type>());
 
 /**
@@ -337,7 +315,7 @@ typedef Conditional3<false, std::true_type, A<void>> FalseConditional3_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional3<true, std::true_type, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional3<false, std::true_type, B<void>>);
 
-TestRegister t3(new TestConditional<TrueConditional3_t,
+RegisterTest(t3, new TestConditional<TrueConditional3_t,
     FalseConditional3_t, std::true_type, void>());  
 
 
@@ -382,7 +360,7 @@ typedef Conditional4<false, void> FalseConditional4_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional4<true, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional4<false, void>);
 
-TestRegister t4(new TestConditional<TrueConditional4_t,
+RegisterTest(t4, new TestConditional<TrueConditional4_t,
     FalseConditional4_t, std::true_type, std::false_type>());
 
 /**
@@ -431,7 +409,7 @@ typedef Conditional5<false, A, void> FalseConditional5_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional5<true, A, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional5<false, A, void>);
 
-TestRegister t5(new TestConditional<TrueConditional5_t,
+RegisterTest(t5, new TestConditional<TrueConditional5_t,
     FalseConditional5_t, A<void>, std::false_type>());
 
 /**
@@ -480,7 +458,7 @@ typedef Conditional6<false, std::true_type, A, void> FalseConditional6_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional6<true, std::true_type, A, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional6<false, std::true_type, A, void>);
 
-TestRegister t6(new TestConditional<TrueConditional6_t,
+RegisterTest(t6, new TestConditional<TrueConditional6_t,
     FalseConditional6_t, std::true_type, A<void>>());
 
 /**
@@ -527,7 +505,7 @@ typedef Conditional7<false, A, void, B, void> FalseConditional7_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional7<true, A, void, B, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional7<false, A, void, B, void>);
 
-TestRegister t7(new TestConditional<TrueConditional7_t,
+RegisterTest(t7, new TestConditional<TrueConditional7_t,
     FalseConditional7_t, A<void>, B<void>>());
 
 /**
@@ -558,7 +536,7 @@ typedef Conditional8<false, A<void>, std::false_type> FalseConditional8_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional8<true, A<void>, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional8<false, A<void>, std::false_type>);
 
-TestRegister t8(new TestConditional<TrueConditional8_t,
+RegisterTest(t8, new TestConditional<TrueConditional8_t,
     FalseConditional8_t, std::true_type, std::false_type>());
 
 /**
@@ -589,7 +567,7 @@ typedef Conditional9<false, std::true_type, A<void>> FalseConditional9_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional9<true, std::true_type, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional9<false, std::true_type, A<void>>);
 
-TestRegister t9(new TestConditional<TrueConditional9_t,
+RegisterTest(t9, new TestConditional<TrueConditional9_t,
     FalseConditional9_t, std::true_type, std::false_type>());
 
 /**
@@ -617,7 +595,7 @@ typedef Conditional10<false, A<void>, A<void>> FalseConditional10_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional10<true, A<void>, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional10<false, A<void>, A<void>>);
 
-TestRegister t10(new TestConditional<TrueConditional10_t,
+RegisterTest(t10, new TestConditional<TrueConditional10_t,
     FalseConditional10_t, std::true_type, std::false_type>());
 
 /**
@@ -650,7 +628,7 @@ typedef Conditional11<false, A<void>> FalseConditional11_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional11<true, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional11<false, A<void>>);
 
-TestRegister t11(new TestConditional<TrueConditional11_t,
+RegisterTest(t11, new TestConditional<TrueConditional11_t,
     FalseConditional11_t, std::true_type, std::false_type>());
 
 /**
@@ -683,7 +661,7 @@ typedef Conditional12<false, std::true_type, A<void>> FalseConditional12_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional12<true, std::true_type, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional12<false, std::true_type, A<void>>);
 
-TestRegister t12(new TestConditional<TrueConditional12_t,
+RegisterTest(t12, new TestConditional<TrueConditional12_t,
     FalseConditional12_t, std::true_type, std::false_type>());
 
 /**
@@ -716,7 +694,7 @@ typedef Conditional13<false, A<void>> FalseConditional13_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional13<true, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional13<false, A<void>>);
 
-TestRegister t13(new TestConditional<TrueConditional13_t,
+RegisterTest(t13, new TestConditional<TrueConditional13_t,
     FalseConditional13_t, std::true_type, std::false_type>());
 
 /**
@@ -749,7 +727,7 @@ typedef Conditional14<false, void, A<void>, std::false_type> FalseConditional14_
 __DEFINE_NAME_CONDITIONAL_(Conditional14<true, void, A<void>, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional14<false, void, A<void>, std::false_type>);
 
-TestRegister t14(new TestConditional<TrueConditional14_t,
+RegisterTest(t14, new TestConditional<TrueConditional14_t,
     FalseConditional14_t, std::true_type, std::false_type>());
 
 /**
@@ -777,7 +755,7 @@ typedef Conditional15<false, void, std::true_type, A<void>> FalseConditional15_t
 __DEFINE_NAME_CONDITIONAL_(Conditional15<true, void, std::true_type, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional15<false, void, std::true_type, A<void>>);
 
-TestRegister t15(new TestConditional<TrueConditional15_t,
+RegisterTest(t15, new TestConditional<TrueConditional15_t,
     FalseConditional15_t, std::true_type, std::false_type>());
 
 /**
@@ -811,7 +789,7 @@ typedef Conditional16<false, void, A<void>> FalseConditional16_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional16<true, void, A<void>>);
 __DEFINE_NAME_CONDITIONAL_(Conditional16<false, void, A<void>>);
 
-TestRegister t16(new TestConditional<TrueConditional16_t,
+RegisterTest(t16, new TestConditional<TrueConditional16_t,
     FalseConditional16_t, std::true_type, std::false_type>());
 
 /**
@@ -841,7 +819,7 @@ typedef Conditional17<false, A, void> FalseConditional17_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional17<true, A, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional17<false, A, void>);
 
-TestRegister t17(new TestConditional<TrueConditional17_t,
+RegisterTest(t17, new TestConditional<TrueConditional17_t,
     FalseConditional17_t, std::true_type, std::false_type>());
 
 /**
@@ -870,7 +848,7 @@ typedef Conditional18<false, std::true_type, A, void> FalseConditional18_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional18<true, std::true_type, A, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional18<false, std::true_type, A, void>);
 
-TestRegister t18(new TestConditional<TrueConditional18_t, 
+RegisterTest(t18, new TestConditional<TrueConditional18_t, 
     FalseConditional18_t, std::true_type, std::false_type>());
 
 /**
@@ -900,7 +878,7 @@ typedef Conditional19<false, A, void, A, void> FalseConditional19_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional19<true, A, void, A, void>);
 __DEFINE_NAME_CONDITIONAL_(Conditional19<false, A, void, A, void>);
 
-TestRegister t19(new TestConditional<TrueConditional19_t,
+RegisterTest(t19, new TestConditional<TrueConditional19_t,
     FalseConditional19_t, std::true_type, std::false_type>());
 
 /**
@@ -933,7 +911,7 @@ typedef Conditional20<false,  std::true_type, std::false_type> FalseConditional2
 __DEFINE_NAME_CONDITIONAL_(Conditional20<true, std::true_type, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional20<false,  std::true_type, std::false_type>);
 
-TestRegister t20(new TestConditional<TrueConditional20_t,
+RegisterTest(t20, new TestConditional<TrueConditional20_t,
     FalseConditional20_t, std::true_type, std::false_type, TrueAliasTypeTmpl, void>());
 
 /**
@@ -966,7 +944,7 @@ typedef Conditional21<false,  std::true_type, std::false_type> FalseConditional2
 __DEFINE_NAME_CONDITIONAL_(Conditional21<true, std::true_type, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional21<false,  std::true_type, std::false_type>);
 
-TestRegister t21(new TestConditional<TrueConditional21_t,
+RegisterTest(t21, new TestConditional<TrueConditional21_t,
     FalseConditional21_t, std::true_type, std::false_type, FalseAliasTypeTmpl, void>());
 
 /**
@@ -998,7 +976,7 @@ typedef Conditional22<false,  std::true_type, std::false_type> FalseConditional2
 __DEFINE_NAME_CONDITIONAL_(Conditional22<true, std::true_type, std::false_type>);
 __DEFINE_NAME_CONDITIONAL_(Conditional22<false,  std::true_type, std::false_type>);
 
-TestRegister t22(new TestConditional<TrueConditional22_t,
+RegisterTest(t22, new TestConditional<TrueConditional22_t,
     FalseConditional22_t, std::true_type, std::false_type,
     TrueFalseAliasTypeTmpl, void>());
 
@@ -1030,7 +1008,7 @@ typedef Conditional23<false> FalseConditional23_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional23<true>);
 __DEFINE_NAME_CONDITIONAL_(Conditional23<false>);
 
-TestRegister t23(new TestConditional<TrueConditional23_t,
+RegisterTest(t23, new TestConditional<TrueConditional23_t,
     FalseConditional23_t, std::true_type, std::false_type,
     TrueAliasTypeTmpl, void>());
 
@@ -1062,7 +1040,7 @@ typedef Conditional24<false> FalseConditional24_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional24<true>);
 __DEFINE_NAME_CONDITIONAL_(Conditional24<false>);
 
-TestRegister t24(new TestConditional<TrueConditional24_t,
+RegisterTest(t24, new TestConditional<TrueConditional24_t,
     FalseConditional24_t, std::true_type, std::false_type,
     FalseAliasTypeTmpl, void>());
 
@@ -1096,18 +1074,11 @@ typedef Conditional25<false> FalseConditional25_t;
 __DEFINE_NAME_CONDITIONAL_(Conditional25<true>);
 __DEFINE_NAME_CONDITIONAL_(Conditional25<false>);
 
-TestRegister t25(new TestConditional<TrueConditional25_t,
+RegisterTest(t25, new TestConditional<TrueConditional25_t,
     FalseConditional25_t, std::true_type, std::false_type,
     TrueFalseAliasTypeTmpl, void>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

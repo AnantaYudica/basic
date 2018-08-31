@@ -1,6 +1,8 @@
 #include "macro/IsSameWith.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
@@ -61,29 +63,6 @@ __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 bool BoolCompare(bool a, bool b)
 {
@@ -167,7 +146,7 @@ void TestValue()
 
 template<template<typename> class Tis, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestIsSame : BaseTest
+struct TestIsSame : basic::test::Base
 {
     void Test() 
     {
@@ -205,9 +184,9 @@ using IsSame1_t = IsSame1<T>;
 __DEFINE_NAME_(IsSame1<A>);
 __DEFINE_NAME_(IsSame1<B>);
 
-TestRegister t1(new TestIsSame<IsSame1_t, A, bool, true, 
+RegisterTest(t1, new TestIsSame<IsSame1_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t2(new TestIsSame<IsSame1_t, B, bool, false,
+RegisterTest(t2, new TestIsSame<IsSame1_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -241,9 +220,9 @@ using IsSame2_t = IsSame2<T>;
 __DEFINE_NAME_(IsSame2<A>);
 __DEFINE_NAME_(IsSame2<B>);
 
-TestRegister t3(new TestIsSame<IsSame2_t, A, bool, true, 
+RegisterTest(t3, new TestIsSame<IsSame2_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t4(new TestIsSame<IsSame2_t, B, bool, false,
+RegisterTest(t4, new TestIsSame<IsSame2_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -278,21 +257,14 @@ __DEFINE_NAME_(IsSame3<C<void>>);
 __DEFINE_NAME_(IsSame3<D<void>>);
 __DEFINE_NAME_(IsSame3<A>);
 
-TestRegister t5(new TestIsSame<IsSame3_t, C<void>, bool, true, 
+RegisterTest(t5, new TestIsSame<IsSame3_t, C<void>, bool, true, 
     &BoolCompare>());
-TestRegister t6(new TestIsSame<IsSame3_t, D<void>, bool, false,
+RegisterTest(t6, new TestIsSame<IsSame3_t, D<void>, bool, false,
     &BoolCompare>());
-TestRegister t7(new TestIsSame<IsSame3_t, A, bool, false,
+RegisterTest(t7, new TestIsSame<IsSame3_t, A, bool, false,
     &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/HasStaticMemberFunction.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <type_traits>
 #include <vector>
 #include <typeinfo>
@@ -77,29 +79,6 @@ __DEFINE_NAME_(A);
 __DEFINE_NAME_(B);
 __DEFINE_NAME_(C<std::true_type>);
 __DEFINE_NAME_(C<std::false_type>);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<template<typename> class Thsmf, typename T,
     typename Tta>
@@ -183,7 +162,7 @@ void TestValue()
 
 template<template<typename> class Thsmf, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestHasStaticMmbrFunc : BaseTest
+struct TestHasStaticMmbrFunc : basic::test::Base
 {
     void Test() 
     {
@@ -225,9 +204,9 @@ using HasStaticMmbrFunc1_t = HasStaticMmbrFunc1<T, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc1<A, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc1<B, void>);
 
-TestRegister t1(new TestHasStaticMmbrFunc<HasStaticMmbrFunc1_t, A, bool, true, 
+RegisterTest(t1, new TestHasStaticMmbrFunc<HasStaticMmbrFunc1_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t2(new TestHasStaticMmbrFunc<HasStaticMmbrFunc1_t, B, bool, false,
+RegisterTest(t2, new TestHasStaticMmbrFunc<HasStaticMmbrFunc1_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -269,9 +248,9 @@ using HasStaticMmbrFunc2_t = HasStaticMmbrFunc2<T, void, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc2<A, void, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc2<B, void, void>);
 
-TestRegister t3(new TestHasStaticMmbrFunc<HasStaticMmbrFunc2_t, A, bool, true, 
+RegisterTest(t3, new TestHasStaticMmbrFunc<HasStaticMmbrFunc2_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t4(new TestHasStaticMmbrFunc<HasStaticMmbrFunc2_t, B, bool, false,
+RegisterTest(t4, new TestHasStaticMmbrFunc<HasStaticMmbrFunc2_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -317,9 +296,9 @@ using HasStaticMmbrFunc3_t = HasStaticMmbrFunc3<C, T, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc3<C, std::true_type, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc3<C, std::false_type, void>);
 
-TestRegister t5(new TestHasStaticMmbrFunc<HasStaticMmbrFunc3_t, std::true_type, 
+RegisterTest(t5, new TestHasStaticMmbrFunc<HasStaticMmbrFunc3_t, std::true_type, 
     bool, true, &BoolCompare>());
-TestRegister t6(new TestHasStaticMmbrFunc<HasStaticMmbrFunc3_t, std::false_type,
+RegisterTest(t6, new TestHasStaticMmbrFunc<HasStaticMmbrFunc3_t, std::false_type,
     bool, false, &BoolCompare>());
 
 /**
@@ -377,9 +356,9 @@ using HasStaticMmbrFunc4_t = HasStaticMmbrFunc4<T, void, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc4<A, void, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc4<B, void, void>);
 
-TestRegister t7(new TestHasStaticMmbrFunc<HasStaticMmbrFunc4_t, A, 
+RegisterTest(t7, new TestHasStaticMmbrFunc<HasStaticMmbrFunc4_t, A, 
     bool, true, &BoolCompare>());
-TestRegister t8(new TestHasStaticMmbrFunc<HasStaticMmbrFunc4_t, B,
+RegisterTest(t8, new TestHasStaticMmbrFunc<HasStaticMmbrFunc4_t, B,
     bool, false, &BoolCompare>());
 
 /**
@@ -424,9 +403,9 @@ using HasStaticMmbrFunc5_t = HasStaticMmbrFunc5<T, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc5<A, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc5<B, void>);
 
-TestRegister t9(new TestHasStaticMmbrFunc<HasStaticMmbrFunc5_t, A, 
+RegisterTest(t9, new TestHasStaticMmbrFunc<HasStaticMmbrFunc5_t, A, 
     bool, true, &BoolCompare>());
-TestRegister t10(new TestHasStaticMmbrFunc<HasStaticMmbrFunc5_t, B,
+RegisterTest(t10, new TestHasStaticMmbrFunc<HasStaticMmbrFunc5_t, B,
     bool, false, &BoolCompare>());
 
 /**
@@ -485,9 +464,9 @@ using HasStaticMmbrFunc6_t = HasStaticMmbrFunc6<T, void>;
 __DEFINE_NAME_(HasStaticMmbrFunc6<std::true_type, void>);
 __DEFINE_NAME_(HasStaticMmbrFunc6<std::false_type, void>);
 
-TestRegister t11(new TestHasStaticMmbrFunc<HasStaticMmbrFunc6_t, std::true_type, 
+RegisterTest(t11, new TestHasStaticMmbrFunc<HasStaticMmbrFunc6_t, std::true_type, 
     bool, true, &BoolCompare>());
-TestRegister t12(new TestHasStaticMmbrFunc<HasStaticMmbrFunc6_t, 
+RegisterTest(t12, new TestHasStaticMmbrFunc<HasStaticMmbrFunc6_t, 
     std::false_type, bool, false, &BoolCompare>());
 
 /**
@@ -551,19 +530,12 @@ using HasStaticMmbrFunc7_t = HasStaticMmbrFunc7<T, void, C>;
 __DEFINE_NAME_(HasStaticMmbrFunc7<D, void, C>);
 __DEFINE_NAME_(HasStaticMmbrFunc7<B, void, C>);
 
-TestRegister t13(new TestHasStaticMmbrFunc<HasStaticMmbrFunc7_t, D, 
+RegisterTest(t13, new TestHasStaticMmbrFunc<HasStaticMmbrFunc7_t, D, 
     bool, true, &BoolCompare>());
-TestRegister t14(new TestHasStaticMmbrFunc<HasStaticMmbrFunc7_t, B, 
+RegisterTest(t14, new TestHasStaticMmbrFunc<HasStaticMmbrFunc7_t, B, 
     bool, false, &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }
