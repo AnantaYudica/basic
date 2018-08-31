@@ -2,10 +2,12 @@
 #define BASIC_TEST_OUTPUT_H_
 
 #include "Status.h"
+#include "out/Trace.h"
 
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
+#include <stack>
 
 namespace basic
 {
@@ -21,6 +23,7 @@ private:
     bool m_debugEnable;
     FILE* m_outputFile;
     Ts& m_status;
+    std::stack<out::Trace> m_traces;
 public:
     Output(Ts& status);
     Output(Ts& status, const char* file_output);
@@ -33,6 +36,10 @@ public:
     void Info(const char* format, Targs... args);
     template<typename... Targs>
     void Debug(const char* format, Targs... args);
+public:
+    void Push(const out::Trace& trace);
+    void Pop();
+    std::stack<out::Trace> GetTrace();
 public:
     bool Enable();
     void Enable(bool enable);
@@ -111,6 +118,24 @@ void Output<Ts>::Debug(const char* format, Targs... args)
         fprintf(m_outputFile, format, args...);
         fflush(m_outputFile);
     }
+}
+
+template<typename Ts>
+void Output<Ts>::Push(const out::Trace& trace)
+{
+    m_traces.push(trace);
+}
+
+template<typename Ts>
+void Output<Ts>::Pop()
+{
+    m_traces.pop();
+}
+
+template<typename Ts>
+std::stack<out::Trace> Output<Ts>::GetTrace()
+{
+    return m_traces;
 }
 
 template<typename Ts>
