@@ -2,6 +2,7 @@
 #define BASIC_TYPE_NAME_DECLARATOR_POINTER_H_
 
 #include <string>
+#include <ostream>
 
 #include "../Declarator.h"
 #include "../Specifier.h"
