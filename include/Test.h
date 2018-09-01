@@ -6,11 +6,13 @@
 #include "test/Memory.h"
 #include "test/Base.h"
 #include "test/Register.h"
+#include "test/Trace.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <utility>
 #include <vector>
+#include <stack>
 
 #ifndef BASIC_TEST_OUTPUT_FILENAME
 #define BASIC_TEST_OUTPUT_FILENAME_EMPTY
@@ -52,6 +54,7 @@ public:
     OutputType Output;
     MemoryType Memory;
     std::vector<test::Register<Test<Ts, To, Tmem>>*> List;
+    std::stack<test::Trace> Traces;
 private:
     Test();
 public:
@@ -63,6 +66,10 @@ public:
     static void Debug(const char* debug_msg_cstr, Targs&&... args);
 public:
     static const int& Run();
+public:
+    void Push(const test::Trace& trace);
+    void Pop();
+    std::stack<test::Trace> GetTrace();
 };
 
 template<typename Ts, template<typename> class To,
@@ -74,13 +81,15 @@ template<typename Ts, template<typename> class To,
 Test<Ts, To, Tmem>::Test() :
     Status(),
 #ifdef BASIC_TEST_OUTPUT_FILENAME_EMPTY
-    Output(Status)
+    Output(Status),
 #else //!BASIC_TEST_OUTPUT_FILENAME_EMPTY
-    Output(Status, BASIC_TEST_OUTPUT_FILENAME)
+    Output(Status, BASIC_TEST_OUTPUT_FILENAME),
 #endif
 #ifdef USING_BASIC_TEST_MEMORY
-    ,Memory(Output)
+    Memory(Output),
 #endif //USING_BASIC_TEST_MEMORY
+    List(),
+    Traces()
 {}
 
 template<typename Ts, template<typename> class To,
@@ -102,7 +111,7 @@ bool Test<Ts, To, Tmem>::Assert(bool test, const char* error_msg_cstr,
     {
         Instance.Output.Error("error %s file %s line %i\n", 
             error_msg_cstr, file, line);
-        auto trace = Instance.Output.GetTrace();
+        auto trace = Instance.GetTrace();
         while (!trace.empty())
         {
             Instance.Output.Error(" from file %s line %i\n", 
@@ -131,14 +140,35 @@ const int& Test<Ts, To, Tmem>::Run()
     for (auto t : Instance.List)
     {
         Debug("Test %u of %u : \n", i, s);
-        Instance.Output.Push(test::out::Trace(t->File(),
-            t->Line()));
+        Instance.Push(test::Trace(t->File(), t->Line()));
         t->Run();
-        Instance.Output.Pop();
+        Instance.Pop();
         ++i;
     }
     return Instance.Status.Get();
 }
+
+template<typename Ts, template<typename> class To,
+    template<typename> class Tmem>
+void Test<Ts, To, Tmem>::Push(const test::Trace& trace)
+{
+    Instance.Traces.push(trace);
+}
+
+template<typename Ts, template<typename> class To,
+    template<typename> class Tmem>
+void Test<Ts, To, Tmem>::Pop()
+{
+    Instance.Traces.pop();
+}
+
+template<typename Ts, template<typename> class To,
+    template<typename> class Tmem>
+std::stack<test::Trace> Test<Ts, To, Tmem>::GetTrace()
+{
+    return Instance.Traces;
+}
+
 
 } //!basic
 
