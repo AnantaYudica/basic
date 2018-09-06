@@ -75,11 +75,6 @@ template<typename... TArgs>
 template<typename... TValArgs>
 Variable<TArgs...>::Variable(TValArgs&&... val_args)
 {}
-/*
-template<typename... TArgs>
-Variable<TArgs...>::Variable(const Variable<TArgs...>& cpy)
-{}
-*/
 
 template<typename... TArgs>
 Variable<TArgs...>& Variable<TArgs...>::
@@ -93,12 +88,6 @@ template<typename... TValArgs>
 Variable<TArg, TArgs...>::Variable(TValArgs&&... val_args) :
     Variable<TArgs...>(std::forward<TValArgs>(val_args)...)
 {}
-/*
-template<typename TArg, typename... TArgs>
-Variable<TArg, TArgs...>::Variable(const Variable<TArg, TArgs...>& cpy) :
-    Variable<TArgs...>(cpy)
-{}
-*/
 
 template<typename TArg, typename... TArgs>
 Variable<TArg, TArgs...>& Variable<TArg, TArgs...>::
@@ -124,14 +113,7 @@ Variable<var::Value<TArg>, TArgs...>::Variable(TValArg&& val_arg,
         Variable<TArgs...>(std::forward<TValArgs>(val_args)...),
         m_value(std::forward<TValArg>(val_arg))
 {}
-/*
-template<typename TArg, typename... TArgs>
-Variable<var::Value<TArg>, TArgs...>::
-    Variable(const Variable<var::Value<TArg>, TArgs...>& cpy) :
-        Variable<TArgs...>(cpy),
-        m_value(cpy.m_value)
-{}
-*/
+
 template<typename TArg, typename... TArgs>
 Variable<var::Value<TArg>, TArgs...>& Variable<var::Value<TArg>, TArgs...>::
     operator=(const Variable<var::Value<TArg>, TArgs...>& cpy)
