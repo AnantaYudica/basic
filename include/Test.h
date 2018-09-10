@@ -8,6 +8,7 @@
 #include "test/Register.h"
 #include "test/Trace.h"
 #include "test/reg/Base.h"
+#include "test/type/Name.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -381,6 +382,17 @@ void operator delete[]( void* p, const std::nothrow_t& tag )
 #ifndef BASIC_TEST_CONSTRUCT
 #define BASIC_TEST_CONSTRUCT BASIC_TEST& __test_instance = BASIC_TEST::Instance
 #endif //!BASIC_TEST_CONSTRUCT
+
+#define BASIC_TEST_TYPE_NAME(__NAME__, __TYPE__, ...)\
+template<>\
+struct basic::test::type::Name<__TYPE__,##__VA_ARGS__>\
+{\
+    static basic::test::CString<const char> CStr()\
+    {\
+        static char _cstr[] = __NAME__;\
+        return {_cstr};\
+    }\
+}
 
 #else
 
