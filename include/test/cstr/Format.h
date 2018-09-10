@@ -15,12 +15,12 @@ namespace cstr
 {
 
 template<typename TChar = char, typename... TArgs>
-test::CString<typename std::remove_reference<TChar>::type> 
+test::CString<typename std::remove_const<TChar>::type> 
     Format(const std::size_t& size, const char* format, TArgs&&... args)
 {
     if (size != 0)
     {
-        auto* cstr = new typename std::remove_reference<TChar>::type[size];
+        auto* cstr = new typename std::remove_const<TChar>::type[size];
         int res = snprintf(cstr, size, format, std::forward<TArgs>(args)...);
         if (res >= size || res < 0)
             cstr[size - 1] = '\0';
