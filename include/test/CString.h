@@ -24,6 +24,7 @@ public:
     CString(const CString<TChar>& cpy);
     CString(const CString<const TChar>& cpy);
     CString(CString<TChar>&& mov);
+    CString(CString<const TChar>&& mov);
     ~CString();
 public:
     CString<TChar>& operator=(const CString<const TChar>& cpy);
@@ -31,6 +32,7 @@ public:
     CString<TChar>& operator=(const TChar(&cstr)[S]);
     CString<TChar>& operator=(const CString<TChar>& cpy);
     CString<TChar>& operator=(CString<TChar>&& mov);
+    CString<TChar>& operator=(CString<const TChar>&& mov);
 public:
     TChar& operator[](const std::size_t& index);
     const TChar& operator[](const std::size_t& index) const;
@@ -117,6 +119,14 @@ CString<TChar>::CString(CString<TChar>&& mov) :
 }
 
 template<typename TChar>
+CString<TChar>::CString(CString<const TChar>&& mov) :
+    m_cstr(new TChar[mov.Size()]),
+    m_size(mov.Size())
+{
+    memcpy(m_cstr, *mov, mov.Size() * sizeof(TChar));
+}
+
+template<typename TChar>
 CString<TChar>::~CString()
 {
     if (m_cstr != nullptr)
@@ -174,6 +184,24 @@ CString<TChar>& CString<TChar>::operator=(CString<TChar>&& mov)
         m_size = mov.m_size;
         mov.m_cstr = nullptr;
         mov.m_size = 0;
+    }
+    return *this;
+}
+
+template<typename TChar>
+CString<TChar>& CString<TChar>::operator=(CString<const TChar>&& mov)
+{
+    if (m_cstr != nullptr)
+    {
+        delete[] m_cstr;
+        m_cstr = nullptr;
+        m_size = 0;
+    }
+    if (*mov != nullptr)
+    {
+        m_cstr = new char[mov.Size()];
+        m_size = mov.Size();
+        memcpy(m_cstr, *mov, mov.Size() * sizeof(TChar));
     }
     return *this;
 }
