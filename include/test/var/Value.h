@@ -13,6 +13,8 @@ namespace var
 template<typename T>
 class Value
 {
+public:
+    typedef T Type;
 private:
     T m_value;
 public:
@@ -23,7 +25,7 @@ public:
     Value<T>& operator=(const Value<T>& cpy);
     Value<T>& operator=(Value<T>&& mov);
 public:
-    T Get();
+    T& Get();
     const T& Get() const;
 };
 
@@ -57,7 +59,7 @@ Value<T>& Value<T>::operator=(Value<T>&& mov)
 }
 
 template<typename T>
-T Value<T>::Get()
+T& Value<T>::Get()
 {
     return m_value;
 }
