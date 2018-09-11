@@ -5,6 +5,7 @@
 #include "../../CString.h"
 
 #include <cstddef>
+#include <utility>
 #include <type_traits>
 
 namespace basic
