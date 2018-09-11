@@ -12,6 +12,9 @@ namespace test
 template<typename TChar>
 class CString
 {
+public:
+    typedef TChar CharType;
+    typedef std::size_t SizeType;
 private:
     TChar* m_cstr;
     std::size_t m_size;
@@ -43,6 +46,9 @@ public:
 template<typename TChar>
 class CString<const TChar>
 {
+public:
+    typedef TChar CharType;
+    typedef std::size_t SizeType;
 private:
     const TChar* m_cstr;
     std::size_t m_size;
@@ -79,7 +85,7 @@ CString<TChar>::CString(const TChar(&cstr)[S]) :
 
 template<typename TChar>
 CString<TChar>::CString(TChar*&& cstr, const std::size_t& size) :
-    m_cstr(std::move(cstr)),
+    m_cstr(cstr),
     m_size(size)
 {
     cstr = nullptr;
