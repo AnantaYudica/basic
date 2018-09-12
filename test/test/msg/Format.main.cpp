@@ -4,59 +4,75 @@ BasicTestConstruct;
 
 #include "test/msg/Format.h"
 
-#include <iostream>
+#include <cstdio>
+
+char _true_cstr[] = "true";
+char _false_cstr[] = "false";
+
+#define PRINT_FORMAT(__VAR_NAME__)\
+printf("name : %s, size : %d, cstr : \"%s\", IsNull : %s, IsEmpty : %s\n",\
+    #__VAR_NAME__, __VAR_NAME__.Size(), *__VAR_NAME__,\
+    (!__VAR_NAME__ ? _true_cstr : _false_cstr),\
+    (__VAR_NAME__.IsEmpty() ? _true_cstr : _false_cstr))
+
 
 int main()
 {
-    basic::test::msg::Format f1("format : %s");
+    basic::test::msg::Format<char> f1;
+    PRINT_FORMAT(f1);
 
-    std::cout << f1.Size() << std::endl;
-    std::cout << f1.Value() << std::endl;
+    basic::test::msg::Format<char> f1_1("");
+    PRINT_FORMAT(f1_1);
 
-    basic::test::msg::Format f2(f1, f1.Size() + 4, "%s::%s");
-    std::cout << f2.Size() << std::endl;
-    std::cout << f2.Value() << std::endl;
+    basic::test::msg::Format<char> f2("format : %s");
+    PRINT_FORMAT(f2);
 
-    basic::test::msg::Format f3(f2, f1.Size() + 25, "Type<%s>", "template Foo1<%s>(%s)");
-    std::cout << f3.Size() << std::endl;
-    std::cout << f3.Value() << std::endl;
+    basic::test::msg::Format<char> f3(f2, f2.Size() + 4, "%s::%s");
+    PRINT_FORMAT(f3);
 
-    basic::test::msg::Format f4("format : %d");
-    std::cout << f4.Size() << std::endl;
-    std::cout << f4.Value() << std::endl;
+    basic::test::msg::Format<char> f4(f2, f2.Size() + 25, 
+        "Type<%s>", "template Foo1<%s>(%s)");
+    PRINT_FORMAT(f4);
 
-    basic::test::msg::Format f5(f4, f4.Size() + 10, 4);
-    std::cout << f5.Size() << std::endl;
-    std::cout << f5.Value() << std::endl;
-
-    basic::test::msg::Format f6(f3);
-    std::cout << f6.Size() << std::endl;
-    std::cout << f6.Value() << std::endl;
-
-    basic::test::msg::Format f7(std::move(f6));
-    std::cout << f7.Size() << std::endl;
-    std::cout << f7.Value() << std::endl;
-    std::cout << f6.Size() << std::endl;
-    if (f6)
-        std::cout << f6.Value() << std::endl;
-
-    basic::test::msg::Format f8("test");
-    std::cout << f8.Size() << std::endl;
-    std::cout << f8.Value() << std::endl;
-    f8 = f3;
-    std::cout << f8.Size() << std::endl;
-    std::cout << f8.Value() << std::endl;
-
-    basic::test::msg::Format f9;
-    f9 = std::move(f8);
-    std::cout << f8.Size() << std::endl;
-    if (f8)
-        std::cout << f8.Value() << std::endl;
-    std::cout << f9.Size() << std::endl;
-    std::cout << f9.Value() << std::endl;
+    basic::test::msg::Format<char> f5("format : %d");
+    PRINT_FORMAT(f5);
     
-    basic::test::msg::Format f10 ("testddd : %d", 14);
-    std::cout << f10.Size() << std::endl;
-    std::cout << f10.Value() << std::endl;
+    basic::test::msg::Format<char> f6(f5, f5.Size() + 10, 4);
+    PRINT_FORMAT(f6);
 
+    basic::test::msg::Format<char> f7(f4);
+    PRINT_FORMAT(f7);
+
+    basic::test::msg::Format<char> f8(std::move(f7));
+    PRINT_FORMAT(f8);
+    PRINT_FORMAT(f7);
+
+    basic::test::msg::Format<char> f9("test");
+    PRINT_FORMAT(f9);
+    f9 = f4;
+    PRINT_FORMAT(f9);
+
+    basic::test::msg::Format<char> f10;
+    f10 = std::move(f9);
+    PRINT_FORMAT(f10);
+    PRINT_FORMAT(f9);
+
+    basic::test::msg::Format<char> f11("testddd : %d", 14);
+    PRINT_FORMAT(f11);
+
+    basic::test::msg::Format<char> f12(basic::test::
+        CString<char>("test cstr"));
+    PRINT_FORMAT(f12);
+
+    basic::test::msg::Format<char> f13(basic::test::
+        CString<const char>("test cstr const"));
+    PRINT_FORMAT(f13);
+    
+    basic::test::msg::Format<char> f14(std::move(basic::test::
+        CString<char>("test cstr")));
+    PRINT_FORMAT(f14);
+
+    basic::test::msg::Format<char> f15(std::move(basic::test::
+        CString<const char>("test cstr const")));
+    PRINT_FORMAT(f15);
 }
