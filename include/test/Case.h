@@ -19,19 +19,18 @@ void Run(TDerived& d, Variable<TVariableArgs...>& var)
 
 template<typename TDerived, typename... TVariableArgs, 
     typename TCaseId, typename... TCaseIds>
-void Run(TDerived& d, test::Variable<TVariableArgs...>& var, TCaseId&& case_id, 
-    TCaseIds&&... case_ids)
+void Run(TDerived& d, test::Variable<TVariableArgs...>& var, const TCaseId& case_id, 
+    const TCaseIds&... case_ids)
 {
-    if (d.template Result<TVariableArgs...>(
-        std::forward<TCaseId>(case_id), var))
+    if (d.Result(case_id, var))
     {
-        d.Debug(std::forward<TCaseId>(case_id), var);
+        d.Debug(case_id, var);
     }
     else
     {
-        d.Error(std::forward<TCaseId>(case_id), var);
+        d.Error(case_id, var);
     }
-    Run(d, var, std::forward<TCaseIds>(case_ids)...);
+    Run(d, var, case_ids...);
 }
 
 } //!case_
