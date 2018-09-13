@@ -8,33 +8,38 @@ struct TestA3 {};
 struct TestA
 {
     template<typename T>
-    bool Result(TestA1&&, basic::test::Variable<T>&)
+    bool Result(const TestA1&, basic::test::Variable<T>&)
     {
         std::cout << "Result TestA1" << std::endl;
         return true;
     }
     template<typename T>
-    bool Result(TestA2&&, basic::test::Variable<T>&)
+    bool Result(const TestA2&, basic::test::Variable<T>&)
     {
         std::cout << "Result TestA2" << std::endl;
         return true;
     }
     template<typename T>
-    bool Result(TestA3&&, basic::test::Variable<T>&)
+    bool Result(const TestA3&, basic::test::Variable<T>&)
     {
         std::cout << "Result TestA3" << std::endl;
         return false;
     }
     template<typename TCaseId, typename T>
-    void Debug(TCaseId&&, basic::test::Variable<T>&)
+    void Info(const TCaseId&, basic::test::Variable<T>&)
+    {
+        std::cout << "Info of TestA" << std::endl;
+    }
+    template<typename TCaseId, typename T>
+    void Debug(const TCaseId&, basic::test::Variable<T>&)
     {
         std::cout << "Debug of TestA" << std::endl;
     }
     template<typename TCaseId, typename T>
-    void Error(TCaseId&&, basic::test::Variable<T>&)
+    void Error(const TCaseId&, basic::test::Variable<T>&)
     {
         std::cout << "Error of TestA" << std::endl;
-    }
+    } 
 };
 
 int main()
