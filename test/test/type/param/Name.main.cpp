@@ -20,7 +20,8 @@ struct basic::test::type::Name<A<TArgs...>>
     static basic::test::CString<char> CStr()
     {
         basic::test::CString<char> param = 
-            std::move(basic::test::type::param::Name<TArgs...>::CStr());
+            std::move(basic::test::type::param::Name<
+                basic::test::type::Parameter<TArgs...>>::CStr());
         return basic::test::cstr::Format<char>(4 + (param.Size() - 1),
             "A<%s>", *param);
     }
