@@ -11,6 +11,13 @@
 #define BASIC_TEST_MEMORY_MULTIPLY_BLOCK_SIZE 10
 #endif //!BASIC_TEST_MEMORY_MULTIPLY_BLOCK_SIZE
 
+#ifndef BASIC_TEST_MEMORY_DEBUG_ALLOC
+#define BASIC_TEST_MEMORY_DEBUG_ALLOC 0
+#endif //!BASIC_TEST_MEMORY_DEBUG_ALLOC
+#ifndef BASIC_TEST_MEMORY_DEBUG_DEALLOC
+#define BASIC_TEST_MEMORY_DEBUG_DEALLOC 0
+#endif //!BASIC_TEST_MEMORY_DEBUG_DEALLOC
+
 #include "Output.h"
 #include "mem/Block.h"
 
@@ -53,8 +60,8 @@ Memory<Tout>::Memory(Tout& output) :
     m_blocks = (mem::Block*)std::malloc(m_blocksLength * 
         sizeof(mem::Block));
     assert(m_blocks != NULL);
-    m_output.Debug("Memory Register begin with size %d\n", 
-        m_blocksLength * sizeof(mem::Block));
+    m_output.Debug("Memory Register Begin {length : %zu, size : %d bytes}\n", 
+        m_blocksLength, m_blocksLength * sizeof(mem::Block));
 }
 
 template<typename Tout>
@@ -62,10 +69,10 @@ Memory<Tout>::~Memory()
 {
     if (m_blocksSize != 0)
     {
-        m_output.Debug("block size : %zu", m_blocksSize);
+        m_output.Debug("Memory Register {size : %zu}\n", m_blocksSize);
         for (std::size_t i = 0; i < m_blocksSize; ++i)
         {
-            m_output.Error("pointer {addr : %p, size : %zu byte} "
+            m_output.Error("Memory Block {addr : %p, size : %zu byte} "
                 "has not deallocation\n", (m_blocks + i)->Pointer(), 
                 (m_blocks + i)->Size());
             if ((m_blocks + i)->File() != nullptr)
@@ -78,7 +85,7 @@ Memory<Tout>::~Memory()
     if (m_blocks != nullptr)
     {
         std::free(m_blocks);
-        m_output.Debug("Memory Register end\n");
+        m_output.Debug("Memory Register End\n");
     }
 }
 
@@ -91,9 +98,8 @@ void Memory<Tout>::ReallocationBlock()
         m_blocks = (mem::Block*)std::realloc(m_blocks,
             m_blocksLength * sizeof(mem::Block));
         assert(m_blocks != NULL);
-        
-        m_output.Debug("Memory Register realloc with length %zu " 
-            "and size %zu bytes\n", m_blocksLength, 
+        m_output.Debug("Memory Register Realloc {length : %zu, " 
+            "size : %zu bytes}\n", m_blocksLength, 
             m_blocksLength * sizeof(mem::Block));
     }
 }
@@ -103,14 +109,17 @@ void Memory<Tout>::AppendBlock(mem::Block& b)
 {
     if (!HasRegister(b.Pointer()))
     {
-        m_output.Debug("allocation memory : {pointer : %p, size : %zu}\n",
+#if BASIC_TEST_MEMORY_DEBUG_ALLOC
+        m_output.Debug("alloc-memory {addr : %p, size : %zu bytes}\n",
                 b.Pointer(), b.Size());
+#endif
         *(m_blocks + m_blocksSize) = std::move(b);
         ++m_blocksSize; 
     }
     else
     {
-        m_output.Error("Memory Register duplicate");
+        m_output.Error("Memory Register duplicate! {Addrs : %p}\n", 
+            b.Pointer());
     }
 }
 
@@ -149,9 +158,11 @@ void Memory<Tout>::Unregister(void * p)
             iReplace = i;
             if (found)
             {
-                m_output.Debug("deallocation memory :"" {pointer : %p, "
-                    "size : %zu}\n", (m_blocks + i)->Pointer(),
+#if BASIC_TEST_MEMORY_DEBUG_DEALLOC
+                m_output.Debug("dealloc-memory {addr : %p, "
+                    "size : %zu bytes}\n", (m_blocks + i)->Pointer(),
                     (m_blocks + i)->Size());
+#endif 
             }
         }
         else
