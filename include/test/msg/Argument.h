@@ -2,6 +2,7 @@
 #define BASIC_TEST_MSG_ARGUMENT_H_
 
 #include "../Variable.h"
+#include "../var/Element.h"
 
 #include <cstddef>
 #include <utility>
@@ -17,9 +18,13 @@ template<typename TCaseId, typename... TArgs>
 class Argument
 {
 public:
-    template<typename TRet, typename TDerived, typename... TFuncMmbrArgs>
+    template<std::size_t I, typename TVar>
+    using ElementType = typename test::var::Element<I, TVar>::Type;
+public:
+    template<typename TRet, typename TDerived, typename TVar, 
+        typename... TFuncMmbrArgs>
     using PointerFunctionMemberType = TRet(TDerived::*)(TFuncMmbrArgs...);
-    template<typename TRet, typename... TFuncArgs>
+    template<typename TRet, typename TVar, typename... TFuncArgs>
     using PointerFunctionType = TRet(*)(TFuncArgs...);
 public:
     Argument();
@@ -35,12 +40,13 @@ protected:
 public:
     template<typename TRet, typename TDerived, typename... TFuncMmbrArgs,
         typename... TVarArgs>
-    TRet Call(PointerFunctionMemberType<TRet, TDerived, TFuncMmbrArgs...> func_mmbr, 
-        TDerived& d, test::Variable<TVarArgs...>& var, 
-        TFuncMmbrArgs&&... args);
+    TRet Call(PointerFunctionMemberType<TRet, TDerived, 
+        test::Variable<TVarArgs...>, TFuncMmbrArgs...> func_mmbr, TDerived& d,
+        test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args);
     template<typename TRet, typename... TFuncArgs, typename... TVarArgs>
-    TRet Call(PointerFunctionType<TRet, TFuncArgs...> func, 
-        test::Variable<TVarArgs...>& var, TFuncArgs&&... args);
+    TRet Call(PointerFunctionType<TRet, test::Variable<TVarArgs...>, 
+        TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
+        TFuncArgs&&... args);
 };
 
 template<typename TCaseId, typename... TArgs>
@@ -69,8 +75,8 @@ template<typename TCaseId, typename... TArgs>
 template<typename TRet, typename TDerived, typename... TFuncMmbrArgs,
     typename... TVarArgs>
 TRet Argument<TCaseId, TArgs...>::Call(PointerFunctionMemberType<TRet, 
-    TDerived, TFuncMmbrArgs...> func_mmbr, TDerived& d, 
-    test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args)
+    TDerived, test::Variable<TVarArgs...>, TFuncMmbrArgs...> func_mmbr, 
+    TDerived& d, test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args)
 {
     return Filler<TRet>(func_mmbr, d, var, 
         std::forward<TFuncMmbrArgs>(args)...);
@@ -79,7 +85,8 @@ TRet Argument<TCaseId, TArgs...>::Call(PointerFunctionMemberType<TRet,
 template<typename TCaseId, typename... TArgs>
 template<typename TRet, typename... TFuncArgs, typename... TVarArgs>
 TRet Argument<TCaseId, TArgs...>::Call(PointerFunctionType<TRet, 
-    TFuncArgs...> func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
+    test::Variable<TVarArgs...>, TFuncArgs...> func, 
+    test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
     return Filler<TRet>(func, var, std::forward<TFuncArgs>(args)...);
 }
