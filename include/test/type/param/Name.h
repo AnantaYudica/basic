@@ -1,6 +1,7 @@
 #ifndef BASIC_TEST_TYPE_PARAM_NAME_H_
 #define BASIC_TEST_TYPE_PARAM_NAME_H_
 
+#include "../Parameter.h"
 #include "../Name.h"
 #include "../../CString.h"
 
@@ -17,8 +18,12 @@ namespace type
 namespace param
 {
 
+template<typename T>
+class Name
+{};
+
 template<typename... TArgs>
-class Name 
+class Name<type::Parameter<TArgs...>>
 {
 protected:
     template<typename TChar>
@@ -29,7 +34,8 @@ public:
 };
 
 template<typename TArg, typename... TArgs>
-class Name<TArg, TArgs...> : public Name<TArgs...>
+class Name<type::Parameter<TArg, TArgs...>> : 
+    public Name<type::Parameter<TArgs...>>
 {
 protected:
     template<typename TChar>
@@ -41,7 +47,7 @@ public:
 
 template<typename... TArgs>
 template<typename TChar>
-TChar* Name<TArgs...>::Forward(std::size_t& size)
+TChar* Name<type::Parameter<TArgs...>>::Forward(std::size_t& size)
 {
     TChar * cstr = new TChar[size + 1];
     cstr[size] = '\0';
@@ -51,7 +57,7 @@ TChar* Name<TArgs...>::Forward(std::size_t& size)
 
 template<typename... TArgs>
 template<typename TChar>
-test::CString<TChar> Name<TArgs...>::CStr()
+test::CString<TChar> Name<type::Parameter<TArgs...>>::CStr()
 {
     std::size_t size = 0;
     return {std::move(Forward<TChar>(size)), size};
@@ -59,7 +65,7 @@ test::CString<TChar> Name<TArgs...>::CStr()
 
 template<typename TArg, typename... TArgs>
 template<typename TChar>
-TChar* Name<TArg, TArgs...>::Forward(std::size_t& size)
+TChar* Name<type::Parameter<TArg, TArgs...>>::Forward(std::size_t& size)
 {
     TChar * cstr;
     std::size_t begin = size;
@@ -69,14 +75,14 @@ TChar* Name<TArg, TArgs...>::Forward(std::size_t& size)
     if (arg_cstr.Size() != 0)
     {
         size += 1;
-        cstr = Name<TArgs...>::template Forward<TChar>(size);
+        cstr = Name<type::Parameter<TArgs...>>::template Forward<TChar>(size);
         memcpy(cstr + (begin + 2), *arg_cstr, (arg_cstr.Size() - 1) * 
             sizeof(TChar));
     }
     else
     {
         size += 2;
-        cstr = Name<TArgs...>::template Forward<TChar>(size);
+        cstr = Name<type::Parameter<TArgs...>>::template Forward<TChar>(size);
     }
     cstr[begin] = ',';
     cstr[begin + 1] = ' ';
@@ -85,7 +91,7 @@ TChar* Name<TArg, TArgs...>::Forward(std::size_t& size)
 
 template<typename TArg, typename... TArgs>
 template<typename TChar>
-test::CString<TChar> Name<TArg, TArgs...>::CStr()
+test::CString<TChar> Name<type::Parameter<TArg, TArgs...>>::CStr()
 {
     std::size_t size = 0;
     TChar * cstr;
@@ -95,7 +101,7 @@ test::CString<TChar> Name<TArg, TArgs...>::CStr()
     if (arg_cstr.Size() != 0)
     {
         size -= 1;
-        cstr = Name<TArgs...>::template Forward<TChar>(size);
+        cstr = Name<type::Parameter<TArgs...>>::template Forward<TChar>(size);
         memcpy(cstr, *arg_cstr, (arg_cstr.Size() - 1) * 
             sizeof(TChar));
     }
