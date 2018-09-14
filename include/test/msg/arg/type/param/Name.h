@@ -5,6 +5,7 @@
 
 #include "../../../../Variable.h"
 #include "../../../../var/Element.h"
+#include "../../../../type/Parameter.h"
 #include "../../../../type/param/Name.h"
 
 #include <cstddef>
@@ -37,8 +38,9 @@ class Argument<TCaseId, arg::type::param::Name<I>, TArgs...> :
 {
 public:
     template<typename TVar>
-    using CharType = typename decltype(Argument<TCaseId>::
-        template ElementType<I, TVar>::NameType::CStr())::CharType;
+    using CharType = typename decltype(type::param::Name<
+        typename Argument<TCaseId>::template ElementType<I, TVar>>::CStr())::
+        CharType;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
@@ -85,8 +87,8 @@ TRet Argument<TCaseId, arg::type::param::Name<I>, TArgs...>::
         test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args)
 {
     test::CString<CharType<test::Variable<TVarArgs...>>> cstr = 
-        std::move(Argument<TCaseId>::template ElementType<I, 
-            test::Variable<TVarArgs...>>::NameType::CStr());
+        std::move(type::param::Name<typename Argument<TCaseId>::
+            template ElementType<I, test::Variable<TVarArgs...>>>::CStr());
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func_mmbr, d, 
         var, std::forward<TFuncMmbrArgs>(args)..., *cstr);
 }
@@ -98,8 +100,8 @@ TRet Argument<TCaseId, arg::type::param::Name<I>, TArgs...>::
     Filler(TFunc func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
     test::CString<CharType<test::Variable<TVarArgs...>>> cstr = 
-        std::move(Argument<TCaseId>::template ElementType<I, 
-            test::Variable<TVarArgs...>>::NameType::CStr());
+        std::move(type::param::Name<typename Argument<TCaseId>::
+            template ElementType<I, test::Variable<TVarArgs...>>>::CStr());
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func, var, 
         std::forward<TFuncArgs>(args)..., *cstr);
 }
