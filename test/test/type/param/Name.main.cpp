@@ -3,7 +3,7 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
-#include "test/Cstring.h"
+#include "test/CString.h"
 #include "test/cstr/Format.h"
 #include "test/type/Name.h"
 #include "test/type/param/Name.h"
