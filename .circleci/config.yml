@@ -1,0 +1,25 @@
+version: 2
+jobs:
+   build:
+     docker: 
+       - image: library/gcc:7.3.0
+     steps:
+       - checkout
+       - run: mkdir -p Build
+       - run: |
+            cd ~
+            wget https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.tar.gz
+            tar xzf cmake-3.10.0-Linux-x86_64.tar.gz
+       - run: |
+            gcc --version
+            g++ --version
+            ~/cmake-3.10.0-Linux-x86_64/bin/cmake --version
+       - run: |
+            cd ~/project/Build
+            ~/cmake-3.10.0-Linux-x86_64/bin/cmake -G "Unix Makefiles" ~/project/cmake -DPROJECT_SOURCE_DIR:PATH=~/project/cmake -DPROJECT_BINARY_DIR:PATH=~/project/Build
+       - run: |
+            cd ~/project/Build
+            make
+       - run: |
+            cd ~/project/Build
+            make test

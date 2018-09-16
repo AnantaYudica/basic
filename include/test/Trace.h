@@ -1,5 +1,5 @@
-#ifndef BASIC_TEST_OUT_TRACE_H_
-#define BASIC_TEST_OUT_TRACE_H_
+#ifndef BASIC_TEST_TRACE_H_
+#define BASIC_TEST_TRACE_H_
 
 #include <cstddef>
 
@@ -7,9 +7,7 @@ namespace basic
 {
 namespace test
 {
-namespace out
-{
-
+    
 struct Trace
 {
     const char* File;
@@ -19,10 +17,8 @@ struct Trace
     {}
 };
 
-} //!out
-
 } //!test
 
 } //!basic
 
-#endif //!BASIC_TEST_OUT_TRACE_H_
+#endif //!BASIC_TEST_TRACE_H_
