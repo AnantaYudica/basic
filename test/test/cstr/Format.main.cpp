@@ -18,6 +18,4 @@ int main()
     int i = 14;
     auto ch4 = basic::test::cstr::Format(10, "%s = %d", "int i", i);
     printf("%s\n", *ch4);
-    auto ch5 = basic::test::cstr::Format(5, "%s = %d");
-    printf("%s\n", *ch5);
 }
