@@ -31,6 +31,7 @@ auto _IsSame(const basic::type::Identification<T2>&) ->
     decltype(std::integral_constant<bool, 
         std::is_same<basic::type::Identification<T2>, T1>::value>());
 
+template<typename T1>
 std::false_type _IsSame(...);
 
 } //!_id
