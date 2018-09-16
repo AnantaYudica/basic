@@ -1,6 +1,8 @@
 #include "type/conditional/Switch.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <typeinfo>
 #include <type_traits>
 #include <string>
@@ -44,29 +46,6 @@ struct Name<__VA_ARGS__>\
 __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename... Targs>
 struct NameParameterTmpl 
@@ -196,7 +175,7 @@ void TestSize()
 
 template<typename Ts, typename Tt, typename Tti, Tti TtiValue, 
     typename Tts, Tts TtsValue>
-struct TestSwitch : BaseTest
+struct TestSwitch : basic::test::Base
 {
     void Test() 
     {
@@ -219,7 +198,7 @@ using Switch0_0_d_t = basic::type::conditional::Switch<std::false_type>;
 
 __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type>);
 
-TestRegister t1_0_0_d(new TestSwitch<Switch0_0_d_t, std::false_type, std::size_t, 0,
+RegisterTest(t1_0_0_d, new TestSwitch<Switch0_0_d_t, std::false_type, std::size_t, 0,
     std::size_t, 0>());
 
 using Switch1_0_d_t = basic::type::conditional::Switch<std::false_type, 
@@ -233,9 +212,9 @@ __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type,
 __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type, 
     std::false_type>);
 
-TestRegister t2_1_0_d(new TestSwitch<Switch1_0_d_t, std::true_type, std::size_t, 0,
+RegisterTest(t2_1_0_d, new TestSwitch<Switch1_0_d_t, std::true_type, std::size_t, 0,
     std::size_t, 1>());
-TestRegister t2_1_1_d(new TestSwitch<Switch1_1_d_t, std::false_type, std::size_t, 1,
+RegisterTest(t2_1_1_d, new TestSwitch<Switch1_1_d_t, std::false_type, std::size_t, 1,
     std::size_t, 1>());
 
 using Switch2_0_d_t = basic::type::conditional::Switch<std::false_type, 
@@ -252,11 +231,11 @@ __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type,
 __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type, 
     std::false_type, std::false_type>);
 
-TestRegister t3_2_0_d(new TestSwitch<Switch2_0_d_t, std::true_type, std::size_t, 0,
+RegisterTest(t3_2_0_d, new TestSwitch<Switch2_0_d_t, std::true_type, std::size_t, 0,
     std::size_t, 2>());
-TestRegister t3_2_1_d(new TestSwitch<Switch2_1_d_t, std::true_type, std::size_t, 1,
+RegisterTest(t3_2_1_d, new TestSwitch<Switch2_1_d_t, std::true_type, std::size_t, 1,
     std::size_t, 2>());
-TestRegister t3_2_2_d(new TestSwitch<Switch2_2_d_t, std::false_type, std::size_t, 2,
+RegisterTest(t3_2_2_d, new TestSwitch<Switch2_2_d_t, std::false_type, std::size_t, 2,
     std::size_t, 2>());
 
 using Switch4_0_d_t = basic::type::conditional::Switch<std::false_type, 
@@ -281,15 +260,15 @@ __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type,
 __DEFINE_NAME_(basic::type::conditional::Switch<std::false_type, 
     std::false_type, std::false_type, std::false_type, std::false_type>);
 
-TestRegister t4_4_0_d(new TestSwitch<Switch4_0_d_t, std::true_type, std::size_t, 0,
+RegisterTest(t4_4_0_d, new TestSwitch<Switch4_0_d_t, std::true_type, std::size_t, 0,
     std::size_t, 4>());
-TestRegister t4_4_1_d(new TestSwitch<Switch4_1_d_t, std::true_type, std::size_t, 1,
+RegisterTest(t4_4_1_d, new TestSwitch<Switch4_1_d_t, std::true_type, std::size_t, 1,
     std::size_t, 4>());
-TestRegister t4_4_2_d(new TestSwitch<Switch4_2_d_t, std::true_type, std::size_t, 2,
+RegisterTest(t4_4_2_d, new TestSwitch<Switch4_2_d_t, std::true_type, std::size_t, 2,
     std::size_t, 4>());
-TestRegister t4_4_3_d(new TestSwitch<Switch4_3_d_t, std::true_type, std::size_t, 3,
+RegisterTest(t4_4_3_d, new TestSwitch<Switch4_3_d_t, std::true_type, std::size_t, 3,
     std::size_t, 4>());
-TestRegister t4_4_4_d(new TestSwitch<Switch4_4_d_t, std::false_type, std::size_t, 4,
+RegisterTest(t4_4_4_d, new TestSwitch<Switch4_4_d_t, std::false_type, std::size_t, 4,
     std::size_t, 4>());
 
 struct A {};
@@ -316,33 +295,26 @@ __DEFINE_NAME_(basic::type::conditional::Switch<A, C, A, B>);
 __DEFINE_NAME_(basic::type::conditional::Switch<B, C, A, B>);
 __DEFINE_NAME_(basic::type::conditional::Switch<C, C, A, B>);
 
-TestRegister t5_3_1(new TestSwitch<Switch3_1_t, B, std::size_t, 1,
+RegisterTest(t5_3_1, new TestSwitch<Switch3_1_t, B, std::size_t, 1,
     std::size_t, 3>());
-TestRegister t5_3_2(new TestSwitch<Switch3_2_t, A, std::size_t, 0,
+RegisterTest(t5_3_2, new TestSwitch<Switch3_2_t, A, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_3(new TestSwitch<Switch3_3_t, A, std::size_t, 0,
+RegisterTest(t5_3_3, new TestSwitch<Switch3_3_t, A, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_4(new TestSwitch<Switch3_4_t, B, std::size_t, 0,
+RegisterTest(t5_3_4, new TestSwitch<Switch3_4_t, B, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_5(new TestSwitch<Switch3_5_t, C, std::size_t, 1,
+RegisterTest(t5_3_5, new TestSwitch<Switch3_5_t, C, std::size_t, 1,
     std::size_t, 3>());
-TestRegister t5_3_6(new TestSwitch<Switch3_6_t, B, std::size_t, 0,
+RegisterTest(t5_3_6, new TestSwitch<Switch3_6_t, B, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_7(new TestSwitch<Switch3_7_t, C, std::size_t, 0,
+RegisterTest(t5_3_7, new TestSwitch<Switch3_7_t, C, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_8(new TestSwitch<Switch3_8_t, C, std::size_t, 0,
+RegisterTest(t5_3_8, new TestSwitch<Switch3_8_t, C, std::size_t, 0,
     std::size_t, 3>());
-TestRegister t5_3_9(new TestSwitch<Switch3_9_t, A, std::size_t, 1,
+RegisterTest(t5_3_9, new TestSwitch<Switch3_9_t, A, std::size_t, 1,
     std::size_t, 3>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

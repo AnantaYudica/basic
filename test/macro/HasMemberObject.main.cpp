@@ -1,6 +1,8 @@
 #include "macro/HasMemberObject.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
@@ -67,29 +69,6 @@ __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
 __DEFINE_NAME_(A);
 __DEFINE_NAME_(B);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 bool BoolCompare(bool a, bool b)
 {
@@ -173,7 +152,7 @@ void TestValue()
 
 template<template<typename> class Thmo, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestHasMmbrObj : BaseTest
+struct TestHasMmbrObj : basic::test::Base
 {
     void Test() 
     {
@@ -215,9 +194,9 @@ using HasMmbrObj1_t = HasMmbrObj1<T>;
 __DEFINE_NAME_(HasMmbrObj1<A>);
 __DEFINE_NAME_(HasMmbrObj1<B>);
 
-TestRegister t1(new TestHasMmbrObj<HasMmbrObj1_t, A, bool, true, 
+RegisterTest(t1, new TestHasMmbrObj<HasMmbrObj1_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t2(new TestHasMmbrObj<HasMmbrObj1_t, B, bool, false,
+RegisterTest(t2, new TestHasMmbrObj<HasMmbrObj1_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -255,9 +234,9 @@ using HasMmbrObj2_t = HasMmbrObj2<T, void>;
 __DEFINE_NAME_(HasMmbrObj2<A, void>);
 __DEFINE_NAME_(HasMmbrObj2<B, void>);
 
-TestRegister t3(new TestHasMmbrObj<HasMmbrObj2_t, A, bool, true, 
+RegisterTest(t3, new TestHasMmbrObj<HasMmbrObj2_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t4(new TestHasMmbrObj<HasMmbrObj2_t, B, bool, false,
+RegisterTest(t4, new TestHasMmbrObj<HasMmbrObj2_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -298,9 +277,9 @@ using HasMmbrObj3_t = HasMmbrObj3<C, T>;
 __DEFINE_NAME_(HasMmbrObj3<C, std::true_type>);
 __DEFINE_NAME_(HasMmbrObj3<C, std::false_type>);
 
-TestRegister t5(new TestHasMmbrObj<HasMmbrObj3_t, std::true_type, bool,
+RegisterTest(t5, new TestHasMmbrObj<HasMmbrObj3_t, std::true_type, bool,
     true, &BoolCompare>());
-TestRegister t6(new TestHasMmbrObj<HasMmbrObj3_t, std::false_type , bool,
+RegisterTest(t6, new TestHasMmbrObj<HasMmbrObj3_t, std::false_type , bool,
     false, &BoolCompare>());
 
 /**
@@ -338,9 +317,9 @@ using HasMmbrObj4_t = HasMmbrObj4<T>;
 __DEFINE_NAME_(HasMmbrObj4<A>);
 __DEFINE_NAME_(HasMmbrObj4<B>);
 
-TestRegister t7(new TestHasMmbrObj<HasMmbrObj4_t, A, bool, true, 
+RegisterTest(t7, new TestHasMmbrObj<HasMmbrObj4_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t8(new TestHasMmbrObj<HasMmbrObj4_t, B , bool, false, 
+RegisterTest(t8, new TestHasMmbrObj<HasMmbrObj4_t, B , bool, false, 
     &BoolCompare>());
 
 /**
@@ -387,9 +366,9 @@ using HasMmbrObj5_t = HasMmbrObj5<T, void>;
 __DEFINE_NAME_(HasMmbrObj5<A, void>);
 __DEFINE_NAME_(HasMmbrObj5<B, void>);
 
-TestRegister t9(new TestHasMmbrObj<HasMmbrObj5_t, A, bool, true, 
+RegisterTest(t9, new TestHasMmbrObj<HasMmbrObj5_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t10(new TestHasMmbrObj<HasMmbrObj5_t, B, bool, false,
+RegisterTest(t10, new TestHasMmbrObj<HasMmbrObj5_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -441,19 +420,12 @@ using HasMmbrObj6_t = HasMmbrObj6<C<T>, C>;
 __DEFINE_NAME_(HasMmbrObj6<C<std::true_type>, C>);
 __DEFINE_NAME_(HasMmbrObj6<C<std::false_type>, C>);
 
-TestRegister t11(new TestHasMmbrObj<HasMmbrObj6_t, std::true_type, bool, true, 
+RegisterTest(t11, new TestHasMmbrObj<HasMmbrObj6_t, std::true_type, bool, true, 
     &BoolCompare>());
-TestRegister t12(new TestHasMmbrObj<HasMmbrObj6_t, std::false_type, bool, false,
+RegisterTest(t12, new TestHasMmbrObj<HasMmbrObj6_t, std::false_type, bool, false,
     &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/StaticMemberFunction.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <sstream>
@@ -87,30 +89,6 @@ __DEFINE_NAME_(A);
 __DEFINE_NAME_(B<void>);
 __DEFINE_NAME_(void(*)());
 __DEFINE_NAME_(B<void> (*)());
-
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 struct AliasType;
 struct AliasTypeTmpl;
@@ -312,7 +290,7 @@ void TestPointerTmpl()
 template<template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename = AliasType, typename = Pointer,
     typename... Targs>
-struct TestStaticMmbrFunc : BaseTest
+struct TestStaticMmbrFunc : basic::test::Base
 {
     void Test() 
     {
@@ -326,7 +304,7 @@ struct TestStaticMmbrFunc : BaseTest
 template<template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasType, PointerTmpl, Targs...> : BaseTest
+    AliasType, PointerTmpl, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -340,7 +318,7 @@ struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue,
 template<template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, Pointer, Targs...> : BaseTest
+    AliasTypeTmpl, Pointer, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -354,7 +332,7 @@ struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue,
 template<template<typename> class Tmf, typename T, typename Tta,
     typename Ttp, Ttp TtpValue, typename... Targs>
 struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, PointerTmpl, Targs...> : BaseTest
+    AliasTypeTmpl, PointerTmpl, Targs...> : basic::test::Base
 {
     void Test() 
     {
@@ -390,7 +368,7 @@ using StaticMmbrFunc1_t = StaticMmbrFunc1<T, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc1<A, void>);
 
-TestRegister t1_1(new TestStaticMmbrFunc<StaticMmbrFunc1_t, A, 
+RegisterTest(t1_1, new TestStaticMmbrFunc<StaticMmbrFunc1_t, A, 
     void (*)(), void (*)(), &A::Foo1>());
 
 /**
@@ -425,7 +403,7 @@ using StaticMmbrFunc2_t = StaticMmbrFunc2<T, void, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc2<A, void, void>);
 
-TestRegister t2_1(new TestStaticMmbrFunc<StaticMmbrFunc2_t, A, 
+RegisterTest(t2_1, new TestStaticMmbrFunc<StaticMmbrFunc2_t, A, 
     void (*)(), void (*)(), &A::Foo1>());
 
 /**
@@ -464,7 +442,7 @@ using StaticMmbrFunc3_t = StaticMmbrFunc3<B, T, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc3<B, void, void>);
 
-TestRegister t3_1(new TestStaticMmbrFunc<StaticMmbrFunc3_t, void, 
+RegisterTest(t3_1, new TestStaticMmbrFunc<StaticMmbrFunc3_t, void, 
     void (*)(), void (*)(), &B<void>::Foo2>());
 
 /**
@@ -503,7 +481,7 @@ using StaticMmbrFunc4_t = StaticMmbrFunc4<T, void, B>;
 
 __DEFINE_NAME_(StaticMmbrFunc4<C, void, B>);
 
-TestRegister t4_1(new TestStaticMmbrFunc<StaticMmbrFunc4_t, C, 
+RegisterTest(t4_1, new TestStaticMmbrFunc<StaticMmbrFunc4_t, C, 
     B<void> (*)(),  B<void> (*)(), &C::Foo3>());
 
 /**
@@ -538,7 +516,7 @@ using StaticMmbrFunc5_t = StaticMmbrFunc5<T, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc5<A, void>);
 
-TestRegister t5_1(new TestStaticMmbrFunc<StaticMmbrFunc5_t, A, 
+RegisterTest(t5_1, new TestStaticMmbrFunc<StaticMmbrFunc5_t, A, 
     void (*)(), void (*)(), &A::Foo1, AliasTypeTmpl, Pointer>());
 
 /**
@@ -571,7 +549,7 @@ using StaticMmbrFunc6_t = StaticMmbrFunc6<T, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc6<A, void>);
 
-TestRegister t6_1(new TestStaticMmbrFunc<StaticMmbrFunc6_t, A, 
+RegisterTest(t6_1, new TestStaticMmbrFunc<StaticMmbrFunc6_t, A, 
     void (*)(), void (*)(), &A::Foo1, AliasType, PointerTmpl, void>());
 
 /**
@@ -607,7 +585,7 @@ using StaticMmbrFunc7_t = StaticMmbrFunc7<T, void>;
 
 __DEFINE_NAME_(StaticMmbrFunc7<A, void>);
 
-TestRegister t7_1(new TestStaticMmbrFunc<StaticMmbrFunc7_t, A, 
+RegisterTest(t7_1, new TestStaticMmbrFunc<StaticMmbrFunc7_t, A, 
     void (*)(), void (*)(), &A::Foo1, AliasTypeTmpl, Pointer, void>());
 
 /**
@@ -650,17 +628,10 @@ using StaticMmbrFunc8_t = StaticMmbrFunc8<T, B>;
 
 __DEFINE_NAME_(StaticMmbrFunc8<C, B>);
 
-TestRegister t8_1(new TestStaticMmbrFunc<StaticMmbrFunc8_t, C, 
+RegisterTest(t8_1, new TestStaticMmbrFunc<StaticMmbrFunc8_t, C, 
     B<void> (*)(), B<void> (*)(), &C::Foo3, AliasTypeTmpl, PointerTmpl, void>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

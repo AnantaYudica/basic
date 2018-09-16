@@ -1,6 +1,8 @@
 #include "type/Access.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <sstream>
@@ -63,28 +65,6 @@ __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename Tid, typename Tb>
 struct Derived : Tb
@@ -180,7 +160,7 @@ void TestHasStaticMemberFunctionFoo2()
 
 template<template<typename> class Td, template<typename> class Tb,
     typename Tda, typename Tt, Tt TtValueFoo1, Tt TtValueFoo2>
-struct TestAccess : BaseTest
+struct TestAccess : basic::test::Base
 {
     void Test() 
     {
@@ -356,25 +336,25 @@ struct Name<Void1_t<Tda>>
     static constexpr const char * Value = "Void1_t";
 };
 
-TestRegister t1_1(new TestAccess<Void1_t, A1, 
+RegisterTest(t1_1, new TestAccess<Void1_t, A1, 
     AccessPublic, bool, true, true>());
-TestRegister t1_2(new TestAccess<Void1_t, A1, 
+RegisterTest(t1_2, new TestAccess<Void1_t, A1, 
     AccessProtected, bool, false, false>());
-TestRegister t1_3(new TestAccess<Void1_t, A1, 
+RegisterTest(t1_3, new TestAccess<Void1_t, A1, 
     AccessPrivate, bool, false, false>());
     
-TestRegister t1_4(new TestAccess<Void1_t, B1True, 
+RegisterTest(t1_4, new TestAccess<Void1_t, B1True, 
     AccessPublic, bool, true, true>());
-TestRegister t1_5(new TestAccess<Void1_t, B1True, 
+RegisterTest(t1_5, new TestAccess<Void1_t, B1True, 
     AccessProtected, bool, false, false>());
-TestRegister t1_6(new TestAccess<Void1_t, B1True, 
+RegisterTest(t1_6, new TestAccess<Void1_t, B1True, 
     AccessPrivate, bool, false, false>());
 
-TestRegister t1_7(new TestAccess<Void1_t, B1False, 
+RegisterTest(t1_7, new TestAccess<Void1_t, B1False, 
     AccessPublic, bool, false, false>());
-TestRegister t1_8(new TestAccess<Void1_t, B1False, 
+RegisterTest(t1_8, new TestAccess<Void1_t, B1False, 
     AccessProtected, bool, false, false>());
-TestRegister t1_9(new TestAccess<Void1_t, B1False, 
+RegisterTest(t1_9, new TestAccess<Void1_t, B1False, 
     AccessPrivate, bool, false, false>());
 
 struct DerivedA1;
@@ -388,11 +368,11 @@ struct Name<DerivedA1_t<Tda>>
     static constexpr const char * Value = "DerivedA1_t";
 };
 
-TestRegister t2_1(new TestAccess<DerivedA1_t, DerivedA1_t, 
+RegisterTest(t2_1, new TestAccess<DerivedA1_t, DerivedA1_t, 
     AccessPublic, bool, true, true>());
-TestRegister t2_2(new TestAccess<DerivedA1_t, DerivedA1_t, 
+RegisterTest(t2_2, new TestAccess<DerivedA1_t, DerivedA1_t, 
     AccessProtected, bool, true, true>());
-TestRegister t2_3(new TestAccess<DerivedA1_t, DerivedA1_t, 
+RegisterTest(t2_3, new TestAccess<DerivedA1_t, DerivedA1_t, 
     AccessPrivate, bool, false, false>());
 
 struct DerivedB1True;
@@ -406,11 +386,11 @@ struct Name<DerivedB1True_t<Tda>>
     static constexpr const char * Value = "DerivedB1True_t";
 };
 
-TestRegister t3_1(new TestAccess<DerivedB1True_t, DerivedB1True_t, 
+RegisterTest(t3_1, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
     AccessPublic, bool, true, true>());
-TestRegister t3_2(new TestAccess<DerivedB1True_t, DerivedB1True_t, 
+RegisterTest(t3_2, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
     AccessProtected, bool, true, true>());
-TestRegister t3_3(new TestAccess<DerivedB1True_t, DerivedB1True_t, 
+RegisterTest(t3_3, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
     AccessPrivate, bool, false, false>());
 
 struct DerivedB1False;
@@ -424,11 +404,11 @@ struct Name<DerivedB1False_t<Tda>>
     static constexpr const char * Value = "DerivedB1False_t";
 };
 
-TestRegister t4_1(new TestAccess<DerivedB1False_t, DerivedB1False_t, 
+RegisterTest(t4_1, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
     AccessPublic, bool, false, false>());
-TestRegister t4_2(new TestAccess<DerivedB1False_t, DerivedB1False_t, 
+RegisterTest(t4_2, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
     AccessProtected, bool, false, false>());
-TestRegister t4_3(new TestAccess<DerivedB1False_t, DerivedB1False_t, 
+RegisterTest(t4_3, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
     AccessPrivate, bool, false, false>());
 
 struct DerivedFriendA1;
@@ -443,11 +423,11 @@ struct Name<DerivedFriendA1_t<Tda>>
     static constexpr const char * Value = "DerivedFriendA1_t";
 };
 
-TestRegister t5_1(new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
+RegisterTest(t5_1, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
     AccessPublic, bool, true, true>());
-TestRegister t5_2(new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
+RegisterTest(t5_2, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
     AccessProtected, bool, true, true>());
-TestRegister t5_3(new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
+RegisterTest(t5_3, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
     AccessPrivate, bool, true, true>());
 
 struct DerivedFriendB1True;
@@ -462,11 +442,11 @@ struct Name<DerivedFriendB1True_t<Tda>>
     static constexpr const char * Value = "DerivedFriendB1True_t";
 };
 
-TestRegister t6_1(new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
+RegisterTest(t6_1, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
     AccessPublic, bool, true, true>());
-TestRegister t6_2(new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
+RegisterTest(t6_2, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
     AccessProtected, bool, true, true>());
-TestRegister t6_3(new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
+RegisterTest(t6_3, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
     AccessPrivate, bool, true, true>());
 
 struct DerivedFriendB1False;
@@ -481,21 +461,14 @@ struct Name<DerivedFriendB1False_t<Tda>>
     static constexpr const char * Value = "DerivedFriendB1False_t";
 };
 
-TestRegister t7_1(new TestAccess<DerivedFriendB1False_t, 
+RegisterTest(t7_1, new TestAccess<DerivedFriendB1False_t, 
     DerivedFriendB1False_t, AccessPublic, bool, false, false>());
-TestRegister t7_2(new TestAccess<DerivedFriendB1False_t, 
+RegisterTest(t7_2, new TestAccess<DerivedFriendB1False_t, 
     DerivedFriendB1False_t, AccessProtected, bool, false, false>());
-TestRegister t7_3(new TestAccess<DerivedFriendB1False_t, 
+RegisterTest(t7_3, new TestAccess<DerivedFriendB1False_t, 
     DerivedFriendB1False_t, AccessPrivate, bool, false, false>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

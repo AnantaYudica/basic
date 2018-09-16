@@ -1,6 +1,8 @@
 #include "macro/IsBaseOf.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
@@ -71,29 +73,6 @@ __DEFINE_NAME_(std::true_type);
 __DEFINE_NAME_(std::false_type);
 __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 bool BoolCompare(bool a, bool b)
 {
@@ -177,7 +156,7 @@ void TestValue()
 
 template<template<typename> class Tibo, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestIsBaseOf : BaseTest
+struct TestIsBaseOf : basic::test::Base
 {
     void Test() 
     {
@@ -217,13 +196,13 @@ __DEFINE_NAME_(IsBaseOf1<AA>);
 __DEFINE_NAME_(IsBaseOf1<B>);
 __DEFINE_NAME_(IsBaseOf1<BB>);
 
-TestRegister t1(new TestIsBaseOf<IsBaseOf1_t, A, bool, false, 
+RegisterTest(t1, new TestIsBaseOf<IsBaseOf1_t, A, bool, false, 
     &BoolCompare>());
-TestRegister t2(new TestIsBaseOf<IsBaseOf1_t, AA, bool, true,
+RegisterTest(t2, new TestIsBaseOf<IsBaseOf1_t, AA, bool, true,
     &BoolCompare>());
-TestRegister t3(new TestIsBaseOf<IsBaseOf1_t, B, bool, false,
+RegisterTest(t3, new TestIsBaseOf<IsBaseOf1_t, B, bool, false,
     &BoolCompare>());
-TestRegister t4(new TestIsBaseOf<IsBaseOf1_t, BB, bool, false,
+RegisterTest(t4, new TestIsBaseOf<IsBaseOf1_t, BB, bool, false,
     &BoolCompare>());
 
 /**
@@ -259,13 +238,13 @@ __DEFINE_NAME_(IsBaseOf2<AA, void>);
 __DEFINE_NAME_(IsBaseOf2<B, void>);
 __DEFINE_NAME_(IsBaseOf2<BB, void>);
 
-TestRegister t5(new TestIsBaseOf<IsBaseOf2_t, A, bool, false, 
+RegisterTest(t5, new TestIsBaseOf<IsBaseOf2_t, A, bool, false, 
     &BoolCompare>());
-TestRegister t6(new TestIsBaseOf<IsBaseOf2_t, AA, bool, true,
+RegisterTest(t6, new TestIsBaseOf<IsBaseOf2_t, AA, bool, true,
     &BoolCompare>());
-TestRegister t7(new TestIsBaseOf<IsBaseOf2_t, B, bool, false, 
+RegisterTest(t7, new TestIsBaseOf<IsBaseOf2_t, B, bool, false, 
     &BoolCompare>());
-TestRegister t8(new TestIsBaseOf<IsBaseOf2_t, BB, bool, false, 
+RegisterTest(t8, new TestIsBaseOf<IsBaseOf2_t, BB, bool, false, 
     &BoolCompare>());
 
 /**
@@ -302,9 +281,9 @@ using IsBaseOf3_t = IsBaseOf3<C, T>;
 __DEFINE_NAME_(IsBaseOf3<C, std::true_type>);
 __DEFINE_NAME_(IsBaseOf3<C, std::false_type>);
 
-TestRegister t9(new TestIsBaseOf<IsBaseOf3_t, std::true_type, bool, true, 
+RegisterTest(t9, new TestIsBaseOf<IsBaseOf3_t, std::true_type, bool, true, 
     &BoolCompare>());
-TestRegister t10(new TestIsBaseOf<IsBaseOf3_t, std::false_type, bool, false,
+RegisterTest(t10, new TestIsBaseOf<IsBaseOf3_t, std::false_type, bool, false,
     &BoolCompare>());
 
 /**
@@ -340,13 +319,13 @@ __DEFINE_NAME_(IsBaseOf4<AA>);
 __DEFINE_NAME_(IsBaseOf4<B>);
 __DEFINE_NAME_(IsBaseOf4<BB>);
 
-TestRegister t11(new TestIsBaseOf<IsBaseOf4_t, A, bool, false, 
+RegisterTest(t11, new TestIsBaseOf<IsBaseOf4_t, A, bool, false, 
     &BoolCompare>());
-TestRegister t12(new TestIsBaseOf<IsBaseOf4_t, AA, bool, true,
+RegisterTest(t12, new TestIsBaseOf<IsBaseOf4_t, AA, bool, true,
     &BoolCompare>());
-TestRegister t13(new TestIsBaseOf<IsBaseOf4_t, B, bool, false, 
+RegisterTest(t13, new TestIsBaseOf<IsBaseOf4_t, B, bool, false, 
     &BoolCompare>());
-TestRegister t14(new TestIsBaseOf<IsBaseOf4_t, BB, bool, false, 
+RegisterTest(t14, new TestIsBaseOf<IsBaseOf4_t, BB, bool, false, 
     &BoolCompare>());
 
 /**
@@ -391,13 +370,13 @@ __DEFINE_NAME_(IsBaseOf5<AA, void>);
 __DEFINE_NAME_(IsBaseOf5<B, void>);
 __DEFINE_NAME_(IsBaseOf5<BB, void>);
 
-TestRegister t15(new TestIsBaseOf<IsBaseOf5_t, A, bool, false, 
+RegisterTest(t15, new TestIsBaseOf<IsBaseOf5_t, A, bool, false, 
     &BoolCompare>());
-TestRegister t16(new TestIsBaseOf<IsBaseOf5_t, AA, bool, true,
+RegisterTest(t16, new TestIsBaseOf<IsBaseOf5_t, AA, bool, true,
     &BoolCompare>());
-TestRegister t17(new TestIsBaseOf<IsBaseOf5_t, B, bool, false, 
+RegisterTest(t17, new TestIsBaseOf<IsBaseOf5_t, B, bool, false, 
     &BoolCompare>());
-TestRegister t18(new TestIsBaseOf<IsBaseOf5_t, BB, bool, false, 
+RegisterTest(t18, new TestIsBaseOf<IsBaseOf5_t, BB, bool, false, 
     &BoolCompare>());
 
 /**
@@ -449,23 +428,16 @@ __DEFINE_NAME_(IsBaseOf6<DD, std::true_type>);
 __DEFINE_NAME_(IsBaseOf6<DD, std::false_type>);
 __DEFINE_NAME_(IsBaseOf6<C, void>);
 
-TestRegister t19(new TestIsBaseOf<IsBaseOf6_1_t, void, bool, false,
+RegisterTest(t19, new TestIsBaseOf<IsBaseOf6_1_t, void, bool, false,
     &BoolCompare>());
-TestRegister t20(new TestIsBaseOf<IsBaseOf6_2_t, std::true_type, bool, true,
+RegisterTest(t20, new TestIsBaseOf<IsBaseOf6_2_t, std::true_type, bool, true,
     &BoolCompare>());
-TestRegister t21(new TestIsBaseOf<IsBaseOf6_2_t, std::false_type, bool, false,
+RegisterTest(t21, new TestIsBaseOf<IsBaseOf6_2_t, std::false_type, bool, false,
     &BoolCompare>());
-TestRegister t22(new TestIsBaseOf<IsBaseOf6_3_t, void, bool, false,
+RegisterTest(t22, new TestIsBaseOf<IsBaseOf6_3_t, void, bool, false,
     &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/HasMemberDefinition.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 
@@ -72,29 +74,6 @@ __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
 __DEFINE_NAME_(A);
 __DEFINE_NAME_(B);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 bool BoolCompare(bool a, bool b)
 {
@@ -178,7 +157,7 @@ void TestValue()
 
 template<template<typename> class Thmd, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestHasMmbrDefn : BaseTest
+struct TestHasMmbrDefn : basic::test::Base
 {
     void Test() 
     {
@@ -216,9 +195,9 @@ using HasMmbrDefn1_t = HasMmbrDefn1<T>;
 __DEFINE_NAME_(HasMmbrDefn1<A>);
 __DEFINE_NAME_(HasMmbrDefn1<B>);
 
-TestRegister t1(new TestHasMmbrDefn<HasMmbrDefn1_t, A, bool, true, 
+RegisterTest(t1, new TestHasMmbrDefn<HasMmbrDefn1_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t2(new TestHasMmbrDefn<HasMmbrDefn1_t, B, bool, false,
+RegisterTest(t2, new TestHasMmbrDefn<HasMmbrDefn1_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -252,9 +231,9 @@ using HasMmbrDefn2_t = HasMmbrDefn2<T, void>;
 __DEFINE_NAME_(HasMmbrDefn2<A, void>);
 __DEFINE_NAME_(HasMmbrDefn2<B, void>);
 
-TestRegister t3(new TestHasMmbrDefn<HasMmbrDefn2_t, A, bool, true, 
+RegisterTest(t3, new TestHasMmbrDefn<HasMmbrDefn2_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t4(new TestHasMmbrDefn<HasMmbrDefn2_t, B, bool, false,
+RegisterTest(t4, new TestHasMmbrDefn<HasMmbrDefn2_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -291,9 +270,9 @@ using HasMmbrDefn3_t = HasMmbrDefn3<C, T>;
 __DEFINE_NAME_(HasMmbrDefn3<C, std::true_type>);
 __DEFINE_NAME_(HasMmbrDefn3<C, std::false_type>);
 
-TestRegister t5(new TestHasMmbrDefn<HasMmbrDefn3_t, std::true_type,
+RegisterTest(t5, new TestHasMmbrDefn<HasMmbrDefn3_t, std::true_type,
     bool, true, &BoolCompare>());
-TestRegister t6(new TestHasMmbrDefn<HasMmbrDefn3_t, std::false_type,
+RegisterTest(t6, new TestHasMmbrDefn<HasMmbrDefn3_t, std::false_type,
     bool, false, &BoolCompare>());
 
 /**
@@ -327,9 +306,9 @@ using HasMmbrDefn4_t = HasMmbrDefn4<T>;
 __DEFINE_NAME_(HasMmbrDefn4<A>);
 __DEFINE_NAME_(HasMmbrDefn4<B>);
 
-TestRegister t7(new TestHasMmbrDefn<HasMmbrDefn4_t, A, bool, true, 
+RegisterTest(t7, new TestHasMmbrDefn<HasMmbrDefn4_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t8(new TestHasMmbrDefn<HasMmbrDefn4_t, B, bool, false, 
+RegisterTest(t8, new TestHasMmbrDefn<HasMmbrDefn4_t, B, bool, false, 
     &BoolCompare>());
 
 /**
@@ -372,9 +351,9 @@ using HasMmbrDefn5_t = HasMmbrDefn5<T>;
 __DEFINE_NAME_(HasMmbrDefn5<A>);
 __DEFINE_NAME_(HasMmbrDefn5<B>);
 
-TestRegister t9(new TestHasMmbrDefn<HasMmbrDefn5_t, A, bool, true, 
+RegisterTest(t9, new TestHasMmbrDefn<HasMmbrDefn5_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t10(new TestHasMmbrDefn<HasMmbrDefn5_t, B, bool, false, 
+RegisterTest(t10, new TestHasMmbrDefn<HasMmbrDefn5_t, B, bool, false, 
     &BoolCompare>());
 
 /**
@@ -421,9 +400,9 @@ using HasMmbrDefn6_t = HasMmbrDefn6<C, T>;
 __DEFINE_NAME_(HasMmbrDefn6<C, std::true_type>);
 __DEFINE_NAME_(HasMmbrDefn6<C, std::false_type>);
 
-TestRegister t11(new TestHasMmbrDefn<HasMmbrDefn6_t, std::true_type, 
+RegisterTest(t11, new TestHasMmbrDefn<HasMmbrDefn6_t, std::true_type, 
     bool, true, &BoolCompare>());
-TestRegister t12(new TestHasMmbrDefn<HasMmbrDefn6_t, std::false_type, 
+RegisterTest(t12, new TestHasMmbrDefn<HasMmbrDefn6_t, std::false_type, 
     bool, false, &BoolCompare>());
 
 /**
@@ -462,19 +441,12 @@ using HasMmbrDefn7_t = HasMmbrDefn7<T, void>;
 __DEFINE_NAME_(HasMmbrDefn7<D, void>);
 __DEFINE_NAME_(HasMmbrDefn7<B, void>);
 
-TestRegister t13(new TestHasMmbrDefn<HasMmbrDefn7_t, D, bool, true, 
+RegisterTest(t13, new TestHasMmbrDefn<HasMmbrDefn7_t, D, bool, true, 
     &BoolCompare>());
-TestRegister t14(new TestHasMmbrDefn<HasMmbrDefn7_t, B, bool, false, 
+RegisterTest(t14, new TestHasMmbrDefn<HasMmbrDefn7_t, B, bool, false, 
     &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/EnableIf.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <type_traits>
 #include <vector>
 #include <typeinfo>
@@ -9,12 +11,6 @@
 template<typename T>
 struct A
 {};
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
 
 template<typename Tc>
 struct Name
@@ -35,23 +31,6 @@ __DEFINE_NAME_CONDITIONAL_(std::true_type);
 __DEFINE_NAME_CONDITIONAL_(std::false_type);
 __DEFINE_NAME_CONDITIONAL_(void);
 __DEFINE_NAME_CONDITIONAL_(A<void>);
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename T, typename... Targs>
 typename std::enable_if<sizeof...(Targs) != 0>::type 
@@ -237,7 +216,7 @@ struct TestOutputTypeTmpl;
 
 template<template<bool, typename> class Te, typename Ttt, typename Ttf,
     typename = TestOutputType, typename... Targs>
-struct TestEnableIf : BaseTest
+struct TestEnableIf : basic::test::Base
 {
     void Test()
     {
@@ -249,7 +228,8 @@ struct TestEnableIf : BaseTest
 
 template<template<bool, typename To> class Te, typename Ttt, typename Ttf,
     typename... Targs>
-struct TestEnableIf<Te, Ttt, Ttf, TestOutputTypeTmpl, Targs...> : BaseTest
+struct TestEnableIf<Te, Ttt, Ttf, TestOutputTypeTmpl, Targs...> : 
+    basic::test::Base
 {
     void Test()
     {
@@ -286,7 +266,7 @@ using EnableIf1_t = EnableIf1<BoolTest, void, To>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf1<true, void, std::true_type>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf1<false, void, std::true_type>);
 
-TestRegister t1(new TestEnableIf<EnableIf1_t, std::true_type, std::false_type>());
+RegisterTest(t1, new TestEnableIf<EnableIf1_t, std::true_type, std::false_type>());
 
 /**
  *  template<bool BoolTest, typename T = void, typename To = std::true_type, 
@@ -321,7 +301,7 @@ using EnableIf2_t = EnableIf2<BoolTest, void, To>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf2<true>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf2<false>);
 
-TestRegister t2(new TestEnableIf<EnableIf2_t, std::true_type, std::false_type>());
+RegisterTest(t2, new TestEnableIf<EnableIf2_t, std::true_type, std::false_type>());
 
 /**
  *  template<bool BoolTest, typename T, typename To = void, bool = true>
@@ -355,7 +335,7 @@ using EnableIf3_t = EnableIf3<BoolTest, A<void>, To>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf3<true, A<void>, std::true_type>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf3<false, A<void>, std::true_type>);
 
-TestRegister t3(new TestEnableIf<EnableIf3_t, std::true_type, std::false_type>());
+RegisterTest(t3, new TestEnableIf<EnableIf3_t, std::true_type, std::false_type>());
 
 /**
  *  template<bool BoolTest, typename T1, typename T2, typename To, bool = true>
@@ -399,7 +379,7 @@ using EnableIf4_t = EnableIf4<BoolTest, void, void, To>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf4<true, void, void, std::true_type>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf4<false, void, void, std::true_type>);
 
-TestRegister t4(new TestEnableIf<EnableIf4_t, std::true_type, std::false_type>());
+RegisterTest(t4, new TestEnableIf<EnableIf4_t, std::true_type, std::false_type>());
 
 /**
  *  template<bool BoolTest, typename T,  
@@ -442,7 +422,7 @@ using EnableIf5_t = EnableIf5<BoolTest, void, A>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf5<true, void, A>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf5<false, void, A>);
 
-TestRegister t5(new TestEnableIf<EnableIf5_t, A<void>, std::false_type>());
+RegisterTest(t5, new TestEnableIf<EnableIf5_t, A<void>, std::false_type>());
 
 /**
  *  template<bool BoolTest, typename T, template<typename> To,
@@ -480,17 +460,10 @@ using EnableIf6_t = EnableIf6<BoolTest, void, A>;
 __DEFINE_NAME_CONDITIONAL_(EnableIf6<true, void, A>);
 __DEFINE_NAME_CONDITIONAL_(EnableIf6<false, void, A>);
 
-TestRegister t6(new TestEnableIf<EnableIf6_t, A<void>, std::false_type,
+RegisterTest(t6, new TestEnableIf<EnableIf6_t, A<void>, std::false_type,
     TestOutputTypeTmpl, void>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

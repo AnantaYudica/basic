@@ -1,6 +1,8 @@
 #include "macro/HasStaticMemberObject.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 #include <typeinfo>
@@ -72,29 +74,6 @@ __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
 __DEFINE_NAME_(A);
 __DEFINE_NAME_(B);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 bool BoolCompare(bool a, bool b)
 {
@@ -178,7 +157,7 @@ void TestValue()
 
 template<template<typename> class Thsmo, typename T,
     typename Ttavt, Ttavt TtavtValue, bool(*Compare)(Ttavt a, Ttavt b)>
-struct TestHasStaticMmbrObj : BaseTest
+struct TestHasStaticMmbrObj : basic::test::Base
 {
     void Test() 
     {
@@ -216,9 +195,9 @@ using HasStaticMmbrObj1_t = HasStaticMmbrObj1<T>;
 __DEFINE_NAME_(HasStaticMmbrObj1<A>);
 __DEFINE_NAME_(HasStaticMmbrObj1<B>);
 
-TestRegister t1(new TestHasStaticMmbrObj<HasStaticMmbrObj1_t, A, bool, true, 
+RegisterTest(t1, new TestHasStaticMmbrObj<HasStaticMmbrObj1_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t2(new TestHasStaticMmbrObj<HasStaticMmbrObj1_t, B, bool, false,
+RegisterTest(t2, new TestHasStaticMmbrObj<HasStaticMmbrObj1_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -252,9 +231,9 @@ using HasStaticMmbrObj2_t = HasStaticMmbrObj2<T, void>;
 __DEFINE_NAME_(HasStaticMmbrObj2<A, void>);
 __DEFINE_NAME_(HasStaticMmbrObj2<B, void>);
 
-TestRegister t3(new TestHasStaticMmbrObj<HasStaticMmbrObj2_t, A, bool, true, 
+RegisterTest(t3, new TestHasStaticMmbrObj<HasStaticMmbrObj2_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t4(new TestHasStaticMmbrObj<HasStaticMmbrObj2_t, B, bool, false,
+RegisterTest(t4, new TestHasStaticMmbrObj<HasStaticMmbrObj2_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -291,9 +270,9 @@ using HasStaticMmbrObj3_t = HasStaticMmbrObj3<C, T>;
 __DEFINE_NAME_(HasStaticMmbrObj3<C, std::true_type>);
 __DEFINE_NAME_(HasStaticMmbrObj3<C, std::false_type>);
 
-TestRegister t5(new TestHasStaticMmbrObj<HasStaticMmbrObj3_t, std::true_type,
+RegisterTest(t5, new TestHasStaticMmbrObj<HasStaticMmbrObj3_t, std::true_type,
     bool, true, &BoolCompare>());
-TestRegister t6(new TestHasStaticMmbrObj<HasStaticMmbrObj3_t, std::false_type,
+RegisterTest(t6, new TestHasStaticMmbrObj<HasStaticMmbrObj3_t, std::false_type,
     bool, false, &BoolCompare>());
 
 /**
@@ -327,9 +306,9 @@ using HasStaticMmbrObj4_t = HasStaticMmbrObj4<T>;
 __DEFINE_NAME_(HasStaticMmbrObj4<A>);
 __DEFINE_NAME_(HasStaticMmbrObj4<B>);
 
-TestRegister t7(new TestHasStaticMmbrObj<HasStaticMmbrObj4_t, A, bool, true, 
+RegisterTest(t7, new TestHasStaticMmbrObj<HasStaticMmbrObj4_t, A, bool, true, 
     &BoolCompare>());
-TestRegister t8(new TestHasStaticMmbrObj<HasStaticMmbrObj4_t, B , bool, false, 
+RegisterTest(t8, new TestHasStaticMmbrObj<HasStaticMmbrObj4_t, B , bool, false, 
     &BoolCompare>());
 
 /**
@@ -372,9 +351,9 @@ using HasStaticMmbrObj5_t = HasStaticMmbrObj5<T, void>;
 __DEFINE_NAME_(HasStaticMmbrObj5<A, void>);
 __DEFINE_NAME_(HasStaticMmbrObj5<B, void>);
 
-TestRegister t9(new TestHasStaticMmbrObj<HasStaticMmbrObj5_t, A, bool, true,
+RegisterTest(t9, new TestHasStaticMmbrObj<HasStaticMmbrObj5_t, A, bool, true,
     &BoolCompare>());
-TestRegister t10(new TestHasStaticMmbrObj<HasStaticMmbrObj5_t, B, bool, false,
+RegisterTest(t10, new TestHasStaticMmbrObj<HasStaticMmbrObj5_t, B, bool, false,
     &BoolCompare>());
 
 /**
@@ -416,19 +395,12 @@ using HasStaticMmbrObj6_t = HasStaticMmbrObj6<T>;
 __DEFINE_NAME_(HasStaticMmbrObj6<std::true_type>);
 __DEFINE_NAME_(HasStaticMmbrObj6<std::false_type>);
 
-TestRegister t11(new TestHasStaticMmbrObj<HasStaticMmbrObj6_t, std::true_type, 
+RegisterTest(t11, new TestHasStaticMmbrObj<HasStaticMmbrObj6_t, std::true_type, 
     bool, true, &BoolCompare>());
-TestRegister t12(new TestHasStaticMmbrObj<HasStaticMmbrObj6_t, std::false_type, 
+RegisterTest(t12, new TestHasStaticMmbrObj<HasStaticMmbrObj6_t, std::false_type, 
     bool, false, &BoolCompare>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

@@ -1,6 +1,8 @@
 #include "macro/MemberDefinition.h"
 #include "Test.h"
 
+BasicTestConstruct;
+
 #include <vector>
 #include <type_traits>
 
@@ -88,29 +90,6 @@ __DEFINE_NAME_(void);
 __DEFINE_NAME_(bool);
 __DEFINE_NAME_(A);
 __DEFINE_NAME_(B<void>);
-
-struct BaseTest
-{
-    virtual ~BaseTest() {};
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(m_ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 struct AliasType;
 struct AliasTypeTmpl;
@@ -206,7 +185,7 @@ void TestAliasTypeTmpl()
 
 template<template<typename> class Tmd, typename T, typename Ttavt,
     typename = AliasType, typename... Targs>
-struct TestMmbrDefn : BaseTest
+struct TestMmbrDefn : basic::test::Base
 {
     void Test() 
     {
@@ -217,7 +196,8 @@ struct TestMmbrDefn : BaseTest
 
 template<template<typename> class Tmd, typename T, typename Ttavt,
     typename... Targs>
-struct TestMmbrDefn<Tmd, T, Ttavt, AliasTypeTmpl, Targs...> : BaseTest
+struct TestMmbrDefn<Tmd, T, Ttavt, AliasTypeTmpl, Targs...> : 
+    basic::test::Base
 {
     void Test() 
     {
@@ -242,7 +222,7 @@ using MmbrDefn1_t = MmbrDefn1<T>;
 
 __DEFINE_NAME_(MmbrDefn1<A>);
 
-TestRegister t1(new TestMmbrDefn<MmbrDefn1_t, A, typename A::Type1>());
+RegisterTest(t1, new TestMmbrDefn<MmbrDefn1_t, A, typename A::Type1>());
 
 /**
  *  template<typename T, typename T1>
@@ -264,7 +244,7 @@ using MmbrDefn2_t = MmbrDefn2<T, void>;
 
 __DEFINE_NAME_(MmbrDefn2<A, void>);
 
-TestRegister t2(new TestMmbrDefn<MmbrDefn2_t, A, typename A::Type1>());
+RegisterTest(t2, new TestMmbrDefn<MmbrDefn2_t, A, typename A::Type1>());
 
 /**
  *  template<template<typename> class T, typename T1>
@@ -290,7 +270,7 @@ using MmbrDefn3_t = MmbrDefn3<B, T>;
 
 __DEFINE_NAME_(MmbrDefn3<B, void>);
 
-TestRegister t3(new TestMmbrDefn<MmbrDefn3_t, void, typename B<void>::Type2>());
+RegisterTest(t3, new TestMmbrDefn<MmbrDefn3_t, void, typename B<void>::Type2>());
 
 /**
  *  template<typename T>
@@ -314,18 +294,11 @@ using MmbrDefn4_t = MmbrDefn4<T>;
 
 __DEFINE_NAME_(MmbrDefn4<C>);
 
-TestRegister t4(new TestMmbrDefn<MmbrDefn4_t, C, 
+RegisterTest(t4, new TestMmbrDefn<MmbrDefn4_t, C, 
     typename C::template Type3<void>, AliasTypeTmpl, void>());
 
 
 int main()
 {
-    Info("BeginTest:\n");
-    
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:");
-    return  ResultStatus;
+    return TestRun();
 }

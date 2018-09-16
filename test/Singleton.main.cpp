@@ -2,7 +2,7 @@
 #define USING_BASIC_TEST_MEMORY
 #include "Test.h"
 
-BasicTest& bt = BasicTest::ms_instance;
+BasicTestConstruct;
 
 #include <vector>
 #include <type_traits>
@@ -81,30 +81,6 @@ void ToString(Tptr t, std::string& str)
     ostr << std::hex << ToVoidPtr(t); 
     str += ostr.str();
 }
-
-struct BaseTest
-{
-    BaseTest() {}
-    virtual ~BaseTest() {}
-    virtual void Test() = 0;
-};
-
-struct TestRegister
-{
-    static std::vector<BaseTest*> List;
-    BaseTest* m_ptr;
-    TestRegister(BaseTest* ptr) :
-        m_ptr(ptr)
-    {
-        List.push_back(ptr);
-    }
-    ~TestRegister()
-    {
-        delete m_ptr;
-    }
-};
-
-std::vector<BaseTest*> TestRegister::List;
 
 template<typename... Targs>
 struct ParameterValue
@@ -313,7 +289,7 @@ void TestCompareGetInstance(T* Tptr)
 
 template<typename Ts, typename Tt, Tt TtValueCI, Tt TtValueDI,
     Tt TtValueHI, Tt TtValueGI, typename... Targs>
-struct TestSingletonHasMember : BaseTest
+struct TestSingletonHasMember : basic::test::Base
 {
     void Test() 
     {
@@ -325,7 +301,7 @@ struct TestSingletonHasMember : BaseTest
 };
 
 template<typename Ts, typename Tt, Tt TtValue>
-struct TestSingletonHasInstance : BaseTest
+struct TestSingletonHasInstance : basic::test::Base
 {
     void Test() 
     {
@@ -335,7 +311,7 @@ struct TestSingletonHasInstance : BaseTest
 
 template<typename Ts, typename Tr, Ts*(*ToPtr)(Tr&),
      typename... Targs>
-struct TestSingletonConstructInstance : BaseTest
+struct TestSingletonConstructInstance : basic::test::Base
 {
     ParameterValue<Targs...> m_paramVal;
     TestSingletonConstructInstance(Targs... args) :
@@ -350,7 +326,7 @@ struct TestSingletonConstructInstance : BaseTest
 };
 
 template<typename Ts, typename Tt, Tt TtValue>
-struct TestSingletonDestroyInstance : BaseTest
+struct TestSingletonDestroyInstance : basic::test::Base
 {
     void Test()
     {
@@ -361,7 +337,7 @@ struct TestSingletonDestroyInstance : BaseTest
 
 template<typename Ts, typename Tr, Ts*(*ToPtr)(Tr&),
     typename Tt, Tt TtValue>
-struct TestSingletonGetInstance : BaseTest
+struct TestSingletonGetInstance : basic::test::Base
 {
     Ts* m_ptr;
     TestSingletonGetInstance(Ts* ptr) :
@@ -401,12 +377,12 @@ A* AToPtr(A& a)
 
 __DEFINE_NAME_(A);
 
-TestRegister t1_1(new TestSingletonHasMember<A, bool, true, true, 
+RegisterTest(t1_1, new TestSingletonHasMember<A, bool, true, true, 
     true, true>());
-TestRegister t1_2(new TestSingletonHasInstance<A, bool, false>());
-TestRegister t1_3(new TestSingletonConstructInstance<A, A, &AToPtr>());
-TestRegister t1_4(new TestSingletonHasInstance<A, bool, true>());
-TestRegister t1_5(new TestSingletonDestroyInstance<A, bool, false>());
+RegisterTest(t1_2, new TestSingletonHasInstance<A, bool, false>());
+RegisterTest(t1_3, new TestSingletonConstructInstance<A, A, &AToPtr>());
+RegisterTest(t1_4, new TestSingletonHasInstance<A, bool, true>());
+RegisterTest(t1_5, new TestSingletonDestroyInstance<A, bool, false>());
 
 class B :
     public Value,
@@ -429,12 +405,12 @@ B* BToPtr(B& b)
     return &b;
 }
 
-TestRegister t2_1(new TestSingletonHasMember<B, bool, true, true, 
+RegisterTest(t2_1, new TestSingletonHasMember<B, bool, true, true, 
     true, true>());
-TestRegister t2_2(new TestSingletonHasInstance<B, bool, false>());
-TestRegister t2_3(new TestSingletonConstructInstance<B, B, &BToPtr, int>(4));
-TestRegister t2_4(new TestSingletonHasInstance<B, bool, true>());
-TestRegister t2_5(new TestSingletonDestroyInstance<B, bool, false>());
+RegisterTest(t2_2, new TestSingletonHasInstance<B, bool, false>());
+RegisterTest(t2_3, new TestSingletonConstructInstance<B, B, &BToPtr, int>(4));
+RegisterTest(t2_4, new TestSingletonHasInstance<B, bool, true>());
+RegisterTest(t2_5, new TestSingletonDestroyInstance<B, bool, false>());
 
 class C :
     public Value,
@@ -460,12 +436,12 @@ C* CToPtr(C*& c)
     return c;
 }
 
-TestRegister t3_1(new TestSingletonHasMember<C, bool, true, true, 
+RegisterTest(t3_1, new TestSingletonHasMember<C, bool, true, true, 
     true, true>());
-TestRegister t3_2(new TestSingletonHasInstance<C, bool, false>());
-TestRegister t3_3(new TestSingletonConstructInstance<C, C*, &CToPtr>());
-TestRegister t3_4(new TestSingletonHasInstance<C, bool, true>());
-TestRegister t3_5(new TestSingletonDestroyInstance<C, bool, false>());
+RegisterTest(t3_2, new TestSingletonHasInstance<C, bool, false>());
+RegisterTest(t3_3, new TestSingletonConstructInstance<C, C*, &CToPtr>());
+RegisterTest(t3_4, new TestSingletonHasInstance<C, bool, true>());
+RegisterTest(t3_5, new TestSingletonDestroyInstance<C, bool, false>());
 
 
 class D:
@@ -484,12 +460,12 @@ D* DToPtr(const D& d)
     return const_cast<D*>(&d);
 }
 
-TestRegister t4_1(new TestSingletonHasMember<D, bool, true, true, 
+RegisterTest(t4_1, new TestSingletonHasMember<D, bool, true, true, 
     true, true>());
-TestRegister t4_2(new TestSingletonHasInstance<D, bool, false>());
-TestRegister t4_3(new TestSingletonConstructInstance<D, const D, &DToPtr>());
-TestRegister t4_4(new TestSingletonHasInstance<D, bool, true>());
-TestRegister t4_5(new TestSingletonDestroyInstance<D, bool, false>());
+RegisterTest(t4_2, new TestSingletonHasInstance<D, bool, false>());
+RegisterTest(t4_3, new TestSingletonConstructInstance<D, const D, &DToPtr>());
+RegisterTest(t4_4, new TestSingletonHasInstance<D, bool, true>());
+RegisterTest(t4_5, new TestSingletonDestroyInstance<D, bool, false>());
 
 class E:
     public Value,
@@ -511,12 +487,12 @@ E* EToPtr(const E& e)
     return const_cast<E*>(&e);
 }
 
-TestRegister t5_1(new TestSingletonHasMember<E, bool, false, false, 
+RegisterTest(t5_1, new TestSingletonHasMember<E, bool, false, false, 
     true, true>());
-TestRegister t5_2(new TestSingletonHasInstance<E, bool, false>());
-TestRegister t5_3(new TestSingletonGetInstance<E, const E,
+RegisterTest(t5_2, new TestSingletonHasInstance<E, bool, false>());
+RegisterTest(t5_3, new TestSingletonGetInstance<E, const E,
     &EToPtr, bool, false>(nullptr));
-TestRegister t5_4(new TestSingletonHasInstance<E, bool, true>());
+RegisterTest(t5_4, new TestSingletonHasInstance<E, bool, true>());
 
 
 class F:
@@ -536,16 +512,10 @@ private:
 
 __DEFINE_NAME_(F);
 
-TestRegister t6_1(new TestSingletonHasMember<F, bool, false, false, 
+RegisterTest(t6_1, new TestSingletonHasMember<F, bool, false, false, 
     false, false>());
 
 int main()
 {
-    Info("BeginTest:\n");
-    for (auto t : TestRegister::List)
-    {
-        t->Test();
-    }
-    Info("EndTest:\n");
-    return  ResultStatus;
+    return TestRun();
 }
