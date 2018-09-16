@@ -2,7 +2,7 @@ version: 2
 jobs:
    build:
      docker: 
-       - image: library/gcc:5.5.0
+       - image: library/gcc:7.3.0
      steps:
        - checkout
        - run: mkdir -p Build
