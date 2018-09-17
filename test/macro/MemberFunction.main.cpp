@@ -305,10 +305,6 @@ BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
 BASIC_TEST_TYPE_NAME("void", void);
 BASIC_TEST_TYPE_NAME("bool", bool);
 
-struct AliasType;
-struct AliasTypeTmpl;
-struct Pointer;
-struct PointerTmpl;
 
 using CaseAliasTypeAndPointer = basic::test::type::
     Parameter<CaseATTa, CaseAT, CasePTa, CaseP>;
