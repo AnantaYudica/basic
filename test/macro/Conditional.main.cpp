@@ -1,16 +1,179 @@
 #include "macro/Conditional.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Message.h"
+#include "test/Variable.h"
+#include "test/Case.h"
 
 #include <typeinfo>
 #include <type_traits>
 #include <string>
 #include <vector>
 
-/**
- * struct Helper
- * */
+struct CaseATTa {}; // case alias type and target
+struct CaseAT {}; // case alias type;
+struct CaseATTTa {}; // case alias type tmpl and target
+struct CaseATT {}; // case alias type tmpl
+
+template<typename TC, typename TTa, 
+    typename... Targs>
+using VariableTestConditional = basic::test::Variable<TC, TTa,
+    basic::test::type::Parameter<Targs...>>;
+
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
+
+template<std::size_t I>
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+
+template<std::size_t I>
+using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+
+typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
+    ArgTypeName<1>> ArgCaseATTa;
+
+typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
+    ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
+
+typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
+    ArgTypeName<0>> ArgCaseAT;
+
+typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
+    ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
+
+typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
+    ArgTypeParamName<2>, ArgTypeName<1>> ArgCaseATTTa;
+
+typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
+    ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
+
+typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
+    ArgTypeParamName<2>, ArgTypeName<0>, ArgTypeParamName<2>> ArgCaseATT;
+
+typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
+    ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
+
+template<typename TCases, typename... TVars>
+class TestConditional :
+    public MsgBaseCaseATTa,
+    public MsgBaseCaseAT,
+    public MsgBaseCaseATTTa,
+    public MsgBaseCaseATT,
+    public basic::test::Message<BASIC_TEST, TestConditional<TCases, TVars...>>,
+    public basic::test::Case<TestConditional<TCases, TVars...>, TCases>,
+    public basic::test::Base<TestConditional<TCases, TVars...>, TVars...>
+{
+public:
+    typedef basic::test::Base<TestConditional<TCases, TVars...>, 
+        TVars...> BaseType; 
+    typedef basic::test::Message<BASIC_TEST, 
+        TestConditional<TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestConditional<TCases, TVars...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseATTa::SetFormat;
+    using MsgBaseCaseAT::SetFormat;
+    using MsgBaseCaseATTTa::SetFormat;
+    using MsgBaseCaseATT::SetFormat;
+public:
+    using MsgBaseCaseATTa::Format;
+    using MsgBaseCaseAT::Format;
+    using MsgBaseCaseATTTa::Format;
+    using MsgBaseCaseATT::Format;
+    using MsgBaseCaseATTa::Argument;
+    using MsgBaseCaseAT::Argument;
+    using MsgBaseCaseATTTa::Argument;
+    using MsgBaseCaseATT::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestConditional(TVars&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
+    {
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+
+        CaseATTa case_alias_type_and_target;
+        SetFormat(info, case_alias_type_and_target,
+            "Test compare between %s::type and %s\n");
+        SetFormat(debug, case_alias_type_and_target,
+            "Test compare between %s::type and %s\n");
+        SetFormat(error, case_alias_type_and_target,
+            "%s::type is not same with %s\n");
+
+        CaseAT case_alias_type;
+        SetFormat(info, case_alias_type,
+            "Test compare between %s::type and %s::Type\n");
+        SetFormat(debug, case_alias_type,
+            "Test compare between %s::type and %s::Type\n");
+        SetFormat(error, case_alias_type,
+            "%s::type is not same with %s::Type\n");
+
+        CaseATTTa case_alias_type_tmpl_and_target;
+        SetFormat(info, case_alias_type_tmpl_and_target,
+            "Test compare between %s::template type<%s> and %s\n");
+        SetFormat(debug, case_alias_type_tmpl_and_target,
+            "Test compare between %s::template type<%s> and %s\n");
+        SetFormat(error, case_alias_type_tmpl_and_target,
+            "%s::template type<%s> is not same with %s\n");
+
+        CaseATT case_alias_type_tmpl;
+        SetFormat(info, case_alias_type_tmpl,
+            "Test compare between %s::template type<%s> and "
+            "%s::template Type<%s>\n");
+        SetFormat(debug, case_alias_type_tmpl,
+            "Test compare between %s::template type<%s> and "
+            "%s::template Type<%s>\n");
+        SetFormat(error, case_alias_type_tmpl,
+            "%s::template type<%s> is not same with "
+            "%s::template Type<%s>\n");
+    }
+
+    template<typename Tc, typename TTa, typename... Targs>
+    bool Result(const CaseATTa&, VariableTestConditional<Tc, 
+        TTa, Targs...>& var)
+    {
+        return typeid(typename Tc::type).hash_code() ==
+            typeid(TTa).hash_code();
+    }
+
+    template<typename Tc, typename TTa, typename... Targs>
+    bool Result(const CaseAT&, VariableTestConditional<Tc, 
+        TTa, Targs...>& var)
+    {
+        return typeid(typename Tc::type).hash_code() ==
+            typeid(typename Tc::Type).hash_code();
+    }
+
+    template<typename Tc, typename TTa, typename... Targs>
+    bool Result(const CaseATTTa&, VariableTestConditional<Tc, 
+        TTa, Targs...>& var)
+    {
+        return typeid(typename Tc::template type<Targs...>).hash_code() ==
+            typeid(TTa).hash_code();
+    }
+
+    template<typename Tc, typename TTa, typename... Targs>
+    bool Result(const CaseATT&, VariableTestConditional<Tc, 
+        TTa, Targs...>& var)
+    {
+        return typeid(typename Tc::template type<Targs...>).hash_code() ==
+            typeid(typename Tc::template Type<Targs...>).hash_code();
+    }
+};
+
+using CaseAliasType = basic::test::type::
+    Parameter<CaseATTa, CaseAT>;
+using CaseAliasTypeTmpl = basic::test::type::
+    Parameter<CaseATTTa, CaseATT>;
+
 template<typename T>
 struct A
 {
@@ -18,207 +181,17 @@ struct A
     typedef std::false_type false_type;
 };
 
+BASIC_TEST_TYPE_NAME("A<void>", A<void>);
+
 template<typename T>
 struct B
 {};
 
-/**
- * struct NameConditional
- * */
-template<typename Tc>
-struct Name
-{
-    static const char * Value;
-};
-template<typename Tc>
-const char* Name<Tc>::Value = "undefined"; 
+BASIC_TEST_TYPE_NAME("B<void>", B<void>);
 
-#define __DEFINE_NAME_CONDITIONAL_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = #__VA_ARGS__;\
-}
-
-__DEFINE_NAME_CONDITIONAL_(std::true_type);
-__DEFINE_NAME_CONDITIONAL_(std::false_type);
-__DEFINE_NAME_CONDITIONAL_(void);
-
-struct TrueFalseAliasType;
-struct TrueAliasTypeTmpl;
-struct FalseAliasTypeTmpl;
-struct TrueFalseAliasTypeTmpl;
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) != 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-    if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-    NameParameterTmpl<Targs...>(str, false);
-}
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) == 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-     if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-}
-
-template<typename Tc, typename Ttc>
-void TestAliasTypeAndTarget()
-{
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Ttc>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Tc>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Ttc>::Value;
-    if(Assert(error_msg.c_str(), 
-        typeid(typename Tc::type).hash_code() ==
-            typeid(Ttc).hash_code()))
-                Info("Pass\n");
-}
-
-template<typename Tc>
-void TestAliasType()
-{
-    std::string error_msg = Name<Tc>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Tc>::Value;
-    error_msg += "::Type";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::Type : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tc::type).hash_code() ==
-            typeid(typename Tc::Type).hash_code()))
-                Info("Pass\n");
-}
-
-template<typename Tc, typename Ttc, typename... Targs>
-void TestAliasTypeTmplAndTarget()
-{
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Ttc>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Tc>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Ttc>::Value;
-    if(Assert(error_msg.c_str(), 
-        typeid(typename Tc::template type<Targs...>).hash_code() ==
-            typeid(Ttc).hash_code()))
-                Info("Pass\n");
-}
-
-template<typename Tc, typename... Targs>
-void TestAliasTypeTmpl()
-{
-    std::string error_msg = Name<Tc>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same error_msg ";
-    error_msg += Name<Tc>::Value;
-    error_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += ">";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Tc>::Value;
-    info_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tc::template type<Targs...>).hash_code() ==
-            typeid(typename Tc::template Type<Targs...>).hash_code()))
-                Info("Pass\n");
-}
-
-/**
- * Definition Parameter name 
- * Tct = True Conditional Type
- * Tcf = False Conditional Type
- * Ttct = True Conditional Target Type
- * Ttcf = False Conditional Target Type
- * Ta = Alias Type
- * Targs = Argumnents Type
- * */
-
-template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
-    typename Ta = TrueFalseAliasType, typename... Targs>
-struct TestConditional : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeAndTarget<Tct, Ttct>();
-        TestAliasType<Tct>();
-        TestAliasTypeAndTarget<Tcf, Ttcf>();
-        TestAliasType<Tcf>();
-    }
-};
-
-template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
-    typename... Targs>
-struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    TrueAliasTypeTmpl, Targs...> : basic::test::Base
-{
-void Test() 
-    {
-        TestAliasTypeTmplAndTarget<Tct, Ttct, Targs...>();
-        TestAliasTypeTmpl<Tct, Targs...>();
-        TestAliasTypeAndTarget<Tcf, Ttcf>();
-        TestAliasType<Tcf>();
-    }
-};
-
-template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
-    typename... Targs>
-struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    FalseAliasTypeTmpl, Targs...> : basic::test::Base
-{
-void Test() 
-    {
-        TestAliasTypeAndTarget<Tct, Ttct>();
-        TestAliasType<Tct>();
-        TestAliasTypeTmplAndTarget<Tcf, Ttcf, Targs...>();
-        TestAliasTypeTmpl<Tcf, Targs...>();
-    }
-};
-
-template<typename Tct, typename Tcf, typename Ttct, typename Ttcf,
-    typename... Targs>
-struct TestConditional<Tct, Tcf, Ttct, Ttcf, 
-    TrueFalseAliasTypeTmpl, Targs...> : basic::test::Base
-{
-void Test() 
-    {
-        TestAliasTypeTmplAndTarget<Tct, Ttct, Targs...>();
-        TestAliasTypeTmpl<Tct, Targs...>();
-        TestAliasTypeTmplAndTarget<Tcf, Ttcf, Targs...>();
-        TestAliasTypeTmpl<Tcf, Targs...>();
-    }
-};
-
+BASIC_TEST_TYPE_NAME("void", void);
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
 
 /**
  * template<bool BoolTest, typename Tt, typename Tf>
@@ -240,15 +213,23 @@ __DEFINE_CONDITIONAL_(Conditional1, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
 typedef Conditional1<true, std::true_type, std::false_type>
-    TrueConditional1_t;
+    TrueConditional1;
 typedef Conditional1<false, std::true_type, std::false_type>
-    FalseConditional1_t;
+    FalseConditional1;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional1<true, std::true_type, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional1<false, std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional1<true, std::true_type, std::false_type>",
+    Conditional1<true, std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional1<false, std::true_type, std::false_type>",
+    Conditional1<false, std::true_type, std::false_type>);
 
-RegisterTest(t1, new TestConditional<TrueConditional1_t, 
-    FalseConditional1_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional1, std::true_type> T1Var1;
+typedef VariableTestConditional<FalseConditional1, std::false_type> T1Var2;
+
+T1Var1 t1_var1;
+T1Var2 t1_var2;
+
+REGISTER_TEST(t1, new TestConditional<CaseAliasType, T1Var1, 
+    T1Var2>(t1_var1, t1_var2));
 
 /**
  *  template<bool BoolTest, typename Tt = std::true_type, 
@@ -276,14 +257,20 @@ __DEFINE_CONDITIONAL_(Conditional2, BoolTest, Tt, Tf, TPLT1, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional2<true> TrueConditional2_t;
-typedef Conditional2<false> FalseConditiona2_t;
+typedef Conditional2<true> TrueConditional2;
+typedef Conditional2<false> FalseConditional2;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional2<true>);
-__DEFINE_NAME_CONDITIONAL_(Conditional2<false>);
+BASIC_TEST_TYPE_NAME("Conditional2<true>", Conditional2<true>);
+BASIC_TEST_TYPE_NAME("Conditional2<false>", Conditional2<false>);
 
-RegisterTest(t2, new TestConditional<TrueConditional2_t, 
-    FalseConditiona2_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional2, std::true_type> T2Var1;
+typedef VariableTestConditional<FalseConditional2, std::false_type> T2Var2;
+
+T2Var1 t2_var1;
+T2Var2 t2_var2;
+
+REGISTER_TEST(t2, new TestConditional<CaseAliasType, T2Var1, 
+    T2Var2>(t2_var1, t2_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -309,14 +296,22 @@ __DEFINE_CONDITIONAL_(Conditional3, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,, TALF1, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional3<true, std::true_type, A<void>> TrueConditional3_t;
-typedef Conditional3<false, std::true_type, A<void>> FalseConditional3_t;
+typedef Conditional3<true, std::true_type, A<void>> TrueConditional3;
+typedef Conditional3<false, std::true_type, A<void>> FalseConditional3;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional3<true, std::true_type, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional3<false, std::true_type, B<void>>);
+BASIC_TEST_TYPE_NAME("Conditional3<true, std::true_type, A<void>>",
+    Conditional3<true, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional3<false, std::true_type, A<void>>",
+    Conditional3<false, std::true_type, A<void>>);
 
-RegisterTest(t3, new TestConditional<TrueConditional3_t,
-    FalseConditional3_t, std::true_type, void>());  
+typedef VariableTestConditional<TrueConditional3, std::true_type> T3Var1;
+typedef VariableTestConditional<FalseConditional3, void> T3Var2;
+
+T3Var1 t3_var1;
+T3Var2 t3_var2;
+
+REGISTER_TEST(t3, new TestConditional<CaseAliasType, T3Var1, 
+    T3Var2>(t3_var1, t3_var2));  
 
 
 /**
@@ -354,14 +349,20 @@ __DEFINE_CONDITIONAL_(Conditional4, BoolTest, Tt, Tf, TPLT2, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional4<true, void> TrueConditional4_t;
-typedef Conditional4<false, void> FalseConditional4_t;
+typedef Conditional4<true, void> TrueConditional4;
+typedef Conditional4<false, void> FalseConditional4;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional4<true, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional4<false, void>);
+BASIC_TEST_TYPE_NAME("Conditional4<true, void>", Conditional4<true, void>);
+BASIC_TEST_TYPE_NAME("Conditional4<false, void>", Conditional4<false, void>);
 
-RegisterTest(t4, new TestConditional<TrueConditional4_t,
-    FalseConditional4_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional4, std::true_type> T4Var1;
+typedef VariableTestConditional<FalseConditional4, std::false_type> T4Var2;
+
+T4Var1 t4_var1;
+T4Var2 t4_var2;
+
+REGISTER_TEST(t4, new TestConditional<CaseAliasType, T4Var1, 
+    T4Var2>(t4_var1, t4_var2));
 
 /**
  *  template<bool BoolTest, template<typename> class Tt, typename T1,
@@ -403,14 +404,22 @@ __DEFINE_CONDITIONAL_(Conditional5, BoolTest, Tt, Tf, TPLT3,
     T_TRUE_NAME_TMPL_, TTNTAL1, T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, 
     TPLF2, TALF3, T_FALSE_NAME_,, T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional5<true, A, void> TrueConditional5_t;
-typedef Conditional5<false, A, void> FalseConditional5_t;
+typedef Conditional5<true, A, void> TrueConditional5;
+typedef Conditional5<false, A, void> FalseConditional5;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional5<true, A, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional5<false, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional5<true, A, void>", 
+    Conditional5<true, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional5<false, A, void>",
+    Conditional5<false, A, void>);
 
-RegisterTest(t5, new TestConditional<TrueConditional5_t,
-    FalseConditional5_t, A<void>, std::false_type>());
+typedef VariableTestConditional<TrueConditional5, A<void>> T5Var1;
+typedef VariableTestConditional<FalseConditional5, std::false_type> T5Var2;
+
+T5Var1 t5_var1;
+T5Var2 t5_var2;
+
+REGISTER_TEST(t5, new TestConditional<CaseAliasType, T5Var1, 
+    T5Var2>(t5_var1, t5_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, template<typename> class Tf, 
@@ -452,14 +461,22 @@ __DEFINE_CONDITIONAL_(Conditional6, BoolTest, Tt, Tf, TPLT4, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, TPLF3, TALF4, T_FALSE_NAME_TMPL_, 
     TFNTAL1, T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional6<true, std::true_type, A, void> TrueConditional6_t;
-typedef Conditional6<false, std::true_type, A, void> FalseConditional6_t;
+typedef Conditional6<true, std::true_type, A, void> TrueConditional6;
+typedef Conditional6<false, std::true_type, A, void> FalseConditional6;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional6<true, std::true_type, A, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional6<false, std::true_type, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional6<true, std::true_type, A, void>",
+    Conditional6<true, std::true_type, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional6<false, std::true_type, A, void>",
+    Conditional6<false, std::true_type, A, void>);
 
-RegisterTest(t6, new TestConditional<TrueConditional6_t,
-    FalseConditional6_t, std::true_type, A<void>>());
+typedef VariableTestConditional<TrueConditional6, std::true_type> T6Var1;
+typedef VariableTestConditional<FalseConditional6, A<void>> T6Var2;
+
+T6Var1 t6_var1;
+T6Var2 t6_var2;
+
+REGISTER_TEST(t6, new TestConditional<CaseAliasType, T6Var1, 
+    T6Var2>(t6_var1, t6_var2));
 
 /**
  *  template<bool BoolTest, template<typename> class Tt, typename T1,
@@ -499,14 +516,22 @@ __DEFINE_CONDITIONAL_(Conditional7, BoolTest, Tt, Tf, TPLT5, T_TRUE_NAME_TMPL_,
     TTNTAL1, T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, TPLF4, TALF5, 
     T_FALSE_NAME_TMPL_, TFNTAL1, T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional7<true, A, void, B, void> TrueConditional7_t;
-typedef Conditional7<false, A, void, B, void> FalseConditional7_t;
+typedef Conditional7<true, A, void, B, void> TrueConditional7;
+typedef Conditional7<false, A, void, B, void> FalseConditional7;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional7<true, A, void, B, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional7<false, A, void, B, void>);
+BASIC_TEST_TYPE_NAME("Conditional7<true, A, void, B, void>",
+    Conditional7<true, A, void, B, void>);
+BASIC_TEST_TYPE_NAME("Conditional7<false, A, void, B, void>",
+    Conditional7<false, A, void, B, void>);
 
-RegisterTest(t7, new TestConditional<TrueConditional7_t,
-    FalseConditional7_t, A<void>, B<void>>());
+typedef VariableTestConditional<TrueConditional7, A<void>> T7Var1;
+typedef VariableTestConditional<FalseConditional7, B<void>> T7Var2;
+
+T7Var1 t7_var1;
+T7Var2 t7_var2;
+
+REGISTER_TEST(t7, new TestConditional<CaseAliasType, T7Var1,
+    T7Var2>(t7_var1, t7_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -530,14 +555,22 @@ __DEFINE_CONDITIONAL_(Conditional8, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional8<true, A<void>, std::false_type> TrueConditional8_t;
-typedef Conditional8<false, A<void>, std::false_type> FalseConditional8_t;
+typedef Conditional8<true, A<void>, std::false_type> TrueConditional8;
+typedef Conditional8<false, A<void>, std::false_type> FalseConditional8;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional8<true, A<void>, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional8<false, A<void>, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional8<true, A<void>, std::false_type>",
+    Conditional8<true, A<void>, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional8<false, A<void>, std::false_type>",
+    Conditional8<false, A<void>, std::false_type>);
 
-RegisterTest(t8, new TestConditional<TrueConditional8_t,
-    FalseConditional8_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional8, std::true_type> T8Var1;
+typedef VariableTestConditional<FalseConditional8, std::false_type> T8Var2;
+
+T8Var1 t8_var1;
+T8Var2 t8_var2;
+
+REGISTER_TEST(t8, new TestConditional<CaseAliasType, T8Var1, 
+    T8Var2>(t8_var1, t8_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -561,14 +594,22 @@ __DEFINE_CONDITIONAL_(Conditional9, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional9<true, std::true_type, A<void>> TrueConditional9_t;
-typedef Conditional9<false, std::true_type, A<void>> FalseConditional9_t;
+typedef Conditional9<true, std::true_type, A<void>> TrueConditional9;
+typedef Conditional9<false, std::true_type, A<void>> FalseConditional9;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional9<true, std::true_type, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional9<false, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional9<true, std::true_type, A<void>>",
+    Conditional9<true, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional9<false, std::true_type, A<void>>",
+    Conditional9<false, std::true_type, A<void>>);
 
-RegisterTest(t9, new TestConditional<TrueConditional9_t,
-    FalseConditional9_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional9, std::true_type> T9Var1;
+typedef VariableTestConditional<FalseConditional9, std::false_type> T9Var2;
+
+T9Var1 t9_var1;
+T9Var2 t9_var2;
+
+REGISTER_TEST(t9, new TestConditional<CaseAliasType, T9Var1,
+    T9Var2>(t9_var1, t9_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -589,14 +630,22 @@ __DEFINE_CONDITIONAL_(Conditional10, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional10<true, A<void>, A<void>> TrueConditional10_t;
-typedef Conditional10<false, A<void>, A<void>> FalseConditional10_t;
+typedef Conditional10<true, A<void>, A<void>> TrueConditional10;
+typedef Conditional10<false, A<void>, A<void>> FalseConditional10;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional10<true, A<void>, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional10<false, A<void>, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional10<true, A<void>, A<void>>",
+    Conditional10<true, A<void>, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional10<false, A<void>, A<void>>",
+    Conditional10<false, A<void>, A<void>>);
 
-RegisterTest(t10, new TestConditional<TrueConditional10_t,
-    FalseConditional10_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional10, std::true_type> T10Var1;
+typedef VariableTestConditional<FalseConditional10, std::false_type> T10Var2;
+
+T10Var1 t10_var1;
+T10Var2 t10_var2;
+
+REGISTER_TEST(t10, new TestConditional<CaseAliasType, T10Var1,
+    T10Var2>(t10_var1, t10_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf = std::false_type>
@@ -622,14 +671,22 @@ __DEFINE_CONDITIONAL_(Conditional11, BoolTest, Tt, Tf, TPLT6, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional11<true, A<void>> TrueConditional11_t;
-typedef Conditional11<false, A<void>> FalseConditional11_t;
+typedef Conditional11<true, A<void>> TrueConditional11;
+typedef Conditional11<false, A<void>> FalseConditional11;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional11<true, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional11<false, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional11<true, A<void>>",
+    Conditional11<true, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional11<false, A<void>>",
+    Conditional11<false, A<void>>);
 
-RegisterTest(t11, new TestConditional<TrueConditional11_t,
-    FalseConditional11_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional11, std::true_type> T11Var1;
+typedef VariableTestConditional<FalseConditional11, std::false_type> T11Var2;
+
+T11Var1 t11_var1;
+T11Var2 t11_var2;
+
+REGISTER_TEST(t11, new TestConditional<CaseAliasType, T11Var1,
+    T11Var2>(t11_var1, t11_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -655,14 +712,22 @@ __DEFINE_CONDITIONAL_(Conditional12, BoolTest, Tt, Tf, TPLT7, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional12<true, std::true_type, A<void>> TrueConditional12_t;
-typedef Conditional12<false, std::true_type, A<void>> FalseConditional12_t;
+typedef Conditional12<true, std::true_type, A<void>> TrueConditional12;
+typedef Conditional12<false, std::true_type, A<void>> FalseConditional12;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional12<true, std::true_type, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional12<false, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional12<true, std::true_type, A<void>>",
+    Conditional12<true, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional12<false, std::true_type, A<void>>",
+    Conditional12<false, std::true_type, A<void>>);
 
-RegisterTest(t12, new TestConditional<TrueConditional12_t,
-    FalseConditional12_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional12, std::true_type> T12Var1;
+typedef VariableTestConditional<FalseConditional12, std::false_type> T12Var2;
+
+T12Var1 t12_var1;
+T12Var2 t12_var2;
+
+REGISTER_TEST(t12, new TestConditional<CaseAliasType, T12Var1,
+    T12Var2>(t12_var1, t12_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf= Tt>
@@ -688,14 +753,22 @@ __DEFINE_CONDITIONAL_(Conditional13, BoolTest, Tt, Tf, TPLT8, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional13<true, A<void>> TrueConditional13_t;
-typedef Conditional13<false, A<void>> FalseConditional13_t;
+typedef Conditional13<true, A<void>> TrueConditional13;
+typedef Conditional13<false, A<void>> FalseConditional13;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional13<true, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional13<false, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional13<true, A<void>>",
+    Conditional13<true, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional13<false, A<void>>",
+    Conditional13<false, A<void>>);
 
-RegisterTest(t13, new TestConditional<TrueConditional13_t,
-    FalseConditional13_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional13, std::true_type> T13Var1;
+typedef VariableTestConditional<FalseConditional13, std::false_type> T13Var2;
+
+T13Var1 t13_var1;
+T13Var2 t13_var2;
+
+REGISTER_TEST(t13, new TestConditional<CaseAliasType, T13Var1,
+    T13Var2>(t13_var1, t13_var2));
 
 /**
  *  template<bool BoolTest, typename T1, typename Tt, typename Tf>
@@ -718,17 +791,26 @@ RegisterTest(t13, new TestConditional<TrueConditional13_t,
 typename T1, typename __T_TRUE_NAME__, typename __T_FALSE_NAME__
 
 __DEFINE_CONDITIONAL_(Conditional14, BoolTest, Tt, Tf, TPLT9, T_TRUE_NAME_,,
-    T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, T_FALSE_NAME_,,
-    T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
+    T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, 
+    T_FALSE_NAME_,, T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional14<true, void, A<void>, std::false_type> TrueConditional14_t;
-typedef Conditional14<false, void, A<void>, std::false_type> FalseConditional14_t;
+typedef Conditional14<true, void, A<void>, std::false_type> TrueConditional14;
+typedef Conditional14<false, void, A<void>, 
+    std::false_type> FalseConditional14;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional14<true, void, A<void>, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional14<false, void, A<void>, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional14<true, void, A<void>, std::false_type>",
+    Conditional14<true, void, A<void>, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional14<false, void, A<void>, std::false_type>",
+    Conditional14<false, void, A<void>, std::false_type>);
 
-RegisterTest(t14, new TestConditional<TrueConditional14_t,
-    FalseConditional14_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional14, std::true_type> T14Var1;
+typedef VariableTestConditional<FalseConditional14, std::false_type> T14Var2;
+
+T14Var1 t14_var1;
+T14Var2 t14_var2;
+
+REGISTER_TEST(t14, new TestConditional<CaseAliasType, T14Var1,
+    T14Var2>(t14_var1, t14_var2));
 
 /**
  *  template<bool BoolTest, typename T1, typename Tt, typename Tf>
@@ -749,14 +831,22 @@ __DEFINE_CONDITIONAL_(Conditional15, BoolTest, Tt, Tf, TPLT9, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional15<true, void, std::true_type, A<void>> TrueConditional15_t;
-typedef Conditional15<false, void, std::true_type, A<void>> FalseConditional15_t;
+typedef Conditional15<true, void, std::true_type, A<void>> TrueConditional15;
+typedef Conditional15<false, void, std::true_type, A<void>> FalseConditional15;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional15<true, void, std::true_type, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional15<false, void, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional15<true, void, std::true_type, A<void>>",
+    Conditional15<true, void, std::true_type, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional15<false, void, std::true_type, A<void>>",
+    Conditional15<false, void, std::true_type, A<void>>);
 
-RegisterTest(t15, new TestConditional<TrueConditional15_t,
-    FalseConditional15_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional15, std::true_type> T15Var1;
+typedef VariableTestConditional<FalseConditional15, std::false_type> T15Var2;
+
+T15Var1 t15_var1;
+T15Var2 t15_var2;
+
+REGISTER_TEST(t15, new TestConditional<CaseAliasType, T15Var1,
+    T15Var2>(t15_var1, t15_var2));
 
 /**
  *  template<bool BoolTest, typename T1, typename Tt, typename Tf = Tt>
@@ -780,17 +870,25 @@ typename T1, typename __T_TRUE_NAME__,\
     typename __T_FALSE_NAME__ = __T_TRUE_NAME__
 
 __DEFINE_CONDITIONAL_(Conditional16, BoolTest, Tt, Tf, TPLT10, T_TRUE_NAME_,,
-    T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, T_FALSE_NAME_,,
-    T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
+    T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF1, TALF2, 
+    T_FALSE_NAME_,, T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional16<true, void, A<void>> TrueConditional16_t;
-typedef Conditional16<false, void, A<void>> FalseConditional16_t;
+typedef Conditional16<true, void, A<void>> TrueConditional16;
+typedef Conditional16<false, void, A<void>> FalseConditional16;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional16<true, void, A<void>>);
-__DEFINE_NAME_CONDITIONAL_(Conditional16<false, void, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional16<true, void, A<void>>",
+    Conditional16<true, void, A<void>>);
+BASIC_TEST_TYPE_NAME("Conditional16<false, void, A<void>>",
+    Conditional16<false, void, A<void>>);
 
-RegisterTest(t16, new TestConditional<TrueConditional16_t,
-    FalseConditional16_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional16, std::true_type> T16Var1;
+typedef VariableTestConditional<FalseConditional16, std::false_type> T16Var2;
+
+T16Var1 t16_var1;
+T16Var2 t16_var2;
+
+REGISTER_TEST(t16, new TestConditional<CaseAliasType, T16Var1,
+    T16Var2>(t16_var1, t16_var2));
 
 /**
  *  template<bool BoolTest, template<typename> class Tt, typename T1, 
@@ -813,14 +911,22 @@ __DEFINE_CONDITIONAL_(Conditional17, BoolTest, Tt, Tf, TPLT3, T_TRUE_NAME_TMPL_,
     TTNTAL1, T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF2, TALF3, 
     T_FALSE_NAME_,, T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional17<true, A, void> TrueConditional17_t;
-typedef Conditional17<false, A, void> FalseConditional17_t;
+typedef Conditional17<true, A, void> TrueConditional17;
+typedef Conditional17<false, A, void> FalseConditional17;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional17<true, A, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional17<false, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional17<true, A, void>",
+    Conditional17<true, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional17<false, A, void>",
+    Conditional17<false, A, void>);
 
-RegisterTest(t17, new TestConditional<TrueConditional17_t,
-    FalseConditional17_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional17, std::true_type> T17Var1;
+typedef VariableTestConditional<FalseConditional17, std::false_type> T17Var2;
+
+T17Var1 t17_var1;
+T17Var2 t17_var2;
+
+REGISTER_TEST(t17, new TestConditional<CaseAliasType, T17Var1,
+    T17Var2>(t17_var1, t17_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, template<typename> class Tf,
@@ -842,14 +948,22 @@ __DEFINE_CONDITIONAL_(Conditional18, BoolTest, Tt, Tf, TPLT4, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,, TPLF3, TALF4, T_FALSE_NAME_TMPL_, 
     TFNTAL1, T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional18<true, std::true_type, A, void> TrueConditional18_t;
-typedef Conditional18<false, std::true_type, A, void> FalseConditional18_t;
+typedef Conditional18<true, std::true_type, A, void> TrueConditional18;
+typedef Conditional18<false, std::true_type, A, void> FalseConditional18;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional18<true, std::true_type, A, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional18<false, std::true_type, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional18<true, std::true_type, A, void>",
+    Conditional18<true, std::true_type, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional18<false, std::true_type, A, void>",
+    Conditional18<false, std::true_type, A, void>);
 
-RegisterTest(t18, new TestConditional<TrueConditional18_t, 
-    FalseConditional18_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional18, std::true_type> T18Var1;
+typedef VariableTestConditional<FalseConditional18, std::false_type> T18Var2;
+
+T18Var1 t18_var1;
+T18Var2 t18_var2;
+
+REGISTER_TEST(t18, new TestConditional<CaseAliasType, T18Var1, 
+    T18Var2>(t18_var1, t18_var2));
 
 /**
  *  template<bool BoolTest, template<typename> class Tt, typename T1,
@@ -868,18 +982,27 @@ RegisterTest(t18, new TestConditional<TrueConditional18_t,
  *  };
  * */
 
-__DEFINE_CONDITIONAL_(Conditional19, BoolTest, Tt, Tf, TPLT5, T_TRUE_NAME_TMPL_, 
-    TTNTAL1, T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, ALIAS_TYPE_TRUE_,, TPLF4, TALF5, 
-    T_FALSE_NAME_TMPL_, TFNTAL1, T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
+__DEFINE_CONDITIONAL_(Conditional19, BoolTest, Tt, Tf, TPLT5, 
+    T_TRUE_NAME_TMPL_, TTNTAL1, T_TRUE_DEFN_TYPE_MMBR_, TTDTMN1, 
+    ALIAS_TYPE_TRUE_,, TPLF4, TALF5, T_FALSE_NAME_TMPL_, TFNTAL1, 
+    T_FALSE_DEFN_TYPE_MMBR_, TFDTMN1, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional19<true, A, void, A, void> TrueConditional19_t;
-typedef Conditional19<false, A, void, A, void> FalseConditional19_t;
+typedef Conditional19<true, A, void, A, void> TrueConditional19;
+typedef Conditional19<false, A, void, A, void> FalseConditional19;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional19<true, A, void, A, void>);
-__DEFINE_NAME_CONDITIONAL_(Conditional19<false, A, void, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional19<true, A, void, A, void>",
+    Conditional19<true, A, void, A, void>);
+BASIC_TEST_TYPE_NAME("Conditional19<false, A, void, A, void>",
+    Conditional19<false, A, void, A, void>);
 
-RegisterTest(t19, new TestConditional<TrueConditional19_t,
-    FalseConditional19_t, std::true_type, std::false_type>());
+typedef VariableTestConditional<TrueConditional19, std::true_type> T19Var1;
+typedef VariableTestConditional<FalseConditional19, std::false_type> T19Var2;
+
+T19Var1 t19_var1;
+T19Var2 t19_var2;
+
+REGISTER_TEST(t19, new TestConditional<CaseAliasType, T19Var1,
+    T19Var2>(t19_var1, t19_var2));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -905,14 +1028,27 @@ __DEFINE_CONDITIONAL_(Conditional20, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_TRUE_, ATTPLT1,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional20<true, std::true_type, std::false_type> TrueConditional20_t;
-typedef Conditional20<false,  std::true_type, std::false_type> FalseConditional20_t;
+typedef Conditional20<true, std::true_type, std::false_type> TrueConditional20;
+typedef Conditional20<false,  std::true_type, std::false_type> 
+    FalseConditional20;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional20<true, std::true_type, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional20<false,  std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional20<true, std::true_type, std::false_type>",
+    Conditional20<true, std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional20<false,  std::true_type, std::false_type>",
+    Conditional20<false,  std::true_type, std::false_type>);
 
-RegisterTest(t20, new TestConditional<TrueConditional20_t,
-    FalseConditional20_t, std::true_type, std::false_type, TrueAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional20, std::true_type,
+    void> T20Var1;
+
+T20Var1 t20_var1;
+
+REGISTER_TEST(t20, new TestConditional<CaseAliasTypeTmpl, T20Var1>(t20_var1));
+
+typedef VariableTestConditional<FalseConditional20, std::false_type> T21Var1;
+
+T21Var1 t21_var1;
+
+REGISTER_TEST(t21, new TestConditional<CaseAliasType, T21Var1>(t21_var1));
 
 /**
  *  template<bool BooTest, typename Tt, typename Tf>
@@ -938,14 +1074,28 @@ __DEFINE_CONDITIONAL_(Conditional21, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_FALSE_, ATTPLF1);
 
-typedef Conditional21<true, std::true_type, std::false_type> TrueConditional21_t;
-typedef Conditional21<false,  std::true_type, std::false_type> FalseConditional21_t;
+typedef Conditional21<true, std::true_type, std::false_type> TrueConditional21;
+typedef Conditional21<false,  std::true_type, std::false_type> 
+    FalseConditional21;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional21<true, std::true_type, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional21<false,  std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional21<true, std::true_type, std::false_type>",
+    Conditional21<true, std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional21<false,  std::true_type, std::false_type>",
+    Conditional21<false,  std::true_type, std::false_type>);
 
-RegisterTest(t21, new TestConditional<TrueConditional21_t,
-    FalseConditional21_t, std::true_type, std::false_type, FalseAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional21, std::true_type,
+    void> T22Var1;
+
+T22Var1 t22_var1;
+
+REGISTER_TEST(t22, new TestConditional<CaseAliasType, T22Var1>(t22_var1));
+
+typedef VariableTestConditional<FalseConditional21, std::false_type,
+    void> T23Var1;
+
+T23Var1 t23_var1;
+
+REGISTER_TEST(t23, new TestConditional<CaseAliasTypeTmpl, T23Var1>(t23_var1));
 
 /**
  *  template<bool BoolTest, typename Tt, typename Tf>
@@ -970,15 +1120,25 @@ __DEFINE_CONDITIONAL_(Conditional22, BoolTest, Tt, Tf,, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_TRUE_, ATTPLT1,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_FALSE_, ATTPLF1);
 
-typedef Conditional22<true, std::true_type, std::false_type> TrueConditional22_t;
-typedef Conditional22<false,  std::true_type, std::false_type> FalseConditional22_t;
+typedef Conditional22<true, std::true_type, std::false_type> TrueConditional22;
+typedef Conditional22<false,  std::true_type, std::false_type> 
+    FalseConditional22;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional22<true, std::true_type, std::false_type>);
-__DEFINE_NAME_CONDITIONAL_(Conditional22<false,  std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional22<true, std::true_type, std::false_type>",
+    Conditional22<true, std::true_type, std::false_type>);
+BASIC_TEST_TYPE_NAME("Conditional22<false,  std::true_type, std::false_type>",
+    Conditional22<false,  std::true_type, std::false_type>);
 
-RegisterTest(t22, new TestConditional<TrueConditional22_t,
-    FalseConditional22_t, std::true_type, std::false_type,
-    TrueFalseAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional22, std::true_type,
+    void> T24Var1;
+typedef VariableTestConditional<FalseConditional22, std::false_type,
+    void> T24Var2;
+
+T24Var1 t24_var1;
+T24Var2 t24_var2;
+
+REGISTER_TEST(t24, new TestConditional<CaseAliasTypeTmpl, T24Var1,
+    T24Var2>(t24_var1, t24_var2));
 
 /**
  *  template<bool BoolTest, typename Tt = std::true_type, 
@@ -1002,15 +1162,24 @@ __DEFINE_CONDITIONAL_(Conditional23, BoolTest, Tt, Tf, TPLT1, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_TRUE_, ATTPLT1,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_FALSE_,);
 
-typedef Conditional23<true> TrueConditional23_t;
-typedef Conditional23<false> FalseConditional23_t;
+typedef Conditional23<true> TrueConditional23;
+typedef Conditional23<false> FalseConditional23;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional23<true>);
-__DEFINE_NAME_CONDITIONAL_(Conditional23<false>);
+BASIC_TEST_TYPE_NAME("Conditional23<true>", Conditional23<true>);
+BASIC_TEST_TYPE_NAME("Conditional23<false>", Conditional23<false>);
 
-RegisterTest(t23, new TestConditional<TrueConditional23_t,
-    FalseConditional23_t, std::true_type, std::false_type,
-    TrueAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional23, std::true_type,
+    void> T25Var1;
+
+T25Var1 t25_var1;
+
+REGISTER_TEST(t25, new TestConditional<CaseAliasTypeTmpl, T25Var1>(t25_var1));
+
+typedef VariableTestConditional<FalseConditional23, std::false_type> T26Var1;
+
+T26Var1 t26_var1;
+
+REGISTER_TEST(t26, new TestConditional<CaseAliasType, T26Var1>(t26_var1));
 
 /**
  *  template<Bool BoolTest, typename Tt = std::true_type,
@@ -1034,15 +1203,24 @@ __DEFINE_CONDITIONAL_(Conditional24, BoolTest, Tt, Tf, TPLT1, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TRUE_,,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_FALSE_, ATTPLF1);
 
-typedef Conditional24<true> TrueConditional24_t;
-typedef Conditional24<false> FalseConditional24_t;
+typedef Conditional24<true> TrueConditional24;
+typedef Conditional24<false> FalseConditional24;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional24<true>);
-__DEFINE_NAME_CONDITIONAL_(Conditional24<false>);
+BASIC_TEST_TYPE_NAME("Conditional24<true>", Conditional24<true>);
+BASIC_TEST_TYPE_NAME("Conditional24<false>", Conditional24<false>);
 
-RegisterTest(t24, new TestConditional<TrueConditional24_t,
-    FalseConditional24_t, std::true_type, std::false_type,
-    FalseAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional24, std::true_type> T27Var1;
+    
+T27Var1 t27_var1;
+
+REGISTER_TEST(t27, new TestConditional<CaseAliasType, T27Var1>(t27_var1));
+
+typedef VariableTestConditional<FalseConditional24, std::false_type,
+    void> T28Var1;
+
+T28Var1 t28_var1;
+
+REGISTER_TEST(t28, new TestConditional<CaseAliasTypeTmpl, T28Var1>(t28_var1));
 
 /**
  *  template<bool BoolTest, typename Tt = std::true_type, 
@@ -1068,17 +1246,24 @@ __DEFINE_CONDITIONAL_(Conditional25, BoolTest, Tt, Tf, TPLT1, T_TRUE_NAME_,,
     T_TRUE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_TRUE_, ATTPLT1,,, T_FALSE_NAME_,,
     T_FALSE_DEFN_TYPE_,, ALIAS_TYPE_TMPL_FALSE_, ATTPLF1);
 
-typedef Conditional25<true> TrueConditional25_t;
-typedef Conditional25<false> FalseConditional25_t;
+typedef Conditional25<true> TrueConditional25;
+typedef Conditional25<false> FalseConditional25;
 
-__DEFINE_NAME_CONDITIONAL_(Conditional25<true>);
-__DEFINE_NAME_CONDITIONAL_(Conditional25<false>);
+BASIC_TEST_TYPE_NAME("Conditional25<true>", Conditional25<true>);
+BASIC_TEST_TYPE_NAME("Conditional25<false>", Conditional25<false>);
 
-RegisterTest(t25, new TestConditional<TrueConditional25_t,
-    FalseConditional25_t, std::true_type, std::false_type,
-    TrueFalseAliasTypeTmpl, void>());
+typedef VariableTestConditional<TrueConditional25, std::true_type,
+    void> T29Var1;
+typedef VariableTestConditional<FalseConditional25, std::false_type,
+    void> T29Var2;
+
+T29Var1 t29_var1;
+T29Var2 t29_var2;
+
+REGISTER_TEST(t29, new TestConditional<CaseAliasTypeTmpl, T29Var1,
+    T29Var2>(t29_var1, t29_var2));
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }
