@@ -1,11 +1,309 @@
 #include "macro/StaticMemberFunction.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Message.h"
+#include "test/Variable.h"
+#include "test/Case.h"
 
 #include <vector>
 #include <type_traits>
 #include <sstream>
+
+struct CaseATTa {}; // case alias type and target
+struct CaseATTTa{}; // case alias type tmpl and target
+struct CaseAT{}; // case alias type
+struct CaseATT{}; // case alias type tmpl
+struct CasePTa{}; // case pointer and target
+struct CasePTTa{}; // case pointer tmpl and target
+struct CaseP{}; //case pointer
+struct CasePT{}; // case pointer tmpl
+
+template<typename TSMF, typename TTarget, typename TTargetPointer, 
+    typename... TArgs>
+using VariableTestStaticMmbrFunc = basic::test::Variable<TSMF, TTarget,
+    basic::test::var::Value<TTargetPointer>,
+    basic::test::type::Parameter<TArgs...>>;
+
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
+
+template<std::size_t I>
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+
+template<std::size_t I>
+using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+
+typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>, 
+    ArgTypeName<1>> ArgCaseATTa;
+
+typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
+    ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
+
+typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
+    ArgTypeParamName<3>, ArgTypeName<1>> ArgCaseATTTa;
+
+typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
+    ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
+
+typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
+    ArgTypeName<0>> ArgCaseAT;
+
+typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
+    ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
+
+typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
+    ArgTypeParamName<3>, ArgTypeName<0>, ArgTypeParamName<3>> ArgCaseATT;
+
+typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
+    ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
+
+typedef basic::test::msg::Argument<CasePTa, ArgTypeName<0>,
+    ArgVarValue<2>> ArgCasePTa;
+
+typedef basic::test::msg::Base<CasePTa, char, ArgCasePTa, 
+    ArgCasePTa, ArgCasePTa> MsgBaseCasePTa;
+
+typedef basic::test::msg::Argument<CasePTTa, ArgTypeName<0>,
+    ArgTypeParamName<3>, ArgVarValue<2>> ArgCasePTTa;
+
+typedef basic::test::msg::Base<CasePTTa, char, ArgCasePTTa, 
+    ArgCasePTTa, ArgCasePTTa> MsgBaseCasePTTa;
+
+typedef basic::test::msg::Argument<CaseP, ArgTypeName<0>,
+    ArgTypeName<0>> ArgCaseP;
+
+typedef basic::test::msg::Base<CaseP, char, ArgCaseP, 
+    ArgCaseP, ArgCaseP> MsgBaseCaseP;
+
+typedef basic::test::msg::Argument<CasePT, ArgTypeName<0>,
+    ArgTypeParamName<3>, ArgTypeName<0>, ArgTypeParamName<3>> ArgCasePT;
+
+typedef basic::test::msg::Base<CasePT, char, ArgCasePT, 
+    ArgCasePT, ArgCasePT> MsgBaseCasePT;
+
+template<typename Tptr>
+void* ToVoidPtr(Tptr t)
+{
+    Tptr * tp = &t;
+    void ** vp = reinterpret_cast<void**>(tp);
+    return *vp;
+} 
+
+template<typename TCases, typename... TVars>
+class TestStaticMmbrFunc :
+    public MsgBaseCaseATTa,
+    public MsgBaseCaseATTTa,
+    public MsgBaseCaseAT,
+    public MsgBaseCaseATT,
+    public MsgBaseCasePTa,
+    public MsgBaseCasePTTa,
+    public MsgBaseCaseP,
+    public MsgBaseCasePT,
+    public basic::test::Message<BASIC_TEST, TestStaticMmbrFunc<TCases, TVars...>>,
+    public basic::test::Case<TestStaticMmbrFunc<TCases, TVars...>, TCases>,
+    public basic::test::Base<TestStaticMmbrFunc<TCases, TVars...>, TVars...>
+{
+public:
+    typedef basic::test::Base<TestStaticMmbrFunc<TCases, TVars...>, 
+        TVars...> BaseType; 
+    typedef basic::test::Message<BASIC_TEST, 
+        TestStaticMmbrFunc<TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestStaticMmbrFunc<TCases, TVars...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseATTa::SetFormat;
+    using MsgBaseCaseATTTa::SetFormat;
+    using MsgBaseCaseAT::SetFormat;
+    using MsgBaseCaseATT::SetFormat;
+    using MsgBaseCasePTa::SetFormat;
+    using MsgBaseCasePTTa::SetFormat;
+    using MsgBaseCaseP::SetFormat;
+    using MsgBaseCasePT::SetFormat;
+public:
+    using MsgBaseCaseATTa::Format;
+    using MsgBaseCaseATTTa::Format;
+    using MsgBaseCaseAT::Format;
+    using MsgBaseCaseATT::Format;
+    using MsgBaseCasePTa::Format;
+    using MsgBaseCasePTTa::Format;
+    using MsgBaseCaseP::Format;
+    using MsgBaseCasePT::Format;
+    using MsgBaseCaseATTa::Argument;
+    using MsgBaseCaseATTTa::Argument;
+    using MsgBaseCaseAT::Argument;
+    using MsgBaseCaseATT::Argument;
+    using MsgBaseCasePTa::Argument;
+    using MsgBaseCasePTTa::Argument;
+    using MsgBaseCaseP::Argument;
+    using MsgBaseCasePT::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestStaticMmbrFunc(TVars&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
+    {
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+
+        CaseATTa case_alias_type_and_target;
+        SetFormat(info, case_alias_type_and_target, 
+            "test compare between %s::type and %s\n");
+        SetFormat(debug, case_alias_type_and_target,
+            "test compare between %s::type and %s\n");
+        SetFormat(error, case_alias_type_and_target,
+            "error %s::type is not same with %s\n");
+
+        CaseATTTa case_alias_type_tmpl_and_target;
+        SetFormat(info, case_alias_type_tmpl_and_target, 
+            "test compare between %s::template type<%s> and %s\n");
+        SetFormat(debug, case_alias_type_tmpl_and_target,
+            "test compare between %s::template type<%s> and %s\n");
+        SetFormat(error, case_alias_type_tmpl_and_target,
+            "error %s::template type<%s> is not same with %s\n");
+
+        CaseAT case_alias_type;
+        SetFormat(info, case_alias_type, 
+            "test compare between %s::type and %s::Type\n");
+        SetFormat(debug, case_alias_type,
+            "test compare between %s::type and %s::Type\n");
+        SetFormat(error, case_alias_type,
+            "error %s::type is not same with %s::Type\n");
+
+        CaseATT case_alias_tmpl_type;
+        SetFormat(info, case_alias_tmpl_type, 
+            "test compare between %s::template type<%s> "
+            "and %s::template type<%s>\n");
+        SetFormat(debug, case_alias_tmpl_type,
+            "test compare between %s::template type<%s> "
+            "and %s::template type<%s>\n");
+        SetFormat(error, case_alias_tmpl_type,
+            "error %s::template type<%s> is not same "
+            "with %s::template type<%s>\n");
+
+        CasePTa case_pointer_and_target;
+        SetFormat(info, case_pointer_and_target, 
+            "test compare between %s::pointer() and %p\n");
+        SetFormat(debug, case_pointer_and_target,
+            "test compare between %s::pointer() and %p\n");
+        SetFormat(error, case_pointer_and_target,
+            "error %s::pointer() is not same with %p\n");
+
+        CasePTTa case_pointer_tmpl_and_target;
+        SetFormat(info, case_pointer_tmpl_and_target, 
+            "test compare between %s::template pointer<%s>() and %p\n");
+        SetFormat(debug, case_pointer_tmpl_and_target,
+            "test compare between %s::template pointer<%s>() and %p\n");
+        SetFormat(error, case_pointer_tmpl_and_target,
+            "error %s::template pointer<%s>() is not same with %p\n");
+
+        CaseP case_pointer;
+        SetFormat(info, case_pointer, 
+            "test compare between %s::pointer() and %s::Pointer()\n");
+        SetFormat(debug, case_pointer,
+            "test compare between %s::pointer() and %s::Pointer()\n");
+        SetFormat(error, case_pointer,
+            "error %s::pointer() is not same with %s::Pointer()\n");
+
+        CasePT case_pointer_tmpl;
+        SetFormat(info, case_pointer_tmpl, 
+            "test compare between %s::template pointer<%s>() "
+            "and %s::template Pointer<%s>()\n");
+        SetFormat(debug, case_pointer_tmpl,
+            "test compare between %s::template pointer<%s>() "
+            "and %s::template Pointer<%s>()\n");
+        SetFormat(error, case_pointer_tmpl,
+            "error %s::template pointer<%s>() is "
+            "not same with %s::template Pointer<%s>()\n");
+
+    }
+public:
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return typeid(typename TSMF::type).hash_code() ==
+            typeid(TTarget).hash_code();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return typeid(typename TSMF::template type<TArgs...>).hash_code() ==
+            typeid(TTarget).hash_code();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CaseAT&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return typeid(typename TSMF::type).hash_code() ==
+            typeid(typename TSMF::Type).hash_code();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CaseATT&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return typeid(typename TSMF::template type<TArgs...>).hash_code() ==
+            typeid(typename TSMF::template Type<TArgs...>).hash_code();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CasePTa&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return ToVoidPtr(TSMF::pointer()) == 
+            var.template GetValue<2>();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CasePTTa&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return ToVoidPtr(TSMF::template pointer<TArgs...>()) == 
+            var.template GetValue<2>();
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CaseP&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return ToVoidPtr(TSMF::pointer()) == ToVoidPtr(TSMF::Pointer());
+    }
+
+    template<typename TSMF, typename TTarget, typename TTargetPointer, 
+        typename... TArgs>
+    bool Result(const CasePT&, VariableTestStaticMmbrFunc<TSMF, TTarget, 
+        TTargetPointer, TArgs...>& var)
+    {
+        return ToVoidPtr(TSMF::template pointer<TArgs...>()) == 
+            ToVoidPtr(TSMF::template Pointer<TArgs...>());
+    }
+};
+
+using CasesAliasTypeAndPointer = basic::test::type::
+    Parameter<CaseATTa, CaseAT, CasePTa, CaseP>;
+using CasesAliasTypeAndPointerTmpl = basic::test::type::
+    Parameter<CaseATTa, CaseAT, CasePTTa, CasePT>;
+using CasesAliasTypeTmplAndPointer = basic::test::type::
+    Parameter<CaseATTTa, CaseATT, CasePTa, CaseP>;
+using CasesAliasTypeTmplAndPointerTmpl = basic::test::type::
+    Parameter<CaseATTTa, CaseATT, CasePTTa, CasePT>;;
 
 struct A
 {
@@ -24,324 +322,15 @@ struct C
     static B<T> Foo3() {}
 };
 
-template<typename T, T TVal>
-struct ValueName
-{
-    static constexpr const char * Value = "undefined"; 
-};
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
+BASIC_TEST_TYPE_NAME("void", void);
+BASIC_TEST_TYPE_NAME("bool", bool);
+BASIC_TEST_TYPE_NAME("A", A);
+BASIC_TEST_TYPE_NAME("B<void>", B<void>);
+BASIC_TEST_TYPE_NAME("void(*)()", void(*)());
+BASIC_TEST_TYPE_NAME("B<void> (*)()", B<void> (*)());
 
-#define __DEFINE_VALUE_NAME_(NAME, ...)\
-template<>\
-struct ValueName<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = NAME;\
-}
-
-template<typename T>
-struct Name
-{
-    static const char * Value;
-};
-
-template<typename T>
-const char* Name<T>::Value = "undefined"; 
-
-template<typename T, T TVal>
-struct Name<ValueName<T, TVal>>
-{
-    static constexpr const char * Value = ValueName<T, TVal>::Value;
-};
-
-#define __DEFINE_NAME_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = #__VA_ARGS__;\
-}
-
-template<typename... Targs>
-struct NameParameterTmpl 
-{
-    static void String(std::string& str, bool first = true)
-    {}
-};
-
-template<typename T, typename... Targs>
-struct NameParameterTmpl<T, Targs...> 
-{
-    static void String(std::string& str, bool first = true)
-    {
-        if (!first)
-            str += ", ";
-        str += Name<T>::Value;
-        NameParameterTmpl<Targs...>::String(str, false);
-    }
-};
-
-__DEFINE_VALUE_NAME_("true", bool, true);
-__DEFINE_VALUE_NAME_("false", bool, false);
-
-__DEFINE_NAME_(std::true_type);
-__DEFINE_NAME_(std::false_type);
-__DEFINE_NAME_(void);
-__DEFINE_NAME_(bool);
-__DEFINE_NAME_(A);
-__DEFINE_NAME_(B<void>);
-__DEFINE_NAME_(void(*)());
-__DEFINE_NAME_(B<void> (*)());
-
-struct AliasType;
-struct AliasTypeTmpl;
-struct Pointer;
-struct PointerTmpl;
-
-template<typename Tptr>
-void* ToVoidPtr(Tptr t)
-{
-    Tptr * tp = &t;
-    void ** vp = reinterpret_cast<void**>(tp);
-    return *vp;
-}
-
-template<typename Tptr>
-void ToString(Tptr t, std::string& str)
-{
-    std::ostringstream ostr;
-    ostr << std::hex << ToVoidPtr(t); 
-    str += ostr.str();
-}
-
-template<template<typename> class Tmf, typename T,
-    typename Tta>
-void TestAliasTypeAndTarget()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Tta>::Value;
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Tta>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmf<T>::type).hash_code() ==
-            typeid(Tta).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T,
-    typename Tta, typename... Targs>
-void TestAliasTypeTmplAndTarget()
-{
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Tta>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Tta>::Value;
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmf<T>::template type<Targs...>).hash_code() ==
-            typeid(Tta).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T>
-void TestAliasType()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Tmf<T>>::Value;
-    error_msg += "::Type";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::Type : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmf<T>::type).hash_code() ==
-            typeid(typename Tmf<T>::Type).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T,
-    typename... Targs>
-void TestAliasTypeTmpl()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Tmf<T>>::Value;
-    error_msg += "::template Type<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += ">";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template Type<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += "> : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmf<T>::template type<Targs...>).hash_code() ==
-            typeid( typename Tmf<T>:: template Type<Targs...>).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T, typename Ttp,
-    Ttp TtpValue>
-void TestPointerAndTarget()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::pointer() is not same with ";
-    ToString(TtpValue, error_msg);
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::pointer() and ";
-    ToString(TtpValue, info_msg);
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        ToVoidPtr(Tmf<T>::pointer()) == ToVoidPtr(TtpValue)))
-            Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T, typename Ttp,
-    Ttp TtpValue, typename... Targs>
-void TestPointerTmplAndTarget()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::template pointer<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += ">() is not same with ";
-    ToString(TtpValue, error_msg);
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template pointer<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += ">() and ";
-    ToString(TtpValue, info_msg);
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        ToVoidPtr(Tmf<T>::template pointer<Targs...>()) == ToVoidPtr(TtpValue)))
-            Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T>
-void TestPointer()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::pointer() is not same with ";
-    error_msg += Name<Tmf<T>>::Value;
-    error_msg += "::Pointer()";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::pointer() and ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::Pointer() : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        ToVoidPtr(Tmf<T>::pointer()) == ToVoidPtr(Tmf<T>::Pointer())))
-            Info("Pass\n");
-}
-
-template<template<typename> class Tmf, typename T,
-    typename... Targs>
-void TestPointerTmpl()
-{
-    std::string error_msg = Name<Tmf<T>>::Value;
-    error_msg += "::template pointer<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += ">() is not same with ";
-    error_msg += Name<Tmf<T>>::Value;
-    error_msg += "::template Pointer<";
-    NameParameterTmpl<Targs...>::String(error_msg);
-    error_msg += ">()";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template pointer<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += ">() and ";
-    info_msg += Name<Tmf<T>>::Value;
-    info_msg += "::template Pointer<";
-    NameParameterTmpl<Targs...>::String(info_msg);
-    info_msg += ">() : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        ToVoidPtr(Tmf<T>::template pointer<Targs...>()) == 
-        ToVoidPtr(Tmf<T>::template Pointer<Targs...>())))
-            Info("Pass\n");
-}
-
-
-template<template<typename> class Tmf, typename T, typename Tta,
-    typename Ttp, Ttp TtpValue, typename = AliasType, typename = Pointer,
-    typename... Targs>
-struct TestStaticMmbrFunc : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeAndTarget<Tmf, T, Tta>();
-        TestAliasType<Tmf, T>();
-        TestPointerAndTarget<Tmf, T, Ttp, TtpValue>();
-        TestPointer<Tmf, T>();
-    };
-};
-
-template<template<typename> class Tmf, typename T, typename Tta,
-    typename Ttp, Ttp TtpValue, typename... Targs>
-struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasType, PointerTmpl, Targs...> : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeAndTarget<Tmf, T, Tta>();
-        TestAliasType<Tmf, T>();
-        TestPointerTmplAndTarget<Tmf, T, Ttp, TtpValue, Targs...>();
-        TestPointerTmpl<Tmf, T, Targs...>();
-    };
-};
-
-template<template<typename> class Tmf, typename T, typename Tta,
-    typename Ttp, Ttp TtpValue, typename... Targs>
-struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, Pointer, Targs...> : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeTmplAndTarget<Tmf, T, Tta, Targs...>();
-        TestAliasTypeTmpl<Tmf, T, Targs...>();
-        TestPointerAndTarget<Tmf, T, Ttp, TtpValue>();
-        TestPointer<Tmf, T>();
-    };
-};
-
-template<template<typename> class Tmf, typename T, typename Tta,
-    typename Ttp, Ttp TtpValue, typename... Targs>
-struct TestStaticMmbrFunc<Tmf, T, Tta, Ttp, TtpValue, 
-    AliasTypeTmpl, PointerTmpl, Targs...> : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeTmplAndTarget<Tmf, T, Tta, Targs...>();
-        TestAliasTypeTmpl<Tmf, T, Targs...>();
-        TestPointerTmplAndTarget<Tmf, T, Ttp, TtpValue, Targs...>();
-        TestPointerTmpl<Tmf, T, Targs...>();
-    };
-};
 
 /**
  * 	template<typename T, typename Tr, typename... Targs>
@@ -364,12 +353,17 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc1, T, Tr, Targs,, T_NAME_,,
     T_RET_NAME_,, ALIAS_TYPE_,, PTR_,, PTR_RET_,, Foo1);
 
 template<typename T>
-using StaticMmbrFunc1_t = StaticMmbrFunc1<T, void>;
+using TStaticMmbrFunc1 = StaticMmbrFunc1<T, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc1<A, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc1<A, void>", StaticMmbrFunc1<A, void>);
 
-RegisterTest(t1_1, new TestStaticMmbrFunc<StaticMmbrFunc1_t, A, 
-    void (*)(), void (*)(), &A::Foo1>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc1<A>, void (*)(), 
+    void*> T1Var1;
+
+T1Var1 t1_var1(ToVoidPtr<void (*)()>(&A::Foo1));
+
+REGISTER_TEST(t1, new TestStaticMmbrFunc<CasesAliasTypeAndPointer, 
+    T1Var1>(t1_var1));
 
 /**
  * 	template<typename T, typename T1, typename Tr, typename... Targs>
@@ -399,12 +393,18 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc2, T, Tr, Targs, TPL1, T_NAME_,,
     T_RET_NAME_,, ALIAS_TYPE_,, PTR_,, PTR_RET_,, Foo1);
 
 template<typename T>
-using StaticMmbrFunc2_t = StaticMmbrFunc2<T, void, void>;
+using TStaticMmbrFunc2 = StaticMmbrFunc2<T, void, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc2<A, void, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc2<A, void, void>", 
+    StaticMmbrFunc2<A, void, void>);
 
-RegisterTest(t2_1, new TestStaticMmbrFunc<StaticMmbrFunc2_t, A, 
-    void (*)(), void (*)(), &A::Foo1>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc2<A>, void (*)(), 
+    void*> T2Var1;
+
+T2Var1 t2_var1(ToVoidPtr<void (*)()>(&A::Foo1));
+
+REGISTER_TEST(t2, new TestStaticMmbrFunc<CasesAliasTypeAndPointer,
+    T2Var1>(t2_var1));
 
 /**
  * 	template<template<typename> class T, typename T1, typename Tr, 
@@ -438,12 +438,18 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc3, T, Tr, Targs, TPL2,
     T_NAME_TMPL_, TNTAL1, T_RET_NAME_,, ALIAS_TYPE_,, PTR_,, PTR_RET_,, Foo2);
 
 template<typename T>
-using StaticMmbrFunc3_t = StaticMmbrFunc3<B, T, void>;
+using TStaticMmbrFunc3 = StaticMmbrFunc3<B, T, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc3<B, void, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc3<B, void, void>",
+    StaticMmbrFunc3<B, void, void>);
 
-RegisterTest(t3_1, new TestStaticMmbrFunc<StaticMmbrFunc3_t, void, 
-    void (*)(), void (*)(), &B<void>::Foo2>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc3<void>, void (*)(), 
+    void*> T3Var1;
+
+T3Var1 t3_var1(ToVoidPtr<void (*)()>(&B<void>::Foo2));
+
+REGISTER_TEST(t3, new TestStaticMmbrFunc<CasesAliasTypeAndPointer,
+    T3Var1>(t3_var1));
 
 /**
  * 	template<typename T, typename T1, template<typename> class Tr,
@@ -477,12 +483,18 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc4, T, Tr, Targs, TPL3, T_NAME_,,
     T_RET_NAME_TMPL_, TRNTAL1, ALIAS_TYPE_,, PTR_,, PTR_RET_,, Foo3);
 
 template<typename T>
-using StaticMmbrFunc4_t = StaticMmbrFunc4<T, void, B>;
+using TStaticMmbrFunc4 = StaticMmbrFunc4<T, void, B>;
 
-__DEFINE_NAME_(StaticMmbrFunc4<C, void, B>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc4<C, void, B>", 
+    StaticMmbrFunc4<C, void, B>);
 
-RegisterTest(t4_1, new TestStaticMmbrFunc<StaticMmbrFunc4_t, C, 
-    B<void> (*)(),  B<void> (*)(), &C::Foo3>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc4<C>, B<void> (*)(), 
+    void*> T4Var1;
+
+T4Var1 t4_var1(ToVoidPtr<B<void> (*)()>(&C::Foo3));
+
+REGISTER_TEST(t4, new TestStaticMmbrFunc<CasesAliasTypeAndPointer,
+    T4Var1>(t4_var1));
 
 /**
  * 	template<typename T, typename Tr, typename... Targs>
@@ -512,12 +524,17 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc5, T, Tr, Targs,, T_NAME_,,
     T_RET_NAME_,, ALIAS_TYPE_TMPL_, ATTPL1, PTR_,, PTR_RET_TMPL_, PRTAL1, Foo1);
 
 template<typename T>
-using StaticMmbrFunc5_t = StaticMmbrFunc5<T, void>;
+using TStaticMmbrFunc5 = StaticMmbrFunc5<T, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc5<A, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc5<A, void>", StaticMmbrFunc5<A, void>);
 
-RegisterTest(t5_1, new TestStaticMmbrFunc<StaticMmbrFunc5_t, A, 
-    void (*)(), void (*)(), &A::Foo1, AliasTypeTmpl, Pointer>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc5<A>, void (*)(), 
+    void*> T5Var1;
+
+T5Var1 t5_var1(ToVoidPtr<void (*)()>(&A::Foo1));
+
+REGISTER_TEST(t5, new TestStaticMmbrFunc<CasesAliasTypeTmplAndPointer,
+    T5Var1>(t5_var1));
 
 /**
  * 	template<typename T, typename Tr, typename... Targs>
@@ -545,12 +562,17 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc6, T, Tr, Targs,, T_NAME_,,
     T_RET_NAME_,, ALIAS_TYPE_,, PTR_TMPL_, PTPL1, PTR_RET_,, Foo1);
 
 template<typename T>
-using StaticMmbrFunc6_t = StaticMmbrFunc6<T, void>;
+using TStaticMmbrFunc6 = StaticMmbrFunc6<T, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc6<A, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc6<A, void>", StaticMmbrFunc6<A, void>);
 
-RegisterTest(t6_1, new TestStaticMmbrFunc<StaticMmbrFunc6_t, A, 
-    void (*)(), void (*)(), &A::Foo1, AliasType, PointerTmpl, void>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc6<A>, void (*)(), 
+    void*, void> T6Var1;
+
+T6Var1 t6_var1(ToVoidPtr<void (*)()>(&A::Foo1));
+
+REGISTER_TEST(t6, new TestStaticMmbrFunc<CasesAliasTypeAndPointerTmpl,
+    T6Var1>(t6_var1));
 
 /**
  * 	template<typename T, typename Tr, typename... Targs>
@@ -581,12 +603,17 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc7, T, Tr, Targs,, T_NAME_,,
     T_RET_NAME_,, ALIAS_TYPE_TMPL_, ATTPL2, PTR_,, PTR_RET_TMPL_, PRTAL2, Foo1);
 
 template<typename T>
-using StaticMmbrFunc7_t = StaticMmbrFunc7<T, void>;
+using TStaticMmbrFunc7 = StaticMmbrFunc7<T, void>;
 
-__DEFINE_NAME_(StaticMmbrFunc7<A, void>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc7<A, void>", StaticMmbrFunc7<A, void>);
 
-RegisterTest(t7_1, new TestStaticMmbrFunc<StaticMmbrFunc7_t, A, 
-    void (*)(), void (*)(), &A::Foo1, AliasTypeTmpl, Pointer, void>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc7<A>, void (*)(), 
+    void*, void> T7Var1;
+
+T7Var1 t7var1(ToVoidPtr<void (*)()>(&A::Foo1));
+
+REGISTER_TEST(t7, new TestStaticMmbrFunc<CasesAliasTypeTmplAndPointer,
+    T7Var1>(t7var1));
 
 /**
  * 	template<typename T, typename Tr, typename... Targs>
@@ -624,14 +651,19 @@ __DEFINE_STATIC_MMBR_FUNC_(StaticMmbrFunc8, T, Tr, Targs, TPL4, T_NAME_,,
     PTR_RET_TMPL_, PRTAL3, Foo3);
 
 template<typename T>
-using StaticMmbrFunc8_t = StaticMmbrFunc8<T, B>;
+using TStaticMmbrFunc8 = StaticMmbrFunc8<T, B>;
 
-__DEFINE_NAME_(StaticMmbrFunc8<C, B>);
+BASIC_TEST_TYPE_NAME("StaticMmbrFunc8<C, B>", StaticMmbrFunc8<C, B>);
 
-RegisterTest(t8_1, new TestStaticMmbrFunc<StaticMmbrFunc8_t, C, 
-    B<void> (*)(), B<void> (*)(), &C::Foo3, AliasTypeTmpl, PointerTmpl, void>());
+typedef VariableTestStaticMmbrFunc<TStaticMmbrFunc8<C>, B<void> (*)(), 
+    void*, void> T8Var1;
+
+T8Var1 t8var1(ToVoidPtr<B<void> (*)()>(&C::Foo3));
+
+REGISTER_TEST(t8, new TestStaticMmbrFunc<CasesAliasTypeTmplAndPointerTmpl,
+    T8Var1>(t8var1));
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }
