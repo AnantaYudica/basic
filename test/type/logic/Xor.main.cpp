@@ -1,236 +1,244 @@
 #include "type/logic/Xor.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Message.h"
+#include "test/Variable.h"
+#include "test/Case.h"
 
 #include <typeinfo>
 #include <type_traits>
 #include <string>
 #include <vector>
 
-template<typename T, T TVal>
-struct ValueName
+struct CaseVTa {}; // case value and target
+struct CaseV {}; // case value
+
+template<typename TXor, bool TTargetValue>
+using VariableTestXor = basic::test::Variable<TXor, 
+    basic::test::type::Value<bool, TTargetValue>, 
+    basic::test::var::Value<const char*>>;
+
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
+
+template<std::size_t I>
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+
+template<std::size_t I>
+using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+
+typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
+    ArgVarValue<2>> ArgCaseVTa;
+
+typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
+    ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
+
+typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
+    ArgTypeName<0>> ArgCaseV;
+
+typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
+    ArgCaseV, ArgCaseV> MsgBaseCaseV;
+
+
+template<typename TCases, typename... TVars>
+class TestXor :
+    public MsgBaseCaseVTa,
+    public MsgBaseCaseV,
+    public basic::test::Message<BASIC_TEST, TestXor<TCases, TVars...>>,
+    public basic::test::Case<TestXor<TCases, TVars...>, TCases>,
+    public basic::test::Base<TestXor<TCases, TVars...>, TVars...>
 {
-    static constexpr const char * Value = "undefined"; 
-};
-
-#define __DEFINE_VALUE_NAME_(NAME, ...)\
-template<>\
-struct ValueName<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = NAME;\
-}
-
-template<typename T>
-struct Name
-{
-    static const char * Value;
-};
-
-template<typename T>
-const char* Name<T>::Value = "undefined"; 
-
-template<typename T, T TVal>
-struct Name<ValueName<T, TVal>>
-{
-    static constexpr const char * Value = ValueName<T, TVal>::Value;
-};
-
-#define __DEFINE_NAME_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = #__VA_ARGS__;\
-}
-
-__DEFINE_NAME_(std::true_type);
-__DEFINE_NAME_(std::false_type);
-__DEFINE_NAME_(void);
-
-template<typename... Targs>
-struct NameParameterTmpl 
-{
-    static void String(std::string& str, bool first = true)
-    {}
-};
-
-template<typename T, typename... Targs>
-struct NameParameterTmpl<T, Targs...> 
-{
-    static void String(std::string& str, bool first = true)
+public:
+    typedef basic::test::Base<TestXor<TCases, TVars...>, TVars...> BaseType; 
+    typedef basic::test::Message<BASIC_TEST, 
+        TestXor<TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestXor<TCases, TVars...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseVTa::SetFormat;
+    using MsgBaseCaseV::SetFormat;
+public:
+    using MsgBaseCaseVTa::Format;
+    using MsgBaseCaseV::Format;
+    using MsgBaseCaseVTa::Argument;
+    using MsgBaseCaseV::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestXor(TVars&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
     {
-        if (!first)
-            str += ", ";
-        str += Name<T>::Value;
-        NameParameterTmpl<Targs...>::String(str, false);
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+        
+        CaseVTa case_value_and_target;
+        SetFormat(info, case_value_and_target, 
+            "test compare between %s::value and %s\n");
+        SetFormat(debug, case_value_and_target,
+            "test compare between %s::value and %s\n");
+        SetFormat(error, case_value_and_target,
+            "error %s::value is not same with %s\n");
+
+        CaseV case_value;
+        SetFormat(info, case_value, 
+            "test compare between %s::value and %s::Value\n");
+        SetFormat(debug, case_value,
+            "test compare between %s::value and %s::Value\n");
+        SetFormat(error, case_value,
+            "error %s::value is not same with %s::Value\n");
+    }
+
+    template<typename TXor, bool TTargetValue>
+    bool Result(const CaseVTa&, VariableTestXor<TXor, TTargetValue>& var)
+    {
+        return TXor::value == TTargetValue;
+    }
+
+    template<typename TXor, bool TTargetValue>
+    bool Result(const CaseV&, VariableTestXor<TXor, TTargetValue>& var)
+    {
+        return TXor::value == TXor::Value;
+    }
+
+};
+
+using Cases = basic::test::type::Parameter<CaseVTa, CaseV>;
+
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
+BASIC_TEST_TYPE_NAME("void", void);
+
+template<typename... TArgs>
+struct basic::test::type::Name<basic::type::logic::Xor<TArgs...>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "basic::type::logic::Xor<%s>";
+        const auto& param_cstr = basic::test::type::param::Name<
+            basic::test::type::Parameter<TArgs...>>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            param_cstr.Size(), _format_cstr, *param_cstr);\
     }
 };
 
-template<typename Ta, typename Tt, Tt TtValue>
-void TestValueAndTarget()
-{
-    std::string error_msg = Name<Ta>::Value;
-    error_msg += "::value is not same with ";
-    error_msg += Name<ValueName<Tt, TtValue>>::Value;
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Ta>::Value;
-    info_msg += "::value and ";
-    info_msg += Name<ValueName<Tt, TtValue>>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        Ta::value == TtValue))
-            Info("Pass\n");
-}
+const char* true_cstr = "true";
+const char* false_cstr = "false";
 
-template<typename Ta>
-void TestValue()
-{
-    std::string error_msg = Name<Ta>::Value;
-    error_msg += "::value is not same with ";
-    error_msg += Name<Ta>::Value;
-    error_msg += "::Value";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Ta>::Value;
-    info_msg += "::value and ";
-    info_msg += Name<Ta>::Value;
-    info_msg += "::Value : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        Ta::value == Ta::Value))
-            Info("Pass\n");
-}
+using TDefaultXor1_1 = basic::type::logic::Xor<std::true_type, std::false_type>;
+using TDefaultXor1_2 = basic::type::logic::Xor<std::true_type, std::true_type>;
 
-template<typename Ta, typename Ttv, Ttv TtvValuee>
-struct TestXor : basic::test::Base
-{
-    void Test() 
-    {
-        TestValueAndTarget<Ta, Ttv, TtvValuee>();
-        TestValue<Ta>();
-    }
-};
+typedef VariableTestXor<TDefaultXor1_1, false> T1Var1;
+typedef VariableTestXor<TDefaultXor1_2, false> T1Var2;
 
-__DEFINE_VALUE_NAME_("true", bool, true);
-__DEFINE_VALUE_NAME_("false", bool, false);
+T1Var1 t1_var1(false_cstr);
+T1Var2 t1_var2(false_cstr);
+    
+REGISTER_TEST(t1, new TestXor<Cases,  T1Var1, T1Var2>(t1_var1,
+    t1_var2));
 
-
-using Xor1_1_d = basic::type::logic::Xor<std::true_type, std::false_type>;
-using Xor1_2_d = basic::type::logic::Xor<std::true_type, std::true_type>;
-
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, std::true_type>);
-
-RegisterTest(t1_1, new TestXor<Xor1_1_d, bool, false>());
-RegisterTest(t1_2, new TestXor<Xor1_2_d, bool, false>());
-
-using Xor2_1_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor2_1 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::false_type>;
-using Xor2_2_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor2_2 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::true_type>;
-using Xor2_3_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor2_3 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::false_type>;
-using Xor2_4_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor2_4 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::true_type>;
 
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::true_type>);
+typedef VariableTestXor<TDefaultXor2_1, false> T2Var1;
+typedef VariableTestXor<TDefaultXor2_2, true> T2Var2;
+typedef VariableTestXor<TDefaultXor2_3, true> T2Var3;
+typedef VariableTestXor<TDefaultXor2_4, false> T2Var4;
 
-RegisterTest(t2_1, new TestXor<Xor2_1_d, bool, false>());
-RegisterTest(t2_2, new TestXor<Xor2_2_d, bool, true>());
-RegisterTest(t2_3, new TestXor<Xor2_3_d, bool, true>());
-RegisterTest(t2_4, new TestXor<Xor2_4_d, bool, false>());
+T2Var1 t2_var1(false_cstr);
+T2Var2 t2_var2(true_cstr);
+T2Var3 t2_var3(true_cstr);
+T2Var4 t2_var4(false_cstr);
 
-using Xor4_1_d = basic::type::logic::Xor<std::true_type, 
+REGISTER_TEST(t2, new TestXor<Cases, T2Var1, T2Var2, T2Var3,
+    T2Var4>(t2_var1, t2_var2, t2_var3, t2_var4));
+
+using TDefaultXor4_1 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::false_type, std::false_type, std::false_type>;
-using Xor4_2_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_2 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::false_type, std::false_type, std::true_type>;
-using Xor4_3_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_3 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::false_type, std::true_type, std::false_type>;
-using Xor4_4_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_4 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::false_type, std::true_type, std::true_type>;
-using Xor4_5_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_5 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::true_type, std::false_type, std::false_type>;
-using Xor4_6_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_6 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::true_type, std::false_type, std::true_type>;
-using Xor4_7_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_7 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::true_type, std::true_type, std::false_type>;
-using Xor4_8_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_8 = basic::type::logic::Xor<std::true_type, 
     std::false_type, std::true_type, std::true_type, std::true_type>;
-using Xor4_9_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_9 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::false_type, std::false_type, std::false_type>;
-using Xor4_10_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_10 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::false_type, std::false_type, std::true_type>;
-using Xor4_11_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_11 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::false_type, std::true_type, std::false_type>;
-using Xor4_12_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_12 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::false_type, std::true_type, std::true_type>;
-using Xor4_13_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_13 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::true_type, std::false_type, std::false_type>;
-using Xor4_14_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_14 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::true_type, std::false_type, std::true_type>;
-using Xor4_15_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_15 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::true_type, std::true_type, std::false_type>;
-using Xor4_16_d = basic::type::logic::Xor<std::true_type, 
+using TDefaultXor4_16 = basic::type::logic::Xor<std::true_type, 
     std::true_type, std::true_type, std::true_type, std::true_type>;
 
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::false_type, std::false_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::false_type, std::false_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::false_type, std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::false_type, std::true_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::true_type, std::false_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::true_type, std::false_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::true_type, std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::false_type, std::true_type, std::true_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::false_type, std::false_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::false_type, std::false_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::false_type, std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::false_type, std::true_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::true_type, std::false_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::true_type, std::false_type, std::true_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::true_type, std::true_type, std::false_type>);
-__DEFINE_NAME_(basic::type::logic::Xor<std::true_type, 
-    std::true_type, std::true_type, std::true_type, std::true_type>);
+typedef VariableTestXor<TDefaultXor4_1, false> T3Var1;
+typedef VariableTestXor<TDefaultXor4_2, true> T3Var2;
+typedef VariableTestXor<TDefaultXor4_3, true> T3Var3;
+typedef VariableTestXor<TDefaultXor4_4, true> T3Var4;
+typedef VariableTestXor<TDefaultXor4_5, true> T3Var5;
+typedef VariableTestXor<TDefaultXor4_6, true> T3Var6;
+typedef VariableTestXor<TDefaultXor4_7, true> T3Var7;
+typedef VariableTestXor<TDefaultXor4_8, true> T3Var8;
+typedef VariableTestXor<TDefaultXor4_9, true> T3Var9;
+typedef VariableTestXor<TDefaultXor4_10, true> T3Var10;
+typedef VariableTestXor<TDefaultXor4_11, true> T3Var11;
+typedef VariableTestXor<TDefaultXor4_12, true> T3Var12;
+typedef VariableTestXor<TDefaultXor4_13, true> T3Var13;
+typedef VariableTestXor<TDefaultXor4_14, true> T3Var14;
+typedef VariableTestXor<TDefaultXor4_15, true> T3Var15;
+typedef VariableTestXor<TDefaultXor4_16, false> T3Var16;
 
-RegisterTest(t3_1, new TestXor<Xor4_1_d, bool, false>());
-RegisterTest(t3_2, new TestXor<Xor4_2_d, bool, true>());
-RegisterTest(t3_3, new TestXor<Xor4_3_d, bool, true>());
-RegisterTest(t3_4, new TestXor<Xor4_4_d, bool, true>());
-RegisterTest(t3_5, new TestXor<Xor4_5_d, bool, true>());
-RegisterTest(t3_6, new TestXor<Xor4_6_d, bool, true>());
-RegisterTest(t3_7, new TestXor<Xor4_7_d, bool, true>());
-RegisterTest(t3_8, new TestXor<Xor4_8_d, bool, true>());
-RegisterTest(t3_9, new TestXor<Xor4_9_d, bool, true>());
-RegisterTest(t3_10, new TestXor<Xor4_10_d, bool, true>());
-RegisterTest(t3_11, new TestXor<Xor4_11_d, bool, true>());
-RegisterTest(t3_12, new TestXor<Xor4_12_d, bool, true>());
-RegisterTest(t3_13, new TestXor<Xor4_13_d, bool, true>());
-RegisterTest(t3_14, new TestXor<Xor4_14_d, bool, true>());
-RegisterTest(t3_15, new TestXor<Xor4_15_d, bool, true>());
-RegisterTest(t3_16, new TestXor<Xor4_16_d, bool, false>());
+T3Var1 t3_var1(false_cstr);
+T3Var2 t3_var2(true_cstr);
+T3Var3 t3_var3(true_cstr);
+T3Var4 t3_var4(true_cstr);
+T3Var5 t3_var5(true_cstr);
+T3Var6 t3_var6(true_cstr);
+T3Var7 t3_var7(true_cstr);
+T3Var8 t3_var8(true_cstr);
+T3Var9 t3_var9(true_cstr);
+T3Var10 t3_var10(true_cstr);
+T3Var11 t3_var11(true_cstr);
+T3Var12 t3_var12(true_cstr);
+T3Var13 t3_var13(true_cstr);
+T3Var14 t3_var14(true_cstr);
+T3Var15 t3_var15(true_cstr);
+T3Var16 t3_var16(false_cstr);
+
+REGISTER_TEST(t3, new TestXor<Cases, T3Var1, T3Var2, T3Var3, T3Var4, T3Var5,
+    T3Var6, T3Var7, T3Var8, T3Var9, T3Var10, T3Var11, T3Var12, T3Var13, 
+    T3Var14, T3Var15, T3Var16>(t3_var1, t3_var2, t3_var3, t3_var4, t3_var5,
+        t3_var6, t3_var7, t3_var8, t3_var9, t3_var10, t3_var11, t3_var12,
+        t3_var13, t3_var14, t3_var15, t3_var16));
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }
