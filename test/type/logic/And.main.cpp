@@ -232,7 +232,7 @@ T3Var14 t3_var14(false_cstr);
 T3Var15 t3_var15(false_cstr);
 T3Var16 t3_var16(true_cstr);
 
-REGISTER_TEST(t3_1, new TestAnd<Cases, T3Var1, T3Var2, T3Var3, T3Var4, T3Var5,
+REGISTER_TEST(t3, new TestAnd<Cases, T3Var1, T3Var2, T3Var3, T3Var4, T3Var5,
     T3Var6, T3Var7, T3Var8, T3Var9, T3Var10, T3Var11, T3Var12, T3Var13, 
     T3Var14, T3Var15, T3Var16>(t3_var1, t3_var2, t3_var3, t3_var4, t3_var5,
         t3_var6, t3_var7, t3_var8, t3_var9, t3_var10, t3_var11, t3_var12,
