@@ -98,8 +98,6 @@ public:
     {
         return std::is_same<typename TRecursive::type,
             TTargetAlias>::value; 
-        //typeid(typename TRecursive::type).hash_code() ==
-        //    typeid(TTargetAlias).hash_code();
     }
 
     template<typename TRecursive, typename TTargetAlias>
@@ -108,8 +106,6 @@ public:
     {
         return std::is_same<typename TRecursive::type,
             typename TRecursive::Type>::value; 
-        //return typeid(typename TRecursive::type).hash_code() ==
-        //    typeid(typename TRecursive::Type).hash_code();
     }
 };
 
