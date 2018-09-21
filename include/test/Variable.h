@@ -2,7 +2,7 @@
 #define BASIC_TEST_VARIABLE_H_
 
 #include "var/Value.h"
-#include "var/val/Definition.h"
+#include "var/Definition.h"
 
 #include <cstddef>
 #include <type_traits>
@@ -39,8 +39,8 @@ public:
     Variable<TArg, TArgs...>& operator=(Variable<TArg, TArgs...>&&) = delete;
 public:
     template<std::size_t I>
-    typename std::enable_if<var::val::Definition<I, TArg, TArgs...>::HasValue
-        && I != 0, typename var::val::Definition<I, TArg, TArgs...>::Type>::
+    typename std::enable_if<var::Definition<I, TArg, TArgs...>::HasValue
+        && I != 0, typename var::Definition<I, TArg, TArgs...>::Type>::
         type GetValue();
 };
 
@@ -62,12 +62,12 @@ public:
         operator=(Variable<var::Value<TArg>, TArgs...>&&) = delete;
 public:
     template<std::size_t I>
-    typename std::enable_if<var::val::Definition<I, var::Value<TArg>, 
-        TArgs...>::HasValue && I != 0, typename var::val::Definition<I, 
+    typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+        TArgs...>::HasValue && I != 0, typename var::Definition<I, 
         var::Value<TArg>, TArgs...>::Type>::type GetValue();
     template<std::size_t I>
-    typename std::enable_if<var::val::Definition<I, var::Value<TArg>, 
-        TArgs...>::HasValue && I == 0, typename var::val::Definition<I, 
+    typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+        TArgs...>::HasValue && I == 0, typename var::Definition<I, 
         var::Value<TArg>, TArgs...>::Type>::type GetValue();
 };
 
@@ -99,8 +99,8 @@ Variable<TArg, TArgs...>& Variable<TArg, TArgs...>::
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
-typename std::enable_if<var::val::Definition<I, TArg, TArgs...>::HasValue
-    && I != 0, typename var::val::Definition<I, TArg, TArgs...>::Type>::type
+typename std::enable_if<var::Definition<I, TArg, TArgs...>::HasValue
+    && I != 0, typename var::Definition<I, TArg, TArgs...>::Type>::type
     Variable<TArg, TArgs...>::GetValue()
 {
     return Variable<TArgs...>::template GetValue<I - 1>();
@@ -125,8 +125,8 @@ Variable<var::Value<TArg>, TArgs...>& Variable<var::Value<TArg>, TArgs...>::
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
-typename std::enable_if<var::val::Definition<I, var::Value<TArg>, 
-    TArgs...>::HasValue && I != 0, typename var::val::Definition<I, 
+typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+    TArgs...>::HasValue && I != 0, typename var::Definition<I, 
     var::Value<TArg>, TArgs...>::Type>::type 
     Variable<var::Value<TArg>, TArgs...>::GetValue()
 {
@@ -135,8 +135,8 @@ typename std::enable_if<var::val::Definition<I, var::Value<TArg>,
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
-typename std::enable_if<var::val::Definition<I, var::Value<TArg>, TArgs...>::HasValue
-    && I == 0, typename var::val::Definition<I, var::Value<TArg>, TArgs...>::Type>::type
+typename std::enable_if<var::Definition<I, var::Value<TArg>, TArgs...>::HasValue
+    && I == 0, typename var::Definition<I, var::Value<TArg>, TArgs...>::Type>::type
     Variable<var::Value<TArg>, TArgs...>::GetValue()
 {
     return m_value.Get();
