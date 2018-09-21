@@ -1,9 +1,9 @@
+#define EXPERIMENTAL
 #include "Test.h"
-
-BasicTestConstruct;
+BASIC_TEST_CONSTRUCT;
 
 int main()
 {
-    Info("hello world\n");
-    return TestRun();
+    INFO("hello world\n");
+    return RUN_TEST();
 }
