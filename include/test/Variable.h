@@ -2,7 +2,6 @@
 #define BASIC_TEST_VARIABLE_H_
 
 #include "Value.h"
-#include "var/Value.h"
 #include "var/Definition.h"
 
 #include <cstddef>
@@ -38,38 +37,6 @@ public:
 public:
     Variable<TArg, TArgs...>& operator=(const Variable<TArg, TArgs...>& cpy);
     Variable<TArg, TArgs...>& operator=(Variable<TArg, TArgs...>&&) = delete;
-public:
-    template<std::size_t I>
-    typename std::enable_if<var::Definition<I, TArg, TArgs...>::HasValue
-        && I != 0, typename var::Definition<I, TArg, TArgs...>::Type>::
-        type GetValue();
-};
-
-template<typename TArg, typename... TArgs>
-class Variable<test::Value<TArg>, TArgs...> :
-    public Variable<TArgs...>
-{
-private:
-    test::Value<TArg> m_value;
-public:
-    template<typename TValArg, typename... TValArgs>
-    Variable(TValArg&& val_arg, TValArgs&&... val_args);
-    Variable(const Variable<test::Value<TArg>, TArgs...>& cpy) = delete;
-    Variable(Variable<test::Value<TArg>, TArgs...>&&) = delete;
-public:
-    Variable<test::Value<TArg>, TArgs...>& 
-        operator=(const Variable<test::Value<TArg>, TArgs...>& cpy);
-    Variable<test::Value<TArg>, TArgs...>& 
-        operator=(Variable<test::Value<TArg>, TArgs...>&&) = delete;
-public:
-    template<std::size_t I>
-    typename std::enable_if<var::Definition<I, test::Value<TArg>, 
-        TArgs...>::HasValue && I != 0, typename var::Definition<I, 
-        test::Value<TArg>, TArgs...>::Type>::type GetValue();
-    template<std::size_t I>
-    typename std::enable_if<var::Definition<I, test::Value<TArg>, 
-        TArgs...>::HasValue && I == 0, typename var::Definition<I, 
-        test::Value<TArg>, TArgs...>::Type>::type GetValue();
 };
 
 template<typename... TArgs>
@@ -96,51 +63,6 @@ Variable<TArg, TArgs...>& Variable<TArg, TArgs...>::
 {
     Variable<TArgs...>::operator=(cpy);
     return *this;
-}
-
-template<typename TArg, typename... TArgs>
-template<std::size_t I>
-typename std::enable_if<var::Definition<I, TArg, TArgs...>::HasValue
-    && I != 0, typename var::Definition<I, TArg, TArgs...>::Type>::type
-    Variable<TArg, TArgs...>::GetValue()
-{
-    return Variable<TArgs...>::template GetValue<I - 1>();
-}
-
-template<typename TArg, typename... TArgs>
-template<typename TValArg, typename... TValArgs>
-Variable<test::Value<TArg>, TArgs...>::Variable(TValArg&& val_arg, 
-    TValArgs&&... val_args) :
-        Variable<TArgs...>(std::forward<TValArgs>(val_args)...),
-        m_value(std::forward<TValArg>(val_arg))
-{}
-
-template<typename TArg, typename... TArgs>
-Variable<test::Value<TArg>, TArgs...>& Variable<test::Value<TArg>, TArgs...>::
-    operator=(const Variable<test::Value<TArg>, TArgs...>& cpy)
-{
-    Variable<TArgs...>::operator=(cpy);
-    m_value = cpy.m_value;
-    return *this;
-}
-
-template<typename TArg, typename... TArgs>
-template<std::size_t I>
-typename std::enable_if<var::Definition<I, test::Value<TArg>, 
-    TArgs...>::HasValue && I != 0, typename var::Definition<I, 
-    test::Value<TArg>, TArgs...>::Type>::type 
-    Variable<test::Value<TArg>, TArgs...>::GetValue()
-{
-    return Variable<TArgs...>::template GetValue<I - 1>();
-}
-
-template<typename TArg, typename... TArgs>
-template<std::size_t I>
-typename std::enable_if<var::Definition<I, test::Value<TArg>, TArgs...>::HasValue
-    && I == 0, typename var::Definition<I, test::Value<TArg>, TArgs...>::Type>::type
-    Variable<test::Value<TArg>, TArgs...>::GetValue()
-{
-    return *m_value;
 }
 
 } //!test
