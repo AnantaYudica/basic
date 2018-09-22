@@ -1,7 +1,7 @@
 #ifndef BASIC_TEST_VAR_DEFINITION_H_
 #define BASIC_TEST_VAR_DEFINITION_H_
 
-#include "Value.h"
+#include "../Value.h"
 
 #include <cstddef>
 
@@ -49,7 +49,7 @@ struct Definition<0, TArg, TArgs...>
 };
 
 template<typename TArg, typename... TArgs>
-struct Definition<0, var::Value<TArg>, TArgs...>
+struct Definition<0, test::Value<TArg>, TArgs...>
 {
     typedef TArg type;
     typedef TArg Type;

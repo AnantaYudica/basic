@@ -101,21 +101,21 @@ public:
     template<typename T1, typename T2, T2 T2Value, typename T3>
     bool Result(const TestA1&, basic::test::Variable<T1, 
         basic::test::type::Value<T2, T2Value>,
-        basic::test::var::Value<T3>>& var)
+        basic::test::Value<T3>>& var)
     {
         return typeid(T1).hash_code() == typeid(int).hash_code();
     }
     template<typename T1, typename T2, T2 T2Value, typename T3>
     bool Result(const TestA2&, basic::test::Variable<T1, 
         basic::test::type::Value<T2, T2Value>,
-        basic::test::var::Value<T3>>& var)
+        basic::test::Value<T3>>& var)
     {
         return T2Value == 4;
     }
     template<typename T1, typename T2, T2 T2Value, typename T3>
     bool Result(const TestA3&, basic::test::Variable<T1, 
         basic::test::type::Value<T2, T2Value>,
-        basic::test::var::Value<T3>>& var)
+        basic::test::Value<T3>>& var)
     {
         return var.template GetValue<2>() == 14;
     }
@@ -124,7 +124,7 @@ public:
 template<typename T1, typename T2, T2 T2Value, typename T3>
 using VariableTestA = basic::test::Variable<T1, 
     basic::test::type::Value<T2, T2Value>,
-    basic::test::var::Value<T3>>;
+    basic::test::Value<T3>>;
 
 VariableTestA<int, int, 4, int> var1(14);
 VariableTestA<char, int, 4, int> var2(14);

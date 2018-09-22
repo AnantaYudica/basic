@@ -1,6 +1,7 @@
 #ifndef BASIC_TEST_VARIABLE_H_
 #define BASIC_TEST_VARIABLE_H_
 
+#include "Value.h"
 #include "var/Value.h"
 #include "var/Definition.h"
 
@@ -45,30 +46,30 @@ public:
 };
 
 template<typename TArg, typename... TArgs>
-class Variable<var::Value<TArg>, TArgs...> :
+class Variable<test::Value<TArg>, TArgs...> :
     public Variable<TArgs...>
 {
 private:
-    var::Value<TArg> m_value;
+    test::Value<TArg> m_value;
 public:
     template<typename TValArg, typename... TValArgs>
     Variable(TValArg&& val_arg, TValArgs&&... val_args);
-    Variable(const Variable<var::Value<TArg>, TArgs...>& cpy) = delete;
-    Variable(Variable<var::Value<TArg>, TArgs...>&&) = delete;
+    Variable(const Variable<test::Value<TArg>, TArgs...>& cpy) = delete;
+    Variable(Variable<test::Value<TArg>, TArgs...>&&) = delete;
 public:
-    Variable<var::Value<TArg>, TArgs...>& 
-        operator=(const Variable<var::Value<TArg>, TArgs...>& cpy);
-    Variable<var::Value<TArg>, TArgs...>& 
-        operator=(Variable<var::Value<TArg>, TArgs...>&&) = delete;
+    Variable<test::Value<TArg>, TArgs...>& 
+        operator=(const Variable<test::Value<TArg>, TArgs...>& cpy);
+    Variable<test::Value<TArg>, TArgs...>& 
+        operator=(Variable<test::Value<TArg>, TArgs...>&&) = delete;
 public:
     template<std::size_t I>
-    typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+    typename std::enable_if<var::Definition<I, test::Value<TArg>, 
         TArgs...>::HasValue && I != 0, typename var::Definition<I, 
-        var::Value<TArg>, TArgs...>::Type>::type GetValue();
+        test::Value<TArg>, TArgs...>::Type>::type GetValue();
     template<std::size_t I>
-    typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+    typename std::enable_if<var::Definition<I, test::Value<TArg>, 
         TArgs...>::HasValue && I == 0, typename var::Definition<I, 
-        var::Value<TArg>, TArgs...>::Type>::type GetValue();
+        test::Value<TArg>, TArgs...>::Type>::type GetValue();
 };
 
 template<typename... TArgs>
@@ -108,15 +109,15 @@ typename std::enable_if<var::Definition<I, TArg, TArgs...>::HasValue
 
 template<typename TArg, typename... TArgs>
 template<typename TValArg, typename... TValArgs>
-Variable<var::Value<TArg>, TArgs...>::Variable(TValArg&& val_arg, 
+Variable<test::Value<TArg>, TArgs...>::Variable(TValArg&& val_arg, 
     TValArgs&&... val_args) :
         Variable<TArgs...>(std::forward<TValArgs>(val_args)...),
         m_value(std::forward<TValArg>(val_arg))
 {}
 
 template<typename TArg, typename... TArgs>
-Variable<var::Value<TArg>, TArgs...>& Variable<var::Value<TArg>, TArgs...>::
-    operator=(const Variable<var::Value<TArg>, TArgs...>& cpy)
+Variable<test::Value<TArg>, TArgs...>& Variable<test::Value<TArg>, TArgs...>::
+    operator=(const Variable<test::Value<TArg>, TArgs...>& cpy)
 {
     Variable<TArgs...>::operator=(cpy);
     m_value = cpy.m_value;
@@ -125,21 +126,21 @@ Variable<var::Value<TArg>, TArgs...>& Variable<var::Value<TArg>, TArgs...>::
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
-typename std::enable_if<var::Definition<I, var::Value<TArg>, 
+typename std::enable_if<var::Definition<I, test::Value<TArg>, 
     TArgs...>::HasValue && I != 0, typename var::Definition<I, 
-    var::Value<TArg>, TArgs...>::Type>::type 
-    Variable<var::Value<TArg>, TArgs...>::GetValue()
+    test::Value<TArg>, TArgs...>::Type>::type 
+    Variable<test::Value<TArg>, TArgs...>::GetValue()
 {
     return Variable<TArgs...>::template GetValue<I - 1>();
 }
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
-typename std::enable_if<var::Definition<I, var::Value<TArg>, TArgs...>::HasValue
-    && I == 0, typename var::Definition<I, var::Value<TArg>, TArgs...>::Type>::type
-    Variable<var::Value<TArg>, TArgs...>::GetValue()
+typename std::enable_if<var::Definition<I, test::Value<TArg>, TArgs...>::HasValue
+    && I == 0, typename var::Definition<I, test::Value<TArg>, TArgs...>::Type>::type
+    Variable<test::Value<TArg>, TArgs...>::GetValue()
 {
-    return m_value.Get();
+    return *m_value;
 }
 
 } //!test
