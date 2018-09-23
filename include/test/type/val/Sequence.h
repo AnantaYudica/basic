@@ -20,7 +20,6 @@ public:
     typedef T Type;
 public:
     static constexpr std::size_t Size = sizeof...(TValues);
-    static constexpr std::size_t size = sizeof...(TValues);
 };
 
 
@@ -29,30 +28,32 @@ class Sequence<T, TValue, TValues...>
 {
 public:
     typedef T Type;
+    typedef Type AtType;
 public:
     static constexpr std::size_t Size = sizeof...(TValues) + 1;
-    static constexpr std::size_t size = sizeof...(TValues) + 1;
 public:
     template<std::size_t I>
-    static constexpr typename std::enable_if<I == 0, T>::type Get();
+    static constexpr typename std::enable_if<I == 0, AtType>::type At();
     template<std::size_t I>
-    static constexpr typename std::enable_if<I != 0, T>::type Get();
+    static constexpr typename std::enable_if<I != 0, AtType>::type At();
 };
 
 template<typename T, T TValue, T... TValues>
 template<std::size_t I>
-constexpr typename std::enable_if<I == 0, T>::type 
-    Sequence<T, TValue, TValues...>::Get()
+constexpr typename std::enable_if<I == 0, 
+    typename Sequence<T, TValue, TValues...>::AtType>::type 
+        Sequence<T, TValue, TValues...>::At()
 {
     return TValue;
 }
 
 template<typename T, T TValue, T... TValues>
 template<std::size_t I>
-constexpr typename std::enable_if<I != 0, T>::type 
-    Sequence<T, TValue, TValues...>::Get()
+constexpr typename std::enable_if<I != 0, 
+    typename Sequence<T, TValue, TValues...>::AtType>::type 
+        Sequence<T, TValue, TValues...>::At()
 {
-    return Sequence<T, TValues...>::template Get<I - 1>();
+    return Sequence<T, TValues...>::template At<I - 1>();
 }
 
 } //!val
