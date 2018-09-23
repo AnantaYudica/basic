@@ -80,18 +80,18 @@ public:
 public:
     template<std::size_t I>
     typename std::enable_if<I == 0, typename test::type::param::Element<I, 
-        test::type::Parameter<TArg, TArgs...>>::Type>::type& Get();
+        test::type::Parameter<TArg, TArgs...>>::Type>::type& At();
     template<std::size_t I>
     typename std::enable_if<I != 0, typename test::type::param::Element<I, 
-        test::type::Parameter<TArg, TArgs...>>::Type>::type& Get();
+        test::type::Parameter<TArg, TArgs...>>::Type>::type& At();
     template<std::size_t I>
     const typename std::enable_if<I == 0, typename test::type::param::
         Element<I,test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-            Get() const;
+            At() const;
     template<std::size_t I>
     const typename std::enable_if<I != 0, typename test::type::param::
         Element<I,test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-            Get() const;
+            At() const;
 };
 
 template<typename TTypeParam>
@@ -273,7 +273,7 @@ template<typename TArg, typename... TArgs>
 template<std::size_t I>
 typename std::enable_if<I == 0, typename test::type::param::Element<I, 
     test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-        Parameter<test::type::Parameter<TArg, TArgs...>>::Get()
+        Parameter<test::type::Parameter<TArg, TArgs...>>::At()
 {
     return m_value;
 }
@@ -282,17 +282,17 @@ template<typename TArg, typename... TArgs>
 template<std::size_t I>
 typename std::enable_if<I != 0, typename test::type::param::Element<I, 
     test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-        Parameter<test::type::Parameter<TArg, TArgs...>>::Get()
+        Parameter<test::type::Parameter<TArg, TArgs...>>::At()
 {
     return Parameter<test::type::Parameter<TArgs...>>::
-        template Get<I - 1>();
+        template At<I - 1>();
 }
 
 template<typename TArg, typename... TArgs>
 template<std::size_t I>
 const typename std::enable_if<I == 0, typename test::type::param::
     Element<I,test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-        Parameter<test::type::Parameter<TArg, TArgs...>>::Get() const
+        Parameter<test::type::Parameter<TArg, TArgs...>>::At() const
 {
     return m_value;
 }
@@ -301,10 +301,10 @@ template<typename TArg, typename... TArgs>
 template<std::size_t I>
 const typename std::enable_if<I != 0, typename test::type::param::
     Element<I,test::type::Parameter<TArg, TArgs...>>::Type>::type& 
-        Parameter<test::type::Parameter<TArg, TArgs...>>::Get() const
+        Parameter<test::type::Parameter<TArg, TArgs...>>::At() const
 {
     return Parameter<test::type::Parameter<TArgs...>>::
-        template Get<I - 1>();;
+        template At<I - 1>();;
 }
 
 } //!test
