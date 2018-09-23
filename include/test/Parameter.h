@@ -1,8 +1,8 @@
-#ifndef BASIC_TEST_VAL_PARAMETER_H_
-#define BASIC_TEST_VAL_PARAMETER_H_
+#ifndef BASIC_TEST_PARAMETER_H_
+#define BASIC_TEST_PARAMETER_H_
 
-#include "../type/Parameter.h"
-#include "../type/param/Element.h"
+#include "type/Parameter.h"
+#include "type/param/Element.h"
 
 #include <utility>
 #include <type_traits>
@@ -11,9 +11,7 @@ namespace basic
 {
 namespace test
 {
-namespace val
-{
-
+    
 template<typename TTypeParam>
 class Parameter
 {
@@ -309,11 +307,9 @@ const typename std::enable_if<I != 0, typename test::type::param::
         template Get<I - 1>();;
 }
 
-} //!var
-
 } //!test
 
 }//!basic
 
 
-#endif //!BASIC_TEST_VAL_PARAMETER_H_
+#endif //!BASIC_TEST_PARAMETER_H_
