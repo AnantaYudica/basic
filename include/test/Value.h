@@ -13,6 +13,8 @@ class Value
 {
 public:
     typedef T Type;
+    typedef Type& GetType;
+    typedef const Type& ConstGetType;
 private:
     T m_value;
 public:
@@ -26,6 +28,9 @@ public:
 public:
     T& operator*();
     const T& operator*() const;
+public:
+    GetType Get();
+    ConstGetType Get() const;
 };
 
 template<typename T>
@@ -69,6 +74,18 @@ T& Value<T>::operator*()
 
 template<typename T>
 const T& Value<T>::operator*() const
+{
+    return m_value;
+}
+
+template<typename T>
+typename Value<T>::GetType Value<T>::Get()
+{
+    return m_value;
+}
+
+template<typename T>
+typename Value<T>::ConstGetType Value<T>::Get() const
 {
     return m_value;
 }
