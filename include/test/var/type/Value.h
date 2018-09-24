@@ -15,6 +15,8 @@ class Variable<test::type::Value<TArg, TArgValue>, TArgs...> :
     public Variable<TArgs...>
 {
 public:
+    typedef test::type::Value<TArg, TArgValue>&& ConstGetType;
+public:
     template<typename... TValArgs>
     Variable(TValArgs&&... val_args);
     Variable(const Variable<test::type::Value<TArg, TArgValue>, 
@@ -28,6 +30,8 @@ public:
     Variable<test::type::Value<TArg, TArgValue>, TArgs...>& 
         operator=(Variable<test::type::Value<TArg, TArgValue>, 
             TArgs...>&&) = delete;
+public:
+    ConstGetType Get() const;
 public:
     test::type::Value<TArg, TArgValue>&& operator*() const;
 };
@@ -47,6 +51,13 @@ Variable<test::type::Value<TArg, TArgValue>, TArgs...>&
 {
     Variable<TArgs...>::operator=(cpy);
     return *this;
+}
+
+template<typename TArg, TArg TArgValue, typename... TArgs>
+typename Variable<test::type::Value<TArg, TArgValue>, TArgs...>::ConstGetType 
+    Variable<test::type::Value<TArg, TArgValue>, TArgs...>::Get() const
+{
+    return std::move(test::type::Value<TArg, TArgValue>{});
 }
 
 template<typename TArg, TArg TArgValue, typename... TArgs>

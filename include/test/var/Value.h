@@ -39,6 +39,9 @@ template<typename TArg, typename... TArgs>
 class Variable<test::Value<TArg>, TArgs...> :
     public Variable<TArgs...>
 {
+public:
+    typedef test::Value<TArg>& GetType;
+    typedef const test::Value<TArg>& ConstGetType;
 private:
     test::Value<TArg> m_value;
 public:
@@ -51,6 +54,9 @@ public:
         operator=(const Variable<test::Value<TArg>, TArgs...>& cpy);
     Variable<test::Value<TArg>, TArgs...>& 
         operator=(Variable<test::Value<TArg>, TArgs...>&&) = delete;
+public:
+    GetType Get();
+    ConstGetType Get() const;
 public:
     test::Value<TArg>& operator*();
     const test::Value<TArg>& operator*() const;
@@ -73,6 +79,19 @@ Variable<test::Value<TArg>, TArgs...>& Variable<test::Value<TArg>, TArgs...>::
     return *this;
 }
 
+template<typename TArg, typename... TArgs>
+typename Variable<test::Value<TArg>, TArgs...>::GetType 
+    Variable<test::Value<TArg>, TArgs...>::Get()
+{
+    return m_value;
+}
+
+template<typename TArg, typename... TArgs>
+typename Variable<test::Value<TArg>, TArgs...>::ConstGetType 
+    Variable<test::Value<TArg>, TArgs...>::Get() const
+{
+    return m_value;
+}
 
 template<typename TArg, typename... TArgs>
 test::Value<TArg>& Variable<test::Value<TArg>, TArgs...>::operator*()

@@ -16,6 +16,10 @@ class Variable<test::Parameter<test::type::
     Parameter<TValuesArg...>>, TArgs...> :
         public Variable<TArgs...>
 {
+public:
+    typedef test::Parameter<test::type::Parameter<TValuesArg...>>& GetType;
+    typedef const test::Parameter<test::type::
+        Parameter<TValuesArg...>>& ConstGetType;
 private:
     test::Parameter<test::type::Parameter<TValuesArg...>> m_value;
 public:
@@ -32,6 +36,9 @@ public:
     Variable<test::Parameter<test::type::Parameter<TValuesArg...>>, 
         TArgs...>& operator=(Variable<test::Parameter<
             test::type::Parameter<TValuesArg...>>, TArgs...>&&) = delete;
+public:
+    GetType Get();
+    ConstGetType Get() const;
 public:
     test::Parameter<test::type::Parameter<TValuesArg...>>& operator*();
     const test::Parameter<test::type::Parameter<TValuesArg...>>& 
@@ -55,6 +62,22 @@ Variable<test::Parameter<test::type::Parameter<TValuesArg...>>, TArgs...>&
     Variable<TArgs...>::operator=(cpy);
     m_value = cpy.m_value;
     return *this;
+}
+
+template<typename... TValuesArg, typename... TArgs>
+typename Variable<test::Parameter<test::type::Parameter<TValuesArg...>>, 
+    TArgs...>::GetType Variable<test::Parameter<test::type::
+        Parameter<TValuesArg...>>, TArgs...>::Get()
+{
+    return m_value;
+}
+
+template<typename... TValuesArg, typename... TArgs>
+typename Variable<test::Parameter<test::type::Parameter<TValuesArg...>>,
+    TArgs...>::ConstGetType Variable<test::Parameter<test::type::
+        Parameter<TValuesArg...>>, TArgs...>::Get() const
+{
+    return m_value;
 }
 
 template<typename... TValuesArg, typename... TArgs>
