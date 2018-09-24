@@ -17,14 +17,16 @@ namespace has
 {
 
 template<typename TVar>
-constexpr auto LValue(int) -> decltype(std::declval<TVar>().Get(), 
-    std::true_type());
+constexpr auto LValue(int) -> decltype(
+    static_cast<typename TVar::GetType(TVar::*)()>(&TVar::Get), 
+        std::true_type());
 template<typename TVar>
 constexpr std::false_type LValue(...);
 
 template<typename TVar>
-constexpr auto RValue(int) -> decltype(std::declval<const TVar>().Get(), 
-    std::true_type());
+constexpr auto RValue(int) -> decltype(
+    static_cast<typename TVar::ConstGetType(TVar::*)() const>(&TVar::Get), 
+        std::true_type());
 template<typename TVar>
 constexpr std::false_type RValue(...);
 
@@ -39,7 +41,7 @@ class Has<I, test::Variable<TArgs...>>
 {
 private:
     typedef typename var::Definition<I, 
-            test::Variable<TArgs...>>::Type VariableType;
+        test::Variable<TArgs...>>::Type VariableType;
 public:
     static constexpr bool LValue = decltype(var::has::
         LValue<VariableType>(0))::value;
