@@ -32,8 +32,6 @@ public:
             TArgs...>&&) = delete;
 public:
     ConstGetType Get() const;
-public:
-    test::type::Value<TArg, TArgValue>&& operator*() const;
 };
 
 template<typename TArg, TArg TArgValue, typename... TArgs>
@@ -56,13 +54,6 @@ Variable<test::type::Value<TArg, TArgValue>, TArgs...>&
 template<typename TArg, TArg TArgValue, typename... TArgs>
 typename Variable<test::type::Value<TArg, TArgValue>, TArgs...>::ConstGetType 
     Variable<test::type::Value<TArg, TArgValue>, TArgs...>::Get() const
-{
-    return std::move(test::type::Value<TArg, TArgValue>{});
-}
-
-template<typename TArg, TArg TArgValue, typename... TArgs>
-test::type::Value<TArg, TArgValue>&& 
-    Variable<test::type::Value<TArg, TArgValue>, TArgs...>::operator*() const
 {
     return std::move(test::type::Value<TArg, TArgValue>{});
 }
