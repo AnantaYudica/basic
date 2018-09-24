@@ -57,9 +57,6 @@ public:
 public:
     GetType Get();
     ConstGetType Get() const;
-public:
-    test::Value<TArg>& operator*();
-    const test::Value<TArg>& operator*() const;
 };
 
 template<typename TArg, typename... TArgs>
@@ -89,19 +86,6 @@ typename Variable<test::Value<TArg>, TArgs...>::GetType
 template<typename TArg, typename... TArgs>
 typename Variable<test::Value<TArg>, TArgs...>::ConstGetType 
     Variable<test::Value<TArg>, TArgs...>::Get() const
-{
-    return m_value;
-}
-
-template<typename TArg, typename... TArgs>
-test::Value<TArg>& Variable<test::Value<TArg>, TArgs...>::operator*()
-{
-    return m_value;
-}
-
-template<typename TArg, typename... TArgs>
-const test::Value<TArg>& Variable<test::Value<TArg>, TArgs...>::
-    operator*() const
 {
     return m_value;
 }
