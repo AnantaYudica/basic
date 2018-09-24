@@ -39,10 +39,6 @@ public:
 public:
     GetType Get();
     ConstGetType Get() const;
-public:
-    test::Parameter<test::type::Parameter<TValuesArg...>>& operator*();
-    const test::Parameter<test::type::Parameter<TValuesArg...>>& 
-        operator*() const;
 };
 
 template<typename... TValuesArg, typename... TArgs>
@@ -76,22 +72,6 @@ template<typename... TValuesArg, typename... TArgs>
 typename Variable<test::Parameter<test::type::Parameter<TValuesArg...>>,
     TArgs...>::ConstGetType Variable<test::Parameter<test::type::
         Parameter<TValuesArg...>>, TArgs...>::Get() const
-{
-    return m_value;
-}
-
-template<typename... TValuesArg, typename... TArgs>
-test::Parameter<test::type::Parameter<TValuesArg...>>& 
-    Variable<test::Parameter<test::type::Parameter<TValuesArg...>>, 
-        TArgs...>::operator*()
-{
-    return m_value;
-}
-
-template<typename... TValuesArg, typename... TArgs>
-const test::Parameter<test::type::Parameter<TValuesArg...>>& 
-    Variable<test::Parameter<test::type::Parameter<TValuesArg...>>, 
-        TArgs...>::operator*() const
 {
     return m_value;
 }
