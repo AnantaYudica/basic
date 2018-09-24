@@ -54,26 +54,26 @@ int main()
     paramVal.Fill<void>(&A::Print, &a);
     A a1 = paramVal.Fill<A>();
 
-    printf("i = %d\n", paramVal.Get<0>());
-    printf("cstr = %s\n", paramVal.Get<1>());
-    printf("f = %f\n", paramVal.Get<2>());
+    printf("i = %d\n", paramVal.At<0>());
+    printf("cstr = %s\n", paramVal.At<1>());
+    printf("f = %f\n", paramVal.At<2>());
     
-    paramVal.Get<0>() = 4;
-    paramVal.Get<2>() = (float)(22.0 / 7.0);
+    paramVal.At<0>() = 4;
+    paramVal.At<2>() = (float)(22.0 / 7.0);
 
-    printf("i = %d\n", paramVal.Get<0>());
-    printf("cstr = %s\n", paramVal.Get<1>());
-    printf("f = %f\n", paramVal.Get<2>());
+    printf("i = %d\n", paramVal.At<0>());
+    printf("cstr = %s\n", paramVal.At<1>());
+    printf("f = %f\n", paramVal.At<2>());
 
     const ParamVal1 cpyParamVal1 = paramVal; 
-    printf("i = %d\n", cpyParamVal1.Get<0>());
-    printf("cstr = %s\n", cpyParamVal1.Get<1>());
-    printf("f = %f\n", cpyParamVal1.Get<2>());
+    printf("i = %d\n", cpyParamVal1.At<0>());
+    printf("cstr = %s\n", cpyParamVal1.At<1>());
+    printf("f = %f\n", cpyParamVal1.At<2>());
 
     const ParamVal1 cpyParamVal2 = std::move(paramVal); 
-    printf("i = %d\n", cpyParamVal1.Get<0>());
-    printf("cstr = %s\n", cpyParamVal1.Get<1>());
-    printf("f = %f\n", cpyParamVal1.Get<2>());
+    printf("i = %d\n", cpyParamVal1.At<0>());
+    printf("cstr = %s\n", cpyParamVal1.At<1>());
+    printf("f = %f\n", cpyParamVal1.At<2>());
     
 
 }
