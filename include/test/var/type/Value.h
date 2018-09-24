@@ -31,6 +31,7 @@ public:
         operator=(Variable<test::type::Value<TArg, TArgValue>, 
             TArgs...>&&) = delete;
 public:
+    void Get() = delete;
     ConstGetType Get() const;
 };
 
