@@ -26,9 +26,6 @@ public:
     Value<T>& operator=(const Value<T>& cpy);
     Value<T>& operator=(Value<T>&& mov);
 public:
-    T& operator*();
-    const T& operator*() const;
-public:
     GetType Get();
     ConstGetType Get() const;
 };
@@ -64,18 +61,6 @@ Value<T>& Value<T>::operator=(Value<T>&& mov)
 {
     m_value = std::move(mov);
     return *this;
-}
-
-template<typename T>
-T& Value<T>::operator*()
-{
-    return m_value;
-}
-
-template<typename T>
-const T& Value<T>::operator*() const
-{
-    return m_value;
 }
 
 template<typename T>
