@@ -8,6 +8,7 @@ int main()
 {
     basic::test::Variable<basic::test::Value<int>> var1(4);
     std::cout << "value : " << **var1 << std::endl;
+    std::cout << "value : " << *var1.Get() << std::endl;
     basic::test::Variable<int, basic::test::Value<int>> var2(6);
     basic::test::Variable<basic::test::Value<int>, int,
         basic::test::Value<int>, char> var3(4, 6);
