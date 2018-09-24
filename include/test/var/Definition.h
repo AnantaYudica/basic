@@ -1,7 +1,7 @@
 #ifndef BASIC_TEST_VAR_DEFINITION_H_
 #define BASIC_TEST_VAR_DEFINITION_H_
 
-#include "../Value.h"
+#include "../Variable.h"
 
 #include <cstddef>
 
@@ -12,52 +12,28 @@ namespace test
 namespace var
 {
 
-template<std::size_t I, typename... TArgs>
+template<std::size_t I, typename TVar>
 struct Definition
-{
-    typedef void type;
-    typedef void Type;
-    typedef bool has_value_type;
-    typedef bool HasValueType;
-    static constexpr has_value_type has_value = false;
-    static constexpr HasValueType HasValue = false;
-}; 
+{};
 
 template<std::size_t I, typename TArg, typename... TArgs>
-struct Definition<I, TArg, TArgs...> : Definition<I - 1, TArgs...>
+struct Definition<I, test::Variable<TArg, TArgs...>>
 {
-    typedef typename Definition<I - 1, TArgs...>::type type;
-    typedef typename Definition<I - 1, TArgs...>::Type Type;
-    typedef typename Definition<I - 1, TArgs...>::has_value_type 
-        has_value_type;
-    typedef typename Definition<I - 1, TArgs...>::HasValueType HasValueType;
-    static constexpr has_value_type has_value = 
-        Definition<I - 1, TArgs...>::has_value;
-    static constexpr HasValueType HasValue = 
-        Definition<I - 1, TArgs...>::HasValue;
+    typedef typename Definition<I - 1, test::Variable<TArgs...>>::Type Type;
 };
 
 template<typename TArg, typename... TArgs>
-struct Definition<0, TArg, TArgs...>
+struct Definition<0, test::Variable<TArg, TArgs...>>
 {
-    typedef void type;
-    typedef void Type;
-    typedef bool has_value_type;
-    typedef bool HasValueType;
-    static constexpr has_value_type has_value = false;
-    static constexpr HasValueType HasValue = false;
+    typedef test::Variable<TArg, TArgs...> Type;
 };
 
-template<typename TArg, typename... TArgs>
-struct Definition<0, test::Value<TArg>, TArgs...>
+template<typename... TArgs>
+struct Definition<0, test::Variable<TArgs...>>
 {
-    typedef TArg type;
-    typedef TArg Type;
-    typedef bool has_value_type;
-    typedef bool HasValueType;
-    static constexpr has_value_type has_value = true;
-    static constexpr HasValueType HasValue = true;
+    typedef test::Variable<TArgs...> Type;
 };
+
 
 } //!var
 
