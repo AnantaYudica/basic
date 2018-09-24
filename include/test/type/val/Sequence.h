@@ -33,16 +33,16 @@ public:
     static constexpr std::size_t Size = sizeof...(TValues) + 1;
 public:
     template<std::size_t I>
-    constexpr typename std::enable_if<I == 0, ConstAtType>::type At();
+    constexpr typename std::enable_if<I == 0, ConstAtType>::type At() const;
     template<std::size_t I>
-    constexpr typename std::enable_if<I != 0, ConstAtType>::type At();
+    constexpr typename std::enable_if<I != 0, ConstAtType>::type At() const;
 };
 
 template<typename T, T TValue, T... TValues>
 template<std::size_t I>
 constexpr typename std::enable_if<I == 0, 
     typename Sequence<T, TValue, TValues...>::ConstAtType>::type 
-        Sequence<T, TValue, TValues...>::At()
+        Sequence<T, TValue, TValues...>::At() const
 {
     return TValue;
 }
@@ -51,9 +51,9 @@ template<typename T, T TValue, T... TValues>
 template<std::size_t I>
 constexpr typename std::enable_if<I != 0, 
     typename Sequence<T, TValue, TValues...>::ConstAtType>::type 
-        Sequence<T, TValue, TValues...>::At()
+        Sequence<T, TValue, TValues...>::At() const
 {
-    return Sequence<T, TValues...>::template At<I - 1>();
+    return Sequence<T, TValues...>{}.template At<I - 1>();
 }
 
 } //!val
