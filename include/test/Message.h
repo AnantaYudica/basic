@@ -2,6 +2,11 @@
 #define BASIC_TEST_MESSAGE_H_
 
 #include "Variable.h"
+#include "var/Parameter.h"
+#include "var/Value.h"
+#include "var/type/Value.h"
+#include "var/type/val/Sequence.h"
+#include "var/val/Sequence.h"
 
 #include "msg/Base.h"
 
