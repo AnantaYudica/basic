@@ -16,7 +16,7 @@ int main()
         int, 
         basic::test::type::Value<int, 4>,
         basic::test::type::val::Sequence<int, 1, 2, 3, 4>,
-        basic::test::Parameter<basic::test::type::Parameter<int, int, int>>,
+        basic::test::Parameter<int, int, int>,
         basic::test::Value<int>,
         basic::test::val::Sequence<int,2>> Var1;
 
