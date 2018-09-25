@@ -19,15 +19,11 @@ void Print2(int i, char c, float f)
 
 int main()
 {
-    basic::test::Variable<basic::test::Parameter<
-        basic::test::type::Parameter<int>>> var1(4);
+    basic::test::Variable<basic::test::Parameter<int>> var1(4);
     var1.Get().Fill<void>(&Print1);
-    basic::test::Variable<int, basic::test::Parameter<
-        basic::test::type::Parameter<int>>> var2(6);
-    basic::test::Variable<basic::test::Parameter<
-        basic::test::type::Parameter<int, char, float>>, int,
-        basic::test::Parameter<basic::test::type::
-            Parameter<int>>, char> var3(4, 'a', 3.14, 14);
+    basic::test::Variable<int, basic::test::Parameter<int>> var2(6);
+    basic::test::Variable<basic::test::Parameter<int, char, float>, int,
+        basic::test::Parameter<int>, char> var3(4, 'a', 3.14, 14);
     var3.Get().Fill<void>(&Print2);
 
 }
