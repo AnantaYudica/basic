@@ -4,7 +4,9 @@
 #include "../../Argument.h"
 
 #include "../../../Variable.h"
+#include "../../../var/type/Value.h"
 #include "../../../var/Element.h"
+#include "../../../var/At.h"
 #include "../../../type/Value.h"
 
 #include <cstddef>
@@ -81,8 +83,7 @@ TRet Argument<TCaseId, arg::type::Value<I>, TArgs...>::
 {
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func_mmbr, d, 
         var, std::forward<TFuncMmbrArgs>(args)..., 
-        std::move(Argument<TCaseId>::template ElementType<I, 
-            test::Variable<TVarArgs...>>::Get()));
+        std::move(test::var::At<I>(var).Get().Get()));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -93,8 +94,7 @@ TRet Argument<TCaseId, arg::type::Value<I>, TArgs...>::
 {
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func, var, 
         std::forward<TFuncArgs>(args)..., 
-        std::move(Argument<TCaseId>::template ElementType<I, 
-            test::Variable<TVarArgs...>>::Get()));
+        std::move(test::var::At<I>(var).Get().Get()));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
