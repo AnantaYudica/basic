@@ -36,10 +36,8 @@ struct A
 
 int main()
 {
-    typedef basic::test::Parameter<
-        basic::test::type::Parameter<>> ParamVal0;
-    typedef basic::test::Parameter<
-        basic::test::type::Parameter<int, const char*, float>> ParamVal1;
+    typedef basic::test::Parameter<> ParamVal0;
+    typedef basic::test::Parameter<int, const char*, float> ParamVal1;
 
     A a;
     ParamVal0 paramVal0;
