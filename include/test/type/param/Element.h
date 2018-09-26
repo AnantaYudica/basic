@@ -31,6 +31,20 @@ struct Element<I, type::Parameter<TArg, TArgs...>>
         Parameter<TArgs...>>::Type Type;
 };
 
+template<template<typename...> class TTParam, typename TArg, 
+    typename... TArgs>
+struct Element<0, TTParam<TArg, TArgs...>>
+{
+    typedef TArg Type;
+};
+
+template<std::size_t I, template<typename...> class TTParam, typename TArg, 
+    typename... TArgs>
+struct Element<I, TTParam<TArg, TArgs...>>
+{
+    typedef typename Element<I - 1, TTParam<TArgs...>>::Type Type;
+};
+
 } //!param
 
 } //!type
