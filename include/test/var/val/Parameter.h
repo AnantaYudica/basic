@@ -16,8 +16,7 @@ class Variable<test::val::Parameter<TValuesArg...>, TArgs...> :
 {
 public:
     typedef test::val::Parameter<TValuesArg...>& GetType;
-    typedef const test::val::Parameter<test::type::
-        Parameter<TValuesArg...>>& ConstGetType;
+    typedef const test::val::Parameter<TValuesArg...>& ConstGetType;
 private:
     test::val::Parameter<TValuesArg...> m_value;
 public:
