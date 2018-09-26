@@ -9,6 +9,9 @@ BASIC_TEST_CONSTRUCT;
 #include <cstdio>
 #include <typeinfo>
 
+template<typename... TArgs>
+struct Param1 {};
+
 int main()
 {
     typedef basic::test::type::Parameter<char, short, 
@@ -35,4 +38,25 @@ int main()
         typeid(TIntegerIndex4A).name());
     assert(typeid(long long).hash_code() == 
         typeid(TIntegerIndex4A).hash_code());
+
+    typedef Param1<char, short, int, long> P1;
+    typedef typename basic::test::type::param::Element<0, P1>::Type
+        P1_I0;
+    printf("%s == %s?\n", typeid(char).name(), typeid(P1_I0).name());
+    assert(typeid(char).hash_code() == typeid(P1_I0).hash_code());
+    
+    typedef typename basic::test::type::param::Element<1, P1>::Type
+        P1_I1;
+    printf("%s == %s?\n", typeid(short).name(), typeid(P1_I1).name());
+    assert(typeid(short).hash_code() == typeid(P1_I1).hash_code());
+    
+    typedef typename basic::test::type::param::Element<2, P1>::Type
+        P1_I2;
+    printf("%s == %s?\n", typeid(int).name(), typeid(P1_I2).name());
+    assert(typeid(int).hash_code() == typeid(P1_I2).hash_code());
+
+    typedef typename basic::test::type::param::Element<3, P1>::Type
+        P1_I3;
+    printf("%s == %s?\n", typeid(long).name(), typeid(P1_I3).name());
+    assert(typeid(long).hash_code() == typeid(P1_I3).hash_code());
 }
