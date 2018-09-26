@@ -1,4 +1,4 @@
-#include "test/Parameter.h"
+#include "test/val/Parameter.h"
 
 #include <cstdio>
 #include <typeinfo>
@@ -36,8 +36,8 @@ struct A
 
 int main()
 {
-    typedef basic::test::Parameter<> ParamVal0;
-    typedef basic::test::Parameter<int, const char*, float> ParamVal1;
+    typedef basic::test::val::Parameter<> ParamVal0;
+    typedef basic::test::val::Parameter<int, const char*, float> ParamVal1;
 
     A a;
     ParamVal0 paramVal0;

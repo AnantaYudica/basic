@@ -1,10 +1,10 @@
 #include "test/var/Has.h"
 #include "test/Variable.h"
 #include "test/var/Value.h"
-#include "test/var/Parameter.h"
 #include "test/var/type/Value.h"
 #include "test/var/type/val/Sequence.h"
 #include "test/var/val/Sequence.h"
+#include "test/var/val/Parameter.h"
 
 #include <iostream>
 #include <typeinfo>
@@ -15,7 +15,7 @@ int main()
         int, 
         basic::test::type::Value<int, 4>,
         basic::test::type::val::Sequence<int, 1, 2, 3, 4>,
-        basic::test::Parameter<basic::test::type::Parameter<int, int, int>>,
+        basic::test::val::Parameter<int, int, int>,
         basic::test::Value<int>,
         basic::test::val::Sequence<int,2>> Var1;
     std::cout << std::boolalpha;
