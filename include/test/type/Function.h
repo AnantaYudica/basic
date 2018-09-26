@@ -23,19 +23,11 @@ public:
 public:
     static constexpr PointerType Pointer = Func;
 public:
-    static TRet Call(TArgs&&... args);
-public:
-    TRet operator()(TArgs&&... args) const;
+    constexpr TRet Call(TArgs&&... args) const;
 };
 
 template<typename TRet, typename... TArgs, TRet(*Func)(TArgs...)>
-TRet Function<TRet(TArgs...), Func>::Call(TArgs&&... args)
-{
-    return Func(std::forward<TArgs>(args)...);
-}
-
-template<typename TRet, typename... TArgs, TRet(*Func)(TArgs...)>
-TRet Function<TRet(TArgs...), Func>::operator()(TArgs&&... args) const
+constexpr TRet Function<TRet(TArgs...), Func>::Call(TArgs&&... args) const
 {
     return Func(std::forward<TArgs>(args)...);
 }
