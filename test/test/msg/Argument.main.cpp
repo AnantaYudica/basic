@@ -10,6 +10,7 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/type/val/seq/At.h"
 #include "test/msg/arg/type/param/Name.h"
 #include "test/msg/arg/Value.h"
+#include "test/msg/arg/val/Sequence.h"
 #include "test/type/Parameter.h"
 #include "test/type/param/Name.h"
 #include "test/type/Value.h"
@@ -142,10 +143,15 @@ int main()
     arg7_0_3.Call<void>(&ATest::Foo4, a1, var7, 2);
     arg7_0_3.Call<int>(&Print, var7, std::move("Print type value at 3 : %d\n"));
 
-
-    basic::test::Variable<basic::test::var::Value<int>, char> var8(4);
+    basic::test::Variable<basic::test::Value<int>, char> var8(4);
     basic::test::msg::Argument<TestA1, basic::test::msg::arg::Value<0>> arg8;
     arg8.Call<void>(&ATest::Foo4, a1, var8, 2);
     arg8.Call<int>(&Print, var8, std::move("Print var value : %d\n"));
+    
+    basic::test::Variable<basic::test::val::Sequence<int, 4>, char> var9(4, 2, 10, 1);
+    basic::test::msg::Argument<TestA1, basic::test::msg::arg::val::Sequence<0>> arg9;
+    arg9.Call<void>(&ATest::Foo4, a1, var9, 2);
+    arg9.Call<int>(&Print, var9, 
+        std::move("Print var value : %d %d %d %d\n"));
     
 }
