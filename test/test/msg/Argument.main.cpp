@@ -11,6 +11,7 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/type/val/seq/At.h"
 #include "test/msg/arg/type/param/Name.h"
 #include "test/msg/arg/Value.h"
+#include "test/msg/arg/val/Function.h"
 #include "test/msg/arg/val/Sequence.h"
 #include "test/type/Parameter.h"
 #include "test/type/param/Name.h"
@@ -175,6 +176,19 @@ int main()
         basic::test::type::Function<int(int&&), &Foo2>> var11(4);
     basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
         Function<1, basic::test::msg::arg::Value<0>>> arg11;
-    //arg11.Call<void>(&ATest::Foo4, a1, var11, 2);
+    arg11.Call<void>(&ATest::Foo4, a1, var11, 2);
     arg11.Call<int>(&Print, var11, std::move("Print var value : %d\n"));
+    
+    basic::test::Variable<basic::test::val::Function<int()>> var12(&Foo1);
+    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
+        Function<0>> arg12;
+    arg12.Call<void>(&ATest::Foo4, a1, var12, 2);
+    arg12.Call<int>(&Print, var12, std::move("Print var value : %d\n"));
+    
+    basic::test::Variable<basic::test::Value<int>,
+        basic::test::val::Function<int(int&&)>> var13(14, &Foo2);
+    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
+        Function<1, basic::test::msg::arg::Value<0>>> arg13;
+    arg13.Call<void>(&ATest::Foo4, a1, var13, 2);
+    arg13.Call<int>(&Print, var13, std::move("Print var value : %d\n"));
 }
