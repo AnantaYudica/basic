@@ -35,16 +35,16 @@ public:
         template ElementType<I, TVar>::Type;
 public:
     template<typename TVar>
-    using GetType = ValueType<TVar>&&;
+    using GetType = ValueType<TVar>;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
     using PointerFunctionMemberType = typename Argument<TCaseId, TArgs...>::
         template PointerFunctionMemberType<TRet, TDerived, TVar, 
-        TFuncMmbrArgs..., GetType<TVar>>;
+        TFuncMmbrArgs..., GetType<TVar>&&>;
     template<typename TRet, typename TVar, typename... TFuncArgs>
     using PointerFunctionType = typename Argument<TCaseId, TArgs...>::
-        template PointerFunctionType<TRet, TVar, TFuncArgs..., GetType<TVar>>;
+        template PointerFunctionType<TRet, TVar, TFuncArgs..., GetType<TVar>&&>;
 public:
     Argument();
 protected:
