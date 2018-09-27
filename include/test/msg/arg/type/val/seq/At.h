@@ -46,11 +46,9 @@ public:
     template<typename TVar>
     using ElementType = typename Argument<TCaseId>::
         template ElementType<I, TVar>;
-    template<typename TVar>
-    using ValueType = typename ElementType<TVar>::Type;
 public:
     template<typename TVar>
-    using GetType = ValueType<TVar>;
+    using GetType = typename ElementType<TVar>::Type;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>

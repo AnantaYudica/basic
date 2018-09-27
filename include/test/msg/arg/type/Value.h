@@ -35,11 +35,11 @@ class Argument<TCaseId, arg::type::Value<I>, TArgs...> :
 {
 public:
     template<typename TVar>
-    using ValueType = typename Argument<TCaseId>::
-        template ElementType<I, TVar>::Type;
+    using ElementType = typename Argument<TCaseId>::
+        template ElementType<I, TVar>;
 public:
     template<typename TVar>
-    using GetType = ValueType<TVar>;
+    using GetType = typename ElementType<TVar>::Type;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>

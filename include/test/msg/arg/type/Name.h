@@ -34,15 +34,15 @@ class Argument<TCaseId, arg::type::Name<I>, TArgs...> :
 {
 public:
     template<typename TVar>
+    using ElementType = typename Argument<TCaseId>::
+        template ElementType<I, TVar>;
+public:
+    template<typename TVar>
     using CharType = typename std::remove_const<typename decltype(test::type::
-        Name<typename Argument<TCaseId>::template ElementType<I, TVar>>::
-            CStr())::CharType>::type;
+        Name<ElementType<TVar>>::CStr())::CharType>::type;
 public:
     template<typename TVar>
-    using ValueType = test::CString<CharType<TVar>>;
-public:
-    template<typename TVar>
-    using GetType = ValueType<TVar>;
+    using GetType = test::CString<CharType<TVar>>;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>

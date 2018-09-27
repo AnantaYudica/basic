@@ -37,11 +37,9 @@ public:
     template<typename TVar>
     using ElementType = typename Argument<TCaseId>::
         template ElementType<I, TVar>;
-    template<typename TVar>
-    using ReturnType = typename ElementType<TVar>::ReturnType;
 public:
     template<typename TVar>
-    using GetType = ReturnType<TVar>;
+    using GetType = typename ElementType<TVar>::ReturnType;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
@@ -140,7 +138,7 @@ typename Argument<TCaseId, arg::type::Function<I, TArgArgs...>, TArgs...>::
             Get(test::Variable<TVarArgs...>& var)
 {
     return std::move(Argument<TCaseId, TArgArgs...>{}.template Call<
-        ReturnType<test::Variable<TVarArgs...>>>(test::var::
+        GetType<test::Variable<TVarArgs...>>>(test::var::
             At<I>(var).Get().Get(), var));
 }
 

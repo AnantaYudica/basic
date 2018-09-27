@@ -31,11 +31,11 @@ class Argument<TCaseId, arg::Value<I>, TArgs...> :
 {
 public:
     template<typename TVar>
-    using ValueType = typename Argument<TCaseId>::
-        template ElementType<I, TVar>::Type;
+    using ElementType = typename Argument<TCaseId>::
+        template ElementType<I, TVar>;
 public:
     template<typename TVar>
-    using GetType = ValueType<TVar>;
+    using GetType = typename ElementType<TVar>::Type;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
@@ -69,7 +69,7 @@ public:
 public:
     template<typename... TVarArgs>
     GetType<test::Variable<TVarArgs...>> 
-        Get(test::Variable<TVarArgs...>& var) const;
+        Get(test::Variable<TVarArgs...>& var);
 };
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -123,7 +123,7 @@ template<typename TCaseId, std::size_t I, typename... TArgs>
 template<typename... TVarArgs>
 typename Argument<TCaseId, arg::Value<I>, TArgs...>::
     template GetType<test::Variable<TVarArgs...>> Argument<TCaseId, 
-        arg::Value<I>, TArgs...>::Get(test::Variable<TVarArgs...>& var) const
+        arg::Value<I>, TArgs...>::Get(test::Variable<TVarArgs...>& var)
 {
     return std::move(basic::test::var::At<I>(var).Get().Get());
 }

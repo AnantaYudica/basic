@@ -53,10 +53,7 @@ public:
             CStr())::CharType>::type;
 public:
     template<typename TVar>
-    using ValueType = test::CString<CharType<TVar>>;
-public:
-    template<typename TVar>
-    using GetType = ValueType<TVar>;
+    using GetType = test::CString<CharType<TVar>>;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
