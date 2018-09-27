@@ -81,7 +81,7 @@ public:
 public:
     template<typename... TVarArgs>
     GetType<test::Variable<TVarArgs...>> 
-        Get(test::Variable<TVarArgs...>& var) const;
+        Get(test::Variable<TVarArgs...>& var);
 };
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -136,7 +136,7 @@ template<typename... TVarArgs>
 typename Argument<TCaseId, arg::type::param::Name<I>, TArgs...>::
     template GetType<test::Variable<TVarArgs...>> Argument<TCaseId, 
         arg::type::param::Name<I>, TArgs...>::
-            Get(test::Variable<TVarArgs...>& var) const
+            Get(test::Variable<TVarArgs...>& var)
 {
     return std::move(type::param::Name<typename Argument<TCaseId>::
         template ElementType<I, test::Variable<TVarArgs...>>>::CStr());
