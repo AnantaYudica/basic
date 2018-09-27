@@ -141,4 +141,4 @@ TRet Argument<TCaseId, arg::type::Function<I, TArgArgs...>, TArgs...>::
 
 } //!basic
 
-#endif //!BASIC_TEST_MSG_ARG_TYPE_VAL_FUNCTION_H_
+#endif //!BASIC_TEST_MSG_ARG_TYPE_FUNCTION_H_
