@@ -34,15 +34,17 @@ public:
     using ValueType = typename Argument<TCaseId>::
         template ElementType<I, TVar>::Type;
 public:
+    template<typename TVar>
+    using GetType = ValueType<TVar>&&;
+public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
     using PointerFunctionMemberType = typename Argument<TCaseId, TArgs...>::
         template PointerFunctionMemberType<TRet, TDerived, TVar, 
-        TFuncMmbrArgs..., ValueType<TVar>&&>;
+        TFuncMmbrArgs..., GetType<TVar>>;
     template<typename TRet, typename TVar, typename... TFuncArgs>
     using PointerFunctionType = typename Argument<TCaseId, TArgs...>::
-        template PointerFunctionType<TRet, TVar, TFuncArgs...,
-        ValueType<TVar>&&>;
+        template PointerFunctionType<TRet, TVar, TFuncArgs..., GetType<TVar>>;
 public:
     Argument();
 protected:
@@ -64,6 +66,10 @@ public:
     TRet Call(PointerFunctionType<TRet, test::Variable<TVarArgs...>, 
         TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
         TFuncArgs&&... args);
+public:
+    template<typename... TVarArgs>
+    GetType<test::Variable<TVarArgs...>> 
+        Get(test::Variable<TVarArgs...>& var) const;
 };
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -77,10 +83,8 @@ TRet Argument<TCaseId, arg::Value<I>, TArgs...>::
     Filler(TFuncMmbr func_mmbr, TDerived& d, test::Variable<TVarArgs...>& var,
         TFuncMmbrArgs&&... args)
 {
-    auto& var_at = basic::test::var::At<I>(var).Get();
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func_mmbr, d, 
-        var, std::forward<TFuncMmbrArgs>(args)..., 
-        std::move(var_at.Get()));
+        var, std::forward<TFuncMmbrArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -89,10 +93,8 @@ template<typename TRet, typename TFunc, typename... TFuncArgs,
 TRet Argument<TCaseId, arg::Value<I>, TArgs...>::
     Filler(TFunc func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
-    auto& var_at = basic::test::var::At<I>(var).Get();
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func, var, 
-        std::forward<TFuncArgs>(args)..., 
-        std::move(var_at.Get()));
+        std::forward<TFuncArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
@@ -115,6 +117,15 @@ TRet Argument<TCaseId, arg::Value<I>, TArgs...>::
         TFuncArgs&&... args)
 {
     return Filler<TRet>(func, var, std::forward<TFuncArgs>(args)...);
+}
+
+template<typename TCaseId, std::size_t I, typename... TArgs>
+template<typename... TVarArgs>
+typename Argument<TCaseId, arg::Value<I>, TArgs...>::
+    template GetType<test::Variable<TVarArgs...>> Argument<TCaseId, 
+        arg::Value<I>, TArgs...>::Get(test::Variable<TVarArgs...>& var) const
+{
+    return std::move(basic::test::var::At<I>(var).Get().Get());
 }
 
 } //!msg
