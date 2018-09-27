@@ -8,8 +8,10 @@
 #include "../../../../../type/Parameter.h"
 #include "../../../../../type/param/Element.h"
 #include "../../../../../type/Name.h"
+#include "../../../../../CString.h"
 
 #include <cstddef>
+#include <type_traits>
 
 namespace basic
 {
@@ -46,18 +48,24 @@ public:
     using ElementType = typename Argument<TCaseId>::template ElementType<I, 
         TVar>;
     template<typename TVar>
-    using CharType = typename decltype(type::Name<typename type::param::
-        Element<IAt, ElementType<TVar>>::Type>::CStr())::CharType;
+    using CharType = typename std::remove_const<typename decltype(type::
+        Name<typename type::param::Element<IAt, ElementType<TVar>>::Type>::
+            CStr())::CharType>::type;
+public:
+    template<typename TVar>
+    using ValueType = test::CString<CharType<TVar>>;
+public:
+    template<typename TVar>
+    using GetType = ValueType<TVar>;
 public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
     using PointerFunctionMemberType = typename Argument<TCaseId, TArgs...>::
         template PointerFunctionMemberType<TRet, TDerived, TVar, 
-        TFuncMmbrArgs..., const CharType<TVar>*&&>;
+        TFuncMmbrArgs..., GetType<TVar>&&>;
     template<typename TRet, typename TVar, typename... TFuncArgs>
     using PointerFunctionType = typename Argument<TCaseId, TArgs...>::
-        template PointerFunctionType<TRet, TVar, TFuncArgs...,
-        const CharType<TVar>*&&>;
+        template PointerFunctionType<TRet, TVar, TFuncArgs..., GetType<TVar>&&>;
 public:
     Argument();
 protected:
@@ -79,6 +87,10 @@ public:
     TRet Call(PointerFunctionType<TRet, test::Variable<TVarArgs...>, 
         TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
         TFuncArgs&&... args);
+public:
+    template<typename... TVarArgs>
+    GetType<test::Variable<TVarArgs...>> 
+        Get(test::Variable<TVarArgs...>& var) const;
 };
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -92,11 +104,8 @@ TRet Argument<TCaseId, arg::type::param::name::At<I, IAt>, TArgs...>::
     Filler(TFuncMmbr func_mmbr, TDerived& d,
         test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args)
 {
-    test::CString<CharType<test::Variable<TVarArgs...>>> cstr = 
-        std::move(type::Name<typename test::type::param::Element<IAt, 
-            ElementType<test::Variable<TVarArgs...>>>::Type>::CStr());
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func_mmbr, d, 
-        var, std::forward<TFuncMmbrArgs>(args)..., *cstr);
+        var, std::forward<TFuncMmbrArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -105,11 +114,8 @@ template<typename TRet, typename TFunc, typename... TFuncArgs,
 TRet Argument<TCaseId, arg::type::param::name::At<I, IAt>, TArgs...>::
     Filler(TFunc func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
-    test::CString<CharType<test::Variable<TVarArgs...>>> cstr = 
-        std::move(type::Name<typename test::type::param::Element<IAt, 
-            ElementType<test::Variable<TVarArgs...>>>::Type>::CStr());
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func, var, 
-        std::forward<TFuncArgs>(args)..., *cstr);
+        std::forward<TFuncArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -132,6 +138,17 @@ TRet Argument<TCaseId, arg::type::param::name::At<I, IAt>, TArgs...>::
         TFuncArgs&&... args)
 {
     return Filler<TRet>(func, var, std::forward<TFuncArgs>(args)...);
+}
+
+template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
+template<typename... TVarArgs>
+typename Argument<TCaseId, arg::type::param::name::At<I, IAt>, TArgs...>::
+    template GetType<test::Variable<TVarArgs...>> Argument<TCaseId, 
+        arg::type::param::name::At<I, IAt>, TArgs...>::
+            Get(test::Variable<TVarArgs...>& var) const
+{
+    return std::move(type::Name<typename test::type::param::Element<IAt, 
+        ElementType<test::Variable<TVarArgs...>>>::Type>::CStr());
 }
 
 } //!msg
