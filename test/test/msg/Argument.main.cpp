@@ -10,6 +10,7 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/type/val/Sequence.h"
 #include "test/msg/arg/type/val/seq/At.h"
 #include "test/msg/arg/type/param/Name.h"
+#include "test/msg/arg/type/param/name/At.h"
 #include "test/msg/arg/Value.h"
 #include "test/msg/arg/val/Function.h"
 #include "test/msg/arg/val/Parameter.h"
@@ -105,6 +106,18 @@ int Foo2(int&& i)
     return printf("Print Foo2(i = %d)\n", i);
 }
 
+int Foo3(int&& i1, float&& f, long&& l, int&& i2)
+{
+    return printf("Print Foo3(i1 = %d, f = %f, l = %d, "
+        "i2 = %d)\n", i1, f, l, i2);
+}
+
+int Foo3(int&& i1, int&& i2, int&& i3, int&& i4)
+{
+    return printf("Print Foo3(i1 = %d, i2 = %d, i3 = %d, "
+        "i4 = %d)\n", i1, i2, i3, i4);
+}
+
 int main()
 {
     ATest a1;
@@ -132,6 +145,15 @@ int main()
     basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::param::Name<0>> arg5;
     arg5.Call<void>(&ATest::Foo3, a1, var5, 2);
     arg5.Call<int>(&Print, var5, std::move("Print param Name : %s\n"));
+
+    basic::test::msg::Argument<TestA1, 
+        basic::test::msg::arg::type::param::name::At<0, 0>> arg5_0_0;
+    basic::test::msg::Argument<TestA1, 
+        basic::test::msg::arg::type::param::name::At<0, 1>> arg5_0_1;
+    arg5_0_0.Call<void>(&ATest::Foo3, a1, var5, 2);
+    arg5_0_0.Call<int>(&Print, var5, std::move("Print type name at 0 : %s\n"));
+    arg5_0_1.Call<void>(&ATest::Foo3, a1, var5, 2);
+    arg5_0_1.Call<int>(&Print, var5, std::move("Print type name at 1 : %s\n"));
     
     basic::test::Variable<basic::test::type::Value<int, 14>, char> var6;
     basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Value<0>> arg6;
@@ -242,5 +264,23 @@ int main()
     arg14_0_2.Call<int>(&Print, var14, std::move("Print type value at 2 : %d\n"));
     arg14_0_3.Call<void>(&ATest::Foo4, a1, var14, 2);
     arg14_0_3.Call<int>(&Print, var14, std::move("Print type value at 3 : %f\n"));
+
+    basic::test::Variable<basic::test::type::Function<int(int&&, float&&, 
+        long&&, int&&), &Foo3>, basic::test::val::Parameter<int, float, long>,
+        basic::test::type::Value<int, 22>> var15(1, 3.14, 11);
+    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
+        Function<0, basic::test::msg::arg::val::Parameter<1>,
+            basic::test::msg::arg::type::Value<2>>> arg15;
+    arg15.Call<void>(&ATest::Foo4, a1, var15, 2);
+    arg15.Call<int>(&Print, var15, std::move("Print var value : %d\n"));
+    
+    basic::test::Variable<basic::test::type::Function<int(int&&, int&&, 
+        int&&, int&&), &Foo3>, basic::test::val::Sequence<int, 3>,
+        basic::test::Value<int>> var16(1, 2, 3, 4);
+    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
+        Function<0, basic::test::msg::arg::val::Sequence<1>,
+            basic::test::msg::arg::Value<2>>> arg16;
+    arg16.Call<void>(&ATest::Foo4, a1, var16, 2);
+    arg16.Call<int>(&Print, var16, std::move("Print var value : %d\n"));
 
 }
