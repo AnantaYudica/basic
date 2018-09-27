@@ -43,16 +43,18 @@ public:
     using ElementType = typename Argument<TCaseId>::
         template ElementType<I, TVar>;
 public:
+    template<typename TVar>
+    using GetType = typename test::type::param::Element<IAt, 
+        ElementType<TVar>>::Type;
+public:
     template<typename TRet, typename TDerived, typename TVar, 
         typename... TFuncMmbrArgs>
     using PointerFunctionMemberType = typename Argument<TCaseId, TArgs...>::
         template PointerFunctionMemberType<TRet, TDerived, TVar, 
-        TFuncMmbrArgs..., typename test::type::param::Element<IAt, 
-            ElementType<TVar>>::Type&&>;
+        TFuncMmbrArgs..., GetType<TVar>&&>;
     template<typename TRet, typename TVar, typename... TFuncArgs>
     using PointerFunctionType = typename Argument<TCaseId, TArgs...>::
-        template PointerFunctionType<TRet, TVar, TFuncArgs..., 
-        typename test::type::param::Element<IAt, ElementType<TVar>>::Type&&>;
+        template PointerFunctionType<TRet, TVar, TFuncArgs..., GetType<TVar>&&>;
 public:
     Argument();
 protected:
@@ -74,6 +76,10 @@ public:
     TRet Call(PointerFunctionType<TRet, test::Variable<TVarArgs...>, 
         TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
         TFuncArgs&&... args);
+public:
+    template<typename... TVarArgs>
+    GetType<test::Variable<TVarArgs...>> 
+        Get(test::Variable<TVarArgs...>& var);
 };
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -88,8 +94,7 @@ TRet Argument<TCaseId, arg::val::param::At<I, IAt>, TArgs...>::
         TFuncMmbrArgs&&... args)
 {
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func_mmbr, d, 
-        var, std::forward<TFuncMmbrArgs>(args)..., 
-        std::move(test::var::At<I>(var).Get().template At<IAt>()));
+        var, std::forward<TFuncMmbrArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -99,8 +104,7 @@ TRet Argument<TCaseId, arg::val::param::At<I, IAt>, TArgs...>::
     Filler(TFunc func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
     return Argument<TCaseId, TArgs...>:: template Filler<TRet>(func, var, 
-        std::forward<TFuncArgs>(args)..., 
-        std::move(test::var::At<I>(var).Get().template At<IAt>()));
+        std::forward<TFuncArgs>(args)..., std::move(Get(var)));
 }
 
 template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
@@ -123,6 +127,16 @@ TRet Argument<TCaseId, arg::val::param::At<I, IAt>, TArgs...>::
         TFuncArgs&&... args)
 {
     return Filler<TRet>(func, var, std::forward<TFuncArgs>(args)...);
+}
+
+template<typename TCaseId, std::size_t I, std::size_t IAt, typename... TArgs>
+template<typename... TVarArgs>
+typename Argument<TCaseId, arg::val::param::At<I, IAt>, TArgs...>::
+    template GetType<test::Variable<TVarArgs...>> 
+        Argument<TCaseId, arg::val::param::At<I, IAt>, TArgs...>::
+            Get(test::Variable<TVarArgs...>& var)
+{
+    return std::move(test::var::At<I>(var).Get().template At<IAt>());
 }
 
 } //!msg
