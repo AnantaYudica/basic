@@ -3,10 +3,30 @@
 
 #include "Format.h"
 #include "Argument.h"
+#include "arg/Value.h"
+#include "arg/type/Function.h"
+#include "arg/type/Index.h"
 #include "arg/type/Name.h"
 #include "arg/type/Value.h"
 #include "arg/type/param/Name.h"
+#include "arg/type/param/name/At.h"
+#include "arg/type/val/Sequence.h"
+#include "arg/type/val/seq/At.h"
+#include "arg/val/Function.h"
+#include "arg/val/Parameter.h"
+#include "arg/val/Sequence.h"
+#include "arg/val/param/At.h"
+#include "arg/val/seq/At.h"
+
+// todo : Remove when next release
+#ifndef REMOVED_DEPRECATED
+#define REMOVED_DEPRECATED
+#endif //!REMOVED_DEPRECATED
+
 #include "arg/var/Value.h"
+
+// end todo
+
 
 namespace basic
 {
