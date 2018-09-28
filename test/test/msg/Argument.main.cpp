@@ -17,10 +17,10 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/val/Sequence.h"
 #include "test/msg/arg/val/param/At.h"
 #include "test/msg/arg/val/seq/At.h"
-/*
+
 #include "test/msg/arg/type/Index.h"
 #include "test/type/Index.h"
-*/
+
 #include "test/CString.h"
 #include "test/cstr/out/Argument.h"
 
@@ -302,7 +302,7 @@ int main()
     printf("get arg14 value at 3 from var14  : %f\n", arg14.Get<3>(var14));
     arg14.Call<void>(&ATest::Foo6, a1, var14, 2);
     arg14.Call<int>(&Print, var14, 
-        std::move("Print type val sequence : %d %f %d %f\n"));
+        std::move("Print type val parameter : %d %f %d %f\n"));
     
     basic::test::msg::Argument<TestA1, 
         basic::test::msg::arg::val::param::At<0, 0>> arg14_0_0;
@@ -348,11 +348,30 @@ int main()
     printf("get arg16 value from var16  : %d\n", arg16.Get(var16));
     arg16.Call<void>(&ATest::Foo4, a1, var16, 2);
     arg16.Call<int>(&Print, var16, std::move("Print var value : %d\n"));
-    /*
+    
     typedef basic::test::type::Index<TestA1, 0> TestAt_at0;
     basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Index<0,
         basic::test::msg::arg::val::seq::At>> arg17;
-    arg17.Call<void>(&ATest::Foo4, a1, var9, 2);
-    */
-
+    printf("get arg17 at 0 value from var16  : %d\n", arg17.Get<0>(var9));
+    arg17.Call<void>(TestAt_at0{}, &ATest::Foo4, a1, var9, 2);
+    arg17.Call<int>(TestAt_at0{}, 
+        &Print, var9, std::move("Print var value : %d\n"));
+    
+    
+    typedef basic::test::type::Index<TestA1, 1> TestAt_at1;
+    basic::test::Variable<
+        basic::test::Value<int>,
+        basic::test::val::Sequence<int, 4>,
+        basic::test::type::Value<int, 1>,
+        basic::test::type::val::Sequence<int, 144, 4, 44, 441>> var18(4, 11, 14, 6, 22);
+    basic::test::msg::Argument<TestA1, 
+        basic::test::msg::arg::Value<0>,
+        basic::test::msg::arg::type::Index<1,
+            basic::test::msg::arg::val::seq::At>,
+        basic::test::msg::arg::type::Value<2>,
+        basic::test::msg::arg::type::Index<3,
+            basic::test::msg::arg::type::val::seq::At>> arg18;
+    arg18.Call<void>(TestAt_at1{}, &ATest::Foo4, a1, var18, 2);
+    arg18.Call<int>(TestAt_at1{}, &Print, var18, 
+        std::move("Print var value : %d %d %d %d\n"));
 }
