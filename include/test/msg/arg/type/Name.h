@@ -76,14 +76,14 @@ public:
         TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
         TFuncArgs&&... args);
 public:
-    template<typename TRet, std::size_t ICaseId, typename TDerived, 
-        typename... TFuncMmbrArgs, typename... TVarArgs>
+    template<typename TRet, typename TDerived, typename... TFuncMmbrArgs, 
+        std::size_t ICaseId, typename... TVarArgs>
     TRet Call(const type::Index<TCaseId, ICaseId>&, 
         PointerFunctionMemberType<ICaseId, TRet, TDerived, 
             test::Variable<TVarArgs...>, TFuncMmbrArgs...> func_mmbr, 
         TDerived& d, test::Variable<TVarArgs...>& var, 
         TFuncMmbrArgs&&... args);
-    template<typename TRet, std::size_t ICaseId, typename... TFuncArgs, 
+    template<typename TRet, typename... TFuncArgs, std::size_t ICaseId, 
         typename... TVarArgs>
     TRet Call(const type::Index<TCaseId, ICaseId>&, PointerFunctionType<ICaseId, 
         TRet, test::Variable<TVarArgs...>, TFuncArgs...> func, 
@@ -145,8 +145,8 @@ TRet Argument<TCaseId, arg::type::Name<I>, TArgs...>::
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
-template<typename TRet, std::size_t ICaseId, typename TDerived, 
-    typename... TFuncMmbrArgs, typename... TVarArgs>
+template<typename TRet, typename TDerived, typename... TFuncMmbrArgs, 
+    std::size_t ICaseId, typename... TVarArgs>
 TRet Argument<TCaseId, arg::type::Name<I>, TArgs...>::
     Call(const type::Index<TCaseId, ICaseId>&, 
         PointerFunctionMemberType<ICaseId, TRet, TDerived, 
@@ -158,7 +158,7 @@ TRet Argument<TCaseId, arg::type::Name<I>, TArgs...>::
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
-template<typename TRet, std::size_t ICaseId, typename... TFuncArgs, 
+template<typename TRet, typename... TFuncArgs, std::size_t ICaseId, 
     typename... TVarArgs>
 TRet Argument<TCaseId, arg::type::Name<I>, TArgs...>::
     Call(const type::Index<TCaseId, ICaseId>&, PointerFunctionType<ICaseId, 
