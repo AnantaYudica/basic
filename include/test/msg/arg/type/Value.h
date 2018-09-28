@@ -161,7 +161,7 @@ TRet Argument<TCaseId, arg::type::Value<I>, TArgs...>::
         TRet, test::Variable<TVarArgs...>, TFuncArgs...> func, 
         test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
-    return Filler<TCaseId, TRet>(func, var, std::forward<TFuncArgs>(args)...);
+    return Filler<ICaseId, TRet>(func, var, std::forward<TFuncArgs>(args)...);
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgs>
