@@ -3,6 +3,7 @@
 
 #include "../Variable.h"
 #include "../var/Element.h"
+#include "../type/Index.h"
 
 #include <cstddef>
 #include <utility>
@@ -48,6 +49,19 @@ public:
     TRet Call(PointerFunctionType<0, TRet, test::Variable<TVarArgs...>, 
         TFuncArgs...> func, test::Variable<TVarArgs...>& var, 
         TFuncArgs&&... args);
+public:
+    template<typename TRet, std::size_t ICaseId, typename TDerived, 
+        typename... TFuncMmbrArgs, typename... TVarArgs>
+    TRet Call(const type::Index<TCaseId, ICaseId>&, 
+        PointerFunctionMemberType<ICaseId, TRet, TDerived, 
+            test::Variable<TVarArgs...>, TFuncMmbrArgs...> func_mmbr, 
+        TDerived& d, test::Variable<TVarArgs...>& var, 
+        TFuncMmbrArgs&&... args);
+    template<typename TRet, std::size_t ICaseId, typename... TFuncArgs, 
+        typename... TVarArgs>
+    TRet Call(const type::Index<TCaseId, ICaseId>&, PointerFunctionType<ICaseId, 
+        TRet, test::Variable<TVarArgs...>, TFuncArgs...> func, 
+        test::Variable<TVarArgs...>& var, TFuncArgs&&... args);
 };
 
 template<typename TCaseId, typename... TArgs>
@@ -90,6 +104,28 @@ TRet Argument<TCaseId, TArgs...>::Call(PointerFunctionType<0, TRet,
     test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
 {
     return Filler<0, TRet>(func, var, std::forward<TFuncArgs>(args)...);
+}
+
+template<typename TCaseId, typename... TArgs>
+template<typename TRet, std::size_t ICaseId, typename TDerived, 
+    typename... TFuncMmbrArgs, typename... TVarArgs>
+TRet Argument<TCaseId, TArgs...>::Call(const type::Index<TCaseId, ICaseId>&, 
+    PointerFunctionMemberType<ICaseId, TRet, TDerived, 
+        test::Variable<TVarArgs...>, TFuncMmbrArgs...> func_mmbr, 
+    TDerived& d, test::Variable<TVarArgs...>& var, TFuncMmbrArgs&&... args)
+{
+    return Filler<ICaseId, TRet>(func_mmbr, d, var, 
+        std::forward<TFuncMmbrArgs>(args)...);
+}
+
+template<typename TCaseId, typename... TArgs>
+template<typename TRet, std::size_t ICaseId, typename... TFuncArgs, 
+    typename... TVarArgs>
+TRet Argument<TCaseId, TArgs...>::Call(const type::Index<TCaseId, ICaseId>&, 
+    PointerFunctionType<ICaseId, TRet, test::Variable<TVarArgs...>, 
+    TFuncArgs...> func, test::Variable<TVarArgs...>& var, TFuncArgs&&... args)
+{
+    return Filler<TCaseId, TRet>(func, var, std::forward<TFuncArgs>(args)...);
 }
 
 } //!msg
