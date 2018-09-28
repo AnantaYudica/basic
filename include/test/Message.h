@@ -3,12 +3,18 @@
 
 #include "Variable.h"
 #include "var/Value.h"
+#include "var/type/Function.h"
 #include "var/type/Value.h"
 #include "var/type/val/Sequence.h"
+#include "var/val/Function.h"
 #include "var/val/Sequence.h"
 #include "var/val/Parameter.h"
 
 #include "msg/Base.h"
+
+#include "type/Index.h"
+
+#include <cstddef>
 
 namespace basic
 {
@@ -29,6 +35,16 @@ public:
     void Debug(const TCaseId&, test::Variable<TVarArgs...>& var);
     template<typename TCaseId, typename... TVarArgs>
     void Error(const TCaseId&, test::Variable<TVarArgs...>& var);
+public:
+    template<typename TCaseId, std::size_t ICaseId, typename... TVarArgs>
+    void Info(const type::Index<TCaseId, ICaseId>&, 
+        test::Variable<TVarArgs...>& var);
+    template<typename TCaseId, std::size_t ICaseId,  typename... TVarArgs>
+    void Debug(const type::Index<TCaseId, ICaseId>&, 
+        test::Variable<TVarArgs...>& var);
+    template<typename TCaseId, std::size_t ICaseId,  typename... TVarArgs>
+    void Error(const type::Index<TCaseId, ICaseId>&, 
+        test::Variable<TVarArgs...>& var);
 };
 
 template<typename TTest, typename TDerived>
@@ -67,6 +83,38 @@ void Message<TTest, TDerived>::Error(const TCaseId& case_id,
     m_derived.Argument(error, case_id).template Call<void, 
         const char*>(&TTest::Error, var, std::move(*m_derived.Format(error,
             case_id)));
+}
+
+template<typename TTest, typename TDerived>
+template<typename TCaseId, std::size_t ICaseId, typename... TVarArgs>
+void Message<TTest, TDerived>::Info(const test::type::Index<TCaseId, 
+    ICaseId>& case_id, test::Variable<TVarArgs...>& var)
+{
+    msg::base::Info info;
+    m_derived.Argument(info, TCaseId{}).template Call<void, 
+        const char*>(case_id, &TTest::Info, var, 
+            std::move(*m_derived.Format(info, TCaseId{})));
+}
+
+template<typename TTest, typename TDerived>
+template<typename TCaseId, std::size_t ICaseId,  typename... TVarArgs>
+void Message<TTest, TDerived>::Debug(const test::type::Index<TCaseId, 
+    ICaseId>& case_id, test::Variable<TVarArgs...>& var)
+{
+    msg::base::Debug debug;
+    m_derived.Argument(debug, TCaseId{}).template Call<void, 
+        const char*>(case_id, &TTest::Debug, var, 
+            std::move(*m_derived.Format(debug, TCaseId{})));}
+
+template<typename TTest, typename TDerived>
+template<typename TCaseId, std::size_t ICaseId,  typename... TVarArgs>
+void Message<TTest, TDerived>::Error(const test::type::Index<TCaseId, 
+    ICaseId>& case_id, test::Variable<TVarArgs...>& var)
+{
+    msg::base::Error error;
+    m_derived.Argument(error, TCaseId{}).template Call<void, 
+        const char*>(case_id, &TTest::Error, var, 
+            std::move(*m_derived.Format(error, TCaseId{})));
 }
 
 } //!test
