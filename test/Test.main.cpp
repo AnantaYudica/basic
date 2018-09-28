@@ -7,6 +7,7 @@ BASIC_TEST_CONSTRUCT;
 #include "test/Message.h"
 #include "test/Variable.h"
 #include "test/Case.h"
+#include "test/var/At.h"
 
 #include <typeinfo>
 
@@ -29,11 +30,11 @@ typedef basic::test::msg::Argument<TestA3,
     basic::test::msg::arg::type::Value<1>> DebugArgTestA3;
     
 typedef basic::test::msg::Argument<TestA1, 
-    basic::test::msg::arg::var::Value<2>> ErrorArgTestA1;
+    basic::test::msg::arg::Value<2>> ErrorArgTestA1;
 typedef basic::test::msg::Argument<TestA2, 
-    basic::test::msg::arg::var::Value<2>> ErrorArgTestA2;
+    basic::test::msg::arg::Value<2>> ErrorArgTestA2;
 typedef basic::test::msg::Argument<TestA3, 
-    basic::test::msg::arg::var::Value<2>> ErrorArgTestA3;
+    basic::test::msg::arg::Value<2>> ErrorArgTestA3;
 
 typedef basic::test::msg::Base<TestA1, char, InfoArgTestA1,
     DebugArgTestA1, ErrorArgTestA1> MessageBaseTestA1;
@@ -117,7 +118,7 @@ public:
         basic::test::type::Value<T2, T2Value>,
         basic::test::Value<T3>>& var)
     {
-        return var.template GetValue<2>() == 14;
+        return basic::test::var::At<2>(var).Get().Get() == 14;
     }
 };
 
