@@ -1,10 +1,14 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0.2)
 
 add_compile_options(-std=c++11)
 
-project (basic)
+project(basic)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/basic CACHE PATH "..." FORCE)
+endif()
 
 include_directories (${PROJECT_SOURCE_DIR}/../include)
 
@@ -52,5 +56,11 @@ endfunction(addTestExecutable)
 file(GLOB_RECURSE LIST_INCLUDE "${PROJECT_SOURCE_DIR}/../include/*")
 
 setSourceGroup("Header Files" "${PROJECT_SOURCE_DIR}/../include")
+
 enable_testing()
+
 addTestExecutable("Test" "test" "${PROJECT_SOURCE_DIR}/../test" "${LIST_INCLUDE}")
+
+install (DIRECTORY ${PROJECT_SOURCE_DIR}/../include/ DESTINATION basic/include/basic)
+
+set(INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/basic)

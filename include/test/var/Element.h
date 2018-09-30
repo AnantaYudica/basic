@@ -21,15 +21,12 @@ struct Element<I, test::Variable<TArg, TArgs...>>
 {
     using Type = typename Element<I - 1, 
         test::Variable<TArgs...>>::Type;
-    using type = typename Element<I - 1, 
-        test::Variable<TArgs...>>::type;
 };
 
 template<typename TArg, typename... TArgs>
 struct Element<0, test::Variable<TArg, TArgs...>>
 {
     using Type = TArg;
-    using type = TArg;
 };
 
 } //!var

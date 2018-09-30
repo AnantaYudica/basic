@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include <cassert>
 
+#include "out/Argument.h"
+#include "cstr/out/Argument.h"
+
 namespace basic
 {
 namespace test
@@ -28,11 +31,11 @@ public:
     ~Output();
 public:
     template<typename... Targs>
-    void Error(const char* format, Targs... args);
+    void Error(const char* format, Targs&&... args);
     template<typename... Targs>
-    void Info(const char* format, Targs... args);
+    void Info(const char* format, Targs&&... args);
     template<typename... Targs>
-    void Debug(const char* format, Targs... args);
+    void Debug(const char* format, Targs&&... args);
 public:
     bool Enable();
     void Enable(bool enable);
@@ -78,37 +81,40 @@ Output<Ts>::~Output()
 
 template<typename Ts>
 template<typename... Targs>
-void Output<Ts>::Error(const char* format, Targs... args)
+void Output<Ts>::Error(const char* format, Targs&&... args)
 {
     m_status.Error();
     if (m_enable)
     {
         assert(m_outputFile != NULL);
-        fprintf(m_outputFile, format, args...);
+        fprintf(m_outputFile, format, 
+            test::out::Argument<Targs>::Value(args)...);
         fflush(m_outputFile);
     }
 }
 
 template<typename Ts>
 template<typename... Targs>
-void Output<Ts>::Info(const char* format, Targs... args)
+void Output<Ts>::Info(const char* format, Targs&&... args)
 {
     if (m_enable && m_infoEnable)
     {
         assert(m_outputFile != NULL);
-        fprintf(m_outputFile, format, args...);
+        fprintf(m_outputFile, format, 
+            test::out::Argument<Targs>::Value(args)...);
         fflush(m_outputFile);
     }
 }
 
 template<typename Ts>
 template<typename... Targs>
-void Output<Ts>::Debug(const char* format, Targs... args)
+void Output<Ts>::Debug(const char* format, Targs&&... args)
 {
     if (m_enable && m_debugEnable)
     {
         assert(m_outputFile != NULL);
-        fprintf(m_outputFile, format, args...);
+        fprintf(m_outputFile, format, 
+            test::out::Argument<Targs>::Value(args)...);
         fflush(m_outputFile);
     }
 }

@@ -13,29 +13,23 @@ class Value
 {
 public:
     typedef T Type;
+    typedef Type ConstGetType;
 public:
-    static constexpr T Get();
+    constexpr Value();
 public:
-    Value();
-    T operator*() const;
+    constexpr ConstGetType Get() const;
 };
 
 template<typename T, T ValueT>
-constexpr T Value<T, ValueT>::Get()
+constexpr Value<T, ValueT>::Value()
+{}
+
+template<typename T, T ValueT>
+constexpr typename Value<T, ValueT>::ConstGetType 
+    Value<T, ValueT>::Get() const
 {
     return ValueT;
 }
-
-template<typename T, T ValueT>
-Value<T, ValueT>::Value()
-{};
-
-template<typename T, T ValueT>
-T Value<T, ValueT>::operator*() const
-{
-    return ValueT;
-}
-
 
 } //!type
 

@@ -4,18 +4,8 @@
 
 int main()
 {
-    basic::test::Variable<int, basic::test::var::Value<int>> var1(4);
-    std::cout << var1.GetValue<1>() << std::endl;
-
-    basic::test::Variable<int, basic::test::var::Value<int>> var3(6);
-    std::cout << var3.GetValue<1>() << std::endl;
-
-    var3 = var1;
-    std::cout << var3.GetValue<1>() << std::endl;
-
-    basic::test::Variable<int, basic::test::var::Value<int>,
-        basic::test::var::Value<int>, char> var4(4, 6);
-    
-    std::cout << var4.GetValue<1>() << " " <<
-        var4.GetValue<2>() << std::endl;
+    basic::test::Variable<> var1;
+    basic::test::Variable<int> var2;
+    basic::test::Variable<int, char> var3;
+    basic::test::Variable<int, char, float> var4;
 }
