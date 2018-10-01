@@ -4,13 +4,14 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseATTTa{}; // case alias type tmpl and target
@@ -21,12 +22,22 @@ struct CasePTTa{}; // case pointer tmpl and target
 struct CaseP{}; //case pointer
 struct CasePT{}; // case pointer tmpl
 
-template<typename TMO, typename TObject, typename TTarget, 
-    typename TTargetPointer, typename... TArgs>
-using VariableTestMmbrObj = basic::test::Variable<TMO, TObject,
-    basic::test::var::Value<TObject*>, TTarget,
-    basic::test::var::Value<TTargetPointer>,
+template<typename TMmbrObj, typename TObject, typename TAliasType, 
+    typename TPointer, typename... TArgs>
+using VariableTestMmbrObj = basic::test::Variable<
+    TMmbrObj, 
+    TObject,
+    basic::test::Value<TObject*>, 
+    TAliasType,
+    basic::test::Value<TPointer>,
     basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IMmbrObj = 0;
+constexpr std::size_t IObject = 1;
+constexpr std::size_t IValPtrObject = 2;
+constexpr std::size_t IAliasType = 3;
+constexpr std::size_t IValPointer = 4;
+constexpr std::size_t ITypeParameter = 5;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -35,55 +46,78 @@ template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>, 
-    ArgTypeName<3>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeName<IAliasType>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
-    ArgTypeParamName<5>, ArgTypeName<3>> ArgCaseATTTa;
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IMmbrObj>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IAliasType>> ArgCaseATTTa;
 
 typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
     ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IMmbrObj>,
+    ArgTypeName<IMmbrObj>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
 
-typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
-    ArgTypeParamName<5>, ArgTypeName<0>, ArgTypeParamName<5>> ArgCaseATT;
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IMmbrObj>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
 
 typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
     ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
 
-typedef basic::test::msg::Argument<CasePTa, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>, ArgVarValue<4>> ArgCasePTa;
+typedef basic::test::msg::Argument<CasePTa, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>, 
+    ArgTypeName<IMmbrObj>, 
+    ArgValue<IValPointer>> ArgCasePTa;
 
 typedef basic::test::msg::Base<CasePTa, char, ArgCasePTa, 
     ArgCasePTa, ArgCasePTa> MsgBaseCasePTa;
 
-typedef basic::test::msg::Argument<CasePTTa, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>, ArgTypeParamName<5>,
-    ArgVarValue<4>> ArgCasePTTa;
+typedef basic::test::msg::Argument<CasePTTa, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>,
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeParamName<ITypeParameter>,
+    ArgValue<IValPointer>> ArgCasePTTa;
 
 typedef basic::test::msg::Base<CasePTTa, char, ArgCasePTTa, 
     ArgCasePTTa, ArgCasePTTa> MsgBaseCasePTTa;
 
-typedef basic::test::msg::Argument<CaseP, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>> ArgCaseP;
+typedef basic::test::msg::Argument<CaseP, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>, 
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>, 
+    ArgTypeName<IMmbrObj>> ArgCaseP;
 
 typedef basic::test::msg::Base<CaseP, char, ArgCaseP, 
     ArgCaseP, ArgCaseP> MsgBaseCaseP;
 
-typedef basic::test::msg::Argument<CasePT, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>, ArgTypeParamName<5>, ArgTypeName<1>,
-    ArgVarValue<2>, ArgTypeName<0>, ArgTypeParamName<5>> ArgCasePT;
+typedef basic::test::msg::Argument<CasePT, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>, 
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IObject>,
+    ArgValue<IValPtrObject>, 
+    ArgTypeName<IMmbrObj>, 
+    ArgTypeParamName<ITypeParameter>> ArgCasePT;
 
 typedef basic::test::msg::Base<CasePT, char, ArgCasePT, 
     ArgCasePT, ArgCasePT> MsgBaseCasePT;
@@ -231,78 +265,84 @@ public:
 
     }
 public:
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CaseATTa&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return typeid(typename TMO::type).hash_code() ==
-            typeid(TTarget).hash_code();
+        return typeid(typename TMmbrObj::type).hash_code() ==
+            typeid(TAliasType).hash_code();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CaseATTTa&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return typeid(typename TMO::template type<TArgs...>).hash_code() ==
-            typeid(TTarget).hash_code();
+        return typeid(typename TMmbrObj::template type<TArgs...>).hash_code() ==
+            typeid(TAliasType).hash_code();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CaseAT&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return typeid(typename TMO::type).hash_code() ==
-            typeid(typename TMO::Type).hash_code();
+        return typeid(typename TMmbrObj::type).hash_code() ==
+            typeid(typename TMmbrObj::Type).hash_code();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CaseATT&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return typeid(typename TMO::template type<TArgs...>).hash_code() ==
-            typeid(typename TMO::template Type<TArgs...>).hash_code();
+        return typeid(typename TMmbrObj::template type<TArgs...>).hash_code() ==
+            typeid(typename TMmbrObj::template Type<TArgs...>).hash_code();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CasePTa&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CasePTa&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return ToVoidPtr(&(var.template GetValue<2>()->*TMO::pointer())) == 
-            var.template GetValue<4>();
+        return ToVoidPtr(&(basic::test::var::At<
+            IValPtrObject>(var).Get().Get()->*TMmbrObj::pointer())) == 
+                basic::test::var::At<IValPointer>(var).Get().Get();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CasePTTa&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CasePTTa&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return ToVoidPtr(&(var.template GetValue<2>()->*TMO::
-            template pointer<TArgs...>())) == var.template GetValue<2>();
+        return ToVoidPtr(&(basic::test::var::At<
+            IValPtrObject>(var).Get().Get()->*TMmbrObj::template pointer<
+                TArgs...>())) == basic::test::var::At<
+                    IValPtrObject>(var).Get().Get();
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CaseP&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CaseP&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return ToVoidPtr(&(var.template GetValue<2>()->*TMO::pointer())) == 
-            ToVoidPtr(&(var.template GetValue<2>()->*TMO::Pointer()));
+        return ToVoidPtr(&(basic::test::var::At<
+            IValPtrObject>(var).Get().Get()->*TMmbrObj::pointer())) == 
+            ToVoidPtr(&(basic::test::var::At<IValPtrObject>(var).Get().Get()->*
+                TMmbrObj::Pointer()));
     }
 
-    template<typename TMO, typename TObject, typename TTarget, 
-        typename TTargetPointer, typename... TArgs>
-    bool Result(const CasePT&, VariableTestMmbrObj<TMO, TObject, 
-        TTarget, TTargetPointer, TArgs...>& var)
+    template<typename TMmbrObj, typename TObject, typename TAliasType, 
+        typename TPointer, typename... TArgs>
+    bool Result(const CasePT&, VariableTestMmbrObj<TMmbrObj, TObject, 
+        TAliasType, TPointer, TArgs...>& var)
     {
-        return ToVoidPtr(&(var.template GetValue<2>()->*TMO::
-            template pointer<TArgs...>())) == 
-            ToVoidPtr(&(var.template GetValue<2>()->*TMO::
-                template Pointer<TArgs...>()));
+        return ToVoidPtr(&(basic::test::var::At<
+            IValPtrObject>(var).Get().Get()->*TMmbrObj::template pointer<
+                TArgs...>())) == ToVoidPtr(&(basic::test::var::At<
+                    IValPtrObject>(var).Get().Get()->*TMmbrObj::
+                    template Pointer<TArgs...>()));
     }
 };
 

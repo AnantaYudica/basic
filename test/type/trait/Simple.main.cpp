@@ -4,38 +4,39 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseAT {}; // case alias type
 
-template<typename TSimple, typename TTargetAlias>
-using VariableTestSimple = basic::test::Variable<TSimple, 
-    TTargetAlias>;
+template<typename TSimple, typename TAliasType>
+using VariableTestSimple = basic::test::Variable<
+    TSimple, 
+    TAliasType>;
+
+constexpr std::size_t ISimple = 0;
+constexpr std::size_t IAliasType = 1;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
-template<std::size_t I>
-using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
-
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
-
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa,
+    ArgTypeName<ISimple>,
+    ArgTypeName<IAliasType>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<ISimple>,
+    ArgTypeName<ISimple>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
@@ -92,17 +93,17 @@ public:
             "error %s::type is not same with %s::Type\n");
     }
 
-    template<typename TSimple, typename TTargetAlias>
+    template<typename TSimple, typename TAliasType>
     bool Result(const CaseATTa&, VariableTestSimple<TSimple, 
-        TTargetAlias>& var)
+        TAliasType>& var)
     {
         return std::is_same<typename TSimple::type,
-            TTargetAlias>::value; 
+            TAliasType>::value; 
     }
 
-    template<typename TSimple, typename TTargetAlias>
+    template<typename TSimple, typename TAliasType>
     bool Result(const CaseAT&, VariableTestSimple<TSimple, 
-        TTargetAlias>& var)
+        TAliasType>& var)
     {
         return std::is_same<typename TSimple::type,
             typename TSimple::Type>::value; 

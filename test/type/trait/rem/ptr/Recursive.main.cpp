@@ -4,38 +4,39 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseAT {}; // case alias type
 
-template<typename TRecursive, typename TTargetAlias>
-using VariableTestRecursive = basic::test::Variable<TRecursive, 
-    TTargetAlias>;
+template<typename TRecursive, typename TAliasType>
+using VariableTestRecursive = basic::test::Variable<
+    TRecursive, 
+    TAliasType>;
+
+constexpr std::size_t IRecursive = 0;
+constexpr std::size_t IAliasType = 1;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
-template<std::size_t I>
-using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
-
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
-
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IRecursive>,
+    ArgTypeName<IAliasType>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IRecursive>,
+    ArgTypeName<IRecursive>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
@@ -92,17 +93,17 @@ public:
             "error %s::type is not same with %s::Type\n");
     }
 
-    template<typename TRecursive, typename TTargetAlias>
+    template<typename TRecursive, typename TAliasType>
     bool Result(const CaseATTa&, VariableTestRecursive<TRecursive, 
-        TTargetAlias>& var)
+        TAliasType>& var)
     {
         return std::is_same<typename TRecursive::type,
-            TTargetAlias>::value; 
+            TAliasType>::value; 
     }
 
-    template<typename TRecursive, typename TTargetAlias>
+    template<typename TRecursive, typename TAliasType>
     bool Result(const CaseAT&, VariableTestRecursive<TRecursive, 
-        TTargetAlias>& var)
+        TAliasType>& var)
     {
         return std::is_same<typename TRecursive::type,
             typename TRecursive::Type>::value; 

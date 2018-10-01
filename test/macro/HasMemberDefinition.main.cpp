@@ -4,11 +4,13 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
 
 struct CaseAVTTa {}; // case alias value type and target
@@ -16,40 +18,58 @@ struct CaseAVT {}; // case alias value type
 struct CaseVTa {}; // case value and target
 struct CaseV {}; // case value
 
-template<typename THasMmbrDefn, typename TAVT, TAVT TAVTValue>
-using VariableTestHasMmbrDefn = basic::test::Variable<THasMmbrDefn,
-    TAVT,  basic::test::type::Value<TAVT, TAVTValue>,
-    basic::test::var::Value<const char*>>;
+template<typename THasMmbrDefn, typename TAliasVal, TAliasVal AliasValue>
+using VariableTestHasMmbrDefn = basic::test::Variable<
+    THasMmbrDefn,
+    TAliasVal,  
+    basic::test::type::Value<TAliasVal, AliasValue>,
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IHasMmbrDefn = 0;
+constexpr std::size_t IAliasVal = 1;
+constexpr std::size_t ITypeValAliasValue = 2;
+constexpr std::size_t IValFuncBoolToCString = 3;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
+
+template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseAVTTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseAVTTa;
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
+
+typedef basic::test::msg::Argument<CaseAVTTa, 
+    ArgTypeName<IHasMmbrDefn>,
+    ArgTypeName<IAliasVal>> ArgCaseAVTTa;
 
 typedef basic::test::msg::Base<CaseAVTTa, char, ArgCaseAVTTa, 
     ArgCaseAVTTa, ArgCaseAVTTa> MsgBaseCaseAVTTa;
 
-typedef basic::test::msg::Argument<CaseAVT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAVT;
+typedef basic::test::msg::Argument<CaseAVT, 
+    ArgTypeName<IHasMmbrDefn>,
+    ArgTypeName<IHasMmbrDefn>> ArgCaseAVT;
 
 typedef basic::test::msg::Base<CaseAVT, char, ArgCaseAVT, 
     ArgCaseAVT, ArgCaseAVT> MsgBaseCaseAVT;
 
-typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
-    ArgVarValue<3>> ArgCaseVTa;
+typedef basic::test::msg::Argument<CaseVTa, 
+    ArgTypeName<IHasMmbrDefn>,
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValAliasValue>>> ArgCaseVTa;
 
 typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
     ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
 
-typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseV;
+typedef basic::test::msg::Argument<CaseV,
+    ArgTypeName<IHasMmbrDefn>,
+    ArgTypeName<IHasMmbrDefn>> ArgCaseV;
 
 typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
     ArgCaseV, ArgCaseV> MsgBaseCaseV;
@@ -138,32 +158,32 @@ public:
             "%s::Value\n");
     }
 
-    template<typename THasMmbrDefn, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrDefn, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVTTa&, VariableTestHasMmbrDefn<THasMmbrDefn, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasMmbrDefn::value_type).hash_code() ==
-            typeid(TAVT).hash_code();
+            typeid(TAliasVal).hash_code();
     }
 
-    template<typename THasMmbrDefn, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrDefn, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVT&, VariableTestHasMmbrDefn<THasMmbrDefn, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasMmbrDefn::value_type).hash_code() ==
             typeid(typename THasMmbrDefn::ValueType).hash_code();
     }
 
-    template<typename THasMmbrDefn, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrDefn, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseVTa&, VariableTestHasMmbrDefn<THasMmbrDefn, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
-        return TAVTValue == THasMmbrDefn::value;
+        return AliasValue == THasMmbrDefn::value;
     }
     
-    template<typename THasMmbrDefn, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrDefn, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseV&, VariableTestHasMmbrDefn<THasMmbrDefn, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return THasMmbrDefn::value == THasMmbrDefn::Value;
     }
@@ -207,6 +227,12 @@ BASIC_TEST_TYPE_NAME("B", B);
 const char* true_cstr = "true";
 const char* false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
+
 /**
  *  template<typename T>
  *  constexpr auto _HasMmbrDefn1(int) -> 
@@ -237,8 +263,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrDefn1<B>", HasMmbrDefn1<B>);
 typedef VariableTestHasMmbrDefn<THasMmbrDefn1<A>, bool, true> T1Var1;
 typedef VariableTestHasMmbrDefn<THasMmbrDefn1<B>, bool, false> T1Var2;
 
-T1Var1 t1_var1(true_cstr);
-T1Var2 t1_var2(false_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
 
 REGISTER_TEST(t1, new TestHasMmbrDefn<Cases, T1Var1, 
     T1Var2>(t1_var1, t1_var2));
@@ -277,8 +303,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrDefn2<B, void>", HasMmbrDefn2<B, void>);
 typedef VariableTestHasMmbrDefn<THasMmbrDefn2<A>, bool, true> T2Var1;
 typedef VariableTestHasMmbrDefn<THasMmbrDefn2<B>, bool, false> T2Var2;
 
-T2Var1 t2_var1(true_cstr);
-T2Var2 t2_var2(false_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
 
 REGISTER_TEST(t2, new TestHasMmbrDefn<Cases, T2Var1, 
     T2Var2>(t2_var1, t2_var2));
@@ -324,8 +350,8 @@ typedef VariableTestHasMmbrDefn<THasMmbrDefn3<std::true_type>,
 typedef VariableTestHasMmbrDefn<THasMmbrDefn3<std::false_type>,
     bool, false> T3Var2;
 
-T3Var1 t3_var1(true_cstr);
-T3Var2 t3_var2(false_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
 
 REGISTER_TEST(t3, new TestHasMmbrDefn<Cases, T3Var1,
     T3Var2>(t3_var1, t3_var2));
@@ -364,8 +390,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrDefn4<B>", HasMmbrDefn4<B>);
 typedef VariableTestHasMmbrDefn<THasMmbrDefn4<A>, bool, true> T4Var1;
 typedef VariableTestHasMmbrDefn<THasMmbrDefn4<B>, bool, false> T4Var2;
 
-T4Var1 t4_var1(true_cstr);
-T4Var2 t4_var2(false_cstr);
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
 
 REGISTER_TEST(t4, new TestHasMmbrDefn<Cases, T4Var1, 
     T4Var2>(t4_var1, t4_var2));
@@ -413,8 +439,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrDefn5<B>", HasMmbrDefn5<B>);
 typedef VariableTestHasMmbrDefn<THasMmbrDefn5<A>, bool, true> T5Var1;
 typedef VariableTestHasMmbrDefn<THasMmbrDefn5<B>, bool, false> T5Var2;
 
-T5Var1 t5_var1(true_cstr);
-T5Var2 t5_var2(false_cstr);
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
 
 REGISTER_TEST(t5, new TestHasMmbrDefn<Cases, T5Var1,
     T5Var2>(t5_var1, t5_var2));
@@ -470,8 +496,8 @@ typedef VariableTestHasMmbrDefn<THasMmbrDefn6<std::true_type>,
 typedef VariableTestHasMmbrDefn<THasMmbrDefn6<std::false_type>, 
     bool, false> T6Var2;
 
-T6Var1 t6_var1(true_cstr);
-T6Var2 t6_var2(false_cstr);
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
 
 REGISTER_TEST(t6, new TestHasMmbrDefn<Cases, T6Var1, 
     T6Var2>(t6_var1, t6_var2));
@@ -515,8 +541,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrDefn7<B, void>", HasMmbrDefn7<B, void>);
 typedef VariableTestHasMmbrDefn<THasMmbrDefn7<D>, bool, true> T7Var1;
 typedef VariableTestHasMmbrDefn<THasMmbrDefn7<B>, bool, false> T7Var2;
 
-T7Var1 t7_var1(true_cstr);
-T7Var2 t7_var2(false_cstr);
+T7Var1 t7_var1(&BoolToString);
+T7Var2 t7_var2(&BoolToString);
 
 REGISTER_TEST(t7, new TestHasMmbrDefn<Cases, T7Var1, 
     T7Var2>(t7_var1, t7_var2));

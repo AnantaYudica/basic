@@ -4,24 +4,32 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <typeinfo>
 #include <type_traits>
-#include <string>
-#include <vector>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseAT {}; // case alias type;
 struct CaseATTTa {}; // case alias type tmpl and target
 struct CaseATT {}; // case alias type tmpl
 
-template<typename TC, typename TTa, 
-    typename... Targs>
-using VariableTestConditional = basic::test::Variable<TC, TTa,
-    basic::test::type::Parameter<Targs...>>;
+template<typename TConditional, typename TAliasTarget, 
+    typename... TArgs>
+using VariableTestConditional = basic::test::Variable<
+    TConditional, 
+    TAliasTarget,
+    basic::test::type::Parameter<TArgs...>>;
+
+    
+constexpr std::size_t IConditional = 0;
+constexpr std::size_t IAliasTarget = 1;
+constexpr std::size_t ITypeParameter = 2;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -30,28 +38,35 @@ template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IConditional>,
+    ArgTypeName<IAliasTarget>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IConditional>,
+    ArgTypeName<IAliasTarget>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
 
-typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
-    ArgTypeParamName<2>, ArgTypeName<1>> ArgCaseATTTa;
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IConditional>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IAliasTarget>> ArgCaseATTTa;
 
 typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
     ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
 
-typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
-    ArgTypeParamName<2>, ArgTypeName<0>, ArgTypeParamName<2>> ArgCaseATT;
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IConditional>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IConditional>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
 
 typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
     ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
@@ -136,36 +151,37 @@ public:
             "%s::template Type<%s>\n");
     }
 
-    template<typename Tc, typename TTa, typename... Targs>
-    bool Result(const CaseATTa&, VariableTestConditional<Tc, 
-        TTa, Targs...>& var)
+    template<typename TConditional, typename TAliasTarget, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestConditional<TConditional, 
+        TAliasTarget, TArgs...>& var)
     {
-        return typeid(typename Tc::type).hash_code() ==
-            typeid(TTa).hash_code();
+        return typeid(typename TConditional::type).hash_code() ==
+            typeid(TAliasTarget).hash_code();
     }
 
-    template<typename Tc, typename TTa, typename... Targs>
-    bool Result(const CaseAT&, VariableTestConditional<Tc, 
-        TTa, Targs...>& var)
+    template<typename TConditional, typename TAliasTarget, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestConditional<TConditional, 
+        TAliasTarget, TArgs...>& var)
     {
-        return typeid(typename Tc::type).hash_code() ==
-            typeid(typename Tc::Type).hash_code();
+        return typeid(typename TConditional::type).hash_code() ==
+            typeid(typename TConditional::Type).hash_code();
     }
 
-    template<typename Tc, typename TTa, typename... Targs>
-    bool Result(const CaseATTTa&, VariableTestConditional<Tc, 
-        TTa, Targs...>& var)
+    template<typename TConditional, typename TAliasTarget, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestConditional<TConditional, 
+        TAliasTarget, TArgs...>& var)
     {
-        return typeid(typename Tc::template type<Targs...>).hash_code() ==
-            typeid(TTa).hash_code();
+        return typeid(typename TConditional::template type<
+            TArgs...>).hash_code() == typeid(TAliasTarget).hash_code();
     }
 
-    template<typename Tc, typename TTa, typename... Targs>
-    bool Result(const CaseATT&, VariableTestConditional<Tc, 
-        TTa, Targs...>& var)
+    template<typename TConditional, typename TAliasTarget, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestConditional<TConditional, 
+        TAliasTarget, TArgs...>& var)
     {
-        return typeid(typename Tc::template type<Targs...>).hash_code() ==
-            typeid(typename Tc::template Type<Targs...>).hash_code();
+        return typeid(typename TConditional::template type<
+            TArgs...>).hash_code() == typeid(typename TConditional::
+                template Type<TArgs...>).hash_code();
     }
 };
 

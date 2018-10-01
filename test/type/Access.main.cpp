@@ -4,42 +4,56 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
 struct CaseHMFFoo1 {}; // case has member function Foo1
 struct CaseHSMFFoo2 {}; // case has static member function Foo2
 
-template<typename TDerived, typename TBase, bool HasMmbrFuncFoo1, 
+template<typename TDerivedAccess, typename TBaseAccess, bool HasMmbrFuncFoo1, 
     bool HasStaticMmbrFuncFoo2>
-using VariableTestAccess = basic::test::Variable<TDerived, TBase,
+using VariableTestAccess = basic::test::Variable<
+    TDerivedAccess, 
+    TBaseAccess,
     basic::test::type::Value<bool, HasMmbrFuncFoo1>,
     basic::test::type::Value<bool, HasStaticMmbrFuncFoo2>,
-    basic::test::var::Value<const char*>,
-    basic::test::var::Value<const char*>>;
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IDerivedAccess = 0;
+constexpr std::size_t IBaseAccess = 1;
+constexpr std::size_t ITypeValHasMmbrFuncFoo1 = 2;
+constexpr std::size_t ITypeHasStaticMmbrFuncFoo2 = 3;
+constexpr std::size_t IValFuncBoolToCString = 4;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
-using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
 
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
 
-typedef basic::test::msg::Argument<CaseHMFFoo1, ArgTypeName<0>,
-    ArgTypeName<1>, ArgVarValue<4>> ArgCaseHMFFoo1;
+typedef basic::test::msg::Argument<CaseHMFFoo1, 
+    ArgTypeName<IDerivedAccess>,
+    ArgTypeName<IBaseAccess>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValHasMmbrFuncFoo1>>> ArgCaseHMFFoo1;
 
 typedef basic::test::msg::Base<CaseHMFFoo1, char, ArgCaseHMFFoo1, 
     ArgCaseHMFFoo1, ArgCaseHMFFoo1> MsgBaseCaseHMFFoo1;
 
-typedef basic::test::msg::Argument<CaseHSMFFoo2, ArgTypeName<0>,
-    ArgTypeName<0>, ArgVarValue<5>> ArgCaseHSMFFoo2;
+typedef basic::test::msg::Argument<CaseHSMFFoo2, 
+    ArgTypeName<IDerivedAccess>,
+    ArgTypeName<IDerivedAccess>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeHasStaticMmbrFuncFoo2>>> ArgCaseHSMFFoo2;
 
 typedef basic::test::msg::Base<CaseHSMFFoo2, char, ArgCaseHSMFFoo2, 
     ArgCaseHSMFFoo2, ArgCaseHSMFFoo2> MsgBaseCaseHSMFFoo2;
@@ -121,22 +135,22 @@ public:
             "value is not same with %s\n");
     }
 
-    template<typename TDerived, typename TBase, bool HasMmbrFuncFoo1, 
-        bool HasStaticMmbrFuncFoo2>
-    bool Result(const CaseHMFFoo1&, VariableTestAccess<TDerived, TBase,
-        HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
+    template<typename TDerivedAccess, typename TBaseAccess, 
+        bool HasMmbrFuncFoo1, bool HasStaticMmbrFuncFoo2>
+    bool Result(const CaseHMFFoo1&, VariableTestAccess<TDerivedAccess, 
+        TBaseAccess, HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
     {
-        return decltype(TDerived::template HasMemberFunctionFoo1<
-            TBase>(0))::value == HasMmbrFuncFoo1; 
+        return decltype(TDerivedAccess::template HasMemberFunctionFoo1<
+            TBaseAccess>(0))::value == HasMmbrFuncFoo1; 
     }
 
-    template<typename TDerived, typename TBase, bool HasMmbrFuncFoo1, 
-        bool HasStaticMmbrFuncFoo2>
-    bool Result(const CaseHSMFFoo2&, VariableTestAccess<TDerived, TBase,
-        HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
+    template<typename TDerivedAccess, typename TBaseAccess, 
+        bool HasMmbrFuncFoo1, bool HasStaticMmbrFuncFoo2>
+    bool Result(const CaseHSMFFoo2&, VariableTestAccess<TDerivedAccess, 
+        TBaseAccess, HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
     {
-        return decltype(TDerived::template HasStaticMemberFunctionFoo2<
-            TBase>(0))::value == HasStaticMmbrFuncFoo2; 
+        return decltype(TDerivedAccess::template HasStaticMemberFunctionFoo2<
+            TBaseAccess>(0))::value == HasStaticMmbrFuncFoo2; 
     }
 };
 
@@ -147,8 +161,13 @@ BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
 BASIC_TEST_TYPE_NAME("void", void);
 BASIC_TEST_TYPE_NAME("bool", bool);
 
-char true_cstr[] = "true";
-char false_cstr[] = "false";
+const char * true_cstr = "true";
+const char * false_cstr = "false";
+
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
 
 struct AccessPublic
 {
@@ -460,15 +479,15 @@ typedef VariableTestAccess<TVoid1<AccessProtected>,
 typedef VariableTestAccess<TVoid1<AccessPrivate>, 
     B1False<AccessPrivate>, false, false> T1Var9;
 
-T1Var1 t1_var1(true_cstr, true_cstr);
-T1Var2 t1_var2(false_cstr, false_cstr);
-T1Var3 t1_var3(false_cstr, false_cstr);
-T1Var4 t1_var4(true_cstr, true_cstr);
-T1Var5 t1_var5(false_cstr, false_cstr);
-T1Var6 t1_var6(false_cstr, false_cstr);
-T1Var7 t1_var7(false_cstr, false_cstr);
-T1Var8 t1_var8(false_cstr, false_cstr);
-T1Var9 t1_var9(false_cstr, false_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
+T1Var3 t1_var3(&BoolToString);
+T1Var4 t1_var4(&BoolToString);
+T1Var5 t1_var5(&BoolToString);
+T1Var6 t1_var6(&BoolToString);
+T1Var7 t1_var7(&BoolToString);
+T1Var8 t1_var8(&BoolToString);
+T1Var9 t1_var9(&BoolToString);
 
 REGISTER_TEST(t1, new TestAccess<Cases, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9>(t1_var1, t1_var2, t1_var3,
@@ -488,9 +507,9 @@ typedef VariableTestAccess<TDerivedA1<AccessProtected>,
 typedef VariableTestAccess<TDerivedA1<AccessPrivate>, 
     TDerivedA1<AccessPrivate>, false, false> T2Var3;
 
-T2Var1 t2_var1(true_cstr, true_cstr);
-T2Var2 t2_var2(true_cstr, true_cstr);
-T2Var3 t2_var3(false_cstr, false_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
+T2Var3 t2_var3(&BoolToString);
 
 REGISTER_TEST(t2, new TestAccess<Cases, T2Var1, T2Var2, T2Var3>(t2_var1, 
     t2_var2, t2_var3));
@@ -509,9 +528,9 @@ typedef VariableTestAccess<DerivedB1True_t<AccessProtected>,
 typedef VariableTestAccess<DerivedB1True_t<AccessPrivate>, 
     DerivedB1True_t<AccessPrivate>, false, false> T3Var3;
 
-T3Var1 t3_var1(true_cstr, true_cstr);
-T3Var2 t3_var2(true_cstr, true_cstr);
-T3Var3 t3_var3(false_cstr, false_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
+T3Var3 t3_var3(&BoolToString);
 
 REGISTER_TEST(t3, new TestAccess<Cases, T3Var1, T3Var2, T3Var3>(t3_var1, 
     t3_var2, t3_var3));
@@ -530,9 +549,9 @@ typedef VariableTestAccess<DerivedB1False_t<AccessProtected>,
 typedef VariableTestAccess<DerivedB1False_t<AccessPrivate>, 
     DerivedB1False_t<AccessPrivate>, false, false> T4Var3;
 
-T4Var1 t4_var1(false_cstr, false_cstr);
-T4Var2 t4_var2(false_cstr, false_cstr);
-T4Var3 t4_var3(false_cstr, false_cstr);
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
+T4Var3 t4_var3(&BoolToString);
 
 REGISTER_TEST(t4, new TestAccess<Cases, T4Var1, T4Var2, T4Var3>(t4_var1, 
     t4_var2, t4_var3));
@@ -552,9 +571,9 @@ typedef VariableTestAccess<TDerivedFriendA1<AccessProtected>,
 typedef VariableTestAccess<TDerivedFriendA1<AccessPrivate>, 
     TDerivedFriendA1<AccessPrivate>, true, true> T5Var3;
 
-T5Var1 t5_var1(true_cstr, true_cstr);
-T5Var2 t5_var2(true_cstr, true_cstr);
-T5Var3 t5_var3(true_cstr, true_cstr);
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
+T5Var3 t5_var3(&BoolToString);
 
 REGISTER_TEST(t5, new TestAccess<Cases, T5Var1, T5Var2, T5Var3>(t5_var1, 
     t5_var2, t5_var3));
@@ -574,9 +593,9 @@ typedef VariableTestAccess<DerivedFriendB1True_t<AccessProtected>,
 typedef VariableTestAccess<DerivedFriendB1True_t<AccessPrivate>, 
     DerivedFriendB1True_t<AccessPrivate>, true, true> T6Var3;
 
-T6Var1 t6_var1(true_cstr, true_cstr);
-T6Var2 t6_var2(true_cstr, true_cstr);
-T6Var3 t6_var3(true_cstr, true_cstr);
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
+T6Var3 t6_var3(&BoolToString);
 
 REGISTER_TEST(t6, new TestAccess<Cases, T6Var1, T6Var2, T6Var3>(t6_var1, 
     t6_var2, t6_var3));
@@ -596,9 +615,9 @@ typedef VariableTestAccess<DerivedFriendB1False_t<AccessProtected>,
 typedef VariableTestAccess<DerivedFriendB1False_t<AccessPrivate>, 
     DerivedFriendB1False_t<AccessPrivate>, false, false> T7Var3;
 
-T7Var1 t7_var1(false_cstr, false_cstr);
-T7Var2 t7_var2(false_cstr, false_cstr);
-T7Var3 t7_var3(false_cstr, false_cstr);
+T7Var1 t7_var1(&BoolToString);
+T7Var2 t7_var2(&BoolToString);
+T7Var3 t7_var3(&BoolToString);
 
 REGISTER_TEST(t7, new TestAccess<Cases, T7Var1, T7Var2, T7Var3>(t7_var1, 
     t7_var2, t7_var3));

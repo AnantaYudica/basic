@@ -4,14 +4,15 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <type_traits>
-#include <vector>
 #include <typeinfo>
-#include <string>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseATTTa {}; // case alias type tmpl and target
@@ -20,10 +21,20 @@ struct CaseNATT {}; // case no alias type tmpl
 struct CaseAT {}; // case alias type
 struct CaseATT {}; // case alias type tmpl
 
-template<typename TEITrue, typename TTrue, 
-    typename TEIFalse, typename TFalse, typename... Targs>
-using VariableTestEnableIf = basic::test::Variable<TEITrue, TTrue,
-    TEIFalse, TFalse, basic::test::type::Parameter<Targs...>>;
+template<typename TEnableIfTrue, typename TTrue, 
+    typename TEnableIfFalse, typename TFalse, typename... TArgs>
+using VariableTestEnableIf = basic::test::Variable<
+    TEnableIfTrue, 
+    TTrue,
+    TEnableIfFalse, 
+    TFalse, 
+    basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IEnableIfTrue = 0;
+constexpr std::size_t ITrue = 1;
+constexpr std::size_t IEnableIfFalse = 2;
+constexpr std::size_t IFalse = 3;
+constexpr std::size_t ITypeParameter = 4;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -32,76 +43,85 @@ template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<ITrue>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
-    ArgTypeName<1>, ArgTypeParamName<4>> ArgCaseATTTa;
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<ITrue>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATTTa;
 
 typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
     ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
 
-typedef basic::test::msg::Argument<CaseNAT, ArgTypeName<2>> ArgCaseNAT;
+typedef basic::test::msg::Argument<CaseNAT, 
+    ArgTypeName<IEnableIfFalse>> ArgCaseNAT;
 
 typedef basic::test::msg::Base<CaseNAT, char, ArgCaseNAT, 
     ArgCaseNAT, ArgCaseNAT> MsgBaseCaseNAT;
 
-typedef basic::test::msg::Argument<CaseNATT, ArgTypeName<2>> ArgCaseNATT;
+typedef basic::test::msg::Argument<CaseNATT, 
+    ArgTypeName<IEnableIfFalse>> ArgCaseNATT;
 
 typedef basic::test::msg::Base<CaseNATT, char, ArgCaseNATT, 
     ArgCaseNATT, ArgCaseNATT> MsgBaseCaseNATT;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<IEnableIfTrue>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
 
-typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
-    ArgTypeParamName<4>, ArgTypeName<0>, ArgTypeParamName<4>> ArgCaseATT;
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IEnableIfTrue>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
 
 typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
     ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
 
-template<template<bool, typename> class TTEI, typename TFalse, 
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
     bool BoolTest, typename TTrue>
-static auto GetTypeAlias1(const TTEI<BoolTest, TTrue>&) ->
-    decltype(std::declval<typename TTEI<BoolTest, TTrue>::type>());
-template<template<bool, typename> class TTEI, typename TFalse>
+static auto GetTypeAlias1(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::type>());
+template<template<bool, typename> class TTEnableIf, typename TFalse>
 static TFalse GetTypeAlias1(...);
 
-template<template<bool, typename> class TTEI, typename TFalse, 
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
     bool BoolTest, typename TTrue>
-static auto GetTypeAlias2(const TTEI<BoolTest, TTrue>&) ->
-    decltype(std::declval<typename TTEI<BoolTest, TTrue>::Type>());
-template<template<bool, typename> class TTEI, typename TFalse>
+static auto GetTypeAlias2(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::Type>());
+template<template<bool, typename> class TTEnableIf, typename TFalse>
 static TFalse GetTypeAlias2(...);
 
-template<template<bool, typename> class TTEI, typename TFalse, 
-    typename... Targs, bool BoolTest, typename TTrue>
-static auto GetTypeAliasTmpl1(const TTEI<BoolTest, TTrue>&) ->
-    decltype(std::declval<typename TTEI<BoolTest, TTrue>::
-        template type<Targs...>>());
-template<template<bool, typename> class TTEI, typename TFalse, 
-    typename... Targs>
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs, bool BoolTest, typename TTrue>
+static auto GetTypeAliasTmpl1(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::
+        template type<TArgs...>>());
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs>
 static TFalse GetTypeAliasTmpl1(...);
 
-template<template<bool, typename> class TTEI, typename TFalse, 
-    typename... Targs, bool BoolTest, typename TTrue>
-static auto GetTypeAliasTmpl2(const TTEI<BoolTest, TTrue>&) ->
-    decltype(std::declval<typename TTEI<BoolTest, TTrue>::
-        template Type<Targs...>>());
-template<template<bool, typename> class TTEI, typename TFalse, 
-    typename... Targs>
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs, bool BoolTest, typename TTrue>
+static auto GetTypeAliasTmpl2(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::
+        template Type<TArgs...>>());
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs>
 static TFalse GetTypeAliasTmpl2(...);
 
 
-template<template <bool, typename> class TTEI, typename TCases, 
+template<template <bool, typename> class TTEnableIf, typename TCases, 
     typename... TVars>
 class TestEnableIf :
     public MsgBaseCaseATTa, 
@@ -110,17 +130,19 @@ class TestEnableIf :
     public MsgBaseCaseNATT,
     public MsgBaseCaseAT,
     public MsgBaseCaseATT,
-    public basic::test::Message<BASIC_TEST, TestEnableIf<TTEI, TCases, 
-        TVars...>>,
-    public basic::test::Case<TestEnableIf<TTEI, TCases, TVars...>, TCases>,
-    public basic::test::Base<TestEnableIf<TTEI, TCases, TVars...>, TVars...>
+    public basic::test::Message<BASIC_TEST, TestEnableIf<TTEnableIf, 
+        TCases, TVars...>>,
+    public basic::test::Case<TestEnableIf<TTEnableIf, 
+        TCases, TVars...>, TCases>,
+    public basic::test::Base<TestEnableIf<TTEnableIf, 
+        TCases, TVars...>, TVars...>
 {
 public:
-    typedef basic::test::Base<TestEnableIf<TTEI, TCases, TVars...>, 
+    typedef basic::test::Base<TestEnableIf<TTEnableIf, TCases, TVars...>, 
         TVars...> BaseType; 
-    typedef basic::test::Message<BASIC_TEST, TestEnableIf<TTEI, TCases, 
-        TVars...>> BaseMessageType;
-    typedef basic::test::Case<TestEnableIf<TTEI, TCases, TVars...>, 
+    typedef basic::test::Message<BASIC_TEST, TestEnableIf<TTEnableIf, 
+        TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestEnableIf<TTEnableIf, TCases, TVars...>, 
         TCases> BaseCaseType;
 protected:
     using MsgBaseCaseATTa::SetFormat;
@@ -207,63 +229,66 @@ public:
             "%s::template Type<%s>\n");
     }
 
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseATTa&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
     {
-        return typeid(decltype(GetTypeAlias1<TTEI, TFalse>(std::declval<
-            TEITrue>()))).hash_code() == typeid(TTrue).hash_code();
-    }
-
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseATTTa&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
-    {
-        return typeid(decltype(GetTypeAliasTmpl1<TTEI, TFalse, 
-            Targs...>(std::declval<TEITrue>()))).hash_code() == 
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfTrue>()))).hash_code() == 
             typeid(TTrue).hash_code();
     }
-    
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseNAT&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
+
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
     {
-        return typeid(decltype(GetTypeAlias1<TTEI, TFalse>(std::declval<
-            TEIFalse>()))).hash_code() == typeid(TFalse).hash_code();
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(TTrue).hash_code();
     }
-    
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseNATT&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
+   
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseNAT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
     {
-        return typeid(decltype(GetTypeAliasTmpl1<TTEI, TFalse, 
-            Targs...>(std::declval<TEIFalse>()))).hash_code() == 
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfFalse>()))).hash_code() == 
             typeid(TFalse).hash_code();
     }
     
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseAT&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseNATT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
     {
-        return typeid(decltype(GetTypeAlias1<TTEI, TFalse>(std::declval<
-            TEITrue>()))).hash_code() == typeid(decltype(GetTypeAlias2<TTEI, 
-            TFalse>(std::declval<TEITrue>()))).hash_code();
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfFalse>()))).hash_code() == 
+            typeid(TFalse).hash_code();
     }
     
-    template<typename TEITrue, typename TTrue, 
-        typename TEIFalse, typename TFalse, typename... Targs>
-    bool Result(const CaseATT&, VariableTestEnableIf<TEITrue, TTrue,
-        TEIFalse, TFalse, Targs...>& var)
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
     {
-        return typeid(decltype(GetTypeAliasTmpl1<TTEI, TFalse, 
-            Targs...>(std::declval<TEITrue>()))).hash_code() == 
-            typeid(decltype(GetTypeAliasTmpl2<TTEI, TFalse, 
-            Targs...>(std::declval<TEITrue>()))).hash_code();
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(decltype(GetTypeAlias2<TTEnableIf, TFalse>(std::declval<
+                TEnableIfTrue>()))).hash_code();
+    }
+    
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(decltype(GetTypeAliasTmpl2<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code();
     }
 };
 

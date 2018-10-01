@@ -4,18 +4,24 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
 struct CaseTSTa {}; // case ToString and target
 
 template<template<typename> class TTName, typename T>
-using VariableTestName = basic::test::Variable<TTName<T>, T>;
+using VariableTestName = basic::test::Variable<
+    TTName<T>, 
+    T>;
+
+constexpr std::size_t ITName = 0;
+constexpr std::size_t IT = 1;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -23,11 +29,9 @@ using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
-
-typedef basic::test::msg::Argument<CaseTSTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseTSTa;
+typedef basic::test::msg::Argument<CaseTSTa, 
+    ArgTypeName<ITName>,
+    ArgTypeName<IT>> ArgCaseTSTa;
 
 typedef basic::test::msg::Base<CaseTSTa, char, ArgCaseTSTa, 
     ArgCaseTSTa, ArgCaseTSTa> MsgBaseCaseTSTa;

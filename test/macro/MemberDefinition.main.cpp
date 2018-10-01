@@ -4,11 +4,13 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
 
 struct CaseATTa {}; // case alias type and target
@@ -16,9 +18,15 @@ struct CaseATTTa{}; // case alias type tmpl and target
 struct CaseAT{}; // case alias type
 struct CaseATT{}; // case alias type tmpl
 
-template<typename TMD, typename TTarget, typename... TArgs>
-using VariableTestMmbrDefn = basic::test::Variable<TMD, TTarget,
+template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+using VariableTestMmbrDefn = basic::test::Variable<
+    TMmbrDefn, 
+    TAliasType,
     basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IMmbrDefn = 0;
+constexpr std::size_t IAliasType = 1;
+constexpr std::size_t ITypeParameter = 2;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -26,33 +34,36 @@ using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
-
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>, 
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IMmbrDefn>, 
+    ArgTypeName<IAliasType>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseATTTa, ArgTypeName<0>,
-    ArgTypeParamName<2>, ArgTypeName<1>> ArgCaseATTTa;
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IAliasType>> ArgCaseATTTa;
 
 typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
     ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeName<IMmbrDefn>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
 
-typedef basic::test::msg::Argument<CaseATT, ArgTypeName<0>,
-    ArgTypeParamName<2>, ArgTypeName<0>, ArgTypeParamName<2>> ArgCaseATT;
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IMmbrDefn>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
 
 typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
     ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
-
 
 template<typename TCases, typename... TVar>
 class TestMmbrDefn :
@@ -133,36 +144,37 @@ public:
             "with %s::template type<%s>\n");
     }
 public:
-    template<typename TMD, typename TTarget, typename... TArgs>
-    bool Result(const CaseATTa&, VariableTestMmbrDefn<TMD, TTarget, 
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
         TArgs...>& var)
     {
-        return typeid(typename TMD::type).hash_code() ==
-            typeid(TTarget).hash_code();
+        return typeid(typename TMmbrDefn::type).hash_code() ==
+            typeid(TAliasType).hash_code();
     }
 
-    template<typename TMD, typename TTarget, typename... TArgs>
-    bool Result(const CaseATTTa&, VariableTestMmbrDefn<TMD, TTarget,  
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestMmbrDefn<TMmbrDefn, TAliasType,  
         TArgs...>& var)
     {
-        return typeid(typename TMD::template type<TArgs...>).hash_code() ==
-            typeid(TTarget).hash_code();
+        return typeid(typename TMmbrDefn::template type<
+            TArgs...>).hash_code() == typeid(TAliasType).hash_code();
     }
 
-    template<typename TMD, typename TTarget, typename... TArgs>
-    bool Result(const CaseAT&, VariableTestMmbrDefn<TMD, TTarget, 
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
         TArgs...>& var)
     {
-        return typeid(typename TMD::type).hash_code() ==
-            typeid(typename TMD::Type).hash_code();
+        return typeid(typename TMmbrDefn::type).hash_code() ==
+            typeid(typename TMmbrDefn::Type).hash_code();
     }
 
-    template<typename TMD, typename TTarget, typename... TArgs>
-    bool Result(const CaseATT&, VariableTestMmbrDefn<TMD, TTarget, 
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
         TArgs...>& var)
     {
-        return typeid(typename TMD::template type<TArgs...>).hash_code() ==
-            typeid(typename TMD::template Type<TArgs...>).hash_code();
+        return typeid(typename TMmbrDefn::template type<
+            TArgs...>).hash_code() == typeid(typename TMmbrDefn::template Type<
+            TArgs...>).hash_code();
     }
 };
 

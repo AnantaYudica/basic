@@ -4,12 +4,14 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <type_traits>
-#include <vector>
 #include <typeinfo>
 
 struct CaseAVTTa {}; // case alias value_type and target
@@ -17,40 +19,58 @@ struct CaseAVT {}; // case alias value_type
 struct CaseVTa {}; // case value and target
 struct CaseV {}; // case value
 
-template<typename THasMmbrFunc, typename TAVT, TAVT TAVTValue>
-using VariableTestHasMmbrFunc = basic::test::Variable<THasMmbrFunc,
-    TAVT,  basic::test::type::Value<TAVT, TAVTValue>,
-    basic::test::var::Value<const char*>>;
+template<typename THasMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
+using VariableTestHasMmbrFunc = basic::test::Variable<
+    THasMmbrFunc,
+    TAliasVal,  
+    basic::test::type::Value<TAliasVal, AliasValue>,
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IHasMmbrFunc = 0;
+constexpr std::size_t IAliasVal = 1;
+constexpr std::size_t ITypeValAliasValue = 2;
+constexpr std::size_t IValFuncBoolToCString = 3;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
+
+template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseAVTTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseAVTTa;
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
+
+typedef basic::test::msg::Argument<CaseAVTTa, 
+    ArgTypeName<IHasMmbrFunc>,
+    ArgTypeName<IAliasVal>> ArgCaseAVTTa;
 
 typedef basic::test::msg::Base<CaseAVTTa, char, ArgCaseAVTTa, 
     ArgCaseAVTTa, ArgCaseAVTTa> MsgBaseCaseAVTTa;
 
-typedef basic::test::msg::Argument<CaseAVT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAVT;
+typedef basic::test::msg::Argument<CaseAVT, 
+    ArgTypeName<IHasMmbrFunc>,
+    ArgTypeName<IHasMmbrFunc>> ArgCaseAVT;
 
 typedef basic::test::msg::Base<CaseAVT, char, ArgCaseAVT, 
     ArgCaseAVT, ArgCaseAVT> MsgBaseCaseAVT;
 
-typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
-    ArgVarValue<3>> ArgCaseVTa;
+typedef basic::test::msg::Argument<CaseVTa, 
+    ArgTypeName<IHasMmbrFunc>,
+    ArgValFunction<IValFuncBoolToCString, 
+        ArgTypeValue<ITypeValAliasValue>>> ArgCaseVTa;
 
 typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
     ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
 
-typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseV;
+typedef basic::test::msg::Argument<CaseV, 
+    ArgTypeName<IHasMmbrFunc>,
+    ArgTypeName<IHasMmbrFunc>> ArgCaseV;
 
 typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
     ArgCaseV, ArgCaseV> MsgBaseCaseV;
@@ -138,32 +158,32 @@ public:
             "%s::Value\n");
     }
 
-    template<typename THasMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVTTa&, VariableTestHasMmbrFunc<THasMmbrFunc, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasMmbrFunc::value_type).hash_code() ==
-            typeid(TAVT).hash_code();
+            typeid(TAliasVal).hash_code();
     }
     
-    template<typename THasMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVT&, VariableTestHasMmbrFunc<THasMmbrFunc, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasMmbrFunc::value_type).hash_code() ==
             typeid(typename THasMmbrFunc::ValueType).hash_code();
     }
     
-    template<typename THasMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseVTa&, VariableTestHasMmbrFunc<THasMmbrFunc, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
-        return TAVTValue == THasMmbrFunc::value;
+        return AliasValue == THasMmbrFunc::value;
     }
     
-    template<typename THasMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseV&, VariableTestHasMmbrFunc<THasMmbrFunc, 
-        TAVT, TAVTValue>& var)
+        TAliasVal, AliasValue>& var)
     {
         return THasMmbrFunc::value == THasMmbrFunc::Value;
     }
@@ -288,6 +308,11 @@ BASIC_TEST_TYPE_NAME("B", B);
 const char* true_cstr = "true";
 const char* false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
 /**
  * 	template<typename T, typename Tr, typename... Targs>
  * 	constexpr auto _HasMmbrFunc1(T t, Targs... args) ->
@@ -350,19 +375,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc1<A11>, bool, false> T1Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc1<A12>, bool, false> T1Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc1<B>, bool, false> T1Var13;
 
-T1Var1 t1_var1(true_cstr);
-T1Var2 t1_var2(false_cstr);
-T1Var3 t1_var3(false_cstr);
-T1Var4 t1_var4(false_cstr);
-T1Var5 t1_var5(false_cstr);
-T1Var6 t1_var6(false_cstr);
-T1Var7 t1_var7(false_cstr);
-T1Var8 t1_var8(false_cstr);
-T1Var9 t1_var9(false_cstr);
-T1Var10 t1_var10(false_cstr);
-T1Var11 t1_var11(false_cstr);
-T1Var12 t1_var12(false_cstr);
-T1Var13 t1_var13(false_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
+T1Var3 t1_var3(&BoolToString);
+T1Var4 t1_var4(&BoolToString);
+T1Var5 t1_var5(&BoolToString);
+T1Var6 t1_var6(&BoolToString);
+T1Var7 t1_var7(&BoolToString);
+T1Var8 t1_var8(&BoolToString);
+T1Var9 t1_var9(&BoolToString);
+T1Var10 t1_var10(&BoolToString);
+T1Var11 t1_var11(&BoolToString);
+T1Var12 t1_var12(&BoolToString);
+T1Var13 t1_var13(&BoolToString);
 
 REGISTER_TEST(t1, new TestHasMmbrFunc<Cases, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12, 
@@ -431,19 +456,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc2<A11>, bool, false> T2Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc2<A12>, bool, false> T2Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc2<B>, bool, false> T2Var13;
 
-T2Var1 t2_var1(false_cstr);
-T2Var2 t2_var2(true_cstr);
-T2Var3 t2_var3(false_cstr);
-T2Var4 t2_var4(false_cstr);
-T2Var5 t2_var5(false_cstr);
-T2Var6 t2_var6(false_cstr);
-T2Var7 t2_var7(false_cstr);
-T2Var8 t2_var8(false_cstr);
-T2Var9 t2_var9(false_cstr);
-T2Var10 t2_var10(false_cstr);
-T2Var11 t2_var11(false_cstr);
-T2Var12 t2_var12(false_cstr);
-T2Var13 t2_var13(false_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
+T2Var3 t2_var3(&BoolToString);
+T2Var4 t2_var4(&BoolToString);
+T2Var5 t2_var5(&BoolToString);
+T2Var6 t2_var6(&BoolToString);
+T2Var7 t2_var7(&BoolToString);
+T2Var8 t2_var8(&BoolToString);
+T2Var9 t2_var9(&BoolToString);
+T2Var10 t2_var10(&BoolToString);
+T2Var11 t2_var11(&BoolToString);
+T2Var12 t2_var12(&BoolToString);
+T2Var13 t2_var13(&BoolToString);
 
 REGISTER_TEST(t2, new TestHasMmbrFunc<Cases, T2Var1, T2Var2, T2Var3, T2Var4,
     T2Var5, T2Var6, T2Var7, T2Var8, T2Var9, T2Var10, T2Var11, T2Var12, 
@@ -512,19 +537,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc3<A11>, bool, false> T3Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc3<A12>, bool, false> T3Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc3<B>, bool, false> T3Var13;
 
-T3Var1 t3_var1(false_cstr);
-T3Var2 t3_var2(false_cstr);
-T3Var3 t3_var3(true_cstr);
-T3Var4 t3_var4(false_cstr);
-T3Var5 t3_var5(false_cstr);
-T3Var6 t3_var6(false_cstr);
-T3Var7 t3_var7(false_cstr);
-T3Var8 t3_var8(false_cstr);
-T3Var9 t3_var9(false_cstr);
-T3Var10 t3_var10(false_cstr);
-T3Var11 t3_var11(false_cstr);
-T3Var12 t3_var12(false_cstr);
-T3Var13 t3_var13(false_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
+T3Var3 t3_var3(&BoolToString);
+T3Var4 t3_var4(&BoolToString);
+T3Var5 t3_var5(&BoolToString);
+T3Var6 t3_var6(&BoolToString);
+T3Var7 t3_var7(&BoolToString);
+T3Var8 t3_var8(&BoolToString);
+T3Var9 t3_var9(&BoolToString);
+T3Var10 t3_var10(&BoolToString);
+T3Var11 t3_var11(&BoolToString);
+T3Var12 t3_var12(&BoolToString);
+T3Var13 t3_var13(&BoolToString);
 
 REGISTER_TEST(t3, new TestHasMmbrFunc<Cases, T3Var1, T3Var2, T3Var3, T3Var4,
     T3Var5, T3Var6, T3Var7, T3Var8, T3Var9, T3Var10, T3Var11, T3Var12, 
@@ -594,19 +619,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc4<A11>, bool, false> T4Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc4<A12>, bool, false> T4Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc4<B>, bool, false> T4Var13;
 
-T4Var1 t4_var1(false_cstr);
-T4Var2 t4_var2(false_cstr);
-T4Var3 t4_var3(false_cstr);
-T4Var4 t4_var4(true_cstr);
-T4Var5 t4_var5(false_cstr);
-T4Var6 t4_var6(false_cstr);
-T4Var7 t4_var7(false_cstr);
-T4Var8 t4_var8(false_cstr);
-T4Var9 t4_var9(false_cstr);
-T4Var10 t4_var10(false_cstr);
-T4Var11 t4_var11(false_cstr);
-T4Var12 t4_var12(false_cstr);
-T4Var13 t4_var13(false_cstr);
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
+T4Var3 t4_var3(&BoolToString);
+T4Var4 t4_var4(&BoolToString);
+T4Var5 t4_var5(&BoolToString);
+T4Var6 t4_var6(&BoolToString);
+T4Var7 t4_var7(&BoolToString);
+T4Var8 t4_var8(&BoolToString);
+T4Var9 t4_var9(&BoolToString);
+T4Var10 t4_var10(&BoolToString);
+T4Var11 t4_var11(&BoolToString);
+T4Var12 t4_var12(&BoolToString);
+T4Var13 t4_var13(&BoolToString);
 
 REGISTER_TEST(t4, new TestHasMmbrFunc<Cases, T4Var1, T4Var2, T4Var3, T4Var4,
     T4Var5, T4Var6, T4Var7, T4Var8, T4Var9, T4Var10, T4Var11, T4Var12, 
@@ -675,19 +700,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc5<A11>, bool, false> T5Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc5<A12>, bool, false> T5Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc5<B>, bool, false> T5Var13;
 
-T5Var1 t5_var1(false_cstr);
-T5Var2 t5_var2(false_cstr);
-T5Var3 t5_var3(false_cstr);
-T5Var4 t5_var4(false_cstr);
-T5Var5 t5_var5(true_cstr);
-T5Var6 t5_var6(false_cstr);
-T5Var7 t5_var7(false_cstr);
-T5Var8 t5_var8(false_cstr);
-T5Var9 t5_var9(false_cstr);
-T5Var10 t5_var10(false_cstr);
-T5Var11 t5_var11(false_cstr);
-T5Var12 t5_var12(false_cstr);
-T5Var13 t5_var13(false_cstr);
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
+T5Var3 t5_var3(&BoolToString);
+T5Var4 t5_var4(&BoolToString);
+T5Var5 t5_var5(&BoolToString);
+T5Var6 t5_var6(&BoolToString);
+T5Var7 t5_var7(&BoolToString);
+T5Var8 t5_var8(&BoolToString);
+T5Var9 t5_var9(&BoolToString);
+T5Var10 t5_var10(&BoolToString);
+T5Var11 t5_var11(&BoolToString);
+T5Var12 t5_var12(&BoolToString);
+T5Var13 t5_var13(&BoolToString);
 
 REGISTER_TEST(t5, new TestHasMmbrFunc<Cases, T5Var1, T5Var2, T5Var3, T5Var4,
     T5Var5, T5Var6, T5Var7, T5Var8, T5Var9, T5Var10, T5Var11, T5Var12, 
@@ -756,19 +781,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc6<A11>, bool, false> T6Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc6<A12>, bool, false> T6Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc6<B>, bool, false> T6Var13;
 
-T6Var1 t6_var1(false_cstr);
-T6Var2 t6_var2(false_cstr);
-T6Var3 t6_var3(false_cstr);
-T6Var4 t6_var4(false_cstr);
-T6Var5 t6_var5(false_cstr);
-T6Var6 t6_var6(true_cstr);
-T6Var7 t6_var7(false_cstr);
-T6Var8 t6_var8(false_cstr);
-T6Var9 t6_var9(false_cstr);
-T6Var10 t6_var10(false_cstr);
-T6Var11 t6_var11(false_cstr);
-T6Var12 t6_var12(false_cstr);
-T6Var13 t6_var13(false_cstr);
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
+T6Var3 t6_var3(&BoolToString);
+T6Var4 t6_var4(&BoolToString);
+T6Var5 t6_var5(&BoolToString);
+T6Var6 t6_var6(&BoolToString);
+T6Var7 t6_var7(&BoolToString);
+T6Var8 t6_var8(&BoolToString);
+T6Var9 t6_var9(&BoolToString);
+T6Var10 t6_var10(&BoolToString);
+T6Var11 t6_var11(&BoolToString);
+T6Var12 t6_var12(&BoolToString);
+T6Var13 t6_var13(&BoolToString);
 
 REGISTER_TEST(t6, new TestHasMmbrFunc<Cases, T6Var1, T6Var2, T6Var3, T6Var4,
     T6Var5, T6Var6, T6Var7, T6Var8, T6Var9, T6Var10, T6Var11, T6Var12, 
@@ -838,19 +863,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc7<A11>, bool, false> T7Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc7<A12>, bool, false> T7Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc7<B>, bool, false> T7Var13;
 
-T7Var1 t7_var1(false_cstr);
-T7Var2 t7_var2(false_cstr);
-T7Var3 t7_var3(false_cstr);
-T7Var4 t7_var4(false_cstr);
-T7Var5 t7_var5(false_cstr);
-T7Var6 t7_var6(false_cstr);
-T7Var7 t7_var7(true_cstr);
-T7Var8 t7_var8(false_cstr);
-T7Var9 t7_var9(false_cstr);
-T7Var10 t7_var10(false_cstr);
-T7Var11 t7_var11(false_cstr);
-T7Var12 t7_var12(false_cstr);
-T7Var13 t7_var13(false_cstr);
+T7Var1 t7_var1(&BoolToString);
+T7Var2 t7_var2(&BoolToString);
+T7Var3 t7_var3(&BoolToString);
+T7Var4 t7_var4(&BoolToString);
+T7Var5 t7_var5(&BoolToString);
+T7Var6 t7_var6(&BoolToString);
+T7Var7 t7_var7(&BoolToString);
+T7Var8 t7_var8(&BoolToString);
+T7Var9 t7_var9(&BoolToString);
+T7Var10 t7_var10(&BoolToString);
+T7Var11 t7_var11(&BoolToString);
+T7Var12 t7_var12(&BoolToString);
+T7Var13 t7_var13(&BoolToString);
 
 REGISTER_TEST(t7, new TestHasMmbrFunc<Cases, T7Var1, T7Var2, T7Var3, T7Var4,
     T7Var5, T7Var6, T7Var7, T7Var8, T7Var9, T7Var10, T7Var11, T7Var12, 
@@ -920,19 +945,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc8<A11>, bool, false> T8Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc8<A12>, bool, false> T8Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc8<B>, bool, false> T8Var13;
 
-T8Var1 t8_var1(false_cstr);
-T8Var2 t8_var2(false_cstr);
-T8Var3 t8_var3(false_cstr);
-T8Var4 t8_var4(false_cstr);
-T8Var5 t8_var5(false_cstr);
-T8Var6 t8_var6(false_cstr);
-T8Var7 t8_var7(false_cstr);
-T8Var8 t8_var8(true_cstr);
-T8Var9 t8_var9(false_cstr);
-T8Var10 t8_var10(false_cstr);
-T8Var11 t8_var11(false_cstr);
-T8Var12 t8_var12(false_cstr);
-T8Var13 t8_var13(false_cstr);
+T8Var1 t8_var1(&BoolToString);
+T8Var2 t8_var2(&BoolToString);
+T8Var3 t8_var3(&BoolToString);
+T8Var4 t8_var4(&BoolToString);
+T8Var5 t8_var5(&BoolToString);
+T8Var6 t8_var6(&BoolToString);
+T8Var7 t8_var7(&BoolToString);
+T8Var8 t8_var8(&BoolToString);
+T8Var9 t8_var9(&BoolToString);
+T8Var10 t8_var10(&BoolToString);
+T8Var11 t8_var11(&BoolToString);
+T8Var12 t8_var12(&BoolToString);
+T8Var13 t8_var13(&BoolToString);
 
 REGISTER_TEST(t8, new TestHasMmbrFunc<Cases, T8Var1, T8Var2, T8Var3, T8Var4,
     T8Var5, T8Var6, T8Var7, T8Var8, T8Var9, T8Var10, T8Var11, T8Var12, 
@@ -1002,19 +1027,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc9<A11>, bool, false> T9Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc9<A12>, bool, false> T9Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc9<B>, bool, false> T9Var13;
 
-T9Var1 t9_var1(false_cstr);
-T9Var2 t9_var2(false_cstr);
-T9Var3 t9_var3(false_cstr);
-T9Var4 t9_var4(false_cstr);
-T9Var5 t9_var5(false_cstr);
-T9Var6 t9_var6(false_cstr);
-T9Var7 t9_var7(false_cstr);
-T9Var8 t9_var8(false_cstr);
-T9Var9 t9_var9(true_cstr);
-T9Var10 t9_var10(false_cstr);
-T9Var11 t9_var11(false_cstr);
-T9Var12 t9_var12(false_cstr);
-T9Var13 t9_var13(false_cstr);
+T9Var1 t9_var1(&BoolToString);
+T9Var2 t9_var2(&BoolToString);
+T9Var3 t9_var3(&BoolToString);
+T9Var4 t9_var4(&BoolToString);
+T9Var5 t9_var5(&BoolToString);
+T9Var6 t9_var6(&BoolToString);
+T9Var7 t9_var7(&BoolToString);
+T9Var8 t9_var8(&BoolToString);
+T9Var9 t9_var9(&BoolToString);
+T9Var10 t9_var10(&BoolToString);
+T9Var11 t9_var11(&BoolToString);
+T9Var12 t9_var12(&BoolToString);
+T9Var13 t9_var13(&BoolToString);
 
 REGISTER_TEST(t9, new TestHasMmbrFunc<Cases, T9Var1, T9Var2, T9Var3, T9Var4,
     T9Var5, T9Var6, T9Var7, T9Var8, T9Var9, T9Var10, T9Var11, T9Var12, 
@@ -1084,19 +1109,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc10<A11>, bool, false> T10Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc10<A12>, bool, false> T10Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc10<B>, bool, false> T10Var13;
 
-T10Var1 t10_var1(false_cstr);
-T10Var2 t10_var2(false_cstr);
-T10Var3 t10_var3(false_cstr);
-T10Var4 t10_var4(false_cstr);
-T10Var5 t10_var5(false_cstr);
-T10Var6 t10_var6(false_cstr);
-T10Var7 t10_var7(false_cstr);
-T10Var8 t10_var8(false_cstr);
-T10Var9 t10_var9(false_cstr);
-T10Var10 t10_var10(true_cstr);
-T10Var11 t10_var11(false_cstr);
-T10Var12 t10_var12(false_cstr);
-T10Var13 t10_var13(false_cstr);
+T10Var1 t10_var1(&BoolToString);
+T10Var2 t10_var2(&BoolToString);
+T10Var3 t10_var3(&BoolToString);
+T10Var4 t10_var4(&BoolToString);
+T10Var5 t10_var5(&BoolToString);
+T10Var6 t10_var6(&BoolToString);
+T10Var7 t10_var7(&BoolToString);
+T10Var8 t10_var8(&BoolToString);
+T10Var9 t10_var9(&BoolToString);
+T10Var10 t10_var10(&BoolToString);
+T10Var11 t10_var11(&BoolToString);
+T10Var12 t10_var12(&BoolToString);
+T10Var13 t10_var13(&BoolToString);
 
 REGISTER_TEST(t10, new TestHasMmbrFunc<Cases, T10Var1, T10Var2, T10Var3, T10Var4,
     T10Var5, T10Var6, T10Var7, T10Var8, T10Var9, T10Var10, T10Var11, T10Var12, 
@@ -1166,19 +1191,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc11<A11>, bool, true> T11Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc11<A12>, bool, false> T11Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc11<B>, bool, false> T11Var13;
 
-T11Var1 t11_var1(false_cstr);
-T11Var2 t11_var2(false_cstr);
-T11Var3 t11_var3(false_cstr);
-T11Var4 t11_var4(false_cstr);
-T11Var5 t11_var5(false_cstr);
-T11Var6 t11_var6(false_cstr);
-T11Var7 t11_var7(false_cstr);
-T11Var8 t11_var8(false_cstr);
-T11Var9 t11_var9(false_cstr);
-T11Var10 t11_var10(false_cstr);
-T11Var11 t11_var11(true_cstr);
-T11Var12 t11_var12(false_cstr);
-T11Var13 t11_var13(false_cstr);
+T11Var1 t11_var1(&BoolToString);
+T11Var2 t11_var2(&BoolToString);
+T11Var3 t11_var3(&BoolToString);
+T11Var4 t11_var4(&BoolToString);
+T11Var5 t11_var5(&BoolToString);
+T11Var6 t11_var6(&BoolToString);
+T11Var7 t11_var7(&BoolToString);
+T11Var8 t11_var8(&BoolToString);
+T11Var9 t11_var9(&BoolToString);
+T11Var10 t11_var10(&BoolToString);
+T11Var11 t11_var11(&BoolToString);
+T11Var12 t11_var12(&BoolToString);
+T11Var13 t11_var13(&BoolToString);
 
 REGISTER_TEST(t11, new TestHasMmbrFunc<Cases, T11Var1, T11Var2, T11Var3, T11Var4,
     T11Var5, T11Var6, T11Var7, T11Var8, T11Var9, T11Var10, T11Var11, T11Var12, 
@@ -1248,19 +1273,19 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc12<A11>, bool, false> T12Var11;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc12<A12>, bool, true> T12Var12;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc12<B>, bool, false> T12Var13;
 
-T12Var1 t12_var1(false_cstr);
-T12Var2 t12_var2(false_cstr);
-T12Var3 t12_var3(false_cstr);
-T12Var4 t12_var4(false_cstr);
-T12Var5 t12_var5(false_cstr);
-T12Var6 t12_var6(false_cstr);
-T12Var7 t12_var7(false_cstr);
-T12Var8 t12_var8(false_cstr);
-T12Var9 t12_var9(false_cstr);
-T12Var10 t12_var10(false_cstr);
-T12Var11 t12_var11(false_cstr);
-T12Var12 t12_var12(true_cstr);
-T12Var13 t12_var13(false_cstr);
+T12Var1 t12_var1(&BoolToString);
+T12Var2 t12_var2(&BoolToString);
+T12Var3 t12_var3(&BoolToString);
+T12Var4 t12_var4(&BoolToString);
+T12Var5 t12_var5(&BoolToString);
+T12Var6 t12_var6(&BoolToString);
+T12Var7 t12_var7(&BoolToString);
+T12Var8 t12_var8(&BoolToString);
+T12Var9 t12_var9(&BoolToString);
+T12Var10 t12_var10(&BoolToString);
+T12Var11 t12_var11(&BoolToString);
+T12Var12 t12_var12(&BoolToString);
+T12Var13 t12_var13(&BoolToString);
 
 REGISTER_TEST(t12, new TestHasMmbrFunc<Cases, T12Var1, T12Var2, T12Var3, T12Var4,
     T12Var5, T12Var6, T12Var7, T12Var8, T12Var9, T12Var10, T12Var11, T12Var12, 
@@ -1316,8 +1341,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrFunc13<B, void, void>",
 typedef VariableTestHasMmbrFunc<THasMmbrFunc13<A1>, bool, true> T13Var1;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc13<B>, bool, false> T13Var2;
 
-T13Var1 t13_var1(true_cstr);
-T13Var2 t13_var2(false_cstr);
+T13Var1 t13_var1(&BoolToString);
+T13Var2 t13_var2(&BoolToString);
 
 REGISTER_TEST(t13, new TestHasMmbrFunc<Cases, T13Var1, 
     T13Var2>(t13_var1, t13_var2));
@@ -1377,8 +1402,8 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc14<std::true_type>,
 typedef VariableTestHasMmbrFunc<THasMmbrFunc14<std::false_type>, 
     bool, false> T14Var2;
 
-T14Var1 t14_var1(true_cstr);
-T14Var2 t14_var2(false_cstr);
+T14Var1 t14_var1(&BoolToString);
+T14Var2 t14_var2(&BoolToString);
 
 REGISTER_TEST(t14, new TestHasMmbrFunc<Cases, T14Var1, 
     T14Var2>(t14_var1, t14_var2));
@@ -1448,8 +1473,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrFunc15<B, void, void>",
 typedef VariableTestHasMmbrFunc<THasMmbrFunc15<A1>, bool, true> T15Var1;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc15<B>, bool, false> T15Var2;
 
-T15Var1 t15_var1(true_cstr);
-T15Var2 t15_var2(false_cstr);
+T15Var1 t15_var1(&BoolToString);
+T15Var2 t15_var2(&BoolToString);
 
 REGISTER_TEST(t15, new TestHasMmbrFunc<Cases, T15Var1,
     T15Var2>(t15_var1, t15_var2));
@@ -1505,8 +1530,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrFunc16<B, void>",
 typedef VariableTestHasMmbrFunc<THasMmbrFunc16<A1>, bool, true> T16Var1;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc16<B>, bool, false> T16Var2;
 
-T16Var1 t16_var1(true_cstr);
-T16Var2 t16_var2(false_cstr);
+T16Var1 t16_var1(&BoolToString);
+T16Var2 t16_var2(&BoolToString);
 
 REGISTER_TEST(t16, new TestHasMmbrFunc<Cases, T16Var1, 
     T16Var2>(t16_var1, t16_var2));
@@ -1581,8 +1606,8 @@ typedef VariableTestHasMmbrFunc<THasMmbrFunc17<std::true_type>,
 typedef VariableTestHasMmbrFunc<THasMmbrFunc17<std::false_type>, 
     bool, false> T17Var2;
 
-T17Var1 t17_var1(true_cstr);
-T17Var2 t17_var2(false_cstr);
+T17Var1 t17_var1(&BoolToString);
+T17Var2 t17_var2(&BoolToString);
 
 REGISTER_TEST(t17, new TestHasMmbrFunc<Cases, T17Var1,
     T17Var2>(t17_var1, t17_var2));
@@ -1658,8 +1683,8 @@ BASIC_TEST_TYPE_NAME("HasMmbrFunc18<B, void, C1>",
 typedef VariableTestHasMmbrFunc<THasMmbrFunc18<D1>, bool, true> T18Var1;
 typedef VariableTestHasMmbrFunc<THasMmbrFunc18<B>, bool, false> T18Var2;
 
-T18Var1 t18_var1(true_cstr);
-T18Var2 t18_var2(false_cstr);
+T18Var1 t18_var1(&BoolToString);
+T18Var2 t18_var2(&BoolToString);
 
 REGISTER_TEST(t18, new TestHasMmbrFunc<Cases, T18Var1, 
     T18Var2>(t18_var1, t18_var2));

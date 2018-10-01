@@ -4,11 +4,13 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
 #include <typeinfo>
 
@@ -17,40 +19,58 @@ struct CaseAVT {}; // case alias value type
 struct CaseVTa {}; // case value and target
 struct CaseV {}; // case value 
 
-template<typename TIsBaseOf, typename TAVT, TAVT TAVTValue>
-using VariableTestIsBaseOf = basic::test::Variable<TIsBaseOf,
-    TAVT,  basic::test::type::Value<TAVT, TAVTValue>,
-    basic::test::var::Value<const char*>>;
+template<typename TIsBaseOf, typename TAliasVal, TAliasVal AliasValue>
+using VariableTestIsBaseOf = basic::test::Variable<
+    TIsBaseOf,
+    TAliasVal,  
+    basic::test::type::Value<TAliasVal, AliasValue>,
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IIsBaseOf = 0;
+constexpr std::size_t IAliasVal = 1;
+constexpr std::size_t ITypeValAliasValue = 2;
+constexpr std::size_t IValFuncBoolToCString = 3;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
+
+template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseAVTTa, ArgTypeName<0>,
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
+
+typedef basic::test::msg::Argument<CaseAVTTa, 
+    ArgTypeName<IIsBaseOf>,
     ArgTypeName<1>> ArgCaseAVTTa;
 
 typedef basic::test::msg::Base<CaseAVTTa, char, ArgCaseAVTTa, 
     ArgCaseAVTTa, ArgCaseAVTTa> MsgBaseCaseAVTTa;
 
-typedef basic::test::msg::Argument<CaseAVT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAVT;
+typedef basic::test::msg::Argument<CaseAVT, 
+    ArgTypeName<IIsBaseOf>,
+    ArgTypeName<IIsBaseOf>> ArgCaseAVT;
 
 typedef basic::test::msg::Base<CaseAVT, char, ArgCaseAVT, 
     ArgCaseAVT, ArgCaseAVT> MsgBaseCaseAVT;
 
-typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
-    ArgVarValue<3>> ArgCaseVTa;
+typedef basic::test::msg::Argument<CaseVTa, 
+    ArgTypeName<IIsBaseOf>,
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValAliasValue>>> ArgCaseVTa;
 
 typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
     ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
 
-typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseV;
+typedef basic::test::msg::Argument<CaseV, 
+    ArgTypeName<IIsBaseOf>,
+    ArgTypeName<IIsBaseOf>> ArgCaseV;
 
 typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
     ArgCaseV, ArgCaseV> MsgBaseCaseV;
@@ -139,32 +159,32 @@ public:
             "%s::Value\n");
     }
     
-    template<typename TIsBaseOf, typename TAVT, TAVT TAVTValue>
+    template<typename TIsBaseOf, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVTTa&, VariableTestIsBaseOf<
-        TIsBaseOf, TAVT, TAVTValue>& var)
+        TIsBaseOf, TAliasVal, AliasValue>& var)
     {
         return typeid(typename TIsBaseOf::value_type).hash_code() ==
-            typeid(TAVT).hash_code();
+            typeid(TAliasVal).hash_code();
     }
     
-    template<typename TIsBaseOf, typename TAVT, TAVT TAVTValue>
+    template<typename TIsBaseOf, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseAVT&, VariableTestIsBaseOf<
-        TIsBaseOf, TAVT, TAVTValue>& var)
+        TIsBaseOf, TAliasVal, AliasValue>& var)
     {
         return typeid(typename TIsBaseOf::value_type).hash_code() ==
             typeid(typename TIsBaseOf::ValueType).hash_code();
     }
     
-    template<typename TIsBaseOf, typename TAVT, TAVT TAVTValue>
+    template<typename TIsBaseOf, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseVTa&, VariableTestIsBaseOf<
-        TIsBaseOf, TAVT, TAVTValue>& var)
+        TIsBaseOf, TAliasVal, AliasValue>& var)
     {
-        return TAVTValue == TIsBaseOf::value;
+        return AliasValue == TIsBaseOf::value;
     }
     
-    template<typename TIsBaseOf, typename TAVT, TAVT TAVTValue>
+    template<typename TIsBaseOf, typename TAliasVal, TAliasVal AliasValue>
     bool Result(const CaseV&, VariableTestIsBaseOf<
-        TIsBaseOf, TAVT, TAVTValue>& var)
+        TIsBaseOf, TAliasVal, AliasValue>& var)
     {
         return TIsBaseOf::value == TIsBaseOf::Value;
     }
@@ -205,6 +225,11 @@ BASIC_TEST_TYPE_NAME("bool", bool);
 const char* true_cstr = "true";
 const char* false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
 /**
  *  template<typename T>
  *  constexpr auto _IsBaseOf1(const A&) ->
@@ -239,10 +264,10 @@ typedef VariableTestIsBaseOf<TIsBaseOf1<AA>, bool, true> T1Var2;
 typedef VariableTestIsBaseOf<TIsBaseOf1<B>, bool, false> T1Var3;
 typedef VariableTestIsBaseOf<TIsBaseOf1<BB>, bool, false> T1Var4;
 
-T1Var1 t1_var1(false_cstr);
-T1Var2 t1_var2(true_cstr);
-T1Var3 t1_var3(false_cstr);
-T1Var4 t1_var4(false_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
+T1Var3 t1_var3(&BoolToString);
+T1Var4 t1_var4(&BoolToString);
 
 REGISTER_TEST(t1, new TestIsBaseOf<Cases, T1Var1, T1Var2, T1Var3,
     T1Var4>(t1_var1, t1_var2, t1_var3, t1_var4));
@@ -285,10 +310,10 @@ typedef VariableTestIsBaseOf<TIsBaseOf2<AA>, bool, true> T2Var2;
 typedef VariableTestIsBaseOf<TIsBaseOf2<B>, bool, false> T2Var3;
 typedef VariableTestIsBaseOf<TIsBaseOf2<BB>, bool, false> T2Var4;
 
-T2Var1 t2_var1(false_cstr);
-T2Var2 t2_var2(true_cstr);
-T2Var3 t2_var3(false_cstr);
-T2Var4 t2_var4(false_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
+T2Var3 t2_var3(&BoolToString);
+T2Var4 t2_var4(&BoolToString);
 
 REGISTER_TEST(t2, new TestIsBaseOf<Cases, T2Var1, T2Var2, T2Var3,
     T2Var4>(t2_var1, t2_var2, t2_var3, t2_var4));
@@ -332,8 +357,8 @@ BASIC_TEST_TYPE_NAME("IsBaseOf3<C, std::false_type>",
 typedef VariableTestIsBaseOf<TIsBaseOf3<std::true_type>, bool, true> T3Var1;
 typedef VariableTestIsBaseOf<TIsBaseOf3<std::false_type>, bool, false> T3Var2;
 
-T3Var1 t3_var1(true_cstr);
-T3Var2 t3_var2(false_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
 
 REGISTER_TEST(t3, new TestIsBaseOf<Cases, T3Var1, 
     T3Var2>(t3_var1, t3_var2));
@@ -376,10 +401,10 @@ typedef VariableTestIsBaseOf<TIsBaseOf4<AA>, bool, true> T4Var2;
 typedef VariableTestIsBaseOf<TIsBaseOf4<B>, bool, false> T4Var3;
 typedef VariableTestIsBaseOf<TIsBaseOf4<BB>, bool, false> T4Var4;
 
-T4Var1 t4_var1(false_cstr);
-T4Var2 t4_var2(true_cstr);
-T4Var3 t4_var3(false_cstr);
-T4Var4 t4_var4(false_cstr);
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
+T4Var3 t4_var3(&BoolToString);
+T4Var4 t4_var4(&BoolToString);
 
 REGISTER_TEST(t4, new TestIsBaseOf<Cases, T4Var1, T4Var2, T4Var3,
     T4Var4>(t4_var1, t4_var2, t4_var3, t4_var4));
@@ -431,10 +456,10 @@ typedef VariableTestIsBaseOf<TIsBaseOf5<AA>, bool, true> T5Var2;
 typedef VariableTestIsBaseOf<TIsBaseOf5<B>, bool, false> T5Var3;
 typedef VariableTestIsBaseOf<TIsBaseOf5<BB>, bool, false> T5Var4;
 
-T5Var1 t5_var1(false_cstr);
-T5Var2 t5_var2(true_cstr);
-T5Var3 t5_var3(false_cstr);
-T5Var4 t5_var4(false_cstr);
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
+T5Var3 t5_var3(&BoolToString);
+T5Var4 t5_var4(&BoolToString);
 
 REGISTER_TEST(t5, new TestIsBaseOf<Cases, T5Var1, T5Var2, T5Var3,
     T5Var4>(t5_var1, t5_var2, t5_var3, t5_var4));
@@ -496,10 +521,10 @@ typedef VariableTestIsBaseOf<TIsBaseOf6_2<std::false_type>, bool,
     false> T6Var3;
 typedef VariableTestIsBaseOf<TIsBaseOf6_3<void>, bool, false> T6Var4;
 
-T6Var1 t6_var1(false_cstr);
-T6Var2 t6_var2(true_cstr);
-T6Var3 t6_var3(false_cstr);
-T6Var4 t6_var4(false_cstr);
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
+T6Var3 t6_var3(&BoolToString);
+T6Var4 t6_var4(&BoolToString);
 
 REGISTER_TEST(t6, new TestIsBaseOf<Cases, T6Var1, T6Var2, T6Var3,
     T6Var4>(t6_var1, t6_var2, t6_var3, t6_var4));

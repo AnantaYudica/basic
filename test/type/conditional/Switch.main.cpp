@@ -4,14 +4,15 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <typeinfo>
 #include <type_traits>
-#include <string>
-#include <vector>
 
 struct CaseATTa {}; // case alias type and target
 struct CaseAT {}; // case alias type
@@ -20,11 +21,18 @@ struct CaseI {}; // Case index
 struct CaseSTa {}; // case size and target
 struct CaseS {}; // case size
 
-template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-    typename TTargetSize>
-using VariableTestSwitch = basic::test::Variable<TSwitch, 
-    TTargetAlias, basic::test::var::Value<TTargetIndex>,
-    basic::test::var::Value<TTargetSize>>;
+template<typename TSwitch, typename TAliasType, typename TIndex,
+    typename TSize>
+using VariableTestSwitch = basic::test::Variable<
+    TSwitch, 
+    TAliasType, 
+    basic::test::Value<TIndex>,
+    basic::test::Value<TSize>>;
+
+constexpr std::size_t ISwitch = 0;
+constexpr std::size_t IAliasType = 1;
+constexpr std::size_t IValIndex = 2;
+constexpr std::size_t IValSize = 3;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -33,40 +41,46 @@ template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseATTa, ArgTypeName<0>,
-    ArgTypeName<1>> ArgCaseATTa;
+typedef basic::test::msg::Argument<CaseATTa,
+     ArgTypeName<ISwitch>,
+    ArgTypeName<IAliasType>> ArgCaseATTa;
 
 typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
     ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
 
-typedef basic::test::msg::Argument<CaseAT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAT;
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<ISwitch>,
+    ArgTypeName<ISwitch>> ArgCaseAT;
 
 typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
     ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
 
-typedef basic::test::msg::Argument<CaseITa, ArgTypeName<0>,
-    ArgVarValue<2>> ArgCaseITa;
+typedef basic::test::msg::Argument<CaseITa, 
+    ArgTypeName<ISwitch>,
+    ArgValue<IValIndex>> ArgCaseITa;
 
 typedef basic::test::msg::Base<CaseITa, char, ArgCaseITa, 
     ArgCaseITa, ArgCaseITa> MsgBaseCaseITa;
 
-typedef basic::test::msg::Argument<CaseI, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseI;
+typedef basic::test::msg::Argument<CaseI, 
+    ArgTypeName<ISwitch>,
+    ArgTypeName<ISwitch>> ArgCaseI;
 
 typedef basic::test::msg::Base<CaseI, char, ArgCaseI, 
     ArgCaseI, ArgCaseI> MsgBaseCaseI;
 
-typedef basic::test::msg::Argument<CaseSTa, ArgTypeName<0>,
-    ArgVarValue<3>> ArgCaseSTa;
+typedef basic::test::msg::Argument<CaseSTa,
+    ArgTypeName<ISwitch>,
+    ArgValue<IValSize>> ArgCaseSTa;
 
 typedef basic::test::msg::Base<CaseSTa, char, ArgCaseSTa, 
     ArgCaseSTa, ArgCaseSTa> MsgBaseCaseSTa;
 
-typedef basic::test::msg::Argument<CaseS, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseS;
+typedef basic::test::msg::Argument<CaseS, 
+    ArgTypeName<ISwitch>,
+    ArgTypeName<ISwitch>> ArgCaseS;
 
 typedef basic::test::msg::Base<CaseS, char, ArgCaseS, 
     ArgCaseS, ArgCaseS> MsgBaseCaseS;
@@ -171,53 +185,55 @@ public:
         SetFormat(error, case_size,
             "error %s::size is not same with %s::Size\n");
     }
-
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseATTa&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+ 
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseATTa&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
         return typeid(typename TSwitch::type).hash_code() ==
-            typeid(TTargetAlias).hash_code();
+            typeid(TAliasType).hash_code();
     }
 
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseAT&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseAT&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
         return typeid(typename TSwitch::type).hash_code() ==
             typeid(typename TSwitch::Type).hash_code();
     }
 
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseITa&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseITa&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
-        return TSwitch::index == var.template GetValue<2>();
+        return TSwitch::index == basic::test::var::At<
+            IValIndex>(var).Get().Get();
     }
 
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseI&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseI&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
         return TSwitch::index == TSwitch::Index;
     }
 
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseSTa&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseSTa&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
-        return TSwitch::size == var.template GetValue<3>();
+        return TSwitch::size == basic::test::var::At<
+            IValSize>(var).Get().Get();
     }
 
-    template<typename TSwitch, typename TTargetAlias, typename TTargetIndex,
-        typename TTargetSize>
-    bool Result(const CaseS&, VariableTestSwitch<TSwitch, TTargetAlias, 
-        TTargetIndex, TTargetSize>& var)
+    template<typename TSwitch, typename TAliasType, typename TIndex,
+        typename TSize>
+    bool Result(const CaseS&, VariableTestSwitch<TSwitch, TAliasType, TIndex, 
+        TSize>& var)
     {
         return TSwitch::size == TSwitch::Size;
     }

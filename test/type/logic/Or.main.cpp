@@ -4,40 +4,52 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <typeinfo>
 #include <type_traits>
-#include <string>
-#include <vector>
 
 struct CaseVTa {}; // case value and target
 struct CaseV {}; // case value
 
-template<typename TOr, bool TTargetValue>
-using VariableTestOr = basic::test::Variable<TOr, 
-    basic::test::type::Value<bool, TTargetValue>, 
-    basic::test::var::Value<const char*>>;
+template<typename TOr, bool TValue>
+using VariableTestOr = basic::test::Variable<
+    TOr, 
+    basic::test::type::Value<bool, TValue>,
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IOr = 0;
+constexpr std::size_t ITypeValValue = 1;
+constexpr std::size_t IValFuncBoolToCString = 2;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
-using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
-typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
-    ArgVarValue<2>> ArgCaseVTa;
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
+
+typedef basic::test::msg::Argument<CaseVTa, 
+    ArgTypeName<IOr>,
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValValue>>> ArgCaseVTa;
 
 typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
     ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
 
-typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseV;
+typedef basic::test::msg::Argument<CaseV, 
+    ArgTypeName<IOr>,
+    ArgTypeName<IOr>> ArgCaseV;
 
 typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
     ArgCaseV, ArgCaseV> MsgBaseCaseV;
@@ -95,14 +107,14 @@ public:
             "error %s::value is not same with %s::Value\n");
     }
 
-    template<typename TOr, bool TTargetValue>
-    bool Result(const CaseVTa&, VariableTestOr<TOr, TTargetValue>& var)
+    template<typename TOr, bool TValue>
+    bool Result(const CaseVTa&, VariableTestOr<TOr, TValue>& var)
     {
-        return TOr::value == TTargetValue;
+        return TOr::value == TValue;
     }
 
-    template<typename TOr, bool TTargetValue>
-    bool Result(const CaseV&, VariableTestOr<TOr, TTargetValue>& var)
+    template<typename TOr, bool TValue>
+    bool Result(const CaseV&, VariableTestOr<TOr, TValue>& var)
     {
         return TOr::value == TOr::Value;
     }
@@ -131,14 +143,19 @@ struct basic::test::type::Name<basic::type::logic::Or<TArgs...>>
 const char* true_cstr = "true";
 const char* false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
 using TDefaultOr1_1 = basic::type::logic::Or<std::true_type, std::false_type>;
 using TDefaultOr1_2 = basic::type::logic::Or<std::true_type, std::true_type>;
 
 typedef VariableTestOr<TDefaultOr1_1, false> T1Var1;
 typedef VariableTestOr<TDefaultOr1_2, true> T1Var2;
 
-T1Var1 t1_var1(false_cstr);
-T1Var2 t1_var2(true_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
     
 REGISTER_TEST(t1, new TestOr<Cases,  T1Var1, T1Var2>(t1_var1,
     t1_var2));
@@ -157,10 +174,10 @@ typedef VariableTestOr<TDefaultOr2_2, true> T2Var2;
 typedef VariableTestOr<TDefaultOr2_3, true> T2Var3;
 typedef VariableTestOr<TDefaultOr2_4, true> T2Var4;
 
-T2Var1 t2_var1(false_cstr);
-T2Var2 t2_var2(true_cstr);
-T2Var3 t2_var3(true_cstr);
-T2Var4 t2_var4(true_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
+T2Var3 t2_var3(&BoolToString);
+T2Var4 t2_var4(&BoolToString);
 
 REGISTER_TEST(t2, new TestOr<Cases, T2Var1, T2Var2, T2Var3,
     T2Var4>(t2_var1, t2_var2, t2_var3, t2_var4));
@@ -215,22 +232,22 @@ typedef VariableTestOr<TDefaultOr4_14, true> T3Var14;
 typedef VariableTestOr<TDefaultOr4_15, true> T3Var15;
 typedef VariableTestOr<TDefaultOr4_16, true> T3Var16;
 
-T3Var1 t3_var1(false_cstr);
-T3Var2 t3_var2(true_cstr);
-T3Var3 t3_var3(true_cstr);
-T3Var4 t3_var4(true_cstr);
-T3Var5 t3_var5(true_cstr);
-T3Var6 t3_var6(true_cstr);
-T3Var7 t3_var7(true_cstr);
-T3Var8 t3_var8(true_cstr);
-T3Var9 t3_var9(true_cstr);
-T3Var10 t3_var10(true_cstr);
-T3Var11 t3_var11(true_cstr);
-T3Var12 t3_var12(true_cstr);
-T3Var13 t3_var13(true_cstr);
-T3Var14 t3_var14(true_cstr);
-T3Var15 t3_var15(true_cstr);
-T3Var16 t3_var16(true_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
+T3Var3 t3_var3(&BoolToString);
+T3Var4 t3_var4(&BoolToString);
+T3Var5 t3_var5(&BoolToString);
+T3Var6 t3_var6(&BoolToString);
+T3Var7 t3_var7(&BoolToString);
+T3Var8 t3_var8(&BoolToString);
+T3Var9 t3_var9(&BoolToString);
+T3Var10 t3_var10(&BoolToString);
+T3Var11 t3_var11(&BoolToString);
+T3Var12 t3_var12(&BoolToString);
+T3Var13 t3_var13(&BoolToString);
+T3Var14 t3_var14(&BoolToString);
+T3Var15 t3_var15(&BoolToString);
+T3Var16 t3_var16(&BoolToString);
 
 REGISTER_TEST(t3, new TestOr<Cases, T3Var1, T3Var2, T3Var3, T3Var4, T3Var5,
     T3Var6, T3Var7, T3Var8, T3Var9, T3Var10, T3Var11, T3Var12, T3Var13, 

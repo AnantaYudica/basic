@@ -4,12 +4,14 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <type_traits>
-#include <vector>
 #include <typeinfo>
 
 struct CaseAVTTa {}; // case alias value type and target
@@ -17,40 +19,58 @@ struct CaseAVT {}; // case alias value type
 struct CaseVTa {}; // case value and target
 struct CaseV {}; // case value 
 
-template<typename THasStaticMmbrFunc, typename TAVT, TAVT TAVTValue>
-using VariableTestHasStaticMmbrFunc = basic::test::Variable<THasStaticMmbrFunc,
-    TAVT,  basic::test::type::Value<TAVT, TAVTValue>,
-    basic::test::var::Value<const char*>>;
+template<typename THasStaticMmbrFunc, typename TAliasVal, TAliasVal AliasValue>
+using VariableTestHasStaticMmbrFunc = basic::test::Variable<
+    THasStaticMmbrFunc,
+    TAliasVal,  
+    basic::test::type::Value<TAliasVal, AliasValue>,
+    basic::test::val::Function<const char*(bool&&)>>;
+
+constexpr std::size_t IHasStaticMmbrFunc = 0;
+constexpr std::size_t IAliasVal = 1;
+constexpr std::size_t ITypeValAliasValue = 2;
+constexpr std::size_t IValFuncBoolToCString = 3;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
 template<std::size_t I>
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
+
+template<std::size_t I>
 using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 
 template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+using ArgValue = basic::test::msg::arg::Value<I>;
 
-typedef basic::test::msg::Argument<CaseAVTTa, ArgTypeName<0>,
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
+
+typedef basic::test::msg::Argument<CaseAVTTa, 
+    ArgTypeName<IHasStaticMmbrFunc>,
     ArgTypeName<1>> ArgCaseAVTTa;
 
 typedef basic::test::msg::Base<CaseAVTTa, char, ArgCaseAVTTa, 
     ArgCaseAVTTa, ArgCaseAVTTa> MsgBaseCaseAVTTa;
 
-typedef basic::test::msg::Argument<CaseAVT, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseAVT;
+typedef basic::test::msg::Argument<CaseAVT, 
+    ArgTypeName<IHasStaticMmbrFunc>,
+    ArgTypeName<IHasStaticMmbrFunc>> ArgCaseAVT;
 
 typedef basic::test::msg::Base<CaseAVT, char, ArgCaseAVT, 
     ArgCaseAVT, ArgCaseAVT> MsgBaseCaseAVT;
 
-typedef basic::test::msg::Argument<CaseVTa, ArgTypeName<0>,
-    ArgVarValue<3>> ArgCaseVTa;
+typedef basic::test::msg::Argument<CaseVTa, 
+    ArgTypeName<IHasStaticMmbrFunc>,
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValAliasValue>>> ArgCaseVTa;
 
 typedef basic::test::msg::Base<CaseVTa, char, ArgCaseVTa, 
     ArgCaseVTa, ArgCaseVTa> MsgBaseCaseVTa;
 
-typedef basic::test::msg::Argument<CaseV, ArgTypeName<0>,
-    ArgTypeName<0>> ArgCaseV;
+typedef basic::test::msg::Argument<CaseV, 
+    ArgTypeName<IHasStaticMmbrFunc>,
+    ArgTypeName<IHasStaticMmbrFunc>> ArgCaseV;
 
 typedef basic::test::msg::Base<CaseV, char, ArgCaseV, 
     ArgCaseV, ArgCaseV> MsgBaseCaseV;
@@ -139,32 +159,36 @@ public:
             "%s::Value\n");
     }
     
-    template<typename THasStaticMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasStaticMmbrFunc, typename TAliasVal, 
+        TAliasVal AliasValue>
     bool Result(const CaseAVTTa&, VariableTestHasStaticMmbrFunc<
-        THasStaticMmbrFunc, TAVT, TAVTValue>& var)
+        THasStaticMmbrFunc, TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasStaticMmbrFunc::value_type).hash_code() ==
-            typeid(TAVT).hash_code();
+            typeid(TAliasVal).hash_code();
     }
     
-    template<typename THasStaticMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasStaticMmbrFunc, typename TAliasVal, 
+        TAliasVal AliasValue>
     bool Result(const CaseAVT&, VariableTestHasStaticMmbrFunc<
-        THasStaticMmbrFunc, TAVT, TAVTValue>& var)
+        THasStaticMmbrFunc, TAliasVal, AliasValue>& var)
     {
         return typeid(typename THasStaticMmbrFunc::value_type).hash_code() ==
             typeid(typename THasStaticMmbrFunc::ValueType).hash_code();
     }
     
-    template<typename THasStaticMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasStaticMmbrFunc, typename TAliasVal, 
+        TAliasVal AliasValue>
     bool Result(const CaseVTa&, VariableTestHasStaticMmbrFunc<
-        THasStaticMmbrFunc, TAVT, TAVTValue>& var)
+        THasStaticMmbrFunc, TAliasVal, AliasValue>& var)
     {
-        return TAVTValue == THasStaticMmbrFunc::value;
+        return AliasValue == THasStaticMmbrFunc::value;
     }
     
-    template<typename THasStaticMmbrFunc, typename TAVT, TAVT TAVTValue>
+    template<typename THasStaticMmbrFunc, typename TAliasVal, 
+        TAliasVal AliasValue>
     bool Result(const CaseV&, VariableTestHasStaticMmbrFunc<
-        THasStaticMmbrFunc, TAVT, TAVTValue>& var)
+        THasStaticMmbrFunc, TAliasVal, AliasValue>& var)
     {
         return THasStaticMmbrFunc::value == THasStaticMmbrFunc::Value;
     }
@@ -211,6 +235,11 @@ BASIC_TEST_TYPE_NAME("C<std::false_type>", C<std::false_type>);
 const char* true_cstr = "true";
 const char* false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
 /**
  *  template<typename T, typename Tr, typename... Targs>
  *  constexpr auto _HasStaticMmbrFunc1(int, Targs... args) ->
@@ -249,8 +278,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc1<A>, bool,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc1<B>, bool, 
     false> T1Var2;
 
-T1Var1 t1_var1(true_cstr);
-T1Var2 t1_var2(false_cstr);
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
 
 REGISTER_TEST(t1, new TestHasStaticMmbrFunc<Cases, T1Var1,
     T1Var2>(t1_var1, t1_var2));
@@ -301,8 +330,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc2<A>, bool,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc2<B>, bool, 
     false> T2Var2;
 
-T2Var1 t2_var1(true_cstr);
-T2Var2 t2_var2(false_cstr);
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
 
 REGISTER_TEST(t2, new TestHasStaticMmbrFunc<Cases, T2Var1, 
     T2Var2>(t2_var1, t2_var2));
@@ -357,8 +386,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc3<std::true_type>,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc3<std::false_type>, 
     bool, false> T3Var2;
 
-T3Var1 t3_var1(true_cstr);
-T3Var2 t3_var2(false_cstr);
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
 
 REGISTER_TEST(t3, new TestHasStaticMmbrFunc<Cases, T3Var1,
     T3Var2>(t3_var1, t3_var2));
@@ -425,8 +454,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc4<A>, bool,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc4<B>, bool, 
     false> T4Var2;
 
-T4Var1 t4_var1(true_cstr);
-T4Var2 t4_var2(false_cstr);
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
 
 REGISTER_TEST(t4, new TestHasStaticMmbrFunc<Cases, T4Var1,
     T4Var2>(t4_var1, t4_var2));
@@ -480,8 +509,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc5<A>, bool,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc5<B>, bool, 
     false> T5Var2;
 
-T5Var1 t5_var1(true_cstr);
-T5Var2 t5_var2(false_cstr);
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
 
 REGISTER_TEST(t5, new TestHasStaticMmbrFunc<Cases, T5Var1,
     T5Var2>(t5_var1, t5_var2));
@@ -549,8 +578,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc6<std::true_type>,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc6<std::false_type>, 
     bool, false> T6Var2;
 
-T6Var1 t6_var1(true_cstr);
-T6Var2 t6_var2(false_cstr);
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
 
 REGISTER_TEST(t6, new TestHasStaticMmbrFunc<Cases, T6Var1,
     T6Var2>(t6_var1, t6_var2));
@@ -623,8 +652,8 @@ typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc7<D>, bool,
 typedef VariableTestHasStaticMmbrFunc<THasStaticMmbrFunc7<B>, bool, 
     false> T7Var2;
 
-T7Var1 t7_var1(true_cstr);
-T7Var2 t7_var2(false_cstr);
+T7Var1 t7_var1(&BoolToString);
+T7Var2 t7_var2(&BoolToString);
 
 REGISTER_TEST(t7, new TestHasStaticMmbrFunc<Cases, T7Var1,
     T7Var2>(t7_var1, t7_var2));
