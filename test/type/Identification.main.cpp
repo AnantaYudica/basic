@@ -4,9 +4,12 @@
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
+#include "test/Base.h"
+#include "test/Case.h"
 #include "test/Message.h"
 #include "test/Variable.h"
-#include "test/Case.h"
+
+#include "test/var/At.h"
 
 #include <type_traits>
 #include <typeinfo>
@@ -35,13 +38,20 @@ auto GetType2(int) -> decltype(std::declval<typename T::type>());
 template<typename T>
 void GetType2(...);
 
-template<typename TId, bool TIIdVal, bool TVIdVVal, typename... TArgs>
-using VariableIdentification = basic::test::Variable<TId, 
-    basic::test::type::Value<bool, TIIdVal>,
-    basic::test::var::Value<const char*>,
-    basic::test::type::Value<bool, TVIdVVal>, 
-    basic::test::var::Value<const char*>,
+template<typename TIdentification, bool IsIdentificationVal, 
+    bool ValidationVal, typename... TArgs>
+using VariableIdentification = basic::test::Variable<
+    TIdentification, 
+    basic::test::type::Value<bool, IsIdentificationVal>,
+    basic::test::type::Value<bool, ValidationVal>,
+    basic::test::val::Function<const char*(bool&&)>,
     basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IIdentification = 0;
+constexpr std::size_t ITypeValIsIdentificationVal = 1;
+constexpr std::size_t ITypeValValidationVal = 2;
+constexpr std::size_t IValFuncBoolToCString = 3;
+constexpr std::size_t ITypeParameter = 4;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -52,31 +62,42 @@ using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
 template<std::size_t I>
 using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
 
-template<std::size_t I>
-using ArgVarValue = basic::test::msg::arg::var::Value<I>;
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
 
-typedef basic::test::msg::Argument<CaseIsId, ArgTypeName<0>, 
-    ArgTypeName<0>, ArgVarValue<2>> ArgCaseIsId;
+typedef basic::test::msg::Argument<CaseIsId, 
+    ArgTypeName<IIdentification>, 
+    ArgTypeName<IIdentification>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValIsIdentificationVal>>> ArgCaseIsId;
 
 typedef basic::test::msg::Base<CaseIsId, char, ArgCaseIsId, 
     ArgCaseIsId, ArgCaseIsId> MsgBaseCaseIsId;
 
-typedef basic::test::msg::Argument<CaseValidIdValue, ArgTypeName<0>, 
-    ArgTypeParamName<5>, ArgTypeName<0>, ArgTypeParamName<5>, 
-    ArgVarValue<4>> ArgCaseValidIdValue;
+typedef basic::test::msg::Argument<CaseValidIdValue, 
+    ArgTypeName<IIdentification>, 
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IIdentification>, 
+    ArgTypeParamName<ITypeParameter>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValValidationVal>>> ArgCaseValidIdValue;
 
 typedef basic::test::msg::Base<CaseValidIdValue, char, ArgCaseValidIdValue, 
     ArgCaseValidIdValue, ArgCaseValidIdValue> MsgBaseCaseValidIdValue;
 
-typedef basic::test::msg::Argument<CaseValidIdHasType, ArgTypeName<0>,
-    ArgTypeParamName<5>> ArgCaseValidIdHasType;
+typedef basic::test::msg::Argument<CaseValidIdHasType, 
+    ArgTypeName<IIdentification>,
+    ArgTypeParamName<ITypeParameter>> ArgCaseValidIdHasType;
 
 typedef basic::test::msg::Base<CaseValidIdHasType, char, ArgCaseValidIdHasType, 
     ArgCaseValidIdHasType, ArgCaseValidIdHasType> MsgBaseCaseValidIdHasType;
 
-typedef basic::test::msg::Argument<CaseValidIdType, ArgTypeName<0>,
-    ArgTypeParamName<5>, ArgTypeName<0>, ArgTypeParamName<5>, 
-    ArgTypeName<0>> ArgCaseValidIdType;
+typedef basic::test::msg::Argument<CaseValidIdType, 
+    ArgTypeName<IIdentification>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IIdentification>, 
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IIdentification>> ArgCaseValidIdType;
 
 typedef basic::test::msg::Base<CaseValidIdType, char, ArgCaseValidIdType, 
     ArgCaseValidIdType, ArgCaseValidIdType> MsgBaseCaseValidIdType;
@@ -178,38 +199,45 @@ public:
             "is not same with %s\n");
     }
 public:
-    template<typename TId, bool TIIdVal, bool TVIdVVal, typename... TArgs>
-    bool Result(const CaseIsId&, VariableIdentification<TId, 
-        TIIdVal, TVIdVVal, TArgs...>& var)
+    template<typename TIdentification, bool IsIdentificationVal, 
+        bool ValidationVal, typename... TArgs>
+    bool Result(const CaseIsId&, VariableIdentification<TIdentification, 
+        IsIdentificationVal, ValidationVal, TArgs...>& var)
     {
-        return basic::type::IsIdentification<TId>::Value == TIIdVal &&
-            basic::type::IsIdentification<TId>::value == TIIdVal;
+        return basic::type::IsIdentification<TIdentification>::Value == 
+            IsIdentificationVal && basic::type::IsIdentification<
+            TIdentification>::value == IsIdentificationVal;
     }
 
-    template<typename TId, bool TIIdVal, bool TVIdVVal, typename... TArgs>
-    bool Result(const CaseValidIdValue&, VariableIdentification<TId, 
-        TIIdVal, TVIdVVal, TArgs...>& var)
+    template<typename TIdentification, bool IsIdentificationVal, 
+        bool ValidationVal, typename... TArgs>
+    bool Result(const CaseValidIdValue&, VariableIdentification<
+        TIdentification, IsIdentificationVal, ValidationVal, TArgs...>& var)
     {
-        return basic::type::Validation<TId, TArgs...>::Value == TVIdVVal;
+        return basic::type::Validation<TIdentification, TArgs...>::Value == 
+            ValidationVal;
     }
 
-    template<typename TId, bool TIIdVal, bool TVIdVVal, typename... TArgs>
-    bool Result(const CaseValidIdHasType&, VariableIdentification<TId, 
-        TIIdVal, TVIdVVal, TArgs...>& var)
+    template<typename TIdentification, bool IsIdentificationVal, 
+        bool ValidationVal, typename... TArgs>
+    bool Result(const CaseValidIdHasType&, VariableIdentification<
+        TIdentification, IsIdentificationVal, ValidationVal, TArgs...>& var)
     {
         return typeid(decltype(HasType<basic::type::
-            Validation<TId, TArgs...>>(0))).hash_code() ==
+            Validation<TIdentification, TArgs...>>(0))).hash_code() ==
             typeid(std::true_type).hash_code();
     }
 
-    template<typename TId, bool TIIdVal, bool TVIdVVal, typename... TArgs>
-    bool Result(const CaseValidIdType&, VariableIdentification<TId, 
-        TIIdVal, TVIdVVal, TArgs...>& var)
+    template<typename TIdentification, bool IsIdentificationVal, 
+        bool ValidationVal, typename... TArgs>
+    bool Result(const CaseValidIdType&, VariableIdentification<TIdentification,
+        IsIdentificationVal, ValidationVal, TArgs...>& var)
     {
-        return typeid(decltype(GetType1<basic::type::Validation<TId, 
-            TArgs...>>(0))).hash_code() == typeid(TId).hash_code() &&
-            typeid(decltype(GetType2<basic::type::Validation<TId, 
-                TArgs...>>(0))).hash_code() == typeid(TId).hash_code();
+        return typeid(decltype(GetType1<basic::type::Validation<
+            TIdentification, TArgs...>>(0))).hash_code() == 
+            typeid(TIdentification).hash_code() &&
+            typeid(decltype(GetType2<basic::type::Validation<TIdentification, 
+            TArgs...>>(0))).hash_code() == typeid(TIdentification).hash_code();
     }
 };
 
@@ -225,11 +253,17 @@ BASIC_TEST_TYPE_NAME("float", float);
 const char * true_cstr = "true";
 const char * false_cstr = "false";
 
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
+
+
 typedef VariableIdentification<int, false, false> T1Var1Type;
 typedef VariableIdentification<int, false, false, int> T1Var2Type;
 
-T1Var1Type t1_var1(false_cstr, false_cstr);
-T1Var2Type t1_var2(false_cstr, false_cstr);
+T1Var1Type t1_var1(&BoolToString);
+T1Var2Type t1_var2(&BoolToString);
 
 REGISTER_TEST(t1, new TestIdentification<basic::test::type::
     Parameter<CaseIsId, CaseValidIdValue>, T1Var1Type, T1Var2Type>(t1_var1, 
@@ -307,12 +341,12 @@ typedef VariableIdentification<IntId, true, true, IntId,
 typedef VariableIdentification<FloatId, true, true, FloatId,
     FloatingId, NumberId> T2Var6Type;
 
-T2Var1Type t2_var1(true_cstr, true_cstr);
-T2Var2Type t2_var2(true_cstr, true_cstr);
-T2Var3Type t2_var3(true_cstr, true_cstr);
-T2Var4Type t2_var4(true_cstr, true_cstr);
-T2Var5Type t2_var5(true_cstr, true_cstr);
-T2Var6Type t2_var6(true_cstr, true_cstr);
+T2Var1Type t2_var1(&BoolToString);
+T2Var2Type t2_var2(&BoolToString);
+T2Var3Type t2_var3(&BoolToString);
+T2Var4Type t2_var4(&BoolToString);
+T2Var5Type t2_var5(&BoolToString);
+T2Var6Type t2_var6(&BoolToString);
 
 REGISTER_TEST(t2, new TestIdentification<
     basic::test::type::Parameter<CaseIsId, CaseValidIdValue, 
@@ -328,10 +362,10 @@ typedef VariableIdentification<FloatId, true, false, IntegerId,
     NumberId> T3Var3Type;
 typedef VariableIdentification<NumberId, true, false, int> T3Var4Type;
 
-T3Var1Type t3_var1(true_cstr, false_cstr);
-T3Var2Type t3_var2(true_cstr, false_cstr);
-T3Var3Type t3_var3(true_cstr, false_cstr);
-T3Var4Type t3_var4(true_cstr, false_cstr);
+T3Var1Type t3_var1(&BoolToString);
+T3Var2Type t3_var2(&BoolToString);
+T3Var3Type t3_var3(&BoolToString);
+T3Var4Type t3_var4(&BoolToString);
 
 REGISTER_TEST(t3, new TestIdentification<
     basic::test::type::Parameter<CaseIsId, CaseValidIdValue>,

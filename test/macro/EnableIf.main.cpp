@@ -1,243 +1,313 @@
 #include "macro/EnableIf.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Base.h"
+#include "test/Case.h"
+#include "test/Message.h"
+#include "test/Variable.h"
+
+#include "test/var/At.h"
 
 #include <type_traits>
-#include <vector>
 #include <typeinfo>
-#include <string>
+
+struct CaseATTa {}; // case alias type and target
+struct CaseATTTa {}; // case alias type tmpl and target
+struct CaseNAT {}; // case no alias type
+struct CaseNATT {}; // case no alias type tmpl
+struct CaseAT {}; // case alias type
+struct CaseATT {}; // case alias type tmpl
+
+template<typename TEnableIfTrue, typename TTrue, 
+    typename TEnableIfFalse, typename TFalse, typename... TArgs>
+using VariableTestEnableIf = basic::test::Variable<
+    TEnableIfTrue, 
+    TTrue,
+    TEnableIfFalse, 
+    TFalse, 
+    basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IEnableIfTrue = 0;
+constexpr std::size_t ITrue = 1;
+constexpr std::size_t IEnableIfFalse = 2;
+constexpr std::size_t IFalse = 3;
+constexpr std::size_t ITypeParameter = 4;
+
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
+
+template<std::size_t I>
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+
+template<std::size_t I>
+using ArgValue = basic::test::msg::arg::Value<I>;
+
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<ITrue>> ArgCaseATTa;
+
+typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
+    ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
+
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<ITrue>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATTTa;
+
+typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
+    ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
+
+typedef basic::test::msg::Argument<CaseNAT, 
+    ArgTypeName<IEnableIfFalse>> ArgCaseNAT;
+
+typedef basic::test::msg::Base<CaseNAT, char, ArgCaseNAT, 
+    ArgCaseNAT, ArgCaseNAT> MsgBaseCaseNAT;
+
+typedef basic::test::msg::Argument<CaseNATT, 
+    ArgTypeName<IEnableIfFalse>> ArgCaseNATT;
+
+typedef basic::test::msg::Base<CaseNATT, char, ArgCaseNATT, 
+    ArgCaseNATT, ArgCaseNATT> MsgBaseCaseNATT;
+
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeName<IEnableIfTrue>> ArgCaseAT;
+
+typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
+    ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
+
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IEnableIfTrue>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IEnableIfTrue>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
+
+typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
+    ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
+
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    bool BoolTest, typename TTrue>
+static auto GetTypeAlias1(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::type>());
+template<template<bool, typename> class TTEnableIf, typename TFalse>
+static TFalse GetTypeAlias1(...);
+
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    bool BoolTest, typename TTrue>
+static auto GetTypeAlias2(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::Type>());
+template<template<bool, typename> class TTEnableIf, typename TFalse>
+static TFalse GetTypeAlias2(...);
+
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs, bool BoolTest, typename TTrue>
+static auto GetTypeAliasTmpl1(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::
+        template type<TArgs...>>());
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs>
+static TFalse GetTypeAliasTmpl1(...);
+
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs, bool BoolTest, typename TTrue>
+static auto GetTypeAliasTmpl2(const TTEnableIf<BoolTest, TTrue>&) ->
+    decltype(std::declval<typename TTEnableIf<BoolTest, TTrue>::
+        template Type<TArgs...>>());
+template<template<bool, typename> class TTEnableIf, typename TFalse, 
+    typename... TArgs>
+static TFalse GetTypeAliasTmpl2(...);
+
+
+template<template <bool, typename> class TTEnableIf, typename TCases, 
+    typename... TVars>
+class TestEnableIf :
+    public MsgBaseCaseATTa, 
+    public MsgBaseCaseATTTa,
+    public MsgBaseCaseNAT,
+    public MsgBaseCaseNATT,
+    public MsgBaseCaseAT,
+    public MsgBaseCaseATT,
+    public basic::test::Message<BASIC_TEST, TestEnableIf<TTEnableIf, 
+        TCases, TVars...>>,
+    public basic::test::Case<TestEnableIf<TTEnableIf, 
+        TCases, TVars...>, TCases>,
+    public basic::test::Base<TestEnableIf<TTEnableIf, 
+        TCases, TVars...>, TVars...>
+{
+public:
+    typedef basic::test::Base<TestEnableIf<TTEnableIf, TCases, TVars...>, 
+        TVars...> BaseType; 
+    typedef basic::test::Message<BASIC_TEST, TestEnableIf<TTEnableIf, 
+        TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestEnableIf<TTEnableIf, TCases, TVars...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseATTa::SetFormat;
+    using MsgBaseCaseATTTa::SetFormat;
+    using MsgBaseCaseNAT::SetFormat;
+    using MsgBaseCaseNATT::SetFormat;
+    using MsgBaseCaseAT::SetFormat;
+    using MsgBaseCaseATT::SetFormat;
+public:
+    using MsgBaseCaseATTa::Format;
+    using MsgBaseCaseATTTa::Format;
+    using MsgBaseCaseNAT::Format;
+    using MsgBaseCaseNATT::Format;
+    using MsgBaseCaseAT::Format;
+    using MsgBaseCaseATT::Format;
+    using MsgBaseCaseATTa::Argument;
+    using MsgBaseCaseATTTa::Argument;
+    using MsgBaseCaseNAT::Argument;
+    using MsgBaseCaseNATT::Argument;
+    using MsgBaseCaseAT::Argument;
+    using MsgBaseCaseATT::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestEnableIf(TVars&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
+    {
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+
+        CaseATTa case_alias_type_and_target;
+        SetFormat(info, case_alias_type_and_target,
+            "Test compare between %s::type and %s\n");
+        SetFormat(debug, case_alias_type_and_target,
+            "Test compare between %s::type and %s\n");
+        SetFormat(error, case_alias_type_and_target,
+            "error %s::type is not same with %s\n");
+
+        CaseATTTa case_alias_type_tmpl_and_target;
+        SetFormat(info, case_alias_type_tmpl_and_target,
+            "Test compare between %s::template type<%s> and %s\n");
+        SetFormat(debug, case_alias_type_tmpl_and_target,
+            "Test compare between %s::template type<%s> and %s\n");
+        SetFormat(error, case_alias_type_tmpl_and_target,
+            "error %s::template type<%s> is not same with %s\n");
+        
+        CaseNAT case_no_alias_type;
+        SetFormat(info, case_no_alias_type,
+            "test there is no type alias member of %s\n");
+        SetFormat(debug, case_no_alias_type,
+            "test there is no type alias member of %s\n");
+        SetFormat(error, case_no_alias_type,
+            "error %s has type alias member\n");
+
+        CaseNATT case_no_alias_type_tmpl;
+        SetFormat(info, case_no_alias_type_tmpl,
+            "test there is no type template alias member of %s\n");
+        SetFormat(debug, case_no_alias_type_tmpl,
+            "test there is no type template alias member of %s\n");
+        SetFormat(error, case_no_alias_type_tmpl,
+            "error %s has type template alias member\n");
+
+        CaseAT case_alias_type;
+        SetFormat(info, case_alias_type,
+            "Test compare between %s::type and %s::Type\n");
+        SetFormat(debug, case_alias_type,
+            "Test compare between %s::type and %s::Type\n");
+        SetFormat(error, case_alias_type,
+            "error %s::type is not same with %s::Type\n");
+
+        CaseATT case_alias_type_tmpl;
+        SetFormat(info, case_alias_type_tmpl,
+            "Test compare between %s::template type<%s> and "
+            "%s::template Type<%s>\n");
+        SetFormat(debug, case_alias_type_tmpl,
+            "Test compare between %s::template type<%s> and "
+            "%s::template Type<%s>\n");
+        SetFormat(error, case_alias_type_tmpl,
+            "error %s::template type<%s> is not same with "
+            "%s::template Type<%s>\n");
+    }
+
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(TTrue).hash_code();
+    }
+
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(TTrue).hash_code();
+    }
+   
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseNAT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfFalse>()))).hash_code() == 
+            typeid(TFalse).hash_code();
+    }
+    
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseNATT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfFalse>()))).hash_code() == 
+            typeid(TFalse).hash_code();
+    }
+    
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAlias1<TTEnableIf, 
+            TFalse>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(decltype(GetTypeAlias2<TTEnableIf, TFalse>(std::declval<
+                TEnableIfTrue>()))).hash_code();
+    }
+    
+    template<typename TEnableIfTrue, typename TTrue, 
+        typename TEnableIfFalse, typename TFalse, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestEnableIf<TEnableIfTrue, TTrue,
+        TEnableIfFalse, TFalse, TArgs...>& var)
+    {
+        return typeid(decltype(GetTypeAliasTmpl1<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code() == 
+            typeid(decltype(GetTypeAliasTmpl2<TTEnableIf, TFalse, 
+            TArgs...>(std::declval<TEnableIfTrue>()))).hash_code();
+    }
+};
+
+
+using CaseAliasType = basic::test::type::
+    Parameter<CaseATTa, CaseNAT, CaseAT>;
+using CaseAliasTypeTmpl = basic::test::type::
+    Parameter<CaseATTTa, CaseNATT, CaseATT>;
+
 
 template<typename T>
 struct A
 {};
 
-template<typename Tc>
-struct Name
-{
-    static const char * Value;
-};
-template<typename Tc>
-const char* Name<Tc>::Value = "undefined"; 
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
+BASIC_TEST_TYPE_NAME("void", void);
+BASIC_TEST_TYPE_NAME("A<void>", A<void>);
 
-#define __DEFINE_NAME_CONDITIONAL_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = #__VA_ARGS__;\
-}
-
-__DEFINE_NAME_CONDITIONAL_(std::true_type);
-__DEFINE_NAME_CONDITIONAL_(std::false_type);
-__DEFINE_NAME_CONDITIONAL_(void);
-__DEFINE_NAME_CONDITIONAL_(A<void>);
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) != 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-    if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-    NameParameterTmpl<Targs...>(str, false);
-}
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) == 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-     if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-}
-
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-static auto CallFoo(int) ->
-    decltype(std::declval<typename Te<BoolTest, Ttt>::type>());
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-static Ttf CallFoo(...);
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-static auto CallFoo1(int) ->
-    decltype(std::declval<typename Te<BoolTest, Ttt>::Type>());
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-static Ttf CallFoo1(...);
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-static auto CallFoo2(int) ->
-    decltype(std::declval<typename Te<BoolTest, Ttt>::
-        template type<Targs...>>());
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-static Ttf CallFoo2(...);
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-static auto CallFoo3(int) ->
-    decltype(std::declval<typename Te<BoolTest, Ttt>::
-        template Type<Targs...>>());
-template<bool BoolTest, template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-static Ttf CallFoo3(...);
-
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-void TestAliasTypeAndTarget()
-{
-    typedef decltype(CallFoo<true, Te, Ttt, Ttf>(0)) TrueCallFooType;
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Ttt>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Te<true, Ttt>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Ttt>::Value;
-    if (Assert(error_msg.c_str(), typeid(TrueCallFooType).hash_code() ==
-        typeid(Ttt).hash_code()))
-            Info("Pass\n");
-}
-
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-void TestAliasTypeTmplAndTarget()
-{
-    typedef decltype(CallFoo2<true, Te, Ttt, 
-        Ttf, Targs...>(0)) TrueCallFoo2Type;
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Ttt>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Te<true, Ttt>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Ttt>::Value;
-    if (Assert(error_msg.c_str(), typeid(TrueCallFoo2Type).hash_code() ==
-        typeid(Ttt).hash_code()))
-            Info("Pass\n");
-}
-
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-void TestNoHasAliasType()
-{
-    typedef decltype(CallFoo<false, Te, Ttt, Ttf>(0)) FalseCallFooType;
-    std::string info_msg = "Test not has member alias type to ";
-    info_msg += Name<Te<false, Ttt>>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Te<false, Ttt>>::Value;
-    error_msg = " has alias type";
-    if (Assert(error_msg.c_str(), typeid(FalseCallFooType).hash_code() ==
-        typeid(Ttf).hash_code()))
-            Info("Pass\n");
-}
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-void TestNoHasAliasTypeTmpl()
-{
-    typedef decltype(CallFoo2<false, Te, Ttt, 
-        Ttf, Targs...>(0)) FalseCallFoo2Type;
-    std::string info_msg = "Test not has member alias type template to ";
-    info_msg += Name<Te<false, Ttt>>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Te<false, Ttt>>::Value;
-    error_msg = " has alias type";
-    if (Assert(error_msg.c_str(), typeid(FalseCallFoo2Type).hash_code() ==
-        typeid(Ttf).hash_code()))
-            Info("Pass\n");
-}
-
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf>
-void TestAliasType()
-{
-    typedef decltype(CallFoo<true, Te, Ttt, Ttf>(0)) TrueCallFooType;
-    typedef decltype(CallFoo1<true, Te, Ttt, Ttf>(0)) TrueCallFoo1Type;
-    std::string error_msg = Name<Te<true, Ttt>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Te<true, Ttt>>::Value;
-    error_msg += "::Type";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::Type : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(TrueCallFooType).hash_code() ==
-            typeid(TrueCallFoo1Type).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<bool, typename> class Te, typename Ttt,
-    typename Ttf, typename... Targs>
-void TestAliasTypeTmpl()
-{
-    typedef decltype(CallFoo2<true, Te, Ttt,
-        Ttf, Targs...>(0)) TrueCallFoo2Type;
-    typedef decltype(CallFoo3<true, Te,Ttt,
-        Ttf, Targs...>(0)) TrueCallFoo3Type;
-    std::string error_msg = Name<Te<true, Ttt>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Te<true, Ttt>>::Value;
-    error_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += ">";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Te<true, Ttt>>::Value;
-    info_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(TrueCallFoo2Type).hash_code() ==
-            typeid(TrueCallFoo3Type).hash_code()))
-                Info("Pass\n");
-}
-
-struct TestOutputType;
-struct TestOutputTypeTmpl;
-
-template<template<bool, typename> class Te, typename Ttt, typename Ttf,
-    typename = TestOutputType, typename... Targs>
-struct TestEnableIf : basic::test::Base
-{
-    void Test()
-    {
-        TestAliasTypeAndTarget<Te, Ttt, Ttf>();
-        TestNoHasAliasType<Te, Ttt, Ttf>();
-        TestAliasType<Te, Ttt, Ttf>();
-    }
-};
-
-template<template<bool, typename To> class Te, typename Ttt, typename Ttf,
-    typename... Targs>
-struct TestEnableIf<Te, Ttt, Ttf, TestOutputTypeTmpl, Targs...> : 
-    basic::test::Base
-{
-    void Test()
-    {
-        TestAliasTypeTmplAndTarget<Te, Ttt, Ttf, Targs...>();
-        TestNoHasAliasTypeTmpl<Te, Ttt, Ttf, Targs...>();
-        TestAliasTypeTmpl<Te, Ttt, Ttf, Targs...>();
-    }
-};
 
 /**
  *  template<bool BoolTest, typename T, typename To = void, bool = true>
@@ -261,12 +331,21 @@ __DEFINE_ENABLE_IF_(EnableIf1, BoolTest, T, To,,,, T_OUT_NAME_,,
     ALIAS_TYPE_,, true);
 
 template<bool BoolTest, typename To>
-using EnableIf1_t = EnableIf1<BoolTest, void, To>;
+using BoolToEnableIf1 = EnableIf1<BoolTest, void, To>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf1<true, void, std::true_type>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf1<false, void, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf1<true, void, std::true_type>",
+    EnableIf1<true, void, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf1<false, void, std::true_type>",
+    EnableIf1<false, void, std::true_type>);
 
-RegisterTest(t1, new TestEnableIf<EnableIf1_t, std::true_type, std::false_type>());
+typedef VariableTestEnableIf<BoolToEnableIf1<true, std::true_type>, 
+    std::true_type, BoolToEnableIf1<false, std::true_type>,
+    std::false_type> T1Var1;
+
+T1Var1 t1_var1;
+
+REGISTER_TEST(t1, new TestEnableIf<BoolToEnableIf1, CaseAliasType,
+    T1Var1>(t1_var1));
 
 /**
  *  template<bool BoolTest, typename T = void, typename To = std::true_type, 
@@ -296,12 +375,19 @@ __DEFINE_ENABLE_IF_(EnableIf2, BoolTest, T, To, TPLP1,,, T_OUT_NAME_,,
     ALIAS_TYPE_,, true);
 
 template<bool BoolTest, typename To>
-using EnableIf2_t = EnableIf2<BoolTest, void, To>;
+using BoolToEnableIf2 = EnableIf2<BoolTest, void, To>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf2<true>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf2<false>);
+BASIC_TEST_TYPE_NAME("EnableIf2<true>", EnableIf2<true>);
+BASIC_TEST_TYPE_NAME("EnableIf2<false>", EnableIf2<false>);
 
-RegisterTest(t2, new TestEnableIf<EnableIf2_t, std::true_type, std::false_type>());
+typedef VariableTestEnableIf<BoolToEnableIf2<true, std::true_type>, 
+    std::true_type, BoolToEnableIf2<false, std::true_type>,
+    std::false_type> T2Var1;
+
+T2Var1 t2_var1;
+
+REGISTER_TEST(t2, new TestEnableIf<BoolToEnableIf2, CaseAliasType,
+    T2Var1>(t2_var1));
 
 /**
  *  template<bool BoolTest, typename T, typename To = void, bool = true>
@@ -330,12 +416,21 @@ __DEFINE_ENABLE_IF_(EnableIf3, BoolTest, T, To,,, TAL1, T_OUT_NAME_,,
     ALIAS_TYPE_,, true);
 
 template<bool BoolTest, typename To>
-using EnableIf3_t = EnableIf3<BoolTest, A<void>, To>;
+using BoolToEnableIf3 = EnableIf3<BoolTest, A<void>, To>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf3<true, A<void>, std::true_type>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf3<false, A<void>, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf3<true, A<void>, std::true_type>",
+    EnableIf3<true, A<void>, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf3<false, A<void>, std::true_type>",
+    EnableIf3<false, A<void>, std::true_type>);
 
-RegisterTest(t3, new TestEnableIf<EnableIf3_t, std::true_type, std::false_type>());
+typedef VariableTestEnableIf<BoolToEnableIf3<true, std::true_type>, 
+    std::true_type, BoolToEnableIf3<false, std::true_type>,
+    std::false_type> T3Var1;
+
+T3Var1 t3_var1;
+
+REGISTER_TEST(t3, new TestEnableIf<BoolToEnableIf3, CaseAliasType,
+    T3Var1>(t3_var1));
 
 /**
  *  template<bool BoolTest, typename T1, typename T2, typename To, bool = true>
@@ -374,12 +469,21 @@ __DEFINE_ENABLE_IF_(EnableIf4, BoolTest, T1, To, TPLP2, TPLS1,
     TAL2, T_OUT_NAME_,, ALIAS_TYPE_,, true);
 
 template<bool BoolTest, typename To>
-using EnableIf4_t = EnableIf4<BoolTest, void, void, To>;
+using BoolToEnableIf4 = EnableIf4<BoolTest, void, void, To>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf4<true, void, void, std::true_type>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf4<false, void, void, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf4<true, void, void, std::true_type>",
+    EnableIf4<true, void, void, std::true_type>);
+BASIC_TEST_TYPE_NAME("EnableIf4<false, void, void, std::true_type>",
+    EnableIf4<false, void, void, std::true_type>);
 
-RegisterTest(t4, new TestEnableIf<EnableIf4_t, std::true_type, std::false_type>());
+typedef VariableTestEnableIf<BoolToEnableIf4<true, std::true_type>, 
+    std::true_type, BoolToEnableIf4<false, std::true_type>,
+    std::false_type> T4Var1;
+
+T4Var1 t4_var1;
+
+REGISTER_TEST(t4, new TestEnableIf<BoolToEnableIf4, CaseAliasType,
+    T4Var1>(t4_var1));
 
 /**
  *  template<bool BoolTest, typename T,  
@@ -417,12 +521,21 @@ __DEFINE_ENABLE_IF_(EnableIf5, BoolTest, T, To, TPLP3, TPLS2,,
     T_OUT_NAME_TMPL_, TONTAL1, ALIAS_TYPE_,, true);
 
 template<bool BoolTest, typename To>
-using EnableIf5_t = EnableIf5<BoolTest, void, A>;
+using BoolToEnableIf5 = EnableIf5<BoolTest, To, A>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf5<true, void, A>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf5<false, void, A>);
+BASIC_TEST_TYPE_NAME("EnableIf5<true, void, A>",
+    EnableIf5<true, void, A>);
+BASIC_TEST_TYPE_NAME("EnableIf5<false, void, A>",
+    EnableIf5<false, void, A>);
 
-RegisterTest(t5, new TestEnableIf<EnableIf5_t, A<void>, std::false_type>());
+typedef VariableTestEnableIf<BoolToEnableIf5<true, void>, 
+    A<void>, BoolToEnableIf5<false, void>, 
+    std::false_type> T5Var1;
+
+T5Var1 t5_var1;
+
+REGISTER_TEST(t5, new TestEnableIf<BoolToEnableIf5, CaseAliasType,
+    T5Var1>(t5_var1));
 
 /**
  *  template<bool BoolTest, typename T, template<typename> To,
@@ -455,15 +568,23 @@ __DEFINE_ENABLE_IF_(EnableIf6, BoolTest, T, To, TPLP3, TPLS2,,
     T_OUT_NAME_TMPL_, TONTAL2, ALIAS_TYPE_TMPL_, ATTPL1, true);
 
 template<bool BoolTest, typename To>
-using EnableIf6_t = EnableIf6<BoolTest, void, A>;
+using BoolToEnableIf6 = EnableIf6<BoolTest, To, A>;
 
-__DEFINE_NAME_CONDITIONAL_(EnableIf6<true, void, A>);
-__DEFINE_NAME_CONDITIONAL_(EnableIf6<false, void, A>);
+BASIC_TEST_TYPE_NAME("EnableIf6<true, void, A>",
+    EnableIf6<true, void, A>);
+BASIC_TEST_TYPE_NAME("EnableIf6<false, void, A>",
+    EnableIf6<false, void, A>);
 
-RegisterTest(t6, new TestEnableIf<EnableIf6_t, A<void>, std::false_type,
-    TestOutputTypeTmpl, void>());
+typedef VariableTestEnableIf<BoolToEnableIf6<true, void>, 
+    A<void>, BoolToEnableIf6<false, void>, 
+    std::false_type, void> T6Var1;
+
+T6Var1 t6_var1;
+
+REGISTER_TEST(t6, new TestEnableIf<BoolToEnableIf6, CaseAliasTypeTmpl,
+    T6Var1>(t6_var1));
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }

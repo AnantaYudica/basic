@@ -1,10 +1,185 @@
 #include "macro/MemberDefinition.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Base.h"
+#include "test/Case.h"
+#include "test/Message.h"
+#include "test/Variable.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
+
+struct CaseATTa {}; // case alias type and target
+struct CaseATTTa{}; // case alias type tmpl and target
+struct CaseAT{}; // case alias type
+struct CaseATT{}; // case alias type tmpl
+
+template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+using VariableTestMmbrDefn = basic::test::Variable<
+    TMmbrDefn, 
+    TAliasType,
+    basic::test::type::Parameter<TArgs...>>;
+
+constexpr std::size_t IMmbrDefn = 0;
+constexpr std::size_t IAliasType = 1;
+constexpr std::size_t ITypeParameter = 2;
+
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
+
+template<std::size_t I>
+using ArgTypeParamName = basic::test::msg::arg::type::param::Name<I>;
+
+typedef basic::test::msg::Argument<CaseATTa, 
+    ArgTypeName<IMmbrDefn>, 
+    ArgTypeName<IAliasType>> ArgCaseATTa;
+
+typedef basic::test::msg::Base<CaseATTa, char, ArgCaseATTa, 
+    ArgCaseATTa, ArgCaseATTa> MsgBaseCaseATTa;
+
+typedef basic::test::msg::Argument<CaseATTTa, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IAliasType>> ArgCaseATTTa;
+
+typedef basic::test::msg::Base<CaseATTTa, char, ArgCaseATTTa, 
+    ArgCaseATTTa, ArgCaseATTTa> MsgBaseCaseATTTa;
+
+typedef basic::test::msg::Argument<CaseAT, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeName<IMmbrDefn>> ArgCaseAT;
+
+typedef basic::test::msg::Base<CaseAT, char, ArgCaseAT, 
+    ArgCaseAT, ArgCaseAT> MsgBaseCaseAT;
+
+typedef basic::test::msg::Argument<CaseATT, 
+    ArgTypeName<IMmbrDefn>,
+    ArgTypeParamName<ITypeParameter>, 
+    ArgTypeName<IMmbrDefn>, 
+    ArgTypeParamName<ITypeParameter>> ArgCaseATT;
+
+typedef basic::test::msg::Base<CaseATT, char, ArgCaseATT, 
+    ArgCaseATT, ArgCaseATT> MsgBaseCaseATT;
+
+template<typename TCases, typename... TVar>
+class TestMmbrDefn :
+    public MsgBaseCaseATTa,
+    public MsgBaseCaseATTTa,
+    public MsgBaseCaseAT,
+    public MsgBaseCaseATT,
+    public basic::test::Message<BASIC_TEST, TestMmbrDefn<TCases, TVar...>>,
+    public basic::test::Case<TestMmbrDefn<TCases, TVar...>, TCases>,
+    public basic::test::Base<TestMmbrDefn<TCases, TVar...>, TVar...>
+{
+public:
+    typedef basic::test::Base<TestMmbrDefn<TCases, TVar...>, TVar...> BaseType;
+    typedef basic::test::Message<BASIC_TEST, TestMmbrDefn<TCases, 
+        TVar...>> BaseMessageType;
+    typedef basic::test::Case<TestMmbrDefn<TCases, TVar...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseATTa::SetFormat;
+    using MsgBaseCaseATTTa::SetFormat;
+    using MsgBaseCaseAT::SetFormat;
+    using MsgBaseCaseATT::SetFormat;
+public:
+    using MsgBaseCaseATTa::Format;
+    using MsgBaseCaseATTTa::Format;
+    using MsgBaseCaseAT::Format;
+    using MsgBaseCaseATT::Format;
+    using MsgBaseCaseATTa::Argument;
+    using MsgBaseCaseATTTa::Argument;
+    using MsgBaseCaseAT::Argument;
+    using MsgBaseCaseATT::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestMmbrDefn(TVar&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
+    {
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+
+        CaseATTa case_alias_type_and_target;
+        SetFormat(info, case_alias_type_and_target, 
+            "test compare between %s::type and %s\n");
+        SetFormat(debug, case_alias_type_and_target,
+            "test compare between %s::type and %s\n");
+        SetFormat(error, case_alias_type_and_target,
+            "error %s::type is not same with %s\n");
+
+        CaseATTTa case_alias_type_tmpl_and_target;
+        SetFormat(info, case_alias_type_tmpl_and_target, 
+            "test compare between %s::template type<%s> and %s\n");
+        SetFormat(debug, case_alias_type_tmpl_and_target,
+            "test compare between %s::template type<%s> and %s\n");
+        SetFormat(error, case_alias_type_tmpl_and_target,
+            "error %s::template type<%s> is not same with %s\n");
+
+        CaseAT case_alias_type;
+        SetFormat(info, case_alias_type, 
+            "test compare between %s::type and %s::Type\n");
+        SetFormat(debug, case_alias_type,
+            "test compare between %s::type and %s::Type\n");
+        SetFormat(error, case_alias_type,
+            "error %s::type is not same with %s::Type\n");
+
+        CaseATT case_alias_tmpl_type;
+        SetFormat(info, case_alias_tmpl_type, 
+            "test compare between %s::template type<%s> "
+            "and %s::template type<%s>\n");
+        SetFormat(debug, case_alias_tmpl_type,
+            "test compare between %s::template type<%s> "
+            "and %s::template type<%s>\n");
+        SetFormat(error, case_alias_tmpl_type,
+            "error %s::template type<%s> is not same "
+            "with %s::template type<%s>\n");
+    }
+public:
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATTa&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
+        TArgs...>& var)
+    {
+        return typeid(typename TMmbrDefn::type).hash_code() ==
+            typeid(TAliasType).hash_code();
+    }
+
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATTTa&, VariableTestMmbrDefn<TMmbrDefn, TAliasType,  
+        TArgs...>& var)
+    {
+        return typeid(typename TMmbrDefn::template type<
+            TArgs...>).hash_code() == typeid(TAliasType).hash_code();
+    }
+
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseAT&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
+        TArgs...>& var)
+    {
+        return typeid(typename TMmbrDefn::type).hash_code() ==
+            typeid(typename TMmbrDefn::Type).hash_code();
+    }
+
+    template<typename TMmbrDefn, typename TAliasType, typename... TArgs>
+    bool Result(const CaseATT&, VariableTestMmbrDefn<TMmbrDefn, TAliasType, 
+        TArgs...>& var)
+    {
+        return typeid(typename TMmbrDefn::template type<
+            TArgs...>).hash_code() == typeid(typename TMmbrDefn::template Type<
+            TArgs...>).hash_code();
+    }
+};
+
+using CasesAliasType = basic::test::type::Parameter<CaseATTa, CaseAT>;
+using CasesAliasTypeTmp = basic::test::type::Parameter<CaseATTTa, CaseATT>;
 
 struct A
 {
@@ -27,184 +202,12 @@ struct C
     using Type3 = B<T>;
 };
 
-template<typename T, T TVal>
-struct ValueName
-{
-    static constexpr const char * Value = "undefined"; 
-};
-
-#define __DEFINE_VALUE_NAME_(NAME, ...)\
-template<>\
-struct ValueName<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = NAME;\
-}
-
-template<typename T>
-struct Name
-{
-    static const char * Value;
-};
-
-template<typename T>
-const char* Name<T>::Value = "undefined"; 
-
-template<typename T, T TVal>
-struct Name<ValueName<T, TVal>>
-{
-    static constexpr const char * Value = ValueName<T, TVal>::Value;
-};
-
-#define __DEFINE_NAME_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char * Value = #__VA_ARGS__;\
-}
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) != 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-    if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-    NameParameterTmpl<Targs...>(str, false);
-}
-
-template<typename T, typename... Targs>
-typename std::enable_if<sizeof...(Targs) == 0>::type 
-    NameParameterTmpl(std::string& str, bool first = true)
-{
-     if (!first)
-        str += ", ";
-    str += Name<T>::Value;
-}
-
-__DEFINE_VALUE_NAME_("true", bool, true);
-__DEFINE_VALUE_NAME_("false", bool, false);
-
-__DEFINE_NAME_(std::true_type);
-__DEFINE_NAME_(std::false_type);
-__DEFINE_NAME_(void);
-__DEFINE_NAME_(bool);
-__DEFINE_NAME_(A);
-__DEFINE_NAME_(B<void>);
-
-struct AliasType;
-struct AliasTypeTmpl;
-
-template<template<typename> class Tmd, typename T,
-    typename Tta>
-void TestAliasTypeAndTarget()
-{
-    std::string error_msg = Name<Tmd<T>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Tta>::Value;
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Tta>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmd<T>::type).hash_code() ==
-            typeid(Tta).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmd, typename T,
-    typename Tta, typename... Targs>
-void TestAliasTypeTmplAndTarget()
-{
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Tta>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    std::string error_msg = Name<Tmd<T>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Tta>::Value;
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmd<T>::template type<Targs...>).hash_code() ==
-            typeid(Tta).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmd, typename T>
-void TestAliasType()
-{
-    std::string error_msg = Name<Tmd<T>>::Value;
-    error_msg += "::type is not same with ";
-    error_msg += Name<Tmd<T>>::Value;
-    error_msg += "::Type";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::type and ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::Type : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmd<T>::type).hash_code() ==
-            typeid(typename Tmd<T>::Type).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmd, typename T,
-    typename... Targs>
-void TestAliasTypeTmpl()
-{
-    std::string error_msg = Name<Tmd<T>>::Value;
-    error_msg += "::template type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += "> is not same with ";
-    error_msg += Name<Tmd<T>>::Value;
-    error_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(error_msg);
-    error_msg += ">";
-    std::string info_msg = "Test compare between ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::template type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> and ";
-    info_msg += Name<Tmd<T>>::Value;
-    info_msg += "::template Type<";
-    NameParameterTmpl<Targs...>(info_msg);
-    info_msg += "> : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        typeid(typename Tmd<T>::template type<Targs...>).hash_code() ==
-            typeid( typename Tmd<T>:: template Type<Targs...>).hash_code()))
-                Info("Pass\n");
-}
-
-template<template<typename> class Tmd, typename T, typename Ttavt,
-    typename = AliasType, typename... Targs>
-struct TestMmbrDefn : basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeAndTarget<Tmd, T, Ttavt>();
-        TestAliasType<Tmd, T>();
-    };
-};
-
-template<template<typename> class Tmd, typename T, typename Ttavt,
-    typename... Targs>
-struct TestMmbrDefn<Tmd, T, Ttavt, AliasTypeTmpl, Targs...> : 
-    basic::test::Base
-{
-    void Test() 
-    {
-        TestAliasTypeTmplAndTarget<Tmd, T, Ttavt, Targs...>();
-        TestAliasTypeTmpl<Tmd, T, Targs...>();
-    };
-};
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
+BASIC_TEST_TYPE_NAME("void", void);
+BASIC_TEST_TYPE_NAME("bool", bool);
+BASIC_TEST_TYPE_NAME("A", A);
+BASIC_TEST_TYPE_NAME("B<void", B<void>);
 
 /**
  *  template<typename T>
@@ -218,11 +221,15 @@ struct TestMmbrDefn<Tmd, T, Ttavt, AliasTypeTmpl, Targs...> :
 __DEFINE_MMBR_DEFN_(MmbrDefn1, T,, T_NAME_,, ALIAS_TYPE_,, Type1);
 
 template<typename T>
-using MmbrDefn1_t = MmbrDefn1<T>;
+using TMmbrDefn1 = MmbrDefn1<T>;
 
-__DEFINE_NAME_(MmbrDefn1<A>);
+BASIC_TEST_TYPE_NAME("MmbrDefn1<A>", MmbrDefn1<A>);
 
-RegisterTest(t1, new TestMmbrDefn<MmbrDefn1_t, A, typename A::Type1>());
+typedef VariableTestMmbrDefn<TMmbrDefn1<A>, typename A::Type1> T1Var1;
+
+T1Var1 t1_var1;
+
+REGISTER_TEST(t1, new TestMmbrDefn<CasesAliasType, T1Var1>(t1_var1));
 
 /**
  *  template<typename T, typename T1>
@@ -240,11 +247,15 @@ typename __T_NAME__, typename T1
 __DEFINE_MMBR_DEFN_(MmbrDefn2, T, TPL1, T_NAME_,, ALIAS_TYPE_,, Type1);
 
 template<typename T>
-using MmbrDefn2_t = MmbrDefn2<T, void>;
+using TMmbrDefn2 = MmbrDefn2<T, void>;
 
-__DEFINE_NAME_(MmbrDefn2<A, void>);
+BASIC_TEST_TYPE_NAME("MmbrDefn2<A, void>", MmbrDefn2<A, void>);
 
-RegisterTest(t2, new TestMmbrDefn<MmbrDefn2_t, A, typename A::Type1>());
+typedef VariableTestMmbrDefn<TMmbrDefn2<A>, typename A::Type1> T2Var1;
+
+T2Var1 t2_var1;
+
+REGISTER_TEST(t2, new TestMmbrDefn<CasesAliasType, T2Var1>(t2_var1));
 
 /**
  *  template<template<typename> class T, typename T1>
@@ -266,11 +277,15 @@ __DEFINE_MMBR_DEFN_(MmbrDefn3, T, TPL2, T_NAME_TMPL_,
     TNTAL1, ALIAS_TYPE_,, Type2);
 
 template<typename T>
-using MmbrDefn3_t = MmbrDefn3<B, T>;
+using TMmbrDefn3 = MmbrDefn3<B, T>;
 
-__DEFINE_NAME_(MmbrDefn3<B, void>);
+BASIC_TEST_TYPE_NAME("MmbrDefn3<B, void>", MmbrDefn3<B, void>);
 
-RegisterTest(t3, new TestMmbrDefn<MmbrDefn3_t, void, typename B<void>::Type2>());
+typedef VariableTestMmbrDefn<TMmbrDefn3<void>, typename B<void>::Type2> T3Var1;
+
+T3Var1 t3_var1;
+
+REGISTER_TEST(t3, new TestMmbrDefn<CasesAliasType, T3Var1>(t3_var1));
 
 /**
  *  template<typename T>
@@ -290,15 +305,19 @@ __DEFINE_MMBR_DEFN_(MmbrDefn4, T,, T_NAME_,, ALIAS_TYPE_TMPL_, ATTPL1,
     template Type3<T1>);
 
 template<typename T>
-using MmbrDefn4_t = MmbrDefn4<T>;
+using TMmbrDefn4 = MmbrDefn4<T>;
 
-__DEFINE_NAME_(MmbrDefn4<C>);
+BASIC_TEST_TYPE_NAME("MmbrDefn4<C>", MmbrDefn4<C>);
 
-RegisterTest(t4, new TestMmbrDefn<MmbrDefn4_t, C, 
-    typename C::template Type3<void>, AliasTypeTmpl, void>());
+typedef VariableTestMmbrDefn<TMmbrDefn4<C>, 
+    typename C::template Type3<void>, void> T4Var1;
+
+T4Var1 t4_var1;
+
+REGISTER_TEST(t4, new TestMmbrDefn<CasesAliasTypeTmp, T4Var1>(t4_var1));
 
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }

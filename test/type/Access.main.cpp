@@ -1,73 +1,66 @@
 #include "type/Access.h"
+#define USING_BASIC_TEST_MEMORY
+#define EXPERIMENTAL
 #include "Test.h"
+BASIC_TEST_CONSTRUCT;
 
-BasicTestConstruct;
+#include "test/Base.h"
+#include "test/Case.h"
+#include "test/Message.h"
+#include "test/Variable.h"
 
-#include <vector>
+#include "test/var/At.h"
+
 #include <type_traits>
-#include <sstream>
 
-template<typename T, T TVal>
-struct ValueName
-{
-    static constexpr const char* Value = "undefined"; 
-};
+struct CaseHMFFoo1 {}; // case has member function Foo1
+struct CaseHSMFFoo2 {}; // case has static member function Foo2
 
-#define __DEFINE_VALUE_NAME_(NAME, ...)\
-template<>\
-struct ValueName<__VA_ARGS__>\
-{\
-    static constexpr const char* Value = NAME;\
-}
+template<typename TDerivedAccess, typename TBaseAccess, bool HasMmbrFuncFoo1, 
+    bool HasStaticMmbrFuncFoo2>
+using VariableTestAccess = basic::test::Variable<
+    TDerivedAccess, 
+    TBaseAccess,
+    basic::test::type::Value<bool, HasMmbrFuncFoo1>,
+    basic::test::type::Value<bool, HasStaticMmbrFuncFoo2>,
+    basic::test::val::Function<const char*(bool&&)>>;
 
-template<typename T>
-struct Name
-{
-    static constexpr const char* Value = "undefined";
-};
+constexpr std::size_t IDerivedAccess = 0;
+constexpr std::size_t IBaseAccess = 1;
+constexpr std::size_t ITypeValHasMmbrFuncFoo1 = 2;
+constexpr std::size_t ITypeHasStaticMmbrFuncFoo2 = 3;
+constexpr std::size_t IValFuncBoolToCString = 4;
 
-template<typename T, T TVal>
-struct Name<ValueName<T, TVal>>
-{
-    static constexpr const char* Value = ValueName<T, TVal>::Value;
-};
+template<std::size_t I>
+using ArgTypeName = basic::test::msg::arg::type::Name<I>;
 
-#define __DEFINE_NAME_(...)\
-template<>\
-struct Name<__VA_ARGS__>\
-{\
-    static constexpr const char* Value = #__VA_ARGS__;\
-}
+template<std::size_t I>
+using ArgTypeValue = basic::test::msg::arg::type::Value<I>;
 
-template<typename... Targs>
-struct NameParameterTmpl 
-{
-    static void String(std::string& str, bool first = true)
-    {}
-};
+template<std::size_t I, typename... TArgArgs>
+using ArgValFunction = basic::test::msg::arg::val::Function<I, TArgArgs...>;
 
-template<typename T, typename... Targs>
-struct NameParameterTmpl<T, Targs...> 
-{
-    static void String(std::string& str, bool first = true)
-    {
-        if (!first)
-            str += ", ";
-        str += Name<T>::Value;
-        NameParameterTmpl<Targs...>::String(str, false);
-    }
-};
+typedef basic::test::msg::Argument<CaseHMFFoo1, 
+    ArgTypeName<IDerivedAccess>,
+    ArgTypeName<IBaseAccess>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeValHasMmbrFuncFoo1>>> ArgCaseHMFFoo1;
 
-__DEFINE_VALUE_NAME_("true", bool, true);
-__DEFINE_VALUE_NAME_("false", bool, false);
+typedef basic::test::msg::Base<CaseHMFFoo1, char, ArgCaseHMFFoo1, 
+    ArgCaseHMFFoo1, ArgCaseHMFFoo1> MsgBaseCaseHMFFoo1;
 
-__DEFINE_NAME_(std::true_type);
-__DEFINE_NAME_(std::false_type);
-__DEFINE_NAME_(void);
-__DEFINE_NAME_(bool);
+typedef basic::test::msg::Argument<CaseHSMFFoo2, 
+    ArgTypeName<IDerivedAccess>,
+    ArgTypeName<IDerivedAccess>, 
+    ArgValFunction<IValFuncBoolToCString,
+        ArgTypeValue<ITypeHasStaticMmbrFuncFoo2>>> ArgCaseHSMFFoo2;
 
-template<typename Tid, typename Tb>
-struct Derived : Tb
+typedef basic::test::msg::Base<CaseHSMFFoo2, char, ArgCaseHSMFFoo2, 
+    ArgCaseHSMFFoo2, ArgCaseHSMFFoo2> MsgBaseCaseHSMFFoo2;
+
+
+template<typename TID, typename TBase>
+struct Derived : TBase
 {
     template<typename T>
     static constexpr auto 
@@ -83,91 +76,98 @@ struct Derived : Tb
     static constexpr std::false_type HasStaticMemberFunctionFoo2(...);
 };
 
-template<template<typename> class Td, template<typename> class Tb,
-    typename Tda, typename Tt, Tt TtValue>
-void TestHasMemberFunctionFoo1()
-{
-    std::string error_msg = "decltype(";
-    error_msg += Name<Td<Tda>>::Value;
-    error_msg += "<";
-    error_msg += Name<Tda>::Value;
-    error_msg += ">";
-    error_msg += "::template HasMemberFunctionFoo1<";
-    error_msg += Name<Tb<Tda>>::Value;
-    error_msg += "<";
-    error_msg += Name<Tda>::Value;
-    error_msg += ">";
-    error_msg += ">(0)::";
-    error_msg += "value is not same with ";
-    error_msg += Name<ValueName<Tt, TtValue>>::Value;
-    std::string info_msg = "Test compare between decltype(";
-    
-    info_msg += Name<Td<Tda>>::Value;
-    info_msg += "<";
-    info_msg += Name<Tda>::Value;
-    info_msg += ">";
-    info_msg += "::template HasMemberFunctionFoo1<";
-    info_msg += Name<Tb<Tda>>::Value;
-    info_msg += "<";
-    info_msg += Name<Tda>::Value;
-    info_msg += ">";
-    info_msg += ">(0)::";
-    info_msg += "value and ";
-    info_msg += Name<ValueName<Tt, TtValue>>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        decltype(Td<Tda>::template HasMemberFunctionFoo1<Tb<Tda>>(0))::value ==
-            TtValue))
-                Info("Pass\n");
-}
 
-template<template<typename> class Td, template<typename> class Tb,
-    typename Tda, typename Tt, Tt TtValue>
-void TestHasStaticMemberFunctionFoo2()
+template<typename TCases, typename... TVars>
+class TestAccess :
+    public MsgBaseCaseHMFFoo1,
+    public MsgBaseCaseHSMFFoo2,
+    public basic::test::Message<BASIC_TEST, TestAccess<TCases, TVars...>>,
+    public basic::test::Case<TestAccess<TCases, TVars...>, TCases>,
+    public basic::test::Base<TestAccess<TCases, TVars...>, TVars...>
 {
-    std::string error_msg = "decltype(";
-    error_msg += Name<Td<Tda>>::Value;
-    error_msg += "<";
-    error_msg += Name<Tda>::Value;
-    error_msg += ">";
-    error_msg += "::template HasStaticMemberFunctionFoo2<";
-    error_msg += Name<Tb<Tda>>::Value;
-    error_msg += "<";
-    error_msg += Name<Tda>::Value;
-    error_msg += ">";
-    error_msg += ">(0))::value is not same with ";
-    error_msg += Name<ValueName<Tt, TtValue>>::Value;
-    std::string info_msg = "Test compare between decltype(";
-    info_msg += Name<Td<Tda>>::Value;
-    info_msg += "<";
-    info_msg += Name<Tda>::Value;
-    info_msg += ">";
-    info_msg += "::template HasStaticMemberFunctionFoo2<";
-    info_msg += Name<Tb<Tda>>::Value;
-    info_msg += "<";
-    info_msg += Name<Tda>::Value;
-    info_msg += ">";
-    info_msg += ">(0))::value and ";
-    info_msg += Name<ValueName<Tt, TtValue>>::Value;
-    info_msg += " : ";
-    Info(info_msg.c_str());
-    if (Assert(error_msg.c_str(), 
-        decltype(Td<Tda>::template HasStaticMemberFunctionFoo2<Tb<Tda>>(0))::value
-            == TtValue))
-                Info("Pass\n");
-}
-
-template<template<typename> class Td, template<typename> class Tb,
-    typename Tda, typename Tt, Tt TtValueFoo1, Tt TtValueFoo2>
-struct TestAccess : basic::test::Base
-{
-    void Test() 
+public:
+    typedef basic::test::Base<TestAccess<TCases, TVars...>, TVars...> BaseType; 
+    typedef basic::test::Message<BASIC_TEST, 
+        TestAccess<TCases, TVars...>> BaseMessageType;
+    typedef basic::test::Case<TestAccess<TCases, TVars...>, 
+        TCases> BaseCaseType;
+protected:
+    using MsgBaseCaseHMFFoo1::SetFormat;
+    using MsgBaseCaseHSMFFoo2::SetFormat;
+public:
+    using MsgBaseCaseHMFFoo1::Format;
+    using MsgBaseCaseHSMFFoo2::Format;
+    using MsgBaseCaseHMFFoo1::Argument;
+    using MsgBaseCaseHSMFFoo2::Argument;
+public:
+    using BaseType::Run;
+    using BaseCaseType::Run;
+public:
+    TestAccess(TVars&... vars) :
+        BaseType(*this, vars...),
+        BaseMessageType(*this),
+        BaseCaseType(*this)
     {
-        TestHasMemberFunctionFoo1<Td, Tb, Tda, Tt, TtValueFoo1>();
-        TestHasStaticMemberFunctionFoo2<Td, Tb, Tda, Tt, TtValueFoo2>();
-    };
+        basic::test::msg::base::Info info;
+        basic::test::msg::base::Debug debug;
+        basic::test::msg::base::Error error;
+        
+        CaseHMFFoo1 case_has_member_function_Foo1;
+        SetFormat(info, case_has_member_function_Foo1, 
+            "test compare between delctype(%s::template "
+            "HasMemberFunctionFoo1<%s>(0))::value and %s\n");
+        SetFormat(debug, case_has_member_function_Foo1, 
+            "test compare between delctype(%s::template "
+            "HasMemberFunctionFoo1<%s>(0))::value and %s\n");
+        SetFormat(error, case_has_member_function_Foo1,
+            "error delctype(%s::template HasMemberFunctionFoo1<%s>(0))::value "
+            "is not same with %s\n");
+
+        CaseHSMFFoo2 case_has_static_member_function_Foo2;
+        SetFormat(info, case_has_static_member_function_Foo2, 
+            "test compare between delctype(%s::template "
+            "HasStaticMemberFunctionFoo2<%s>(0))::value and %s\n");
+        SetFormat(debug, case_has_static_member_function_Foo2,
+            "test compare between delctype(%s::template "
+            "HasStaticMemberFunctionFoo2<%s>(0))::value and %s\n");
+        SetFormat(error, case_has_static_member_function_Foo2,
+            "error delctype(%s::template HasStaticMemberFunctionFoo2<%s>(0))::"
+            "value is not same with %s\n");
+    }
+
+    template<typename TDerivedAccess, typename TBaseAccess, 
+        bool HasMmbrFuncFoo1, bool HasStaticMmbrFuncFoo2>
+    bool Result(const CaseHMFFoo1&, VariableTestAccess<TDerivedAccess, 
+        TBaseAccess, HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
+    {
+        return decltype(TDerivedAccess::template HasMemberFunctionFoo1<
+            TBaseAccess>(0))::value == HasMmbrFuncFoo1; 
+    }
+
+    template<typename TDerivedAccess, typename TBaseAccess, 
+        bool HasMmbrFuncFoo1, bool HasStaticMmbrFuncFoo2>
+    bool Result(const CaseHSMFFoo2&, VariableTestAccess<TDerivedAccess, 
+        TBaseAccess, HasMmbrFuncFoo1, HasStaticMmbrFuncFoo2>& var)
+    {
+        return decltype(TDerivedAccess::template HasStaticMemberFunctionFoo2<
+            TBaseAccess>(0))::value == HasStaticMmbrFuncFoo2; 
+    }
 };
+
+using Cases = basic::test::type::Parameter<CaseHMFFoo1, CaseHSMFFoo2>;
+
+BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
+BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
+BASIC_TEST_TYPE_NAME("void", void);
+BASIC_TEST_TYPE_NAME("bool", bool);
+
+const char * true_cstr = "true";
+const char * false_cstr = "false";
+
+const char* BoolToString(bool&& b)
+{
+    return b ? true_cstr : false_cstr;
+}
 
 struct AccessPublic
 {
@@ -187,288 +187,442 @@ struct AccessPrivate
     typedef basic::type::access::Private Foo2Access;
 };
 
-__DEFINE_NAME_(AccessPublic);
-__DEFINE_NAME_(AccessProtected);
-__DEFINE_NAME_(AccessPrivate);
+BASIC_TEST_TYPE_NAME("AccessPublic", AccessPublic);
+BASIC_TEST_TYPE_NAME("AccessProtected", AccessProtected);
+BASIC_TEST_TYPE_NAME("AccessPrivate", AccessPrivate);
 
-template<typename Tda>
+template<typename TID, typename TBase>
+struct basic::test::type::Name<Derived<TID, TBase>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "Derived<%s, %s>";
+        const auto& arg1_cstr = basic::test::type::Name<TID>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TBase>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size(), _format_cstr, *arg1_cstr,
+            *arg2_cstr);
+    }
+};
+
+template<typename TDA>
 struct DerivedA;
 
-template<typename Tda, typename TTFriend>
+template<typename TDA, typename TTFriend>
 struct DerivedFriendA;
 
-template<typename Tda>
+template<typename TDA>
 struct DerivedBTrue;
 
-template<typename Tda>
+template<typename TDA>
 struct DerivedBFalse;
 
-template<typename Tda, typename Tid>
+template<typename TDA, typename TID>
 struct DerivedFriendBTrue;
 
-template<typename Tda, typename Tid>
+template<typename TDA, typename TID>
 struct DerivedFriendBFalse;
 
-template<typename Tda>
+template<typename TDA>
 struct ImaginaryFriend {};
 
-template<typename Tda, typename TFriend = ImaginaryFriend<Tda>>
+template<typename TDA>
+struct basic::test::type::Name<ImaginaryFriend<TDA>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "ImaginaryFriend<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size(), _format_cstr, *arg1_cstr);
+    }
+};
+
+template<typename TDA, typename TFriend = ImaginaryFriend<TDA>>
 class A
 {
     friend TFriend;
 public:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Public<typename T::Foo1Access>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Public<typename T::Foo2Access>::type Foo2() {}
 protected:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Protected<typename T::Foo1Access>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Protected<typename T::Foo2Access>::type Foo2() {};
 private:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Private<typename T::Foo1Access>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Private<typename T::Foo2Access>::type Foo2() {};
 };
 
-template<typename Tda>
-using A1 = A<Tda>;
-
-template<typename Tda>
-struct Name<A1<Tda>>
+template<typename TDA, typename TFriend>
+struct basic::test::type::Name<A<TDA, TFriend>>
 {
-    static constexpr const char * Value = "A1";
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "A<%s, %s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TFriend>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size(), _format_cstr, *arg1_cstr,
+            *arg2_cstr);
+    }
 };
 
-template<typename Tda, bool BoolOtherTest, 
-    typename TFriend = ImaginaryFriend<Tda>>
+template<typename TDA>
+using A1 = A<TDA>;
+
+template<typename TDA, bool BoolOtherTest, 
+    typename TFriend = ImaginaryFriend<TDA>>
 class B
 {
     friend TFriend;
 public:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Public<typename T::Foo1Access, void, BoolOtherTest>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Public<typename T::Foo2Access, void, BoolOtherTest>::type Foo2() {};
 protected:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Protected<typename T::Foo1Access, void, BoolOtherTest>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Protected<typename T::Foo2Access, void, BoolOtherTest>::type Foo2() {};
 
 private:
-    template<typename T = Tda>
+    template<typename T = TDA>
     typename basic::type::access::enable_if::
         Private<typename T::Foo1Access, void, BoolOtherTest>::type Foo1() {}
-    template<typename T = Tda>
+    template<typename T = TDA>
     static typename basic::type::access::enable_if::
         Private<typename T::Foo2Access, void, BoolOtherTest>::type Foo2() {};
 };
 
-template<typename Tda>
-using B1True = B<Tda, true>;
-
-template<typename Tda>
-struct Name<B1True<Tda>>
+template<typename TDA, bool BoolOtherTest, typename TFriend>
+struct basic::test::type::Name<B<TDA, BoolOtherTest, TFriend>>
 {
-    static constexpr const char * Value = "B1True";
+    static basic::test::CString<char> CStr()
+    {
+        static std::size_t boolSize = sizeof(true_cstr) > sizeof(false_cstr) ?
+            sizeof(true_cstr) : sizeof(false_cstr);
+        static char _format_cstr[] = "B<%s, %s, %s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TFriend>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size() + boolSize, _format_cstr, 
+            *arg1_cstr, (BoolOtherTest? true_cstr : false_cstr), *arg2_cstr);
+    }
 };
 
-template<typename Tda>
-using B1False = B<Tda, false>;
+template<typename TDA>
+using B1True = B<TDA, true>;
 
-template<typename Tda>
-struct Name<B1False<Tda>>
-{
-    static constexpr const char * Value = "B1False";
-};
+template<typename TDA>
+using B1False = B<TDA, false>;
 
-template<typename Tda>
+template<typename TDA>
 struct Void
 {};
 
-template<typename Tda>
-struct DerivedA : A<Tda>
+template<typename TDA>
+struct DerivedA : A<TDA>
 {};
 
-template<typename Tda, typename Tid>
-struct DerivedFriendA : A<Tda, Derived<Tid, DerivedFriendA<Tda, Tid>>>
+template<typename TDA>
+struct basic::test::type::Name<DerivedA<TDA>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedA<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size(), _format_cstr, *arg1_cstr);
+    }
+};
+
+template<typename TDA, typename TID>
+struct DerivedFriendA : A<TDA, Derived<TID, DerivedFriendA<TDA, TID>>>
 {};
 
-template<typename Tda>
-struct DerivedBTrue : B<Tda, true>
+template<typename TDA, typename TID>
+struct basic::test::type::Name<DerivedFriendA<TDA, TID>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedFriendA<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TID>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size(), _format_cstr, *arg1_cstr,
+            *arg2_cstr);
+    }
+};
+
+template<typename TDA>
+struct DerivedBTrue : B<TDA, true>
 {};
 
-template<typename Tda>
-struct DerivedBFalse : B<Tda, false>
+template<typename TDA>
+struct basic::test::type::Name<DerivedBTrue<TDA>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedBTrue<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size(), _format_cstr, *arg1_cstr);
+    }
+};
+
+template<typename TDA>
+struct DerivedBFalse : B<TDA, false>
 {};
 
-template<typename Tda, typename Tid>
-struct DerivedFriendBTrue : B<Tda, true,
-    Derived<Tid, DerivedFriendBTrue<Tda, Tid>>>
+template<typename TDA>
+struct basic::test::type::Name<DerivedBFalse<TDA>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedBFalse<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size(), _format_cstr, *arg1_cstr);
+    }
+};
+
+template<typename TDA, typename TID>
+struct DerivedFriendBTrue : B<TDA, true,
+    Derived<TID, DerivedFriendBTrue<TDA, TID>>>
 {};
 
-template<typename Tda, typename Tid>
-struct DerivedFriendBFalse : B<Tda, false,
-    Derived<Tid, DerivedFriendBFalse<Tda, Tid>>>
+template<typename TDA, typename TID>
+struct basic::test::type::Name<DerivedFriendBTrue<TDA, TID>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedFriendBTrue<%s, %s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TID>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size(), _format_cstr, *arg1_cstr,
+            *arg2_cstr);
+    }
+};
+
+template<typename TDA, typename TID>
+struct DerivedFriendBFalse : B<TDA, false,
+    Derived<TID, DerivedFriendBFalse<TDA, TID>>>
 {};
+
+template<typename TDA, typename TID>
+struct basic::test::type::Name<DerivedFriendBFalse<TDA, TID>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "DerivedFriendBFalse<%s, %s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        const auto& arg2_cstr = basic::test::type::Name<TID>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size() + arg2_cstr.Size(), _format_cstr, *arg1_cstr,
+            *arg2_cstr);
+    }
+};
 
 struct Void1;
 
-template<typename Tda>
-using Void1_t = Derived<Void1, Void<Tda>>;
+BASIC_TEST_TYPE_NAME("Void1", Void1);
 
-template<typename Tda>
-struct Name<Void1_t<Tda>>
+template<typename TDA>
+using TVoid1 = Derived<Void1, Void<TDA>>;
+
+template<typename TDA>
+struct basic::test::type::Name<TVoid1<TDA>>
 {
-    static constexpr const char * Value = "Void1_t";
+    static basic::test::CString<char> CStr()
+    {
+        static char _format_cstr[] = "TVoid1<%s>";
+        const auto& arg1_cstr = basic::test::type::Name<TDA>::CStr();
+        return basic::test::cstr::Format(sizeof(_format_cstr) +
+            arg1_cstr.Size(), _format_cstr, *arg1_cstr);
+    }
 };
 
-RegisterTest(t1_1, new TestAccess<Void1_t, A1, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t1_2, new TestAccess<Void1_t, A1, 
-    AccessProtected, bool, false, false>());
-RegisterTest(t1_3, new TestAccess<Void1_t, A1, 
-    AccessPrivate, bool, false, false>());
-    
-RegisterTest(t1_4, new TestAccess<Void1_t, B1True, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t1_5, new TestAccess<Void1_t, B1True, 
-    AccessProtected, bool, false, false>());
-RegisterTest(t1_6, new TestAccess<Void1_t, B1True, 
-    AccessPrivate, bool, false, false>());
+typedef VariableTestAccess<TVoid1<AccessPublic>, 
+    A1<AccessPublic>, true, true> T1Var1;
+typedef VariableTestAccess<TVoid1<AccessProtected>, 
+    A1<AccessProtected>, false, false> T1Var2;
+typedef VariableTestAccess<TVoid1<AccessPrivate>, 
+    A1<AccessPrivate>, false, false> T1Var3;
+typedef VariableTestAccess<TVoid1<AccessPublic>, 
+    B1True<AccessPublic>, true, true> T1Var4;
+typedef VariableTestAccess<TVoid1<AccessProtected>, 
+    B1True<AccessProtected>, false, false> T1Var5;
+typedef VariableTestAccess<TVoid1<AccessPrivate>, 
+    B1True<AccessPrivate>, false, false> T1Var6;
+typedef VariableTestAccess<TVoid1<AccessPublic>, 
+    B1False<AccessPublic>, false, false> T1Var7;
+typedef VariableTestAccess<TVoid1<AccessProtected>, 
+    B1False<AccessProtected>, false, false> T1Var8;
+typedef VariableTestAccess<TVoid1<AccessPrivate>, 
+    B1False<AccessPrivate>, false, false> T1Var9;
 
-RegisterTest(t1_7, new TestAccess<Void1_t, B1False, 
-    AccessPublic, bool, false, false>());
-RegisterTest(t1_8, new TestAccess<Void1_t, B1False, 
-    AccessProtected, bool, false, false>());
-RegisterTest(t1_9, new TestAccess<Void1_t, B1False, 
-    AccessPrivate, bool, false, false>());
+T1Var1 t1_var1(&BoolToString);
+T1Var2 t1_var2(&BoolToString);
+T1Var3 t1_var3(&BoolToString);
+T1Var4 t1_var4(&BoolToString);
+T1Var5 t1_var5(&BoolToString);
+T1Var6 t1_var6(&BoolToString);
+T1Var7 t1_var7(&BoolToString);
+T1Var8 t1_var8(&BoolToString);
+T1Var9 t1_var9(&BoolToString);
+
+REGISTER_TEST(t1, new TestAccess<Cases, T1Var1, T1Var2, T1Var3, T1Var4,
+    T1Var5, T1Var6, T1Var7, T1Var8, T1Var9>(t1_var1, t1_var2, t1_var3,
+        t1_var4, t1_var5, t1_var6, t1_var7, t1_var8, t1_var9));
 
 struct DerivedA1;
 
-template<typename Tda>
-using DerivedA1_t = Derived<DerivedA1, DerivedA<Tda>>;
+BASIC_TEST_TYPE_NAME("DerivedA1", DerivedA1);
 
 template<typename Tda>
-struct Name<DerivedA1_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedA1_t";
-};
+using TDerivedA1 = Derived<DerivedA1, DerivedA<Tda>>;
 
-RegisterTest(t2_1, new TestAccess<DerivedA1_t, DerivedA1_t, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t2_2, new TestAccess<DerivedA1_t, DerivedA1_t, 
-    AccessProtected, bool, true, true>());
-RegisterTest(t2_3, new TestAccess<DerivedA1_t, DerivedA1_t, 
-    AccessPrivate, bool, false, false>());
+typedef VariableTestAccess<TDerivedA1<AccessPublic>, 
+    TDerivedA1<AccessPublic>, true, true> T2Var1;
+typedef VariableTestAccess<TDerivedA1<AccessProtected>, 
+    TDerivedA1<AccessProtected>, true, true> T2Var2;
+typedef VariableTestAccess<TDerivedA1<AccessPrivate>, 
+    TDerivedA1<AccessPrivate>, false, false> T2Var3;
+
+T2Var1 t2_var1(&BoolToString);
+T2Var2 t2_var2(&BoolToString);
+T2Var3 t2_var3(&BoolToString);
+
+REGISTER_TEST(t2, new TestAccess<Cases, T2Var1, T2Var2, T2Var3>(t2_var1, 
+    t2_var2, t2_var3));
 
 struct DerivedB1True;
 
-template<typename Tda>
-using DerivedB1True_t = Derived<DerivedB1True, DerivedBTrue<Tda>>;
+BASIC_TEST_TYPE_NAME("DerivedB1True", DerivedB1True);
 
-template<typename Tda>
-struct Name<DerivedB1True_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedB1True_t";
-};
+template<typename TDA>
+using DerivedB1True_t = Derived<DerivedB1True, DerivedBTrue<TDA>>;
 
-RegisterTest(t3_1, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t3_2, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
-    AccessProtected, bool, true, true>());
-RegisterTest(t3_3, new TestAccess<DerivedB1True_t, DerivedB1True_t, 
-    AccessPrivate, bool, false, false>());
+typedef VariableTestAccess<DerivedB1True_t<AccessPublic>, 
+    DerivedB1True_t<AccessPublic>, true, true> T3Var1;
+typedef VariableTestAccess<DerivedB1True_t<AccessProtected>, 
+    DerivedB1True_t<AccessProtected>, true, true> T3Var2;
+typedef VariableTestAccess<DerivedB1True_t<AccessPrivate>, 
+    DerivedB1True_t<AccessPrivate>, false, false> T3Var3;
+
+T3Var1 t3_var1(&BoolToString);
+T3Var2 t3_var2(&BoolToString);
+T3Var3 t3_var3(&BoolToString);
+
+REGISTER_TEST(t3, new TestAccess<Cases, T3Var1, T3Var2, T3Var3>(t3_var1, 
+    t3_var2, t3_var3));
 
 struct DerivedB1False;
 
-template<typename Tda>
-using DerivedB1False_t = Derived<DerivedB1False, DerivedBFalse<Tda>>;
+BASIC_TEST_TYPE_NAME("DerivedB1False", DerivedB1False);
 
-template<typename Tda>
-struct Name<DerivedB1False_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedB1False_t";
-};
+template<typename TDA>
+using DerivedB1False_t = Derived<DerivedB1False, DerivedBFalse<TDA>>;
 
-RegisterTest(t4_1, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
-    AccessPublic, bool, false, false>());
-RegisterTest(t4_2, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
-    AccessProtected, bool, false, false>());
-RegisterTest(t4_3, new TestAccess<DerivedB1False_t, DerivedB1False_t, 
-    AccessPrivate, bool, false, false>());
+typedef VariableTestAccess<DerivedB1False_t<AccessPublic>, 
+    DerivedB1False_t<AccessPublic>, false, false> T4Var1;
+typedef VariableTestAccess<DerivedB1False_t<AccessProtected>, 
+    DerivedB1False_t<AccessProtected>, false, false> T4Var2;
+typedef VariableTestAccess<DerivedB1False_t<AccessPrivate>, 
+    DerivedB1False_t<AccessPrivate>, false, false> T4Var3;
+
+T4Var1 t4_var1(&BoolToString);
+T4Var2 t4_var2(&BoolToString);
+T4Var3 t4_var3(&BoolToString);
+
+REGISTER_TEST(t4, new TestAccess<Cases, T4Var1, T4Var2, T4Var3>(t4_var1, 
+    t4_var2, t4_var3));
 
 struct DerivedFriendA1;
 
-template<typename Tda>
-using DerivedFriendA1_t = Derived<DerivedFriendA1, DerivedFriendA<Tda, 
+BASIC_TEST_TYPE_NAME("DerivedFriendA1", DerivedFriendA1);
+
+template<typename TDA>
+using TDerivedFriendA1 = Derived<DerivedFriendA1, DerivedFriendA<TDA, 
     DerivedFriendA1>>;
 
-template<typename Tda>
-struct Name<DerivedFriendA1_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedFriendA1_t";
-};
+typedef VariableTestAccess<TDerivedFriendA1<AccessPublic>, 
+    TDerivedFriendA1<AccessPublic>, true, true> T5Var1;
+typedef VariableTestAccess<TDerivedFriendA1<AccessProtected>, 
+    TDerivedFriendA1<AccessProtected>, true, true> T5Var2;
+typedef VariableTestAccess<TDerivedFriendA1<AccessPrivate>, 
+    TDerivedFriendA1<AccessPrivate>, true, true> T5Var3;
 
-RegisterTest(t5_1, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t5_2, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
-    AccessProtected, bool, true, true>());
-RegisterTest(t5_3, new TestAccess<DerivedFriendA1_t, DerivedFriendA1_t, 
-    AccessPrivate, bool, true, true>());
+T5Var1 t5_var1(&BoolToString);
+T5Var2 t5_var2(&BoolToString);
+T5Var3 t5_var3(&BoolToString);
+
+REGISTER_TEST(t5, new TestAccess<Cases, T5Var1, T5Var2, T5Var3>(t5_var1, 
+    t5_var2, t5_var3));
 
 struct DerivedFriendB1True;
 
-template<typename Tda>
+BASIC_TEST_TYPE_NAME("DerivedFriendB1True", DerivedFriendB1True);
+
+template<typename TDA>
 using DerivedFriendB1True_t = Derived<DerivedFriendB1True, 
-    DerivedFriendBTrue<Tda, DerivedFriendB1True>>;
+    DerivedFriendBTrue<TDA, DerivedFriendB1True>>;
 
-template<typename Tda>
-struct Name<DerivedFriendB1True_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedFriendB1True_t";
-};
+typedef VariableTestAccess<DerivedFriendB1True_t<AccessPublic>, 
+    DerivedFriendB1True_t<AccessPublic>, true, true> T6Var1;
+typedef VariableTestAccess<DerivedFriendB1True_t<AccessProtected>, 
+    DerivedFriendB1True_t<AccessProtected>, true, true> T6Var2;
+typedef VariableTestAccess<DerivedFriendB1True_t<AccessPrivate>, 
+    DerivedFriendB1True_t<AccessPrivate>, true, true> T6Var3;
 
-RegisterTest(t6_1, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
-    AccessPublic, bool, true, true>());
-RegisterTest(t6_2, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
-    AccessProtected, bool, true, true>());
-RegisterTest(t6_3, new TestAccess<DerivedFriendB1True_t, DerivedFriendB1True_t, 
-    AccessPrivate, bool, true, true>());
+T6Var1 t6_var1(&BoolToString);
+T6Var2 t6_var2(&BoolToString);
+T6Var3 t6_var3(&BoolToString);
+
+REGISTER_TEST(t6, new TestAccess<Cases, T6Var1, T6Var2, T6Var3>(t6_var1, 
+    t6_var2, t6_var3));
 
 struct DerivedFriendB1False;
 
-template<typename Tda>
+BASIC_TEST_TYPE_NAME("DerivedFriendB1False", DerivedFriendB1False);
+
+template<typename TDA>
 using DerivedFriendB1False_t = Derived<DerivedFriendB1False, 
-    DerivedFriendBFalse<Tda, DerivedFriendB1False>>;
+    DerivedFriendBFalse<TDA, DerivedFriendB1False>>;
 
-template<typename Tda>
-struct Name<DerivedFriendB1False_t<Tda>>
-{
-    static constexpr const char * Value = "DerivedFriendB1False_t";
-};
+typedef VariableTestAccess<DerivedFriendB1False_t<AccessPublic>, 
+    DerivedFriendB1False_t<AccessPublic>, false, false> T7Var1;
+typedef VariableTestAccess<DerivedFriendB1False_t<AccessProtected>, 
+    DerivedFriendB1False_t<AccessProtected>, false, false> T7Var2;
+typedef VariableTestAccess<DerivedFriendB1False_t<AccessPrivate>, 
+    DerivedFriendB1False_t<AccessPrivate>, false, false> T7Var3;
 
-RegisterTest(t7_1, new TestAccess<DerivedFriendB1False_t, 
-    DerivedFriendB1False_t, AccessPublic, bool, false, false>());
-RegisterTest(t7_2, new TestAccess<DerivedFriendB1False_t, 
-    DerivedFriendB1False_t, AccessProtected, bool, false, false>());
-RegisterTest(t7_3, new TestAccess<DerivedFriendB1False_t, 
-    DerivedFriendB1False_t, AccessPrivate, bool, false, false>());
+T7Var1 t7_var1(&BoolToString);
+T7Var2 t7_var2(&BoolToString);
+T7Var3 t7_var3(&BoolToString);
+
+REGISTER_TEST(t7, new TestAccess<Cases, T7Var1, T7Var2, T7Var3>(t7_var1, 
+    t7_var2, t7_var3));
 
 int main()
 {
-    return TestRun();
+    return RUN_TEST();
 }
