@@ -1,4 +1,3 @@
-#define EXPERIMENTAL
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 

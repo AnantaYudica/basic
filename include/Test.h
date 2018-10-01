@@ -55,11 +55,7 @@ public:
     StatusType Status;
     OutputType Output;
     MemoryType Memory;
-#ifdef EXPERIMENTAL
     std::vector<test::reg::Base*> List;
-#else
-    std::vector<test::Register<Test<Ts, To, Tmem>>*> List;
-#endif
     std::stack<test::Trace> Traces;
 private:
     Test();
@@ -187,8 +183,6 @@ std::stack<test::Trace> Test<Ts, To, Tmem>::GetTrace()
 
 } //!basic
 
-#ifdef EXPERIMENTAL
-
 #ifndef BASIC_TEST
 #ifdef USING_BASIC_TEST_MEMORY
 #define BASIC_TEST basic::Test<basic::test::Status,\
@@ -198,41 +192,20 @@ std::stack<test::Trace> Test<Ts, To, Tmem>::GetTrace()
 #endif //!USING_BASIC_TEST_MEMORY
 #endif //!BASIC_TEST
 
-#else
-
-#ifndef BasicTest
-#ifdef USING_BASIC_TEST_MEMORY
-#define BasicTest basic::Test<basic::test::Status,\
-    basic::test::Output, basic::test::Memory>
-#else //ELSE USING_BASIC_TEST_MEMORY
-#define BasicTest basic::Test<basic::test::Status>
-#endif //!USING_BASIC_TEST_MEMORY
-#endif //!BasicTest
-
-#endif 
-
 #ifdef USING_BASIC_TEST_MEMORY
 #include <new>
 
 void* operator new(std::size_t sz)
 {
     auto p = std::malloc(sz);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz);
-#else
-    BasicTest::Instance.Memory.Register(p, sz);
-#endif
     return p;
 }
 
 void* operator new[]( std::size_t sz)
 {
     auto p = std::malloc(sz);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz);
-#else
-    BasicTest::Instance.Memory.Register(p, sz);
-#endif
     return p;
 }
 
@@ -240,11 +213,7 @@ template<std::size_t N>
 void* operator new(std::size_t sz, const char (&file)[N], const int& line) 
 {
     auto p = std::malloc(sz);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz, file, line);
-#else
-    BasicTest::Instance.Memory.Register(p, sz, file, line);
-#endif
     return p;
 }
 
@@ -252,11 +221,7 @@ template<std::size_t N>
 void* operator new[]( std::size_t sz, const char (&file)[N], const int& line)
 {
     auto p = std::malloc(sz);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz, file, line);
-#else
-    BasicTest::Instance.Memory.Register(p, sz, file, line);
-#endif
     return p;
 }
 
@@ -265,11 +230,7 @@ void* operator new (std::size_t sz, const std::nothrow_t& tag,
     const char (&file)[N], const int& line)
 {
     auto p = ::operator new(sz, tag);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz, file, line);
-#else
-    BasicTest::Instance.Memory.Register(p, sz, file, line);
-#endif
     return p;
 }
 
@@ -278,11 +239,7 @@ void* operator new[]( std::size_t sz, const std::nothrow_t& tag,
     const char (&file)[N], const int& line)
 {
     auto p = ::operator new[](sz, tag);
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Register(p, sz, file, line);
-#else
-    BasicTest::Instance.Memory.Register(p, sz, file, line);
-#endif
     return p;
 }
 
@@ -304,49 +261,31 @@ void* operator new[]( std::size_t sz, void* ptr,
 
 void operator delete(void* p) noexcept
 {
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Unregister(p);
-#else
-    BasicTest::Instance.Memory.Unregister(p);
-#endif
     std::free(p);
 }
 
 void operator delete[](void* p) noexcept
 {
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Unregister(p);
-#else
-    BasicTest::Instance.Memory.Unregister(p);
-#endif
     std::free(p);
 }
 
 void operator delete ( void* p, const std::nothrow_t& tag )
 {
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Unregister(p);
-#else
-    BasicTest::Instance.Memory.Unregister(p);
-#endif
     std::free(p);
 }
 
 void operator delete[]( void* p, const std::nothrow_t& tag )
 {
-#ifdef EXPERIMENTAL
     BASIC_TEST::Instance.Memory.Unregister(p);
-#else
-    BasicTest::Instance.Memory.Unregister(p);
-#endif
     std::free(p);
 }
 
 #define new(...) new(__VA_ARGS__, __FILE__, __LINE__)
 
 #endif //!USING_BASIC_TEST_MEMORY
-
-#ifdef EXPERIMENTAL
 
 #ifndef INFO
 #define INFO(__INFO_MESSAGE__, ...)\
@@ -393,37 +332,5 @@ struct basic::test::type::Name<__TYPE__,##__VA_ARGS__>\
         return {_cstr};\
     }\
 }
-
-#else
-
-#ifndef Info
-#define Info(__INFO_MESSAGE__, ...)\
-    BasicTest::Info(__INFO_MESSAGE__,##__VA_ARGS__)
-#endif //!Info
-
-#ifndef Assert
-#define Assert(__ERROR_MESSAGE__, __TEST_BOOL__, ...)\
-    BasicTest::Assert(__TEST_BOOL__,##__VA_ARGS__,\
-        __ERROR_MESSAGE__, __FILE__, __LINE__)
-#endif //!Assert
-
-#ifndef TestStatus
-#define TestStatus BasicTest::Instance.Status.Get()
-#endif //!ResultStatus
-
-#ifndef RegisterTest
-#define RegisterTest(Name, Test, ...) basic::test::Register<BasicTest> \
-    Name(Test,##__VA_ARGS__, __FILE__, __LINE__)
-#endif //!RegisterTest
-
-#ifndef TestRun
-#define TestRun() BasicTest::Run()
-#endif //!TestRun
-
-#ifndef BasicTestConstruct
-#define BasicTestConstruct BasicTest& __test_instance = BasicTest::Instance
-#endif //!BasicTestConstruct
-
-#endif
 
 #endif //!BASIC_TEST_H_

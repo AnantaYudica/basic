@@ -1,6 +1,6 @@
 #define USING_BASIC_TEST_MEMORY
 #include "Test.h"
-BasicTestConstruct;
+BASIC_TEST_CONSTRUCT;
 
 #include "test/msg/Format.h"
 

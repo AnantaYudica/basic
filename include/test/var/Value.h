@@ -1,31 +1,6 @@
 #ifndef BASIC_TEST_VAR_VALUE_H_
 #define BASIC_TEST_VAR_VALUE_H_
 
-// todo : Remove when next release
-#ifndef REMOVED_DEPRECATED
-#define REMOVED_DEPRECATED
-#endif //!REMOVED_DEPRECATED
-
-#include "../Value.h"
-
-namespace basic
-{
-namespace test
-{
-namespace var
-{
-
-template<typename T>
-using Value = basic::test::Value<T>;
-
-} //!var
-
-} //!test
-
-} //!basic
-
-// end todo
-
 #include "../Variable.h"
 
 #include "../Value.h"
@@ -57,46 +32,6 @@ public:
 public:
     GetType Get();
     ConstGetType Get() const;
-// todo : Remove when next release
-#ifndef REMOVED_DEPRECATED
-#define REMOVED_DEPRECATED
-#endif //!REMOVED_DEPRECATED
-    template<std::size_t I, typename TDefArg, typename... TDefArgs>
-    struct _Definition
-    {
-        typedef typename _Definition<I - 1, TDefArgs...>::ValueType ValueType;
-        typedef typename _Definition<I - 1, TDefArgs...>::Type Type;
-    };
-    template<typename TDefArg, typename... TDefArgs>
-    struct _Definition<0, TDefArg, TDefArgs...>
-    {
-        typedef typename TDefArg::Type ValueType;
-        typedef TDefArg Type;
-    };
-    template<typename TVar>
-    static constexpr auto _LValue(int) -> decltype(
-        static_cast<typename TVar::GetType(TVar::*)()>(&TVar::Get), 
-            std::true_type());
-    template<typename TVar>
-    static constexpr std::false_type _LValue(...);
-public:
-    template<std::size_t I>
-    typename std::enable_if<decltype(_LValue<typename _Definition<I, test::Value<TArg>, 
-        TArgs...>::Type>(0))::value
-        && I != 0, typename _Definition<I, test::Value<TArg>, TArgs...>::ValueType>::
-        type GetValue()
-    {
-        return Variable<TArgs...>::template GetValue<I - 1>();
-    }
-    template<std::size_t I>
-    typename std::enable_if<decltype(_LValue<typename _Definition<I, test::Value<TArg>, 
-        TArgs...>::Type>(0))::value
-        && I == 0, typename _Definition<I, test::Value<TArg>, TArgs...>::ValueType>::
-        type GetValue()
-    {
-        return m_value.Get();
-    }
-// end todo
 };
 
 template<typename TArg, typename... TArgs>

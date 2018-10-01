@@ -1,5 +1,4 @@
 #define USING_BASIC_TEST_MEMORY
-#define EXPERIMENTAL
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
 
@@ -7,7 +6,6 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/type/Name.h"
 #include "test/msg/arg/type/Value.h"
 #include "test/msg/arg/type/param/Name.h"
-#include "test/msg/arg/var/Value.h"
 #include "test/msg/Base.h"
 
 #include "test/cstr/out/Argument.h"
