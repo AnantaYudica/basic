@@ -18,16 +18,6 @@
 #include "arg/val/param/At.h"
 #include "arg/val/seq/At.h"
 
-// todo : Remove when next release
-#ifndef REMOVED_DEPRECATED
-#define REMOVED_DEPRECATED
-#endif //!REMOVED_DEPRECATED
-
-#include "arg/var/Value.h"
-
-// end todo
-
-
 namespace basic
 {
 namespace test
