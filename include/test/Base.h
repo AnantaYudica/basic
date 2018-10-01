@@ -8,8 +8,6 @@ namespace basic
 namespace test
 {
 
-#ifdef EXPERIMENTAL
-
 template<typename TCases, typename... TVariables>
 class Base
 {
@@ -115,14 +113,6 @@ void Base<TCases, TVariable, TVariables...>::Run()
     Base<TCases>::m_cases.Run(m_var);
     Base<TCases, TVariables...>::Run();
 }
-
-#else
-struct Base
-{
-    virtual ~Base() {};
-    virtual void Test() = 0;
-};
-#endif
 
 } //!test
 
