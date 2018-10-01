@@ -1,4 +1,3 @@
-#define EXPERIMENTAL
 #include "test/Base.h"
 
 #include <iostream>
