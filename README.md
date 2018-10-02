@@ -13,6 +13,7 @@ a repeatable solution
 ```
    mkdir -p Build
    cd ~/project/Build
+   cmake -G "Unix Makefiles" ~/project/cmake
    make install
 ```
   * Windows [not test]
