@@ -60,6 +60,10 @@ Memory<Tout>::Memory(Tout& output) :
     m_blocks = (mem::Block*)std::malloc(m_blocksLength * 
         sizeof(mem::Block));
     assert(m_blocks != NULL);
+#ifdef _WIN32
+	for (std::size_t i = 0; i < m_blocksLength; ++i)
+		memcpy((void*)(m_blocks + i), &mem::Block(), sizeof(mem::Block));
+#endif
     m_output.Debug("Memory Register Begin {length : %zu, size : %d bytes}\n", 
         m_blocksLength, m_blocksLength * sizeof(mem::Block));
 }
@@ -94,10 +98,17 @@ void Memory<Tout>::ReallocationBlock()
 {
     if (m_blocksSize == m_blocksLength)
     {
+#ifdef _WIN32
+		auto old_length = m_blocksLength;
+#endif
         m_blocksLength *= BASIC_TEST_MEMORY_MULTIPLY_BLOCK_SIZE;
         m_blocks = (mem::Block*)std::realloc(m_blocks,
             m_blocksLength * sizeof(mem::Block));
         assert(m_blocks != NULL);
+#ifdef _WIN32
+		for (std::size_t i = old_length; i < m_blocksLength; ++i)
+			memcpy((void*)(m_blocks + i), &mem::Block(), sizeof(mem::Block));
+#endif
         m_output.Debug("Memory Register Realloc {length : %zu, " 
             "size : %zu bytes}\n", m_blocksLength, 
             m_blocksLength * sizeof(mem::Block));
