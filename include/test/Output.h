@@ -23,12 +23,20 @@ private:
     bool m_infoEnable;
     bool m_debugEnable;
     FILE* m_outputFile;
-    Ts& m_status;
+    Ts* m_status;
 public:
     Output(Ts& status);
     Output(Ts& status, const char* file_output);
 public:
+    Output(const Output<Ts>& cpy) = delete;
+    Output(Output<Ts>&& mov);
+public:
     ~Output();
+public:
+    Output<Ts>& operator=(const Output<Ts>& cpy) = delete;
+    Output<Ts>& operator=(Output<Ts>&& mov) = delete;
+public:
+    void Set(Ts& status);
 public:
     template<typename... Targs>
     void Error(const char* format, Targs&&... args);
@@ -51,7 +59,7 @@ Output<Ts>::Output(Ts& status) :
     m_enable(true),
     m_infoEnable(true),
     m_debugEnable(true),
-    m_status(status)
+    m_status(&status)
 {}
 
 template<typename Ts>
@@ -59,7 +67,7 @@ Output<Ts>::Output(Ts& status, const char* file_output) :
     m_enable(true),
     m_infoEnable(true),
     m_debugEnable(true),
-    m_status(status)
+    m_status(&status)
 {
 #if ((defined(_WIN32) || defined(_WIN64)) && !defined(_CRT_SECURE_NO_WARNINGS))
     fopen_s(m_outputFile, file_output, "w"); 
@@ -67,6 +75,18 @@ Output<Ts>::Output(Ts& status, const char* file_output) :
     m_outputFile = fopen(file_output, "w");
 #endif 
     assert(m_outputFile != NULL);
+}
+
+template<typename Ts>
+Output<Ts>::Output(Output<Ts>&& mov) :
+    m_outputFile(mov.m_outputFile),
+    m_enable(mov.m_enable),
+    m_infoEnable(mov.m_infoEnable),
+    m_debugEnable(mov.m_debugEnable),
+    m_status(NULL)
+{
+    mov.m_outputFile = NULL;
+    mov.m_status = NULL;
 }
 
 template<typename Ts>
@@ -80,10 +100,18 @@ Output<Ts>::~Output()
 }
 
 template<typename Ts>
+void Output<Ts>::Set(Ts& status)
+{
+    assert(m_status == NULL);
+    m_status = &status;
+}
+
+template<typename Ts>
 template<typename... Targs>
 void Output<Ts>::Error(const char* format, Targs&&... args)
 {
-    m_status.Error();
+    assert(m_status != NULL);
+    m_status->Error();
     if (m_enable)
     {
         assert(m_outputFile != NULL);
