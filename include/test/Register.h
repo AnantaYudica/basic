@@ -42,7 +42,7 @@ Register<TTest, TDerived>::Register(TDerived* derived, const char (&file)[S],
         m_file(file),
         m_line(line)
 {
-    TTest::Instance.List.push_back(this);
+    TTest::GetInstance().List().push_back(this);
 }
 
 template<typename TTest, typename TDerived>
@@ -52,12 +52,12 @@ Register<TTest, TDerived>::Register(Register<TTest, TDerived>&& mov) :
     m_line(mov.m_line)
 {
     mov.m_derived = nullptr;
-    auto fn = std::find(TTest::Instance.List.begin(), 
-        TTest::Instance.List.end(), &mov);
-    if (fn != TTest::Instance.List.end())
+    auto fn = std::find(TTest::GetInstance().List().begin(),
+        TTest::GetInstance().List().end(), &mov);
+    if (fn != TTest::GetInstance().List().end())
         *fn = this;
     else
-        TTest::Instance.List.push_back(this);
+        TTest::GetInstance().List().push_back(this);
 }
 
 template<typename TTest, typename TDerived>
@@ -79,7 +79,7 @@ int Register<TTest, TDerived>::Run()
     {
         TTest::Error("derived is nullptr");
     }
-    return TTest::Instance.Status.Get(); 
+    return TTest::GetInstance().Status().Get();
 }
 
 template<typename TTest, typename TDerived>
