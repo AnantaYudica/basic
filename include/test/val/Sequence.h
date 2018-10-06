@@ -55,6 +55,22 @@ public:
     ConstAtType At() const;
 };
 
+template<typename T>
+class Sequence<T, 0>
+{
+public:
+    typedef T Type;
+public:
+    static constexpr std::size_t Size = 0;
+public:
+    Sequence();
+    Sequence(const Sequence<T, 0>& cpy);
+    Sequence(Sequence<T, 0>&& mov);
+public:
+    Sequence<T, 0>& operator=(const Sequence<T, 0>& cpy);
+    Sequence<T, 0>& operator=(Sequence<T, 0>&& mov);
+};
+
 template<typename T, std::size_t S>
 Sequence<T, S>::Sequence()
 {}
@@ -135,6 +151,26 @@ typename Sequence<T, S>::ConstAtType Sequence<T, S>::At() const
 {
     return m_values[I];
 }
+
+template<typename T>
+Sequence<T, 0>::Sequence()
+{}
+
+template<typename T>
+Sequence<T, 0>::Sequence(const Sequence<T, 0>& cpy)
+{}
+
+template<typename T>
+Sequence<T, 0>::Sequence(Sequence<T, 0>&& mov)
+{}
+
+template<typename T>
+Sequence<T, 0>& Sequence<T, 0>::operator=(const Sequence<T, 0>& cpy)
+{}
+
+template<typename T>
+Sequence<T, 0>& Sequence<T, 0>::operator=(Sequence<T, 0>&& mov)
+{}
 
 } //!val
 
