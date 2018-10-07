@@ -27,9 +27,9 @@ int main()
 {
     typedef basic::test::type::param::mmbr::Function<P1> PF1;
     A a;
-    PF1::Call<void>(&A::Print1, a, 1,'a', 3.14);
-    PF1::Call<void>(&A::Print1, &a, 1,'a', 3.14);
-    PF1::Call<void>(PF1::PointerConstType<void, A>(&A::Print2), a, 1,'a', 3.14);
-    PF1::Call<void>(PF1::PointerType<void, A>(&A::Print2), &a, 1,'a', 3.14);
+    PF1::Call<void>(&A::Print1, a, 1,'a', 3.14f);
+    PF1::Call<void>(&A::Print1, &a, 1,'a', 3.14f);
+    PF1::Call<void>(PF1::PointerConstType<void, A>(&A::Print2), a, 1,'a', 3.14f);
+    PF1::Call<void>(PF1::PointerType<void, A>(&A::Print2), &a, 1,'a', 3.14f);
 
 }
