@@ -15,6 +15,6 @@ int main()
 {
     typedef basic::test::type::param::Function<P1> PF1;
 
-    PF1::Call<void>(&Print, 1, 'a', 3.14);
+    PF1::Call<void>(&Print, 1, 'a', 3.14f);
 
 }
