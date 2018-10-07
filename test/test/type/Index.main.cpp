@@ -7,6 +7,6 @@
 int main()
 {
     typedef basic::test::type::Index<int, 2> Int_At2;
-    printf("%s %d", typeid(typename Int_At2::Type).name(), 
+    printf("%s %zd", typeid(typename Int_At2::Type).name(), 
         Int_At2::Value);
 }
