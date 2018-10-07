@@ -336,7 +336,7 @@ public:
     bool Result(const CaseHasHI&, VariableTestSingleton<TSingleton, SCaseHIT,
         TGetInstance, TArgs...>& var)
     {
-        return decltype(HasDestroyInstance<TSingleton>(0))::value == 
+        return decltype(HasHasInstance<TSingleton>(0))::value == 
             basic::test::var::At<IValBoolHasHI>(var).Get().Get();
     }
 
@@ -345,7 +345,7 @@ public:
     bool Result(const CaseHasGI&, VariableTestSingleton<TSingleton, SCaseHIT,
         TGetInstance, TArgs...>& var)
     {
-        return decltype(HasDestroyInstance<TSingleton>(0))::value == 
+        return decltype(HasGetInstance<TSingleton>(0))::value == 
             basic::test::var::At<IValBoolHasGI>(var).Get().Get();
     }
 
@@ -615,7 +615,7 @@ typedef basic::test::type::Parameter<
     CaseGITa,
     basic::test::type::Index<CaseHITa, 1>> T5Cases;
 
-T5Var t5_var1(false, false, false, false, false, true, false, 
+T5Var t5_var1(false, false, true, true, false, true, false, 
     nullptr, &EToPtr, &ParamHasCIToCString<>, &BoolToString);
 
 REGISTER_TEST(t5, new TestSingleton<T5Cases, T5Var>(t5_var1));
