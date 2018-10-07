@@ -46,7 +46,7 @@ int main()
     paramVal0.Fill<void>(&A::PrintEmpty, &a);
     A a0 = paramVal0.Fill<A>();
 
-    ParamVal1 paramVal(1, "test", 3.14);
+    ParamVal1 paramVal(1, "test", 3.14f);
     paramVal.Fill<void>(&Print);
     paramVal.Fill<void>(&A::Print, a);
     paramVal.Fill<void>(&A::Print, &a);
