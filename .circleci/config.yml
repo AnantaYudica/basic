@@ -5,21 +5,34 @@ jobs:
        - image: library/gcc:7.3.0
      steps:
        - checkout
-       - run: mkdir -p Build
-       - run: |
+       - run: 
+          name: "Create Directory Build"
+          command: | 
+            mkdir -p Build
+       - run: 
+          name: "Install cmake"
+          command: | 
             cd ~
             wget https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.tar.gz
             tar xzf cmake-3.10.0-Linux-x86_64.tar.gz
-       - run: |
+       - run: 
+          name: "Check Version"
+          command: | 
             gcc --version
             g++ --version
             ~/cmake-3.10.0-Linux-x86_64/bin/cmake --version
-       - run: |
+       - run: 
+          name: "Generete Projects"
+          command: |
             cd ~/project/Build
             ~/cmake-3.10.0-Linux-x86_64/bin/cmake -G "Unix Makefiles" ~/project/cmake -DPROJECT_SOURCE_DIR:PATH=~/project/cmake -DPROJECT_BINARY_DIR:PATH=~/project/Build
-       - run: |
+       - run: 
+          name: "Build All Projects"
+          command: |
             cd ~/project/Build
             make
-       - run: |
+       - run: 
+          name: "Testing"
+          command: |
             cd ~/project/Build
             make test

@@ -162,44 +162,118 @@ protected:
 private:
     static void Deleter(PointerType pointer);
 private:
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<_Singleton<T>::template HasDestroy<Td>::
+        value>::type
+            AssignInstance(PointerType pointer);
+#else
     template<typename Td>
     static typename std::enable_if<HasDestroy<Td>::value>::type 
         AssignInstance(PointerType pointer);
+#endif
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<!_Singleton<T>::template HasDestroy<Td>::
+        value>::type
+            AssignInstance(PointerType pointer);
+#else
     template<typename Td>
     static typename std::enable_if<!HasDestroy<Td>::value>::type 
         AssignInstance(PointerType pointer);
+#endif
 private:
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<_Singleton<T>::template HasAllocate<Td>::
+        value, typename _Singleton<T>::PointerType>::type
+            Allocate();
+#else
     template<typename Td>
     static typename std::enable_if<HasAllocate<Td>::value, PointerType>::type
         Allocate();
+#endif
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<!_Singleton<T>::template HasAllocate<Td>::
+        value, typename _Singleton<T>::PointerType>::type
+            Allocate();
+#else
     template<typename Td>
     static typename std::enable_if<!HasAllocate<Td>::value, PointerType>::type
         Allocate();
+#endif
 private:
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<_Singleton<T>::template HasDeallocate<Td>::
+        value>::type
+            Deallocate(PointerType pointer);
+#else
     template<typename Td>
     static typename std::enable_if<HasDeallocate<Td>::value>::type
         Deallocate(PointerType pointer);
+#endif
+#ifdef _WIN32
+    template<typename Td>
+    static typename std::enable_if<!_Singleton<T>::template HasDeallocate<Td>::
+        value>::type
+            Deallocate(PointerType pointer);
+#else
     template<typename Td>
     static typename std::enable_if<!HasDeallocate<Td>::value>::type
         Deallocate(PointerType pointer);
+#endif
 private:
+#ifdef _WIN32
+    template<typename... Targs, typename TPointer = typename _Singleton<T>::
+        PointerType, typename THasConstruct = typename _Singleton<T>::
+        HasConstruct<typename _Singleton<T>::SimpleType, Targs...>>
+    static typename std::enable_if<THasConstruct::value, TPointer>::type
+         Constructor(TPointer pointer, Targs&&... args);
+#else
     template<typename... Targs>
     static typename std::enable_if<HasConstruct<SimpleType,
         Targs...>::value, PointerType>::type 
             Constructor(PointerType pointer, Targs&&... args);
+#endif
+#ifdef _WIN32
+    template<typename... Targs, typename TPointer = typename _Singleton<T>::
+        PointerType, typename THasConstruct = typename _Singleton<T>::
+        HasConstruct<typename _Singleton<T>::SimpleType, Targs...>>
+    static typename std::enable_if<!THasConstruct::value, TPointer>::type
+        Constructor(TPointer pointer, Targs&&... args);
+#else
     template<typename... Targs>
     static typename std::enable_if<!HasConstruct<SimpleType,
         Targs...>::value, PointerType>::type 
             Constructor(PointerType pointer, Targs&&... args);
+#endif
 protected:
+#ifdef _WIN32
+    template<typename... Targs, typename TPointer = typename _Singleton<T>::
+        PointerType, typename THasConstructor = _Singleton<T>::HasConstructor<
+        typename _Singleton<T>::SimpleType, Targs...>>
+    static typename std::enable_if<THasConstructor::value>::type
+        Construct(TPointer pointer, Targs&&... args);
+#else
     template<typename... Targs>
     static typename std::enable_if<HasConstructor<SimpleType, 
         Targs...>::value>::type
             Construct(PointerType pointer, Targs&&... args);
+#endif
+#ifdef _WIN32
+    template<typename... Targs, typename TPointer = typename _Singleton<T>::
+        PointerType, typename THasConstructor = _Singleton<T>::HasConstructor<
+        typename _Singleton<T>::SimpleType, Targs...>>
+    static typename std::enable_if<!THasConstructor::value>::type
+        Construct(TPointer pointer, Targs&&... args);
+#else
     template<typename... Targs>
     static typename std::enable_if<!HasConstructor<SimpleType, 
         Targs...>::value>::type
             Construct(PointerType pointer, Targs&&... args);
+#endif
 private:
     template<typename... Targs>
     static T& _ConstructInstance(Targs&&... args);
@@ -328,41 +402,65 @@ typename std::enable_if<!_Singleton<T>::template HasDeallocate<Td>::value>::type
 }
 
 template<typename T>
+#ifdef _WIN32
+template<typename... Targs, typename TPointer, typename THasConstruct>
+typename std::enable_if<THasConstruct::value, TPointer>::type
+    _Singleton<T>::Constructor(TPointer pointer, Targs&&... args)
+#else
 template<typename... Targs>
 typename std::enable_if<_Singleton<T>::template HasConstruct<
     typename _Singleton<T>::SimpleType, Targs...>::value, 
         typename _Singleton<T>::PointerType>::type 
             _Singleton<T>::Constructor(PointerType pointer, Targs&&... args)
+#endif
 {
     SimpleType::Construct(pointer, args...);
     return pointer;
 }
 
 template<typename T>
+#ifdef _WIN32
+template<typename... Targs, typename TPointer, typename THasConstruct>
+typename std::enable_if<!THasConstruct::value, TPointer>::type
+    _Singleton<T>::Constructor(TPointer pointer, Targs&&... args)
+#else
 template<typename... Targs>
 typename std::enable_if<!_Singleton<T>::template HasConstruct<
     typename _Singleton<T>::SimpleType, Targs...>::value, 
         typename _Singleton<T>::PointerType>::type 
             _Singleton<T>::Constructor(PointerType pointer, Targs&&... args)
+#endif
 {
     _Singleton<T>::Construct(pointer, args...);
     return pointer;
 }
 
 template<typename T>
+#ifdef _WIN32
+template<typename... Targs, typename TPointer, typename THasConstructor>
+typename std::enable_if<THasConstructor::value>::type
+    _Singleton<T>::Construct(TPointer pointer, Targs&&... args)
+#else
 template<typename... Targs>
 typename std::enable_if<_Singleton<T>::template HasConstructor<
     typename _Singleton<T>::SimpleType, Targs...>::value>::type
         _Singleton<T>::Construct(PointerType pointer, Targs&&... args)
+#endif
 {
     new ((void*)pointer) T(args...);
 }
 
 template<typename T>
+#ifdef _WIN32
+template<typename... Targs, typename TPointer, typename THasConstructor>
+typename std::enable_if<!THasConstructor::value>::type
+    _Singleton<T>::Construct(TPointer pointer, Targs&&... args)
+#else
 template<typename... Targs>
 typename std::enable_if<!_Singleton<T>::template HasConstructor<
     typename _Singleton<T>::SimpleType, Targs...>::value>::type
         _Singleton<T>::Construct(PointerType pointer, Targs&&... args)
+#endif
 {
     static_assert(_Singleton<T>::HasConstructor<
         SimpleType, Targs...>::value, "class T has no constructor");

@@ -27,7 +27,7 @@ template<typename TValue, typename TDiff, TDiff Diff>
 constexpr TValue Arithmetic<TValue, TDiff, Diff>::
     Formula(const TValue& first_value, const std::size_t& term)
 {
-    return first_value + (Diff * term);
+    return first_value + TValue(Diff * term);
 }
 
 } //!formula

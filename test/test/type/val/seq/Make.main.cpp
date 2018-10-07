@@ -24,6 +24,6 @@ int main()
     printf("[7] : %d\n", SequenceInt10{}.At<7>());
     printf("[8] : %d\n", SequenceInt10{}.At<8>());
     printf("[9] : %d\n", SequenceInt10{}.At<9>());
-    printf("Size : %d\n", SequenceInt10::Size);
+    printf("Size : %zi\n", SequenceInt10::Size);
     
 }

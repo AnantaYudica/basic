@@ -10,7 +10,7 @@ char _true_cstr[] = "true";
 char _false_cstr[] = "false";
 
 #define PRINT_FORMAT(__VAR_NAME__)\
-printf("name : %s, size : %d, cstr : \"%s\", IsNull : %s, IsEmpty : %s\n",\
+printf("name : %s, size : %zd, cstr : \"%s\", IsNull : %s, IsEmpty : %s\n",\
     #__VAR_NAME__, __VAR_NAME__.Size(), *__VAR_NAME__,\
     (!__VAR_NAME__ ? _true_cstr : _false_cstr),\
     (__VAR_NAME__.IsEmpty() ? _true_cstr : _false_cstr))
