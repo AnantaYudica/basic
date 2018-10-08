@@ -46,7 +46,8 @@ using Variable = basic::test::Variable<basic::test::val::Sequence<bool, 3>,
 
 template<typename... TCases>
 struct TestA :
-    basic::test::Case<TestA<TCases...>, basic::test::type::Parameter<TCases...>>
+    basic::test::Case<TestA<TCases...>, 
+    basic::test::type::Parameter<TCases...>>
 {
     TestA() :
         basic::test::Case<TestA, 
@@ -76,22 +77,22 @@ struct TestA :
     template<typename TCaseId, typename TVar>
     void Info(const TCaseId&, TVar& var)
     {
-        basic::test::var::At<1>(var).Get().At<CaseIndex<TCaseId>::Value>() =
-            message::m_info;
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_info;
     }
 
     template<typename TCaseId, typename TVar>
     void Debug(const TCaseId&, TVar& var)
     {
-        basic::test::var::At<1>(var).Get().At<CaseIndex<TCaseId>::Value>() =
-            message::m_debug;
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_debug;
     }
 
     template<typename TCaseId, typename TVar>
     void Error(const TCaseId&, TVar& var)
     {
-        basic::test::var::At<1>(var).Get().At<CaseIndex<TCaseId>::Value>() =
-            message::m_error;
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_error;
     } 
 };
 
@@ -99,43 +100,46 @@ int main()
 {
     TestA<> testa0;
 
-    Variable var1{ false, false, false, m_undefined, m_undefined, m_undefined };
+    Variable var1{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
     TestA<Case1> testa1;
     testa1.Run(var1);
     assert(var1.Get().template At<0>() == true);
-    assert(basic::test::var::At<1>(var1).Get().At<CaseIndex<Case1>::Value>() ==
-        message::m_debug);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
     assert(var1.Get().template At<1>() == false);
-    assert(basic::test::var::At<1>(var1).Get().At<CaseIndex<Case2>::Value>() ==
-        message::m_undefined);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_undefined);
     assert(var1.Get().template At<2>() == false);
-    assert(basic::test::var::At<1>(var1).Get().At<CaseIndex<Case3>::Value>() ==
-        message::m_undefined);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case3>::Value>() == message::m_undefined);
 
-    Variable var2{ false, false, false, m_undefined, m_undefined, m_undefined };
+    Variable var2{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
     TestA<Case1, Case2> testa2;
     testa2.Run(var2);
     assert(var2.Get().template At<0>() == true);
-    assert(basic::test::var::At<1>(var2).Get().At<CaseIndex<Case1>::Value>() ==
-        message::m_debug);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
     assert(var2.Get().template At<1>() == true);
-    assert(basic::test::var::At<1>(var2).Get().At<CaseIndex<Case2>::Value>() ==
-        message::m_error);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_error);
     assert(var2.Get().template At<2>() == false);
-    assert(basic::test::var::At<1>(var2).Get().At<CaseIndex<Case3>::Value>() ==
-        message::m_undefined);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case3>::Value>() == message::m_undefined);
 
-    Variable var3{ false, false, false, m_undefined, m_undefined, m_undefined };
+    Variable var3{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
     TestA<Case1, Case2, Case3> testa3;
     testa3.Run(var3);
     assert(var3.Get().template At<0>() == true);
-    assert(basic::test::var::At<1>(var3).Get().At<CaseIndex<Case1>::Value>() ==
-        message::m_debug);
+    assert(basic::test::var::At<1>(var3).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
     assert(var3.Get().template At<1>() == true);
-    assert(basic::test::var::At<1>(var3).Get().At<CaseIndex<Case2>::Value>() ==
-        message::m_error);
+    assert(basic::test::var::At<1>(var3).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_error);
     assert(var3.Get().template At<2>() == true);
-    assert(basic::test::var::At<1>(var3).Get().At<CaseIndex<Case3>::Value>() ==
-        message::m_debug);
+    assert(basic::test::var::At<1>(var3).Get().template 
+        At<CaseIndex<Case3>::Value>() == message::m_debug);
 
 }
