@@ -17,7 +17,7 @@ int main()
     basic::test::out::Argument<
         basic::test::CString<const char>> out_arg2;
 
-    basic::test::CString<char> cstr1 = VALUE1_CSTR;
+    basic::test::CString<char> cstr1(VALUE1_CSTR);
     printf("out_arg1.Value(cstr1) : %s\n", out_arg1.Value(cstr1));
     assert(strcmp(VALUE1_CSTR, out_arg1.Value(cstr1)) == 0);
 
@@ -31,7 +31,7 @@ int main()
             out_arg1.Value(std::move(cpy1_cstr1)));
     assert(strcmp(VALUE1_CSTR, out_arg1.Value(cpy2_cstr1)) == 0);
 
-    basic::test::CString<const char> cstr3 = VALUE2_CSTR;
+    basic::test::CString<const char> cstr3(VALUE2_CSTR);
     printf("out_arg2.Value(cstr3) : %s\n", out_arg2.Value(cstr3));
     assert(strcmp(VALUE2_CSTR, out_arg2.Value(cstr3)) == 0);
 

@@ -51,7 +51,7 @@ const char* Foo0()
 }
 
 template<typename... TArgs>
-char* Foo1(const char* format, TArgs&&... args)
+char* Foo1(const char*&& format, TArgs&&... args)
 {
     snprintf(gbuffer, BUFFER_SIZE, format, 
         std::forward<TArgs>(args)...);
@@ -132,7 +132,7 @@ int main()
 
     const char* cstr1 = FORMAT1_CSTR;
     basic::test::Variable<
-        basic::test::type::Function<char*(const char*), &Foo1>,
+        basic::test::type::Function<char*(const char*&&), &Foo1>,
         basic::test::Value<const char*>> var1(cstr1);
 
     arg1.Call<void>(&TestA::Call, testa1, var1, std::forward<char*>(buffer),
@@ -185,7 +185,7 @@ int main()
 
     const char* cstr3 = FORMAT7_CSTR;
     basic::test::Variable<
-        basic::test::type::Function<char*(const char*, int&&, 
+        basic::test::type::Function<char*(const char*&&, int&&, 
             int&&, int&&, int&&), &Foo1>,
         basic::test::Value<const char*>,
         basic::test::Value<int>,
