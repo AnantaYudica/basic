@@ -1,48 +1,56 @@
 #include "test/Variable.h"
 #include "test/var/At.h"
-#include "test/var/type/Value.h"
-#include "test/var/type/val/Sequence.h"
-#include "test/var/Value.h"
-#include "test/var/val/Sequence.h"
-#include "test/var/val/Parameter.h"
 
-#include <iostream>
+#include <cstdio>
+#include <cassert>
 #include <typeinfo>
-
 
 int main()
 {
-    typedef basic::test::Variable<
-        int, 
-        basic::test::type::Value<int, 4>,
-        basic::test::type::val::Sequence<int, 1, 2, 3, 4>,
-        basic::test::val::Parameter<int, int, int>,
-        basic::test::Value<int>,
-        basic::test::val::Sequence<int,2>> Var1;
+    typedef basic::test::Variable<char> Var1;
+    typedef basic::test::Variable<char, short> Var2;
+    typedef basic::test::Variable<char, short, int> Var3;
+    typedef basic::test::Variable<char, short, int, long> Var4;
 
-    Var1 var1(4, 6, 14, 1, 4, 11);
-    std::cout << "var::At<1, Var1> Variable : " << 
-        basic::test::var::At<1>(var1).Get().Get() << std::endl;
+    Var1 var1;
+    assert(&basic::test::var::At<0>(var1) ==
+        dynamic_cast<Var1*>(&var1));
 
-    std::cout << "var::At<2, Var1> : { " << std::endl;
-    std::cout << basic::test::var::At<2>(var1).Get().At<0>() << std::endl;
-    std::cout << basic::test::var::At<2>(var1).Get().At<1>() << std::endl;
-    std::cout << basic::test::var::At<2>(var1).Get().At<2>() << std::endl;
-    std::cout << basic::test::var::At<2>(var1).Get().At<3>() <<
-        "}" << std::endl;
-    
-    std::cout << "var::At<3, Var1> : { " << std::endl;
-    std::cout << basic::test::var::At<3>(var1).Get().At<0>() << std::endl;
-    std::cout << basic::test::var::At<3>(var1).Get().At<1>() << std::endl;
-    std::cout << basic::test::var::At<3>(var1).Get().At<2>() <<
-        "}" << std::endl;
-    
-    std::cout << "var::At<4, Var1> Variable : " << 
-        basic::test::var::At<4>(var1).Get().Get() << std::endl;
-    
-    std::cout << "var::At<5, Var1> : { " << std::endl;
-    std::cout << basic::test::var::At<5>(var1).Get().At<0>() << std::endl;
-    std::cout << basic::test::var::At<5>(var1).Get().At<1>() <<
-        "}" << std::endl;
+    //todo uncomment if bug #64 fixed
+    /*
+    const Var1& var1_1 = var1;
+    assert(&basic::test::var::At<0>(var1_1) ==
+        dynamic_cast<const Var1*>(&var1_1));
+    */
+
+    Var2 var2;
+    typedef basic::test::Variable<short> Var2_1;
+    assert(&basic::test::var::At<0>(var2) ==
+        dynamic_cast<Var2*>(&var2));
+    assert(&basic::test::var::At<1>(var2) ==
+        dynamic_cast<Var2_1*>(&var2));
+
+    Var3 var3;
+    typedef basic::test::Variable<short, int> Var3_1;
+    typedef basic::test::Variable<int> Var3_2;
+    assert(&basic::test::var::At<0>(var3) ==
+        dynamic_cast<Var3*>(&var3));
+    assert(&basic::test::var::At<1>(var3) ==
+        dynamic_cast<Var3_1*>(&var3));
+    assert(&basic::test::var::At<2>(var3) ==
+        dynamic_cast<Var3_2*>(&var3));
+
+    Var4 var4;
+    typedef basic::test::Variable<short, int, long> Var4_1;
+    typedef basic::test::Variable<int, long> Var4_2;
+    typedef basic::test::Variable<long> Var4_3;
+    assert(&basic::test::var::At<0>(var4) ==
+        dynamic_cast<Var4*>(&var4));
+    assert(&basic::test::var::At<1>(var4) ==
+        dynamic_cast<Var4_1*>(&var4));
+    assert(&basic::test::var::At<2>(var4) ==
+        dynamic_cast<Var4_2*>(&var4));
+    assert(&basic::test::var::At<3>(var4) ==
+        dynamic_cast<Var4_3*>(&var4));
 
 }
