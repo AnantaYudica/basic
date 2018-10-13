@@ -24,38 +24,38 @@ char * gbuffer;
 #define VALUE4_LONG 114
 #define VALUE4_CSTR "114"
 
-#define BEFFER_SIZE 1024
+#define BUFFER_SIZE 1024
 
 int Foo1()
 {
-    snprintf(gbuffer, BEFFER_SIZE, EMPTY_CSTR);
+    snprintf(gbuffer, BUFFER_SIZE, EMPTY_CSTR);
     return 1;
 }
 
 void Foo2(char c)
 {
-    snprintf(gbuffer, BEFFER_SIZE, "%c", c);
+    snprintf(gbuffer, BUFFER_SIZE, "%c", c);
 }
 
 void Foo3(char c, short s)
 {
-    snprintf(gbuffer, BEFFER_SIZE, "%c%hd", c, s);
+    snprintf(gbuffer, BUFFER_SIZE, "%c%hd", c, s);
 }
 
 void Foo3(char c, short s, int i)
 {
-    snprintf(gbuffer, BEFFER_SIZE, "%c%hd%d", c, s, i);
+    snprintf(gbuffer, BUFFER_SIZE, "%c%hd%d", c, s, i);
 }
 
 int Foo4(char c, short s, int i, long l)
 {
-    snprintf(gbuffer, BEFFER_SIZE, "%c%hd%d%ld", c, s, i, l);
+    snprintf(gbuffer, BUFFER_SIZE, "%c%hd%d%ld", c, s, i, l);
     return 1;
 }
 
 int main()
 {
-    gbuffer = new char[BEFFER_SIZE];
+    gbuffer = new char[BUFFER_SIZE];
 
     typedef basic::test::type::Function<int(), &Foo1> Function1;
     Function1::Pointer();
