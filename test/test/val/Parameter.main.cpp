@@ -124,38 +124,38 @@ int main()
     paramVal0.Fill<void>(&Foo1);
     printf("Function Fill : \"%s\"\n", gbuffer);
     assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal0.Fill<void>(&A::Foo1, a0);
     printf("Function member Fill : \"%s\"\n", gbuffer);
     assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal0.Fill<void>(&A::Foo1, &a0);
     printf("Function member Fill (p): \"%s\"\n", gbuffer);
     assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     A a0_1 = paramVal0.Fill<A>();
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
 
     ParamVal1 paramVal1(0);
     paramVal1.template At<0>() = VALUE1_CHAR;
     paramVal1.Fill<int>(&Foo2);
     printf("Function Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal1.Fill<int>(&A::Foo2, a0);
     printf("Function member Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal1.Fill<int>(&A::Foo2, &a0);
     printf("Function member Fill (p): \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     A a1_1 = paramVal1.Fill<A>();
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
 
     assert(paramVal1.template At<0>() == VALUE1_CHAR);
     assert(static_cast<const ParamVal1&>(paramVal1).template At<0>() == 
@@ -165,19 +165,19 @@ int main()
     paramVal2.Fill<void>(static_cast<void(*)(char, short)>(&Foo3));
     printf("Function Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal2.Fill<void>(static_cast<void(A::*)(char, short)>(&A::Foo3), a0);
     printf("Function member Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal2.Fill<void>(static_cast<void(A::*)(char, short)>(&A::Foo3), &a0);
     printf("Function member Fill (p): \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     A a2_1 = std::move(paramVal2.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
 
     assert(paramVal2.template At<0>() == VALUE1_CHAR);
     assert(static_cast<const ParamVal2&>(paramVal2).template At<0>() ==
@@ -192,21 +192,21 @@ int main()
     paramVal3.Fill<void>(static_cast<void(*)(char, short, int)>(&Foo3));
     printf("Function Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal3.Fill<void>(static_cast<void(A::*)(char, short, 
         int)>(&A::Foo3), a0);
     printf("Function member Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal3.Fill<void>(static_cast<void(A::*)(char, short, 
         int)>(&A::Foo3), &a0);
     printf("Function member Fill (p): \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     A a3_1 = std::move(paramVal3.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
 
     assert(paramVal3.template At<0>() == VALUE1_CHAR);
     assert(static_cast<const ParamVal3&>(paramVal3).template At<0>() ==
@@ -226,22 +226,22 @@ int main()
     printf("Function Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
         VALUE4_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal4.Fill<int>(&A::Foo4, a0);
     printf("Function member Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
         VALUE4_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     paramVal4.Fill<int>(&A::Foo4, &a0);
     printf("Function member Fill (p): \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
         VALUE4_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     A a4_1 = std::move(paramVal4.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
         VALUE4_CSTR, gbuffer) == 0);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
 
     assert(paramVal4.template At<0>() == VALUE1_CHAR);
     assert(static_cast<const ParamVal4&>(paramVal4).template At<0>() ==

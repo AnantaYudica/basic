@@ -53,7 +53,7 @@ int main()
     basic::test::Variable<
         basic::test::type::Function<void(), &Foo1>,
         basic::test::type::Function<void(), &Foo2>> var2;
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     var2.Get().Call();
     assert(strcmp(gbuffer, FOO1_CSTR) == 0);
     basic::test::var::At<1>(var2).Get().Call();

@@ -54,14 +54,14 @@ int main()
     assert(strcmp(gbuffer, FOO1_CSTR) == 0);
     const basic::test::Variable<
         basic::test::val::Function<void()>>& var1_1(var1);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     var1_1.Get().Call();
     assert(strcmp(gbuffer, FOO1_CSTR) == 0);
 
     basic::test::Variable<
         basic::test::val::Function<void()>,
         basic::test::val::Function<void()>> var2(&Foo1, &Foo2);
-    gbuffer[0] = NULL;
+    gbuffer[0] = '\0';
     var2.Get().Call();
     assert(strcmp(gbuffer, FOO1_CSTR) == 0);
     basic::test::var::At<1>(var2).Get().Call();
