@@ -219,8 +219,6 @@ int main()
     assert(strcmp(FUNC_CONSTVOLATILE_MMBR_CSTR FUNC_LVAL_MMBR_CSTR VALUE1_CSTR
         VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR, gbuffer) == 0);
 
-    /* todo un-comment if bug #63 fix
-
     Func1::Call<int, TestA&&>(Func1::PointerRValType<int, TestA>(&TestA::Print3), 
         std::move(testa), VALUE1_CHAR, VALUE2_SHORT, VALUE3_INT, VALUE4_LONG);
     printf("output : \"%s\"\n", gbuffer);
@@ -246,7 +244,6 @@ int main()
     printf("output : \"%s\"\n", gbuffer);
     assert(strcmp(FUNC_CONSTVOLATILE_MMBR_CSTR FUNC_RVAL_MMBR_CSTR VALUE1_CSTR
         VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR, gbuffer) == 0);
-    */
 
     delete[] gbuffer;
 }
