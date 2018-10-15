@@ -55,54 +55,64 @@ public:
 private:
     template<typename TRet, typename TDerived, typename TPointer>
     static typename std::enable_if<std::is_pointer<TDerived>::value, 
-        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived& d, 
+            TArgs&&... args);
     template<typename TRet, typename TDerived, typename TPointer>
     static typename std::enable_if<!std::is_pointer<TDerived>::value, 
-        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived& d, 
+            TArgs&&... args);
+    template<typename TRet, typename TDerived, typename TPointer>
+    static typename std::enable_if<std::is_pointer<TDerived>::value,
+        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived&& d, 
+            TArgs&&... args);
+    template<typename TRet, typename TDerived, typename TPointer>
+    static typename std::enable_if<!std::is_pointer<TDerived>::value,
+        TRet>::type _Call(TPointer ptr_func_mmbr, TDerived&& d, 
+            TArgs&&... args);
 public:
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args);
+        TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstType<TRet, TDerivedFuncMmbr> ptr_func_mmbr,
-        TDerived d, TArgs&&... args);
+        TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerVolatileType<TRet, TDerivedFuncMmbr> ptr_func_mmbr,
-        TDerived d, TArgs&&... args);
+        TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstVolatileType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args);
+        TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstLValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerVolatileLValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstVolatileLValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args);
+        TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstRValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerVolatileRValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
     template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
     static TRet Call(PointerConstVolatileRValType<TRet, 
-        TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, TArgs&&... args);
+        TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, TArgs&&... args);
 };
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TPointer>
 typename std::enable_if<std::is_pointer<TDerived>::value, TRet>::type 
     Function<type::Parameter<TArgs...>>::
-        _Call(TPointer ptr_func_mmbr, TDerived d, TArgs&&... args)
+        _Call(TPointer ptr_func_mmbr, TDerived& d, TArgs&&... args)
 {
     return (d->*ptr_func_mmbr)(std::forward<TArgs>(args)...);
 }
@@ -111,117 +121,147 @@ template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TPointer>
 typename std::enable_if<!std::is_pointer<TDerived>::value, TRet>::type 
     Function<type::Parameter<TArgs...>>::
-        _Call(TPointer ptr_func_mmbr, TDerived d, TArgs&&... args)
+        _Call(TPointer ptr_func_mmbr, TDerived& d, TArgs&&... args)
 {
     return (d.*ptr_func_mmbr)(std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
-template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
-TRet Function<type::Parameter<TArgs...>>::
-    Call(PointerType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, 
-        TArgs&&... args)
+template<typename TRet, typename TDerived, typename TPointer>
+typename std::enable_if<std::is_pointer<TDerived>::value, TRet>::type
+Function<type::Parameter<TArgs...>>::
+_Call(TPointer ptr_func_mmbr, TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return (std::move(d)->*ptr_func_mmbr)(std::forward<TArgs>(args)...);
+}
+
+template<typename... TArgs>
+template<typename TRet, typename TDerived, typename TPointer>
+typename std::enable_if<!std::is_pointer<TDerived>::value, TRet>::type
+Function<type::Parameter<TArgs...>>::
+_Call(TPointer ptr_func_mmbr, TDerived&& d, TArgs&&... args)
+{
+    return (std::move(d).*ptr_func_mmbr)(std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
-    Call(PointerConstType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, 
+    Call(PointerType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, 
         TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
-    Call(PointerVolatileType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived d,
+    Call(PointerConstType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, 
         TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d),
+        std::forward<TArgs>(args)...);
+}
+
+template<typename... TArgs>
+template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
+TRet Function<type::Parameter<TArgs...>>::
+    Call(PointerVolatileType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
+        TDerived&& d, TArgs&&... args)
+{
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerConstVolatileType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
-    Call(PointerLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived d, 
+    Call(PointerLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d, 
         TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerConstLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerVolatileLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerConstVolatileLValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
-    Call(PointerRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived d,
+    Call(PointerRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, TDerived&& d,
         TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerConstRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerVolatileRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 template<typename... TArgs>
 template<typename TRet, typename TDerived, typename TDerivedFuncMmbr>
 TRet Function<type::Parameter<TArgs...>>::
     Call(PointerConstVolatileRValType<TRet, TDerivedFuncMmbr> ptr_func_mmbr, 
-        TDerived d, TArgs&&... args)
+        TDerived&& d, TArgs&&... args)
 {
-    return _Call<TRet>(ptr_func_mmbr, d, std::forward<TArgs>(args)...);
+    return _Call<TRet>(ptr_func_mmbr, std::forward<TDerived>(d), 
+        std::forward<TArgs>(args)...);
 }
 
 } //!mmbr
