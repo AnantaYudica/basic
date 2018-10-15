@@ -9,6 +9,7 @@
 #include "test/var/Value.h"
 
 #include "test/msg/arg/val/Sequence.h"
+#include "test/msg/arg/val/seq/At.h"
 #include "test/msg/arg/type/Index.h"
 #include "test/val/Sequence.h"
 
@@ -245,7 +246,56 @@ int main()
     assert(strcmp(arg2.Get(var2), VALUE1_CSTR VALUE2_CSTR
         VALUE3_CSTR VALUE4_CSTR) == 0);
 
-    //todo update test case for bug #60
+    const char* cstr8 = "%d";
+    basic::test::Variable<
+        basic::test::val::Function<char*(const char*&&, int&&)>,
+        basic::test::Value<const char*>,
+        basic::test::val::Sequence<int, 4>> var3(&Foo1, cstr8, VALUE1_INT,
+            VALUE2_INT, VALUE3_INT, VALUE4_INT);
+
+    basic::test::msg::Argument<Case1,
+        basic::test::msg::arg::val::Function<0,
+        basic::test::msg::arg::Value<1>,
+        basic::test::msg::arg::type::Index<2,
+            basic::test::msg::arg::val::seq::At>>> arg3;
+
+    arg3.Call<void>(&TestA::Call, testa1, var3, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE1_CSTR, buffer) == 0);
+
+    arg3.Call<int>(&Call, var3, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE1_CSTR, buffer) == 0);
+
+    arg3.Call<void>(case1_index0, &TestA::Call, testa1, var3,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE1_CSTR, buffer) == 0);
+
+    arg3.Call<int>(case1_index0, &Call, var3, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE1_CSTR, buffer) == 0);
+
+    basic::test::type::Index<Case1, 3> case1_index3;
+    arg3.Call<void>(case1_index3, &TestA::Call, testa1, var3,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE4_CSTR, buffer) == 0);
+
+    arg3.Call<int>(case1_index3, &Call, var3, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE4_CSTR, buffer) == 0);
+
+    assert(strcmp(arg3.Get(var3), VALUE1_CSTR) == 0);
+    assert(strcmp(arg3.template Get<1>(var3), VALUE2_CSTR) == 0);
+    assert(strcmp(arg3.template Get<2>(var3), VALUE3_CSTR) == 0);
+    assert(strcmp(arg3.template Get<3>(var3), VALUE4_CSTR) == 0);
 
     delete[] buffer;
     delete[] gbuffer;
