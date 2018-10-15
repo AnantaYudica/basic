@@ -403,7 +403,9 @@ void operator delete[]( void* p, const std::nothrow_t& tag )
     std::free(p);
 }
 
+#ifndef _WIN32
 #define new(...) new(__VA_ARGS__, __FILE__, __LINE__)
+#endif
 
 #endif //!USING_BASIC_TEST_MEMORY
 
