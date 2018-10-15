@@ -125,14 +125,24 @@ BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);
 BASIC_TEST_TYPE_NAME("std::false_type", std::false_type);
 BASIC_TEST_TYPE_NAME("void", void);
 
+#ifdef _WIN32
+template<typename TTrue, typename TArg, typename... TArgs>
+struct basic::test::type::Name<basic::type::logic::And<TTrue, TArg, TArgs...>>
+#else
 template<typename... TArgs>
 struct basic::test::type::Name<basic::type::logic::And<TArgs...>>
+#endif
 {
     static basic::test::CString<char> CStr()
     {
         static char _format_cstr[] = "basic::type::logic::And<%s>";
+#ifdef _WIN32
+        const auto& param_cstr = basic::test::type::param::Name<
+            basic::test::type::Parameter<TTrue, TArg, TArgs...>>::CStr();
+#else
         const auto& param_cstr = basic::test::type::param::Name<
             basic::test::type::Parameter<TArgs...>>::CStr();
+#endif
         return basic::test::cstr::Format(sizeof(_format_cstr) +
             param_cstr.Size(), _format_cstr, *param_cstr);\
     }

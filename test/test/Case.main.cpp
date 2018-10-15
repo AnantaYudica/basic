@@ -1,62 +1,145 @@
 #include "test/Case.h"
-#include <iostream>
 
-struct TestA1 {};
-struct TestA2 {};
-struct TestA3 {};
+#include "test/val/Sequence.h"
+#include "test/type/Parameter.h"
+#include "test/var/At.h"
 
-struct TestA
+#include "test/var/val/Sequence.h"
+
+#include <cstdio>
+#include <cassert>
+
+struct Case1 {};
+struct Case2 {};
+struct Case3 {};
+
+enum message
 {
-    template<typename T>
-    bool Result(const TestA1&, basic::test::Variable<T>&)
+    m_undefined,
+    m_info,
+    m_debug,
+    m_error
+};
+
+template<typename TCase>
+struct CaseIndex
+{};
+
+template<>
+struct CaseIndex<Case1>
+{
+    static constexpr std::size_t Value = 0;
+};
+template<>
+struct CaseIndex<Case2>
+{
+    static constexpr std::size_t Value = 1;
+}; 
+template<>
+struct CaseIndex<Case3>
+{
+    static constexpr std::size_t Value = 2;
+};
+
+using Variable = basic::test::Variable<basic::test::val::Sequence<bool, 3>,
+    basic::test::val::Sequence<message, 3>>;
+
+template<typename... TCases>
+struct TestA :
+    basic::test::Case<TestA<TCases...>, 
+    basic::test::type::Parameter<TCases...>>
+{
+    TestA() :
+        basic::test::Case<TestA, 
+            basic::test::type::Parameter<TCases...>>(*this)
+    {}
+    template<typename TVar>
+    bool Result(const Case1&, TVar& var)
     {
-        std::cout << "Result TestA1" << std::endl;
+        var.Get().template At<0>() = true;
         return true;
     }
-    template<typename T>
-    bool Result(const TestA2&, basic::test::Variable<T>&)
+
+    template<typename TVar>
+    bool Result(const Case2&, TVar& var)
     {
-        std::cout << "Result TestA2" << std::endl;
-        return true;
-    }
-    template<typename T>
-    bool Result(const TestA3&, basic::test::Variable<T>&)
-    {
-        std::cout << "Result TestA3" << std::endl;
+        var.Get().template At<1>() = true;
         return false;
     }
-    template<typename TCaseId, typename T>
-    void Info(const TCaseId&, basic::test::Variable<T>&)
+
+    template<typename TVar>
+    bool Result(const Case3&, TVar& var)
     {
-        std::cout << "Info of TestA" << std::endl;
+        var.Get().template At<2>() = true;
+        return true;
     }
-    template<typename TCaseId, typename T>
-    void Debug(const TCaseId&, basic::test::Variable<T>&)
+
+    template<typename TCaseId, typename TVar>
+    void Info(const TCaseId&, TVar& var)
     {
-        std::cout << "Debug of TestA" << std::endl;
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_info;
     }
-    template<typename TCaseId, typename T>
-    void Error(const TCaseId&, basic::test::Variable<T>&)
+
+    template<typename TCaseId, typename TVar>
+    void Debug(const TCaseId&, TVar& var)
     {
-        std::cout << "Error of TestA" << std::endl;
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_debug;
+    }
+
+    template<typename TCaseId, typename TVar>
+    void Error(const TCaseId&, TVar& var)
+    {
+        basic::test::var::At<1>(var).Get().
+            template At<CaseIndex<TCaseId>::Value>() = message::m_error;
     } 
 };
 
 int main()
 {
-    TestA ta;
-    basic::test::Variable<int> var1;
-    basic::test::Case<TestA, TestA1> c1(ta);
-    c1.Run(var1);
+    TestA<> testa0;
 
-    basic::test::Case<TestA, 
-        basic::test::type::Parameter<TestA1, TestA2, TestA3>> c2(ta);
-    c2.Run(var1);
-    
-    auto c3(c1);
-    c3.Run(var1);
-    
-    auto c4(c1);
-    c4 = c3;
-    c4.Run(var1);
+    Variable var1{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
+    TestA<Case1> testa1;
+    testa1.Run(var1);
+    assert(var1.Get().template At<0>() == true);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
+    assert(var1.Get().template At<1>() == false);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_undefined);
+    assert(var1.Get().template At<2>() == false);
+    assert(basic::test::var::At<1>(var1).Get().
+        template At<CaseIndex<Case3>::Value>() == message::m_undefined);
+
+    Variable var2{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
+    TestA<Case1, Case2> testa2;
+    testa2.Run(var2);
+    assert(var2.Get().template At<0>() == true);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
+    assert(var2.Get().template At<1>() == true);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_error);
+    assert(var2.Get().template At<2>() == false);
+    assert(basic::test::var::At<1>(var2).Get().
+        template At<CaseIndex<Case3>::Value>() == message::m_undefined);
+
+    Variable var3{ false, false, false, 
+        m_undefined, m_undefined, m_undefined };
+    TestA<Case1, Case2, Case3> testa3;
+    testa3.Run(var3);
+    assert(var3.Get().template At<0>() == true);
+    assert(basic::test::var::At<1>(var3).Get().
+        template At<CaseIndex<Case1>::Value>() == message::m_debug);
+    assert(var3.Get().template At<1>() == true);
+    assert(basic::test::var::At<1>(var3).Get().
+        template At<CaseIndex<Case2>::Value>() == message::m_error);
+    assert(var3.Get().template At<2>() == true);
+    assert(basic::test::var::At<1>(var3).Get().template 
+        At<CaseIndex<Case3>::Value>() == message::m_debug);
+
 }

@@ -342,7 +342,7 @@ struct B
 struct C
 {
     template<typename T>
-    static B<T> Foo3() {}
+    static B<T> Foo3() { return {}; }
 };
 
 BASIC_TEST_TYPE_NAME("std::true_type", std::true_type);

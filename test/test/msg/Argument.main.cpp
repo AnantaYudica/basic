@@ -6,398 +6,244 @@ BASIC_TEST_CONSTRUCT;
 #include "test/msg/arg/type/Name.h"
 #include "test/msg/arg/type/Value.h"
 #include "test/msg/arg/type/Function.h"
+#include "test/msg/arg/type/Index.h"
 #include "test/msg/arg/type/val/Sequence.h"
 #include "test/msg/arg/type/val/seq/At.h"
 #include "test/msg/arg/type/param/Name.h"
 #include "test/msg/arg/type/param/name/At.h"
 #include "test/msg/arg/Value.h"
 #include "test/msg/arg/val/Function.h"
-#include "test/msg/arg/val/Parameter.h"
 #include "test/msg/arg/val/Sequence.h"
-#include "test/msg/arg/val/param/At.h"
 #include "test/msg/arg/val/seq/At.h"
+#include "test/msg/arg/val/Parameter.h"
+#include "test/msg/arg/val/param/At.h"
 
-#include "test/msg/arg/type/Index.h"
 #include "test/type/Index.h"
 
 #include "test/CString.h"
 #include "test/cstr/out/Argument.h"
 
 #include <cstdio>
+#include <cassert>
+#include <cstring>
 
-struct TestA1 {};
-
-class ATest
+struct TestA
 {
-public:
     template<typename... TArgs>
-    void Foo1(int, TArgs&&... args)
+    void Call(char* buffer, const std::size_t& size,
+        const char* format, TArgs&&... args)
     {
-        printf("foo1(int, ...)\n");
-    }
-    template<typename... TArgs>
-    void Foo2(int, TArgs&&... args)
-    {
-        printf("foo2(int, %s)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename... TArgs>
-    void Foo3(int, TArgs&&... args)
-    {
-        printf("foo3(int, %s)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename... TArgs>
-    void Foo4(int, TArgs&&... args)
-    {
-        printf("foo4(int, %d)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename... TArgs>
-    void Foo4f(int, TArgs&&... args)
-    {
-        printf("foo4(int, %f)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename... TArgs>
-    void Foo5(int, TArgs&&... args)
-    {
-        printf("foo5(int, %d %d %d %d)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename... TArgs>
-    void Foo6(int, TArgs&&... args)
-    {
-        printf("foo5(int, %d %f %d %f)\n", std::forward<TArgs>(args)...);
-    }
-    template<typename TChar>
-    void Foo7(int, basic::test::CString<TChar>&& cstr)
-    {
-        printf("foo7(int, %s)\n", *cstr);
+        snprintf(buffer, size, format,
+            basic::test::out::Argument<TArgs>::Value(args)...);
     }
 };
 
-struct A
-{};
-
 template<typename... TArgs>
-struct ParamA
-{};
+int Call(char* buffer, const std::size_t& size,
+    const char* format, TArgs&&... args)
+{
+    snprintf(buffer, size, format,
+        basic::test::out::Argument<TArgs>::Value(args)...);
+    return 1;
+}
 
-BASIC_TEST_TYPE_NAME("int", int);
-BASIC_TEST_TYPE_NAME("char", char);
+struct Case1 {};
+
+#define FORMAT0_CSTR ""
+
+const char* Foo0()
+{
+    return FORMAT0_CSTR;
+}
+
+#define BUFFER_SIZE 1024
+
+#define VALUE_EMPTY_CSTR ""
+
+#define VALUE1_INT 4
+#define VALUE1_CHAR '4'
+#define VALUE1_CSTR "4"
+#define VALUE2_INT 14
+#define VALUE2_SHORT short(14)
+#define VALUE2_CSTR "14"
+#define VALUE3_INT 44
+#define VALUE3_CSTR "44"
+#define VALUE4_INT 114
+#define VALUE4_LONG 114
+#define VALUE4_CSTR "114"
+
+#define CHAR_CSTR "char"
+#define SHORT_CSTR "short"
+#define INT_CSTR "int"
+#define LONG_CSTR "long"
+#define CONJ_CSTR ", "
 
 template<>
-struct basic::test::type::Name<A>
+struct basic::test::type::Name<char>
 {
-    static basic::test::CString<char> CStr()
+    template<typename TChar = char>
+    static test::CString<const TChar> CStr()
     {
-        static char _A[] = "A";
-        return {_A};
+        static TChar cstr[] = CHAR_CSTR;
+        return { cstr };
     }
 };
 
-template<typename... TArgs>
-struct basic::test::type::Name<ParamA<TArgs...>>
+template<>
+struct basic::test::type::Name<short>
 {
-    static basic::test::CString<const char> CStr()
+    template<typename TChar = char>
+    static test::CString<const TChar> CStr()
     {
-        static char _ParamA[] = "ParamA";
-        return {_ParamA};
+        static TChar cstr[] = SHORT_CSTR;
+        return { cstr };
     }
 };
 
-template<typename... TArgs>
-int Print(const char* format, TArgs&&... args)
+template<>
+struct basic::test::type::Name<int>
 {
-    return printf(format, 
-        basic::test::out::Argument<TArgs>::Value(args)...);
-}
+    template<typename TChar = char>
+    static test::CString<const TChar> CStr()
+    {
+        static TChar cstr[] = INT_CSTR;
+        return { cstr };
+    }
+};
 
-int Foo1()
+template<>
+struct basic::test::type::Name<long>
 {
-    return printf("Print Foo1()\n");
-}
-
-int Foo2(int&& i)
-{
-    return printf("Print Foo2(i = %d)\n", i);
-}
-
-int Foo3(int&& i1, float&& f, long&& l, int&& i2)
-{
-    return printf("Print Foo3(i1 = %d, f = %f, l = %d, "
-        "i2 = %d)\n", i1, f, l, i2);
-}
-
-int Foo3(int&& i1, int&& i2, int&& i3, int&& i4)
-{
-    return printf("Print Foo3(i1 = %d, i2 = %d, i3 = %d, "
-        "i4 = %d)\n", i1, i2, i3, i4);
-}
+    template<typename TChar = char>
+    static test::CString<const TChar> CStr()
+    {
+        static TChar cstr[] = LONG_CSTR;
+        return { cstr };
+    }
+};
 
 int main()
 {
-    ATest a1;
+    char * buffer = new char[BUFFER_SIZE];
+    std::size_t buff_size = BUFFER_SIZE;
+    TestA testa1;
+
+    const char * format0 = VALUE_EMPTY_CSTR;
     basic::test::Variable<> var1;
-    basic::test::msg::Argument<TestA1> arg1;
-    arg1.Call<void>(&ATest::Foo1, a1, var1, 2);
-    const char* print1 = "print\n";
-    arg1.Call<int>(&Print, var1, std::move(print1));
+    basic::test::msg::Argument<Case1> arg1;
+    
+    arg1.Call<void>(&TestA::Call, testa1, var1, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
 
-    basic::test::Variable<int, char> var2;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Name<0>> arg2;
-    printf("get arg2 value from var2 : %s\n", *arg2.Get(var2));
-    arg2.Call<void>(&ATest::Foo7, a1, var2, 2);
-    const char* print2 = "Print Name : %s\n";
-    arg2.Call<int>(&Print, var2, std::move(print2));
+    arg1.Call<int>(&Call, var1, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
+    
+    basic::test::type::Index<Case1, 0> case1_index0;
+    arg1.Call<void>(case1_index0, &TestA::Call, testa1, var1,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
 
-    basic::test::Variable<int, char> var3;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Name<1>> arg3;
-    printf("get arg3 value from var3 : %s\n", *arg3.Get(var3));
-    arg3.Call<void>(&ATest::Foo7, a1, var3, 2);
-    const char* print3 = "Print Name : %s\n";
-    arg3.Call<int>(&Print, var3, std::move(print3));
+    arg1.Call<int>(case1_index0, &Call, var1, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
 
-    basic::test::Variable<A, char> var4;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Name<0>> arg4;
-    printf("get arg4 value from var4 : %s\n", *arg4.Get(var4));
-    arg4.Call<void>(&ATest::Foo7, a1, var4, 2);
-    const char* print4 = "Print Name : %s\n";
-    arg4.Call<int>(&Print, var4, std::move(print4));
-    
-    basic::test::Variable<basic::test::type::Parameter<int, char>> var5;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::param::Name<0>> arg5;
-    printf("get arg5 value from var5 : %s\n", *arg5.Get(var5));
-    arg5.Call<void>(&ATest::Foo7, a1, var5, 2);
-    const char* print5 = "Print param Name : %s\n";
-    arg5.Call<int>(&Print, var5, std::move(print4));
+    basic::test::type::Index<Case1, 3> case1_index3;
+    arg1.Call<void>(case1_index3, &TestA::Call, testa1, var1,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
 
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::param::name::At<0, 0>> arg5_0_0;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::param::name::At<0, 1>> arg5_0_1;
-    printf("get arg5_0_0 value from var5 : %s\n", *arg5_0_0.Get(var5));
-    const char* print5_0_0 = "Print get arg5_0_0 from var5 at 0 : %s\n";
-    arg5_0_0.Call<int>(&Print, var5, 
-        std::move(print5_0_0));
-    arg5_0_0.Call<void>(&ATest::Foo7, a1, var5, 2);
-    printf("get arg5_0_1 value from var5 : %s\n", *arg5_0_1.Get(var5));
-    arg5_0_1.Call<void>(&ATest::Foo7, a1, var5, 2);
-    const char* print5_0_1 = "Print get arg5_0_1 from var5 at 1 : %s\n";
-    arg5_0_1.Call<int>(&Print, var5, 
-        std::move(print5_0_1));
-    
-    basic::test::Variable<basic::test::type::Value<int, 14>, char> var6;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Value<0>> arg6;
-    printf("get arg6 value from var6 : %d\n", arg6.Get(var6));
-    arg6.Call<void>(&ATest::Foo4, a1, var6, 2);
-    const char* print6 = "Print type value : %d\n";
-    arg6.Call<int>(&Print, var6, std::move(print6));
-    
-    basic::test::Variable<basic::test::type::val::Sequence<int, 
-        14, 4, 6, 11>, char> var7;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        val::Sequence<0>> arg7;
-    printf("get arg7 at 0 value from var7 : %d\n", arg7.Get<0>(var7));
-    printf("get arg7 at 1 value from var7 : %d\n", arg7.Get<1>(var7));
-    printf("get arg7 at 2 value from var7 : %d\n", arg7.Get<2>(var7));
-    printf("get arg7 at 3 value from var7 : %d\n", arg7.Get<3>(var7));
-    arg7.Call<void>(&ATest::Foo5, a1, var7, 2);
-    const char* print7 = "Print type val sequence : %d %d %d %d\n";
-    arg7.Call<int>(&Print, var7, 
-        std::move(print7));
-    
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::val::seq::At<0, 0>> arg7_0_0;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::val::seq::At<0, 1>> arg7_0_1;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::val::seq::At<0, 2>> arg7_0_2;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::type::val::seq::At<0, 3>> arg7_0_3;
-    printf("get arg7_0_0 value from var7 : %d\n", arg7_0_0.Get(var7));
-    arg7_0_0.Call<void>(&ATest::Foo4, a1, var7, 2);
-    const char* print7_0_0 = "Print type value at 0 : %d\n";
-    arg7_0_0.Call<int>(&Print, var7, std::move(print7_0_0));
-    printf("get arg7_0_1 value from var7 : %d\n", arg7_0_1.Get(var7));
-    arg7_0_1.Call<void>(&ATest::Foo4, a1, var7, 2);
-    const char* print7_0_1 = "Print type value at 1 : %d\n";
-    arg7_0_1.Call<int>(&Print, var7, std::move(print7_0_1));
-    printf("get arg7_0_2 value from var7 : %d\n", arg7_0_2.Get(var7));
-    arg7_0_2.Call<void>(&ATest::Foo4, a1, var7, 2);
-    const char* print7_0_2 = "Print type value at 2 : %d\n";
-    arg7_0_2.Call<int>(&Print, var7, std::move(print7_0_2));
-    printf("get arg7_0_3 value from var7 : %d\n", arg7_0_3.Get(var7));
-    arg7_0_3.Call<void>(&ATest::Foo4, a1, var7, 2);
-    const char* print7_0_3 = "Print type value at 3 : %d\n";
-    arg7_0_3.Call<int>(&Print, var7, std::move(print7_0_3));
+    arg1.Call<int>(case1_index3, &Call, var1, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format0));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(VALUE_EMPTY_CSTR, buffer) == 0);
 
-    basic::test::Variable<basic::test::Value<int>, char> var8(4);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::Value<0>> arg8;
-    printf("get arg8 value from var8  : %d\n", arg8.Get(var8));
-    arg8.Call<void>(&ATest::Foo4, a1, var8, 2);
-    const char* print8 = "Print var value : %d\n";
-    arg8.Call<int>(&Print, var8, std::move(print8));
-    
-    basic::test::Variable<basic::test::val::Sequence<int, 4>, char> var9(4, 2, 10, 1);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::val::Sequence<0>> arg9;
-    printf("get arg9 at 0 value from var9 : %d\n", arg9.Get<0>(var9));
-    printf("get arg9 at 1 value from var9 : %d\n", arg9.Get<1>(var9));
-    printf("get arg9 at 2 value from var9 : %d\n", arg9.Get<2>(var9));
-    printf("get arg9 at 3 value from var9 : %d\n", arg9.Get<3>(var9));
-    arg9.Call<void>(&ATest::Foo5, a1, var9, 2);
-    const char* print9 = "Print var value : %d %d %d %d\n";
-    arg9.Call<int>(&Print, var9, std::move(print9));
-    
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::seq::At<0, 0>> arg9_0_0;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::seq::At<0, 1>> arg9_0_1;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::seq::At<0, 2>> arg9_0_2;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::seq::At<0, 3>> arg9_0_3;
-        
-    printf("get arg9_0_0 value from var9 : %d\n", arg9_0_0.Get(var9));
-    arg9_0_0.Call<void>(&ATest::Foo4, a1, var9, 2);
-    const char* print9_0_0 = "Print type value at 0 : %d\n";
-    arg9_0_0.Call<int>(&Print, var9, std::move(print9_0_0));
-    
-    printf("get arg9_0_1 value from var9 : %d\n", arg9_0_1.Get(var9));
-    arg9_0_1.Call<void>(&ATest::Foo4, a1, var9, 2);
-    const char* print9_0_1 = "Print type value at 1 : %d\n";
-    arg9_0_1.Call<int>(&Print, var9, std::move(print9_0_1));
-    
-    printf("get arg9_0_2 value from var9 : %d\n", arg9_0_2.Get(var9));
-    arg9_0_2.Call<void>(&ATest::Foo4, a1, var9, 2);
-    const char* print9_0_2 = "Print type value at 2 : %d\n";
-    arg9_0_2.Call<int>(&Print, var9, std::move(print9_0_2));
-    
-    printf("get arg9_0_3 value from var9 : %d\n", arg9_0_3.Get(var9));
-    arg9_0_3.Call<void>(&ATest::Foo4, a1, var9, 2);
-    const char* print9_0_3 = "Print type value at 3 : %d\n";
-    arg9_0_3.Call<int>(&Print, var9, std::move(print9_0_3));
-
-    basic::test::Variable<basic::test::type::Function<int(), &Foo1>> var10;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<0>> arg10;
-    printf("get arg10 value from var10  : %d\n", arg10.Get(var10));
-    arg10.Call<void>(&ATest::Foo4, a1, var10, 2);
-    const char* print10 = "Print var value : %d\n";
-    arg10.Call<int>(&Print, var10, std::move(print10));
-    
-    basic::test::Variable<basic::test::Value<int>,
-        basic::test::type::Function<int(int&&), &Foo2>> var11(4);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<1, basic::test::msg::arg::Value<0>>> arg11;
-    printf("get arg11 value from var11  : %d\n", arg11.Get(var11));
-    arg11.Call<void>(&ATest::Foo4, a1, var11, 2);
-    const char* print11 = "Print var value : %d\n";
-    arg11.Call<int>(&Print, var11, std::move(print11));
-    
-    basic::test::Variable<basic::test::val::Function<int()>> var12(&Foo1);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<0>> arg12;
-    
-    printf("get arg12 value from var12  : %d\n", arg12.Get(var12));
-    arg12.Call<void>(&ATest::Foo4, a1, var12, 2);
-    const char* print12 = "Print var value : %d\n";
-    arg12.Call<int>(&Print, var12, std::move(print12));
-    
-    basic::test::Variable<basic::test::Value<int>,
-        basic::test::val::Function<int(int&&)>> var13(14, &Foo2);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<1, basic::test::msg::arg::Value<0>>> arg13;
-        
-    printf("get arg13 value from var13  : %d\n", arg13.Get(var13));
-    arg13.Call<void>(&ATest::Foo4, a1, var13, 2);
-    const char* print13 = "Print var value : %d\n";
-    arg13.Call<int>(&Print, var13, std::move(print13));
-
-
-    basic::test::Variable<basic::test::val::Parameter<int, float, long, 
-        double>, char> var14(1, (float)3.14, 14, double(22/7.0));
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::
-        val::Parameter<0>> arg14;
-        
-    printf("get arg14 value at 0 from var14  : %d\n", arg14.Get<0>(var14));
-    printf("get arg14 value at 1 from var14  : %f\n", arg14.Get<1>(var14));
-    printf("get arg14 value at 2 from var14  : %d\n", arg14.Get<2>(var14));
-    printf("get arg14 value at 3 from var14  : %f\n", arg14.Get<3>(var14));
-    arg14.Call<void>(&ATest::Foo6, a1, var14, 2);
-    const char* print14 = "Print type val parameter : %d %f %d %f\n";
-    arg14.Call<int>(&Print, var14, std::move(print14));
-    
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::param::At<0, 0>> arg14_0_0;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::param::At<0, 1>> arg14_0_1;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::param::At<0, 2>> arg14_0_2;
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::val::param::At<0, 3>> arg14_0_3;
-        
-    printf("get arg14_0_0 value from var14  : %d\n", arg14_0_0.Get(var14));
-    arg14_0_0.Call<void>(&ATest::Foo4, a1, var14, 2);
-    const char* print14_0_0 = "Print type value at 0 : %d\n";
-    arg14_0_0.Call<int>(&Print, var14, std::move(print14_0_0));
-    
-    printf("get arg14_0_1 value from var14  : %f\n", arg14_0_1.Get(var14));
-    arg14_0_1.Call<void>(&ATest::Foo4f, a1, var14, 2);
-    const char* print14_0_1 = "Print type value at 1 : %f\n";
-    arg14_0_1.Call<int>(&Print, var14, std::move(print14_0_1));
-    
-    printf("get arg14_0_2 value from var14  : %d\n", arg14_0_2.Get(var14));
-    arg14_0_2.Call<void>(&ATest::Foo4, a1, var14, 2);
-    const char* print14_0_2 = "Print type value at 2 : %d\n";
-    arg14_0_2.Call<int>(&Print, var14, std::move(print14_0_2));
-    
-    printf("get arg14_0_3 value from var14  : %f\n", arg14_0_3.Get(var14));
-    arg14_0_3.Call<void>(&ATest::Foo4f, a1, var14, 2);
-    const char* print14_0_3 = "Print type value at 3 : %f\n";
-    arg14_0_3.Call<int>(&Print, var14, std::move(print14_0_3));
-
-    basic::test::Variable<basic::test::type::Function<int(int&&, float&&, 
-        long&&, int&&), &Foo3>, basic::test::val::Parameter<int, float, long>,
-        basic::test::type::Value<int, 22>> var15(1, (float)3.14, 11);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<0, basic::test::msg::arg::val::Parameter<1>,
-            basic::test::msg::arg::type::Value<2>>> arg15;
-    printf("get arg15 value from arg15  : %d\n", arg15.Get(var15));
-    arg15.Call<void>(&ATest::Foo4, a1, var15, 2);
-    const char* print15 = "Print var value : %d\n";
-    arg15.Call<int>(&Print, var15, std::move(print15));
-    
-    basic::test::Variable<basic::test::type::Function<int(int&&, int&&, 
-        int&&, int&&), &Foo3>, basic::test::val::Sequence<int, 3>,
-        basic::test::Value<int>> var16(1, 2, 3, 4);
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::
-        Function<0, basic::test::msg::arg::val::Sequence<1>,
-            basic::test::msg::arg::Value<2>>> arg16;
-    printf("get arg16 value from var16  : %d\n", arg16.Get(var16));
-    arg16.Call<void>(&ATest::Foo4, a1, var16, 2);
-    const char* print16 = "Print var value : %d\n";
-    arg16.Call<int>(&Print, var16, std::move(print16));
-    
-    typedef basic::test::type::Index<TestA1, 0> TestAt_at0;
-    basic::test::msg::Argument<TestA1, basic::test::msg::arg::type::Index<0,
-        basic::test::msg::arg::val::seq::At>> arg17;
-    printf("get arg17 at 0 value from var16  : %d\n", arg17.Get<0>(var9));
-    arg17.Call<void>(TestAt_at0{}, &ATest::Foo4, a1, var9, 2);
-    const char* print17 = "Print var value : %d\n";
-    arg17.Call<int>(TestAt_at0{}, &Print, var9, std::move(print17));
-    
-    
-    typedef basic::test::type::Index<TestA1, 1> TestAt_at1;
     basic::test::Variable<
-        basic::test::Value<int>,
-        basic::test::val::Sequence<int, 4>,
-        basic::test::type::Value<int, 1>,
-        basic::test::type::val::Sequence<int, 144, 4, 44, 441>> var18(4, 11, 14, 6, 22);
-    basic::test::msg::Argument<TestA1, 
-        basic::test::msg::arg::Value<0>,
-        basic::test::msg::arg::type::Index<1,
-            basic::test::msg::arg::val::seq::At>,
-        basic::test::msg::arg::type::Value<2>,
+        char, /*0*/
+        basic::test::type::Parameter<char, short, int, long>, /*1*/
+        basic::test::type::Value<int, VALUE1_INT>,  /*2*/
+        basic::test::type::val::Sequence<int, VALUE1_INT,
+            VALUE2_INT, VALUE3_INT, VALUE4_INT>,  /*3*/
+        basic::test::type::Function<const char*(), &Foo0>,  /*4*/
+        basic::test::Value<int>,  /*5*/
+        basic::test::val::Sequence<int, 4>,  /*6*/
+        basic::test::val::Parameter<char, short, int, long>, /*7*/
+        basic::test::val::Function<const char*()> /*8*/> var2(VALUE1_INT,
+            VALUE1_INT, VALUE2_INT, VALUE3_INT, VALUE4_INT, VALUE1_CHAR,
+            VALUE2_SHORT, VALUE3_INT, VALUE4_LONG, &Foo0);
+
+    basic::test::msg::Argument<Case1,
+        basic::test::msg::arg::type::Name<0>, // %s
+        basic::test::msg::arg::type::Value<2>, // %d
+        basic::test::msg::arg::type::Function<4>, // %s
         basic::test::msg::arg::type::Index<3,
-            basic::test::msg::arg::type::val::seq::At>> arg18;
-    arg18.Call<void>(TestAt_at1{}, &ATest::Foo5, a1, var18, 2);
-    const char* print18 = "Print var value : %d %d %d %d\n";
-    arg18.Call<int>(TestAt_at1{}, &Print, var18, std::move(print18));
+            basic::test::msg::arg::type::val::seq::At>, // %d
+        basic::test::msg::arg::type::val::Sequence<3>, // %d%d%d%d
+        basic::test::msg::arg::type::val::seq::At<3, 2>, // %d
+        basic::test::msg::arg::type::param::Name<1>, // %s
+        basic::test::msg::arg::type::param::name::At<1, 3>, // %s
+        basic::test::msg::arg::Value<5>, // %d
+        basic::test::msg::arg::val::Function<8>, // %s
+        basic::test::msg::arg::val::Sequence<6>, // %d%d%d%d
+        basic::test::msg::arg::val::seq::At<6, 2>, // %d
+        basic::test::msg::arg::val::Parameter<7>, // %c%hd%d%ld
+        basic::test::msg::arg::val::param::At<7, 3>> arg2; // %ld
+
+    const char * format1 = "%s%d%s%d%d%d%d%d%d%s%s%d%s%d%d%d%d%d%c%hd%d%ld%ld";
+
+    const char * compare_index0_cstr = CHAR_CSTR VALUE1_CSTR FORMAT0_CSTR 
+        VALUE1_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR VALUE3_CSTR
+        CHAR_CSTR CONJ_CSTR SHORT_CSTR CONJ_CSTR INT_CSTR CONJ_CSTR LONG_CSTR
+        LONG_CSTR VALUE1_CSTR FORMAT0_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
+        VALUE4_CSTR VALUE3_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR
+        VALUE4_CSTR;
+
+    const char * compare_index3_cstr = CHAR_CSTR VALUE1_CSTR FORMAT0_CSTR
+        VALUE4_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR VALUE3_CSTR
+        CHAR_CSTR CONJ_CSTR SHORT_CSTR CONJ_CSTR INT_CSTR CONJ_CSTR LONG_CSTR
+        LONG_CSTR VALUE1_CSTR FORMAT0_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
+        VALUE4_CSTR VALUE3_CSTR VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR VALUE4_CSTR
+        VALUE4_CSTR;
+
+    arg2.Call<void>(&TestA::Call, testa1, var2, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index0_cstr, buffer) == 0);
+
+    arg2.Call<int>(&Call, var2, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index0_cstr, buffer) == 0);
+
+    arg2.Call<void>(case1_index0, &TestA::Call, testa1, var2,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index0_cstr, buffer) == 0);
+
+    arg2.Call<int>(case1_index0, &Call, var2, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index0_cstr, buffer) == 0);
+
+    arg2.Call<void>(case1_index3, &TestA::Call, testa1, var2,
+        std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index3_cstr, buffer) == 0);
+
+    arg2.Call<int>(case1_index3, &Call, var2, std::forward<char*>(buffer),
+        std::forward<const std::size_t&>(buff_size), std::move(format1));
+    printf("output : \"%s\"\n", buffer);
+    assert(strcmp(compare_index3_cstr, buffer) == 0);
+
+    delete[] buffer;
 }

@@ -381,7 +381,7 @@ BASIC_TEST_TYPE_NAME("void(B<void>::*)()", void(B<void>::*)());
 struct C
 {
     template<typename T>
-    B<T> Foo4() {}
+    B<T> Foo4() { return {}; }
 };
 
 BASIC_TEST_TYPE_NAME("C", C);
