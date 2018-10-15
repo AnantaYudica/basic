@@ -16,12 +16,9 @@ int main()
     assert(&basic::test::var::At<0>(var1) ==
         dynamic_cast<Var1*>(&var1));
 
-    //todo uncomment if bug #64 fixed
-    /*
     const Var1& var1_1 = var1;
     assert(&basic::test::var::At<0>(var1_1) ==
         dynamic_cast<const Var1*>(&var1_1));
-    */
 
     Var2 var2;
     typedef basic::test::Variable<short> Var2_1;
