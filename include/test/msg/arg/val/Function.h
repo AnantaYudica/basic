@@ -122,12 +122,12 @@ public:
 #endif
 public:
 #ifdef _WIN32
-    template<typename... TVarArgs, typename TGet = typename Argument<TCaseId, 
-        arg::val::Function<I, TArgArgs...>, TArgs...>::template GetType<
-        test::Variable<TVarArgs...>>>
+    template<std::size_t ICaseId = 0, typename... TVarArgs, typename TGet = 
+        typename Argument<TCaseId, arg::val::Function<I, TArgArgs...>, 
+        TArgs...>::template GetType<test::Variable<TVarArgs...>>>
     TGet Get(test::Variable<TVarArgs...>& var);
 #else
-    template<typename... TVarArgs>
+    template<std::size_t ICaseId = 0, typename... TVarArgs>
     GetType<test::Variable<TVarArgs...>> 
         Get(test::Variable<TVarArgs...>& var);
 #endif
@@ -148,7 +148,7 @@ TRet Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
 {
     return Argument<TCaseId, TArgs...>:: template Filler<ICaseId,
         TRet>(func_mmbr, d, var, std::forward<TFuncMmbrArgs>(args)..., 
-        std::move(Get(var)));
+        std::move(Get<ICaseId>(var)));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgArgs, 
@@ -160,7 +160,7 @@ TRet Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
 {
     return Argument<TCaseId, TArgs...>:: template Filler<ICaseId, 
         TRet>(func, var, std::forward<TFuncArgs>(args)..., 
-        std::move(Get(var)));
+        std::move(Get<ICaseId>(var)));
 }
 
 template<typename TCaseId, std::size_t I, typename... TArgArgs, 
@@ -248,11 +248,11 @@ TRet Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
 template<typename TCaseId, std::size_t I, typename... TArgArgs, 
     typename... TArgs>
 #ifdef _WIN32
-template<typename... TVarArgs, typename TGet>
+template<std::size_t ICaseId, typename... TVarArgs, typename TGet>
 TGet Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
     Get(test::Variable<TVarArgs...>& var)
 #else
-template<typename... TVarArgs>
+template<std::size_t ICaseId, typename... TVarArgs>
 typename Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
     template GetType<test::Variable<TVarArgs...>> 
         Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
@@ -260,8 +260,9 @@ typename Argument<TCaseId, arg::val::Function<I, TArgArgs...>, TArgs...>::
 #endif
 {
     return std::move(Argument<TCaseId, TArgArgs...>{}.
-        template Call<GetType<test::Variable<TVarArgs...>>>(test::var::
-            At<I>(var).Get().Get(), var));
+        template Call<GetType<test::Variable<TVarArgs...>>>(
+            type::Index<TCaseId, ICaseId>{}, 
+            test::var::At<I>(var).Get().Get(), var));
 }
 
 } //!msg
