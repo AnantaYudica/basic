@@ -148,7 +148,12 @@ public:
     Variable<test::val::Sequence<TArg, S>, TArgs...>& 
         operator=(Variable<test::val::Sequence<TArg, S>, TArgs...>&&) = delete;
 public:
+#ifdef _WIN32
+    GetType Get();
+    ConstGetType Get() const;
+#else
     using test::var::val::Sequence<TArg, S, Variable<TArgs...>>::Get;
+#endif
 };
 
 template<typename TArg, std::size_t S, typename... TArgs>
@@ -167,6 +172,23 @@ Variable<test::val::Sequence<TArg, S>, TArgs...>&
     test::var::val::Sequence<TArg, S, Variable<TArgs...>>::operator=(cpy);
     return *this;
 }
+
+#ifdef _WIN32
+template<typename TArg, std::size_t S, typename... TArgs>
+typename Variable<test::val::Sequence<TArg, S>, TArgs...>::GetType 
+    Variable<test::val::Sequence<TArg, S>, TArgs...>::Get()
+{
+    return test::var::val::Sequence<TArg, S, Variable<TArgs...>>::Get();
+}
+
+template<typename TArg, std::size_t S, typename... TArgs>
+typename Variable<test::val::Sequence<TArg, S>, TArgs...>::ConstGetType 
+    Variable<test::val::Sequence<TArg, S>, TArgs...>::Get() const
+{
+    return test::var::val::Sequence<TArg, S, Variable<TArgs...>>::Get();
+}
+#endif
+
 } //!test
 
 } //!basic
