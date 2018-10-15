@@ -25,7 +25,7 @@ template<std::size_t I, typename TArg, typename... TArgs>
 const typename var::Definition<I, test::Variable<TArg, TArgs...>>::Type&
     At(const test::Variable<TArg, TArgs...>& var)
 {
-    return dynamic_cast<typename var::Definition<I, test::Variable<TArg, 
+    return dynamic_cast<const typename var::Definition<I, test::Variable<TArg, 
         TArgs...>>::Type&>(var);
 }
 
