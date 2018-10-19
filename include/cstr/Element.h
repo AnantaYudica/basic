@@ -293,7 +293,7 @@ Element<const TChar, TCharTrait>::
     Element(const CharType*& dptr, const SizeType& size, const SizeType& pos) :
         m_dptr(const_cast<CharType**>(&dptr)),
         m_size(const_cast<SizeType*>(&size)),
-        m_pos(pos)
+        m_pos((pos <= size ? pos : size))
 {}
     
 template<typename TChar, typename TCharTrait>
@@ -301,7 +301,7 @@ Element<const TChar, TCharTrait>::
     Element(CharType** dptr, SizeType* size, const SizeType& pos) :
         m_dptr(dptr),
         m_size(size),
-        m_pos(pos)
+        m_pos((size == nullptr ? 0 : (pos <= *size ? pos : *size)))
 {}
     
 template<typename TChar, typename TCharTrait>
@@ -415,7 +415,7 @@ Element<const TChar, TCharTrait>&
                 m_pos = 0;
         }
         else
-            Element<const TChar, TCharTrait>::operator-=(-diff);
+            Element<const TChar, TCharTrait>::operator+=(-diff);
     }
     return *this;
 }
@@ -450,8 +450,11 @@ typename Element<const TChar, TCharTrait>::DifferenceType
         operator-(const Element<const TChar, TCharTrait>& elem)
 {
     if (!this->IsEnd() && !elem.IsEnd())
-        return (DifferenceType)m_pos - elem.m_pos;
-    return 0;
+        if (*(this->m_dptr) == *(elem.m_dptr))
+            return (DifferenceType)m_pos - elem.m_pos;
+    if (this->IsEnd())
+        return 0;
+    return (DifferenceType)m_pos - *m_size;
 }
 
 template<typename TChar, typename TCharTrait>
@@ -490,9 +493,7 @@ bool Element<const TChar, TCharTrait>::
             return operator==(*elem);
         return this->m_pos == elem.m_pos;
     }
-    else if (!this->IsEnd())
-        return false;
-    return !(elem && elem.m_pos != *(elem.m_size));
+    return this->IsEnd() && elem.IsEnd();
 }
 
 template<typename TChar, typename TCharTrait>
@@ -545,7 +546,7 @@ bool Element<const TChar, TCharTrait>::
     {
         if (*(this->m_dptr) != *(elem.m_dptr) || this->m_pos != elem.m_pos)
             return operator>(*elem);
-        retirm false;
+        return false;
     }
     return !elem.IsEnd();
 }
