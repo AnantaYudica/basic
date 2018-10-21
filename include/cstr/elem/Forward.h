@@ -2,6 +2,7 @@
 #define BASIC_CSTR_ELEM_FORWARD_H_
 
 #include <cstddef>
+#include <limits>
 
 namespace basic
 {
@@ -18,6 +19,9 @@ public:
     typedef TDiff DifferenceType;
 private:
     static constexpr DifferenceType _Difference(const DifferenceType& diff);
+    static constexpr SizeType _Calculate(const SizeType& pos, 
+        const DifferenceType& diff,
+        const SizeType& max_size = std::numeric_limits<TSize>::max());
     static constexpr SizeType _Increment(const SizeType& pos, 
         const DifferenceType& diff);
     static constexpr SizeType _Decrement(const SizeType& pos, 
@@ -44,12 +48,23 @@ constexpr typename Forward<TSize, TDiff, SizeDiff>::DifferenceType
 }
 
 template<typename TSize, typename TDiff, TDiff SizeDiff>
+constexpr typename Forward<TSize, TDiff, SizeDiff>::SizeType
+    Forward<TSize, TDiff, SizeDiff>::_Calculate(const SizeType& pos,
+        const DifferenceType& diff, const SizeType& max_size)
+{
+    return (_Difference(diff) >= 0 ? 
+        ((SizeType)_Difference(diff) <= (max_size - pos) ?
+            pos + _Difference(diff) : max_size) : 
+                ((SizeType)(-_Difference(diff)) <= pos ?
+                    pos + _Difference(diff) : 0));
+}
+
+template<typename TSize, typename TDiff, TDiff SizeDiff>
 constexpr typename Forward<TSize, TDiff, SizeDiff>::SizeType 
     Forward<TSize, TDiff, SizeDiff>::_Increment(const SizeType& pos, 
         const DifferenceType& diff)
 {
-    return (diff > 0 ? pos + _Difference(diff) : 
-        _Decrement(pos, -diff));
+    return _Calculate(pos, diff);
 }
 
 template<typename TSize, typename TDiff, TDiff SizeDiff>
@@ -57,8 +72,7 @@ constexpr typename Forward<TSize, TDiff, SizeDiff>::SizeType
     Forward<TSize, TDiff, SizeDiff>::_Decrement(const SizeType& pos, 
         const DifferenceType& diff)
 {
-    return (diff > 0 ? (pos > _Difference(diff) ? pos - _Difference(diff) : 
-        0) : _Increment(pos, -diff));
+    return _Calculate(pos, -diff);
 }
 
 template<typename TSize, typename TDiff, TDiff SizeDiff>
