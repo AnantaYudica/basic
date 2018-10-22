@@ -45,15 +45,10 @@ public:
     Element(ElementType&& mov);
     ~Element();
 public:
+    ElementType& operator=(const ElementType& cpy);
+    ElementType& operator=(ElementType&& mov);
+public:
     ElementType& operator=(const CharType& ch);
-    template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
-        typename TDifference_ = TDifference>
-    ElementType& operator=(const Element<TChar, TCharTrait, TSize_,
-        TDifference_, TElemTrait_>& elem);
-    template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
-        typename TDifference_ = TDifference>
-    ElementType& operator=(Element<TChar, TCharTrait, TSize_,
-        TDifference_, TElemTrait_>&& elem);
 public:
     ElementType& operator++();
     ElementType operator++(int);
@@ -110,21 +105,17 @@ public:
 private:
     bool IsEnd() const;
     SizeType TraitPosition() const;
-    const SizeType& Position() const;
-    SizeType Size() const;
     CharType& Value();
     const CharType& Value() const;
     CharType* Pointer(const SizeType& off = 0);
     const CharType* Pointer(const SizeType& off = 0) const;
 public:
-    template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
-        typename TDifference_ = TDifference>
-    ConstElementType& operator=(const Element<const TChar, TCharTrait,
-        TSize_, TDifference_, TElemTrait_>& cpy) = delete;
-    template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
-        typename TDifference_ = TDifference>
-    ConstElementType& operator=(Element<const TChar, TCharTrait,
-        TSize_, TDifference_, TElemTrait_>&& mov) = delete;
+    const SizeType& Position() const;
+    SizeType Size() const;
+    const CharType* Get() const;
+public:
+    ConstElementType& operator=(const ConstElementType& cpy);
+    ConstElementType& operator=(ConstElementType&& mov);
 public:
     ConstElementType& operator++();
     ConstElementType operator++(int);
@@ -139,11 +130,9 @@ public:
     template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
         typename TDifference_ = TDifference>
     DifferenceType operator-(const Element<const TChar, TCharTrait,
-        TSize_, TDifference_, TElemTrait_>& elem);
+        TSize_, TDifference_, TElemTrait_>& elem) const;
 public:
     const CharType& operator*() const;
-public:
-    const CharType* Get() const;
 public:
     bool operator==(const CharType& ch) const;
     template<typename TElemTrait_ = TElemTrait, typename TSize_ = TSize, 
@@ -214,40 +203,39 @@ Element<TChar, TCharTrait, TSize, TDifference, TElemTrait>::~Element()
 template<typename TChar, typename TCharTrait, typename TSize,
     typename TDifference, typename TElemTrait>
 typename Element<TChar, TCharTrait, TSize, TDifference, 
+    TElemTrait>::ElementType& Element<TChar, TCharTrait, TSize, 
+        TDifference, TElemTrait>::operator=(const ElementType& cpy)
+{
+    this->m_cstrPtr = cpy.m_cstrPtr;
+    this->m_sizePtr = cpy.m_sizePtr;
+    this->m_pos = cpy.m_pos;
+    return *this;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+typename Element<TChar, TCharTrait, TSize, TDifference, 
+    TElemTrait>::ElementType& Element<TChar, TCharTrait, TSize, TDifference, 
+        TElemTrait>::operator=(ElementType&& mov)
+{
+    this->m_cstrPtr = std::move(mov.m_cstrPtr);
+    this->m_sizePtr = std::move(mov.m_sizePtr);
+    this->m_pos = std::move(mov.m_pos);
+    mov.m_cstrPtr = nullptr;
+    mov.m_sizePtr = nullptr;
+    mov.m_pos = 0;
+    return *this;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+typename Element<TChar, TCharTrait, TSize, TDifference, 
     TElemTrait>::ElementType& 
         Element<TChar, TCharTrait, TSize, TDifference, TElemTrait>::
             operator=(const CharType& ch)
 {
     if (!this->IsEnd())
         ch::Trait<TCharTrait>::Assign(this->Value(), ch);
-    return *this;
-}
-
-template<typename TChar, typename TCharTrait, typename TSize,
-    typename TDifference, typename TElemTrait>
-template<typename TElemTrait_, typename TSize_, typename TDifference_>
-typename Element<TChar, TCharTrait, TSize, TDifference, 
-    TElemTrait>::ElementType& Element<TChar, TCharTrait, TSize, 
-        TDifference, TElemTrait>::operator=(const Element<TChar, TCharTrait, 
-            TSize_, TDifference_, TElemTrait_>& elem)
-{
-    if (!this->IsEnd() && !elem.IsEnd())
-        ch::Trait<TCharTrait>::Copy(this->Pointer(this->TraitPosition()),
-            elem.Pointer(elem.TraitPosition()), 1);
-    return *this;
-}
-
-template<typename TChar, typename TCharTrait, typename TSize,
-    typename TDifference, typename TElemTrait>
-template<typename TElemTrait_, typename TSize_, typename TDifference_>
-typename Element<TChar, TCharTrait, TSize, TDifference, 
-    TElemTrait>::ElementType& Element<TChar, TCharTrait, TSize, TDifference, 
-        TElemTrait>::operator=(Element<TChar, TCharTrait, TSize_,
-            TDifference_, TElemTrait_>&& elem)
-{
-    if (!this->IsEnd() && !elem.IsEnd())
-        ch::Trait<TCharTrait>::Move(this->Pointer(this->TraitPosition()),
-            elem.Pointer(elem.TraitPosition()), 1);
     return *this;
 }
 
@@ -452,24 +440,6 @@ typename Element<const TChar, TCharTrait, TSize, TDifference,
 
 template<typename TChar, typename TCharTrait, typename TSize,
     typename TDifference, typename TElemTrait>
-const typename Element<const TChar, TCharTrait, TSize, TDifference, 
-    TElemTrait>::SizeType& Element<const TChar, TCharTrait, TSize, TDifference,
-        TElemTrait>::Position() const
-{
-    return m_pos;
-}
-
-template<typename TChar, typename TCharTrait, typename TSize,
-    typename TDifference, typename TElemTrait>
-typename Element<const TChar, TCharTrait, TSize, TDifference, 
-    TElemTrait>::SizeType Element<const TChar, TCharTrait, TSize, TDifference, 
-        TElemTrait>::Size() const
-{
-    return *m_sizePtr;
-}
-
-template<typename TChar, typename TCharTrait, typename TSize,
-    typename TDifference, typename TElemTrait>
 typename Element<const TChar, TCharTrait, TSize, TDifference,
     TElemTrait>::CharType& Element<const TChar, TCharTrait, TSize, TDifference,
         TElemTrait>::Value()
@@ -502,6 +472,64 @@ const typename Element<const TChar, TCharTrait, TSize, TDifference,
         TElemTrait>::Pointer(const SizeType& off) const
 {
     return (*m_cstrPtr) + off;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+    const typename Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::SizeType& Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::Position() const
+{
+    return m_pos;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+    typename Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::SizeType Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::Size() const
+{
+    if (m_sizePtr != nullptr)
+        return *m_sizePtr;
+    return 0;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+    const typename Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::CharType* Element<const TChar, TCharTrait, TSize, TDifference,
+    TElemTrait>::Get() const
+{
+    if (!this->IsEnd())
+        return &(this->Value());
+    return nullptr;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+typename Element<const TChar, TCharTrait, TSize, TDifference, 
+    TElemTrait>::ConstElementType& Element<const TChar, TCharTrait, TSize, 
+        TDifference, TElemTrait>::operator=(const ConstElementType& cpy)
+{
+    this->m_cstrPtr = cpy.m_cstrPtr;
+    this->m_sizePtr = cpy.m_sizePtr;
+    this->m_pos = cpy.m_pos;
+    return *this;
+}
+
+template<typename TChar, typename TCharTrait, typename TSize,
+    typename TDifference, typename TElemTrait>
+typename Element<const TChar, TCharTrait, TSize, TDifference, 
+    TElemTrait>::ConstElementType& Element<const TChar, TCharTrait, TSize, 
+        TDifference, TElemTrait>::operator=(ConstElementType&& mov)
+{
+    this->m_cstrPtr = std::move(mov.m_cstrPtr);
+    this->m_sizePtr = std::move(mov.m_sizePtr);
+    this->m_pos = std::move(mov.m_pos);
+    mov.m_cstrPtr = nullptr;
+    mov.m_sizePtr = nullptr;
+    mov.m_pos = 0;
+    return *this;
 }
 
 template<typename TChar, typename TCharTrait, typename TSize,
@@ -614,13 +642,13 @@ template<typename TElemTrait_, typename TSize_, typename TDifference_>
 typename Element<const TChar, TCharTrait, TSize, TDifference, 
     TElemTrait>::DifferenceType Element<const TChar, TCharTrait, TSize, 
         TDifference, TElemTrait>::operator-(const Element<const TChar,
-            TCharTrait, TSize_, TDifference_, TElemTrait_>& elem)
+            TCharTrait, TSize_, TDifference_, TElemTrait_>& elem) const
 {
     if (!this->IsEnd() && !elem.IsEnd())
         if (this->Pointer() == elem.Pointer())
             return (DifferenceType)this->Position() - elem.Position();
     if (this->IsEnd())
-        return 0;
+        return elem.Size() - elem.Position();
     return (DifferenceType)this->Position() - this->Size();
 }
 
@@ -633,17 +661,6 @@ const typename Element<const TChar, TCharTrait, TSize, TDifference,
     if (!this->IsEnd())
         return this->Value();
     return std::move(CharType('\0'));
-}
-
-template<typename TChar, typename TCharTrait, typename TSize,
-    typename TDifference, typename TElemTrait>
-const typename Element<const TChar, TCharTrait, TSize, TDifference, 
-    TElemTrait>::CharType* Element<const TChar, TCharTrait, TSize, TDifference,
-        TElemTrait>::Get() const
-{
-    if (!this->IsEnd())
-        return &(this->Value());
-    return nullptr;
 }
 
 template<typename TChar, typename TCharTrait, typename TSize,
