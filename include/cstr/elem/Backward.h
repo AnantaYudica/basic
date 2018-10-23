@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include "Forward.h"
+#include "../ch/Trait.h"
 
 namespace basic
 {
@@ -20,6 +21,10 @@ public:
 public:
     static constexpr SizeType Position(const SizeType& pos,
         const SizeType& size);
+    template<typename TChar, typename TCharTrait>
+    static SizeType BeginPosition(const TChar* cstr, const TSize& size);
+    template<typename TChar, typename TCharTrait>
+    static SizeType EndPosition(const TChar* cstr, const TSize& size);
 };
 
 template<typename TSize, typename TDiff, TDiff SizeDiff>
@@ -28,6 +33,25 @@ constexpr typename Backward<TSize, TDiff, SizeDiff>::SizeType
         Position(const SizeType& pos, const SizeType& size)
 {
     return (pos >= size ? size : size - (pos + 1));
+}
+
+template<typename TSize, typename TDiff, TDiff SizeDiff>
+template<typename TChar, typename TCharTrait>
+typename Backward<TSize, TDiff, SizeDiff>::SizeType 
+    Backward<TSize, TDiff, SizeDiff>::BeginPosition(const TChar* cstr, 
+        const TSize& size)
+{
+    const TSize len = ch::Trait<TCharTrait>::Length(cstr);
+    return (cstr == nullptr ? 0 : (size > len ? size - len : size));
+}
+
+template<typename TSize, typename TDiff, TDiff SizeDiff>
+template<typename TChar, typename TCharTrait>
+typename Backward<TSize, TDiff, SizeDiff>::SizeType 
+    Backward<TSize, TDiff, SizeDiff>::EndPosition(const TChar* cstr,
+        const TSize& size)
+{
+    return size;
 }
 
 } //!elem
