@@ -35,8 +35,8 @@ struct First
 template<typename TChar, typename TCharTrait>
 template<typename TSubCstr, typename TElementTrait, typename TSize, 
     typename TDifference>
-TSize First<TChar, TCharTrait>::Position(const cstr::Element<const TChar, TCharTrait,
-    TSize, TDifference, TElementTrait>& const_begin_elem, 
+TSize First<TChar, TCharTrait>::Position(const cstr::Element<const TChar, 
+    TCharTrait, TSize, TDifference, TElementTrait>& const_begin_elem, 
     const cstr::Element<const TChar, TCharTrait, TSize, TDifference, 
     TElementTrait>& const_end_elem, const TSubCstr& sub_cstr, 
     const TSize& sub_size)
@@ -47,8 +47,7 @@ TSize First<TChar, TCharTrait>::Position(const cstr::Element<const TChar, TCharT
     TSize sub_pos = 0;
     auto begin_elem = const_begin_elem;
     auto it_elem = const_begin_elem;
-    while(it_elem != '\0' &&
-        it_elem != const_end_elem)
+    while(it_elem != '\0' && it_elem != const_end_elem)
     {
         if (it_elem == sub_cstr[sub_pos])
         {
