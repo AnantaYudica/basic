@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <limits>
 
+#include "../ch/Trait.h"
+
 namespace basic
 {
 namespace cstr
@@ -28,6 +30,10 @@ private:
         const DifferenceType& diff);
 public:
     static constexpr SizeType SizeDifference = SizeDiff;
+    template<typename TChar, typename TCharTrait>
+    static SizeType BeginPosition(const TChar* cstr, const TSize& size);
+    template<typename TChar, typename TCharTrait>
+    static SizeType EndPosition(const TChar* cstr, const TSize& size);
     static constexpr SizeType Position(const SizeType& pos,
         const SizeType& size);
     static constexpr SizeType Increment(const SizeType& pos, 
@@ -73,6 +79,25 @@ constexpr typename Forward<TSize, TDiff, SizeDiff>::SizeType
         const DifferenceType& diff)
 {
     return _Calculate(pos, -diff);
+}
+
+template<typename TSize, typename TDiff, TDiff SizeDiff>
+template<typename TChar, typename TCharTrait>
+typename Forward<TSize, TDiff, SizeDiff>::SizeType 
+    Forward<TSize, TDiff, SizeDiff>::BeginPosition(const TChar* cstr,
+        const TSize& size)
+{
+    return 0;
+}
+
+template<typename TSize, typename TDiff, TDiff SizeDiff>
+template<typename TChar, typename TCharTrait>
+typename Forward<TSize, TDiff, SizeDiff>::SizeType 
+    Forward<TSize, TDiff, SizeDiff>::EndPosition(const TChar* cstr,
+        const TSize& size)
+{
+    const TSize len = ch::Trait<TCharTrait>::Length(cstr);
+    return (cstr == nullptr ? 0 : (len < size ? len : size));
 }
 
 template<typename TSize, typename TDiff, TDiff SizeDiff>
