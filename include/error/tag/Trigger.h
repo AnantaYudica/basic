@@ -32,10 +32,17 @@ public:
 public:
     typedef error::Identification IdType;
     typedef error::id::NumberType IdNumberType;
+public:
+    typedef OutputType&(MessageFunctionType)(OutputType&,
+        const Error<error::tag::Trigger>&);
 private:
-    const IdType& m_id;
+    IdType m_id;
     const char* m_file;
     const std::size_t& m_line;
+    MessageFunctionType* m_msgFuncPtr;
+public:
+    static OutputType& Message(OutputType& out, 
+        const Error<error::tag::Trigger>& err);
 public:
     Error();
 public:
@@ -43,37 +50,52 @@ public:
 protected:
     Error(const IdType& id, const char* file, const std::size_t& line);
 public:
-    virtual ~Error();
+    ~Error();
 public:
     Error<error::tag::Trigger>& 
         operator=(const Error<error::tag::Trigger>&) = delete;
     Error<error::tag::Trigger>& 
         operator=(Error<error::tag::Trigger>&&) = delete;
 public:
-    virtual OutputType& Message(OutputType& out) const;
+    OutputType& Message(OutputType& out) const;
 public:
     const error::Identification& GetIdentification() const;
     const char* GetFile() const;
     const std::size_t& GetLine() const;
 };
 
+typename Error<error::tag::Trigger>::OutputType& 
+    Error<error::tag::Trigger>::Message(OutputType& out, 
+        const Error<error::tag::Trigger>& err)
+{
+    BASIC_ERROR_OUTPUT_OPERATOR(out, " code ");
+    BASIC_ERROR_OUTPUT_OPERATOR(out, error::id::Number(err.m_id));
+    BASIC_ERROR_OUTPUT_OPERATOR(out, " file ");
+    BASIC_ERROR_OUTPUT_OPERATOR(out, err.m_file);
+    BASIC_ERROR_OUTPUT_OPERATOR(out, " line ");
+    BASIC_ERROR_OUTPUT_OPERATOR(out, err.m_line);
+}
+
 Error<error::tag::Trigger>::Error() :
     m_id(error::id::Default()),
     m_file(nullptr),
-    m_line(-1)
+    m_line(-1),
+    m_msgFuncPtr(&Message)
 {}
 
 Error<error::tag::Trigger>::Error(const IdType& id, const char* file, 
     const std::size_t& line) :
         m_id(id),
         m_file(file),
-        m_line(line)
+        m_line(line),
+        m_msgFuncPtr(&Message)
 {}
 
 Error<error::tag::Trigger>::Error(const Error<error::tag::Trigger>& cpy) :
     m_id(cpy.m_id),
     m_file(cpy.m_file),
-    m_line(cpy.m_line)
+    m_line(cpy.m_line),
+    m_msgFuncPtr(cpy.m_msgFuncPtr)
 {}
 
 Error<error::tag::Trigger>::~Error()
@@ -82,12 +104,10 @@ Error<error::tag::Trigger>::~Error()
 typename Error<error::tag::Trigger>::OutputType& 
     Error<error::tag::Trigger>::Message(OutputType& out) const
 {
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " code ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, error::id::Number(m_id));
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " file ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, m_file);
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " line ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, m_line);
+    if (m_msgFuncPtr == NULL)
+        Message(out, *this);
+    else
+        m_msgFuncPtr(out, *this);
     return out;
 }
 
