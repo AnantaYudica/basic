@@ -20,17 +20,19 @@ struct Identification
     {
         uint8_t Zero : 1;
         uint8_t Standard : 1;
+        uint8_t Catch : 1;
 
     } Flag;
     uint16_t Error; // 0 - 65535
-    constexpr Identification(const uint8_t& zero, const uint8_t& standard,
-        const uint8_t& id_error);
-    
+    constexpr Identification(const uint8_t& is_zero, 
+        const uint8_t& is_standard, const uint8_t& is_catch, 
+        const uint16_t& id_error);
 };
 
-constexpr Identification::Identification(const uint8_t& zero, 
-    const uint8_t& standard, const uint8_t& id_error) :
-        Flag{zero, standard},
+constexpr Identification::Identification(const uint8_t& is_zero, 
+    const uint8_t& is_standard, const uint8_t& is_catch,
+    const uint16_t& id_error) :
+        Flag{is_zero, is_standard, is_catch},
         Error(id_error)
 {}
 
@@ -44,7 +46,7 @@ NumberType Number(const Identification& id_)
 
 constexpr Identification Default()
 {
-    return Identification{1, 1, (uint8_t)-1};
+    return Identification{1, 1, 1, (uint16_t)-1};
 }
 
 template<typename TException>
@@ -52,7 +54,6 @@ constexpr Identification Get(const TException e)
 {
     return Default();
 }
-
 
 } //!id
 
