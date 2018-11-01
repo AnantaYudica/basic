@@ -14,26 +14,54 @@ typedef uint32_t NumberType;
 
 } //!id
 
-struct Identification
+class Identification
 {
-    struct
+public:
+    const struct
     {
-        uint8_t Zero : 1;
+        uint8_t Default : 1;
         uint8_t Standard : 1;
         uint8_t Catch : 1;
 
     } Flag;
-    uint16_t Error; // 0 - 65535
-    constexpr Identification(const uint8_t& is_zero, 
+    const uint16_t Error;
+public:
+    constexpr Identification();
+    constexpr Identification(const uint16_t& id_error);
+protected:
+    constexpr Identification(const uint8_t& is_default, 
         const uint8_t& is_standard, const uint8_t& is_catch, 
         const uint16_t& id_error);
+public:
+    Identification(const Identification& cpy);
+    Identification(Identification&& mov);
 };
 
-constexpr Identification::Identification(const uint8_t& is_zero, 
+constexpr Identification::Identification() :
+    Flag{1, 1, 1},
+    Error{static_cast<uint16_t>(-1)}
+{}
+
+constexpr Identification::Identification(const uint16_t& id_error) :
+    Flag{0, 0, 0},
+    Error{id_error}
+{}
+
+constexpr Identification::Identification(const uint8_t& is_default, 
     const uint8_t& is_standard, const uint8_t& is_catch,
     const uint16_t& id_error) :
-        Flag{is_zero, is_standard, is_catch},
-        Error(id_error)
+        Flag{is_default, is_standard, is_catch},
+        Error{id_error}
+{}
+
+Identification::Identification(const Identification& cpy) :
+    Flag{cpy.Flag},
+    Error{cpy.Error}
+{}
+
+Identification::Identification(Identification&& mov) :
+    Flag{mov.Flag},
+    Error{mov.Error}
 {}
 
 namespace id
@@ -44,15 +72,10 @@ NumberType Number(const Identification& id_)
     return reinterpret_cast<const NumberType&>(id_);
 }
 
-constexpr Identification Default()
-{
-    return Identification{1, 1, 1, (uint16_t)-1};
-}
-
 template<typename TException>
 constexpr Identification Get(const TException e)
 {
-    return Default();
+    return {};
 }
 
 } //!id
