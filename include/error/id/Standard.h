@@ -2,7 +2,6 @@
 #define BASIC_ERROR_IDENTIFICATION_STANDARD_H_
 
 #include "../Identification.h"
-#include "Default.h"
 
 #include <utility>
 
@@ -29,7 +28,7 @@ public:
 };
 
 constexpr Standard::Standard() :
-    Identification(Default())
+    Identification()
 {}
 
 constexpr Standard::Standard(const Identification& id) :

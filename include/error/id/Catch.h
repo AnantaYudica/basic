@@ -2,7 +2,6 @@
 #define BASIC_ERROR_IDENTIFICATION_CATCH_H_
 
 #include "../Identification.h"
-#include "Default.h"
 
 #include <utility>
 
@@ -29,7 +28,7 @@ public:
 };
 
 constexpr Catch::Catch() :
-    Identification(Default())
+    Identification()
 {}
 
 constexpr Catch::Catch(const Identification& id) :
