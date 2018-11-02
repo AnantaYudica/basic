@@ -33,8 +33,8 @@ protected:
         const uint8_t& is_standard, const uint8_t& is_catch, 
         const uint16_t& id_error);
 public:
-    Identification(const Identification& cpy);
-    Identification(Identification&& mov);
+    constexpr Identification(const Identification& cpy);
+    constexpr Identification(Identification&& mov);
 };
 
 constexpr Identification::Identification() :
@@ -63,22 +63,6 @@ Identification::Identification(Identification&& mov) :
     Flag{mov.Flag},
     Error{mov.Error}
 {}
-
-namespace id
-{
-
-NumberType Number(const Identification& id_)
-{
-    return reinterpret_cast<const NumberType&>(id_);
-}
-
-template<typename TException>
-constexpr Identification Get(const TException e)
-{
-    return {};
-}
-
-} //!id
 
 } //!error
 
