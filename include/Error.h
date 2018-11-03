@@ -40,7 +40,6 @@ class Error{};
 
 #include "error/tag/Trigger.h"
 #include "error/tag/Catch.h"
-#include "error/tag/Output.h"
 #include "Error.h"
 
 #else //else BASIC_ERROR_H__FORWARD_DECLARATION_
@@ -125,7 +124,7 @@ class Error{};
 
 #if !defined(USING_BASIC_ERROR_CATCH_OPERATOR_THROW_AGAIN)
 #define BASIC_ERROR_CATCH_OPERATOR(...)\
-throw basic::Error<basic::error::tag::Catch>(__VA_ARGS__)
+throw
 
 #elif defined(USING_BASIC_ERROR_CATCH_OPERATOR_OUTPUT)
 #define BASIC_ERROR_CATCH_OPERATOR(...)\
