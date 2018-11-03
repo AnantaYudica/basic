@@ -8,6 +8,9 @@
 #define BASIC_ERROR_TAG_TRIGGER_H_
 
 #include "../Identification.h"
+#include "../id/Catch.h"
+#include "../id/Standard.h"
+#include "../Information.h"
 
 namespace basic
 {
@@ -31,24 +34,22 @@ public:
     typedef BASIC_ERROR_OUTPUT_TYPE OutputType;
 public:
     typedef error::Identification IdType;
-    typedef error::id::NumberType IdNumberType;
 public:
-    typedef OutputType&(MessageFunctionType)(OutputType&,
-        const Error<error::tag::Trigger>&);
+    typedef error::Information InfoType;
 private:
-    IdType m_id;
-    const char* m_file;
-    const std::size_t& m_line;
-    MessageFunctionType* m_msgFuncPtr;
-public:
-    static OutputType& Message(OutputType& out, 
-        const Error<error::tag::Trigger>& err);
+    const InfoType m_info;
 public:
     Error();
+    Error(const IdType& id, const char* file, 
+        const std::size_t& line);
+protected:
+    Error(const error::id::Catch& id,
+        const char* file, const std::size_t& line);
+    Error(const error::id::Standard& id,
+        const char* file, const std::size_t& line);
 public:
     Error(const Error<error::tag::Trigger>& cpy);
-protected:
-    Error(const IdType& id, const char* file, const std::size_t& line);
+    Error(Error<error::tag::Trigger>&& mov);
 public:
     ~Error();
 public:
@@ -59,43 +60,34 @@ public:
 public:
     OutputType& Message(OutputType& out) const;
 public:
-    const error::Identification& GetIdentification() const;
-    const char* GetFile() const;
-    const std::size_t& GetLine() const;
+    const InfoType& GetInformation() const;
 };
 
-typename Error<error::tag::Trigger>::OutputType& 
-    Error<error::tag::Trigger>::Message(OutputType& out, 
-        const Error<error::tag::Trigger>& err)
-{
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " code ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, error::id::Number(err.m_id));
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " file ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, err.m_file);
-    BASIC_ERROR_OUTPUT_OPERATOR(out, " line ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, err.m_line);
-}
-
 Error<error::tag::Trigger>::Error() :
-    m_id(error::id::Default()),
-    m_file(nullptr),
-    m_line(-1),
-    m_msgFuncPtr(&Message)
+    m_info()
 {}
 
 Error<error::tag::Trigger>::Error(const IdType& id, const char* file, 
     const std::size_t& line) :
-        m_id(id),
-        m_file(file),
-        m_line(line),
-        m_msgFuncPtr(&Message)
+        m_info(id, file, line)
+{}
+
+Error<error::tag::Trigger>::Error(const error::id::Catch& id,
+    const char* file, const std::size_t& line) :
+        m_info(id, file, line)
+{}
+
+Error<error::tag::Trigger>::Error(const error::id::Standard& id,
+    const char* file, const std::size_t& line) :
+        m_info(id, file, line)
 {}
 
 Error<error::tag::Trigger>::Error(const Error<error::tag::Trigger>& cpy) :
-    m_id(cpy.m_id),
-    m_file(cpy.m_file),
-    m_line(cpy.m_line),
-    m_msgFuncPtr(cpy.m_msgFuncPtr)
+    m_info(cpy.m_info)
+{}
+
+Error<error::tag::Trigger>::Error(Error<error::tag::Trigger>&& mov) :
+    m_info(std::move(mov.m_info))
 {}
 
 Error<error::tag::Trigger>::~Error()
@@ -104,27 +96,14 @@ Error<error::tag::Trigger>::~Error()
 typename Error<error::tag::Trigger>::OutputType& 
     Error<error::tag::Trigger>::Message(OutputType& out) const
 {
-    if (m_msgFuncPtr == NULL)
-        Message(out, *this);
-    else
-        m_msgFuncPtr(out, *this);
+    BASIC_ERROR_OUTPUT_OPERATOR(out, this->GetInformation());
     return out;
 }
 
-const typename Error<error::tag::Trigger>::IdType& 
-    Error<error::tag::Trigger>::GetIdentification() const
+const typename Error<error::tag::Trigger>::InfoType& 
+    Error<error::tag::Trigger>::GetInformation() const
 {
-    return m_id;
-}
-
-const char* Error<error::tag::Trigger>::GetFile() const
-{
-    return m_file;
-}
-
-const std::size_t& Error<error::tag::Trigger>::GetLine() const
-{
-    return m_line;
+    return m_info;
 }
 
 } //!basic
