@@ -85,7 +85,11 @@ std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar,
 {
     if (!info.GetIdentification().Flag.Default)
     {
-        out << "code " << basic::error::id::Number(info.GetIdentification());
+        if (!info.GetIdentification().Flag.Catch)
+            out << "code " << 
+                basic::error::id::Number(info.GetIdentification());
+        else
+            out << "\nin catch";
         out << " file " << info.GetFile();
         out << " line " << info.GetLine();
     }
