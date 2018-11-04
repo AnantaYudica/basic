@@ -12,6 +12,13 @@ namespace id
 
 typedef uint32_t NumberType;
 
+namespace number
+{
+
+typedef uint16_t ErrorType;
+
+}
+
 } //!id
 
 class Identification
@@ -24,14 +31,14 @@ public:
         uint8_t Catch : 1;
 
     } Flag;
-    const uint16_t Error;
+    const id::number::ErrorType Error;
 public:
     constexpr Identification();
-    constexpr Identification(const uint16_t& id_error);
+    constexpr Identification(const id::number::ErrorType& id_error);
 protected:
     constexpr Identification(const uint8_t& is_default, 
         const uint8_t& is_standard, const uint8_t& is_catch, 
-        const uint16_t& id_error);
+        const id::number::ErrorType& id_error);
 public:
     constexpr Identification(const Identification& cpy);
     constexpr Identification(Identification&& mov);
@@ -39,17 +46,18 @@ public:
 
 constexpr Identification::Identification() :
     Flag{1, 1, 1},
-    Error{static_cast<uint16_t>(-1)}
+    Error{static_cast<id::number::ErrorType>(-1)}
 {}
 
-constexpr Identification::Identification(const uint16_t& id_error) :
-    Flag{0, 0, 0},
-    Error{id_error}
+constexpr Identification::
+    Identification(const id::number::ErrorType& id_error) :
+        Flag{0, 0, 0},
+        Error{id_error}
 {}
 
 constexpr Identification::Identification(const uint8_t& is_default, 
     const uint8_t& is_standard, const uint8_t& is_catch,
-    const uint16_t& id_error) :
+    const id::number::ErrorType& id_error) :
         Flag{is_default, is_standard, is_catch},
         Error{id_error}
 {}
