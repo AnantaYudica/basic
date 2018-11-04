@@ -4,6 +4,7 @@
 #include "../Logic.h"
 #include "../../Identification.h"
 #include "../../id/Get.h"
+#include "../../id/Standard.h"
 #include "../../../constant/error/Identification.h"
 
 #include <stdexcept>
