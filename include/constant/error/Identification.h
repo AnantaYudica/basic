@@ -3,7 +3,6 @@
 
 #include "../../error/Identification.h"
 
-#include <limits>
 
 namespace basic
 {
@@ -12,9 +11,9 @@ namespace constant
 namespace error
 {
 
-enum : basic::error::id::NumberType
+enum : basic::error::id::number::ErrorType
 {
-    undefined_id = std::numeric_limits<basic::error::id::NumberType>::max(),
+    undefined_id = static_cast<basic::error::id::number::ErrorType>(-1),
     exception_id = 1,
     logic_id = 11,
     logic_invalid_id = 111,
