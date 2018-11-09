@@ -19,7 +19,7 @@ template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::Value<TCategoryTrait, 
     typename system::defn::type::category::Value>::Value,
     typename system::defn::type::category::Value>::type  
-Value(const TCategoryTrait& category_trait)
+Value(const TCategoryTrait& category_trait) noexcept
 {
     return category_trait.Value();
 }
@@ -28,7 +28,7 @@ template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::Value<TCategoryTrait, 
     typename system::defn::type::category::Value>::Value,
     typename system::defn::type::category::Value>::type  
-Value(const TCategoryTrait& category_trait)
+Value(const TCategoryTrait& category_trait) noexcept
 {
     return 0;
 }

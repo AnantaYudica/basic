@@ -17,7 +17,7 @@ namespace category
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::Name<TCategoryTrait>::Value, 
     const char *>::type  
-Name(const TCategoryTrait& category_trait)
+Name(const TCategoryTrait& category_trait) noexcept
 {
     return category_trait.Name();
 }
@@ -25,7 +25,7 @@ Name(const TCategoryTrait& category_trait)
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::Name<TCategoryTrait>::Value, 
     const char *>::type  
-Name(const TCategoryTrait& category_trait)
+Name(const TCategoryTrait& category_trait) noexcept
 {
     return "";
 }

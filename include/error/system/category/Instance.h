@@ -16,14 +16,14 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::st::mmbr::func::Instance<TCategoryTrait>::Value,
-    TCategoryTrait>::type Instance()
+    TCategoryTrait>::type Instance() noexcept
 {
     return TCategoryTrait::Instance();
 }
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::st::mmbr::func::Instance<TCategoryTrait>::Value,
-    TCategoryTrait>::type Instance()
+    TCategoryTrait>::type Instance() noexcept
 {
     return {};
 }

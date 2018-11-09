@@ -17,7 +17,7 @@ namespace category
 template<typename TCategoryTrait, typename TValue>
 typename std::enable_if<has::mmbr::func::Message<TCategoryTrait,
     TValue>::Value, const char *>::type  
-Message(const TCategoryTrait& category_trait, const TValue& value)
+Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 {
     return category_trait.Message(value);
 }
@@ -25,7 +25,7 @@ Message(const TCategoryTrait& category_trait, const TValue& value)
 template<typename TCategoryTrait, typename TValue>
 typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
     TValue>::Value, const char *>::type  
-Message(const TCategoryTrait& category_trait, const TValue& value)
+Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 {
     return "";
 }
