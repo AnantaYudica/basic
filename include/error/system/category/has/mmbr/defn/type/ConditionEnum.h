@@ -62,8 +62,8 @@ namespace type
 {
 
 template<typename TCategoryTrait>
-using CoditionEnum = _helper::_basic::_error::_system::_category::_has::_mmbr::
-    _defn::_type::_ConditionEnum<TCategoryTrait>;
+using ConditionEnum = _helper::_basic::_error::_system::_category::_has::
+    _mmbr::_defn::_type::_ConditionEnum<TCategoryTrait>;
 
 } //!type
 
