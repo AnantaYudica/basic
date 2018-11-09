@@ -2,7 +2,6 @@
 #define BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
 
 #include "has/mmbr/func/Message.h"
-#include "Definition.h"
 
 #include <type_traits>
 

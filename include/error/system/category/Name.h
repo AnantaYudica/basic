@@ -2,7 +2,6 @@
 #define BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
 
 #include "has/mmbr/func/Name.h"
-#include "Definition.h"
 
 #include <type_traits>
 
