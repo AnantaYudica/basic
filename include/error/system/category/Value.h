@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_CATEGORY_VALUE_H_
 
 #include "has/mmbr/func/Value.h"
-#include "Definition.h"
+#include "../defn/type/category/Value.h"
 
 #include <type_traits>
 
@@ -17,8 +17,8 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::Value<TCategoryTrait, 
-    typename Definition<TCategoryTrait>::CategoryValueType>::Value,
-    typename Definition<TCategoryTrait>::CategoryValueType>::type  
+    typename system::defn::type::category::Value>::Value,
+    typename system::defn::type::category::Value>::type  
 Value(const TCategoryTrait& category_trait)
 {
     return category_trait.Value();
@@ -26,8 +26,8 @@ Value(const TCategoryTrait& category_trait)
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::Value<TCategoryTrait, 
-    typename Definition<TCategoryTrait>::CategoryValueType>::Value,
-    typename Definition<TCategoryTrait>::CategoryValueType>::type  
+    typename system::defn::type::category::Value>::Value,
+    typename system::defn::type::category::Value>::type  
 Value(const TCategoryTrait& category_trait)
 {
     return 0;
