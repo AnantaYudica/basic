@@ -43,6 +43,7 @@ class Category;
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
 #include "category/DefaultCode.h"
+#include "category/DefaultCondition.h"
 #include "category/Equivalent.h"
 #include "category/Instance.h"
 #include "category/Message.h"
@@ -101,7 +102,10 @@ public:
     CodeType DefaultCode(const CodeSetValueType& code_val) 
         const noexcept;
 public:
+    ConditionType DefaultCondition() const noexcept; 
     ConditionType DefaultCondition(const CodeSetValueType& code_val) 
+        const noexcept;
+    ConditionType DefaultCondition(const CodeType& code) 
         const noexcept;
 public:
     bool Equivalent(const CodeValueType& code_val, 
@@ -163,10 +167,24 @@ Category<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::DefaultCondition() const noexcept
+{
+    return ConditionType(DefaultCode());
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
 Category<TCategoryTrait>::DefaultCondition(const CodeSetValueType& code_val)
     const noexcept
 {
     return ConditionType(DefaultCode(code_val));
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::DefaultCondition(const CodeType& code) const noexcept
+{
+    return ConditionType(category::DefaultCondition(m_trait, code));
 }
 
 template<typename TCategoryTrait>
