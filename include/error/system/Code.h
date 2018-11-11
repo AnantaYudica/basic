@@ -94,7 +94,7 @@ public:
 public:
     const char * Message() const noexcept;
 public:
-    operator bool() const;
+    operator bool() const noexcept;
 };
 
 template<typename TCategoryTrait>
@@ -191,7 +191,7 @@ const char * Code<TCategoryTrait>::Message() const noexcept
 }
 
 template<typename TCategoryTrait>
-Code<TCategoryTrait>::operator bool() const
+Code<TCategoryTrait>::operator bool() const noexcept
 {
     return m_value != m_category.DefaultCode();
 }
