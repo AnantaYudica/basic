@@ -40,8 +40,6 @@ class Code;
 #include "defn/type/Code/Value.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 
-#include <cstdint>
-#include <type_traits>
 #include <utility>
 #include <type_traits>
 #include <ostream>
@@ -64,13 +62,13 @@ public:
     typedef typename Category<TCategoryTrait> CategoryType;
     typedef typename Condition<TCategoryTrait> ConditionType;
 public:
-    typedef typename CategoryType::CodeSetValueType CodeSetValueType;
+    typedef typename CategoryType::CodeSetValueType SetValueType;
 public:
     ValueType m_value;
     CategoryType m_category;
 public:
     Code() noexcept;
-    Code(const CodeSetValueType& code_val) noexcept;
+    Code(const SetValueType& code_val) noexcept;
 public:
     Code(const Code<TCategoryTrait>& cpy) noexcept;
     Code(Code<TCategoryTrait>&& mov) noexcept;
@@ -80,9 +78,9 @@ public:
     Code<TCategoryTrait>& operator=(const Code<TCategoryTrait>& cpy) noexcept;
     Code<TCategoryTrait>& operator=(Code<TCategoryTrait>&& mov) noexcept;
 public:
-    Code<TCategoryTrait>& operator=(const CodeSetValueType& code_val) noexcept;
+    Code<TCategoryTrait>& operator=(const SetValueType& code_val) noexcept;
 public:
-    void Assign(const CodeSetValueType& code_val) noexcept;
+    void Assign(const SetValueType& code_val) noexcept;
 public:
     void Clear() noexcept;
 public:
@@ -100,11 +98,11 @@ public:
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code() noexcept :
     m_category(),
-    m_value(m_category.DefaultCode())
+    m_value(m_category.DefaultCode().m_value)
 {}
 
 template<typename TCategoryTrait>
-Code<TCategoryTrait>::Code(const CodeSetValueType& code_val) noexcept :
+Code<TCategoryTrait>::Code(const SetValueType& code_val) noexcept :
     m_category(),
     m_value(code_val)
 {}
@@ -145,14 +143,14 @@ Code<TCategoryTrait>& Code<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>& Code<TCategoryTrait>::
-    operator=(const CodeSetValueType& code_val) noexcept
+    operator=(const SetValueType& code_val) noexcept
 {
     this->m_value = code_val;
     return *this;
 }
 
 template<typename TCategoryTrait>
-void Code<TCategoryTrait>::Assign(const CodeSetValueType& code_val) noexcept
+void Code<TCategoryTrait>::Assign(const SetValueType& code_val) noexcept
 {
     this->m_value = code_val;
 }
@@ -160,7 +158,7 @@ void Code<TCategoryTrait>::Assign(const CodeSetValueType& code_val) noexcept
 template<typename TCategoryTrait>
 void Code<TCategoryTrait>::Clear() noexcept
 {
-    this->m_value = m_category.DefaultCode();
+    this->m_value = this->m_category.DefaultCode().m_value;
 }
 
 template<typename TCategoryTrait>
@@ -174,7 +172,7 @@ template<typename TCategoryTrait>
 const typename Code<TCategoryTrait>::CategoryType& 
     Code<TCategoryTrait>::Category() const noexcept
 {
-    return m_category;
+    return this->m_category;
 }
 
 template<typename TCategoryTrait>
@@ -187,13 +185,13 @@ typename Code<TCategoryTrait>::ConditionType
 template<typename TCategoryTrait>
 const char * Code<TCategoryTrait>::Message() const noexcept
 {
-    return m_category.Message(*this);
+    return this->m_category.Message(*this);
 }
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::operator bool() const noexcept
 {
-    return m_value != m_category.DefaultCode();
+    return m_value != this->m_category.DefaultCode().m_value;
 }
 
 } //!system
@@ -224,9 +222,9 @@ typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator==(const basic::error::system::
     Code<TCategoryTrait>& code_a, const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_b_emum)
+    Code<TCategoryTrait>::SetValueType& code_b_val)
 {
-    return code_a.Value() == code_b_emum;
+    return code_a.Value() == code_b_val;
 }
 
 template<typename TCategoryTrait>
@@ -241,10 +239,10 @@ template<typename TCategoryTrait>
 typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator==(const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_a_emum, const basic::error::system::
-    Code<TCategoryTrait>& code_b)
+    Code<TCategoryTrait>::SetValueType& code_a_val, 
+    const basic::error::system::Code<TCategoryTrait>& code_b)
 {
-    return code_b == code_a_emum;
+    return code_b == code_a_val;
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
@@ -268,9 +266,9 @@ typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator!=(const basic::error::system::
     Code<TCategoryTrait>& code_a, const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_b_emum)
+    Code<TCategoryTrait>::SetValueType& code_b_val)
 {
-    return !(code_a == code_b_emum);
+    return !(code_a == code_b_val);
 }
 
 template<typename TCategoryTrait>
@@ -285,10 +283,10 @@ template<typename TCategoryTrait>
 typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator!=(const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_a_emum, const basic::error::system::
-    Code<TCategoryTrait>& code_b)
+    Code<TCategoryTrait>::SetValueType& code_a_val, 
+    const basic::error::system::Code<TCategoryTrait>& code_b)
 {
-    return !(code_a_emum == code_b);
+    return !(code_a_val == code_b);
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
@@ -313,9 +311,9 @@ typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator<(const basic::error::system::
     Code<TCategoryTrait>& code_a, const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_b_emum)
+    Code<TCategoryTrait>::SetValueType& code_b_val)
 {
-    return code_a.Value() < code_b_emum;
+    return code_a.Value() < code_b_val;
 }
 
 template<typename TCategoryTrait>
@@ -330,10 +328,10 @@ template<typename TCategoryTrait>
 typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator<(const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_a_emum, const basic::error::system::
-    Code<TCategoryTrait>& code_b)
+    Code<TCategoryTrait>::SetValueType& code_a_emum, 
+    const basic::error::system::Code<TCategoryTrait>& code_b)
 {
-    return code_a_emum < code_b.Value();
+    return code_a_val < code_b.Value();
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
@@ -358,9 +356,9 @@ typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator>(const basic::error::system::
     Code<TCategoryTrait>& code_a, const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_b_emum)
+    Code<TCategoryTrait>::SetValueType& code_b_val)
 {
-    return code_a.Value() > code_b_emum;
+    return code_a.Value() > code_b_val;
 }
 
 template<typename TCategoryTrait>
@@ -375,10 +373,10 @@ template<typename TCategoryTrait>
 typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator>(const typename basic::error::system::
-    Code<TCategoryTrait>::EnumType& code_a_emum, const basic::error::system::
-    Code<TCategoryTrait>& code_b)
+    Code<TCategoryTrait>::SetValueType& code_a_val, 
+    const basic::error::system::Code<TCategoryTrait>& code_b)
 {
-    return code_a_emum > code_b.Value();
+    return code_a_val > code_b.Value();
 }
 
 template<typename TChar, typename TCharTraits, typename TCategoryTrait>
