@@ -1,76 +1,68 @@
 #ifndef BASIC_ERROR_IDENTIFICATION_H_
 #define BASIC_ERROR_IDENTIFICATION_H_
 
-#include <cstdint>
+#include "id/Record.h"
+
+#include <utility>
 
 namespace basic
 {
 namespace error
 {
-namespace id
-{
 
-typedef uint32_t NumberType;
-
-namespace number
-{
-
-typedef uint16_t ErrorType;
-
-}
-
-} //!id
-
-class Identification
+template<typename TRecord = id::Record>
+class Identification : public TRecord
 {
 public:
-    const struct
-    {
-        uint8_t Default : 1;
-        uint8_t Standard : 1;
-        uint8_t Catch : 1;
-
-    } Flag;
-    const id::number::ErrorType Error;
+    typedef TRecord RecordType;
+    typedef typename RecordType::ErrorType ErrorType;
+    typedef typename RecordType::SystemErrorType SystemErrorType;
 public:
-    constexpr Identification();
-    constexpr Identification(const id::number::ErrorType& id_error);
-protected:
-    constexpr Identification(const uint8_t& is_default, 
-        const uint8_t& is_standard, const uint8_t& is_catch, 
-        const id::number::ErrorType& id_error);
+    constexpr Identification() noexcept;
+    constexpr Identification(const RecordType& rec) noexcept;
 public:
-    constexpr Identification(const Identification& cpy);
-    constexpr Identification(Identification&& mov);
+    Identification(const Identification<TRecord>& cpy) noexcept;
+    Identification(Identification<TRecord>&& mov) noexcept;
+public:
+    ErrorType Error() const noexcept;
+    SystemErrorType SystemError() const noexcept;
 };
 
-constexpr Identification::Identification() :
-    Flag{1, 1, 1},
-    Error{static_cast<id::number::ErrorType>(-1)}
+template<typename TRecord>
+constexpr Identification<TRecord>::Identification() noexcept :
 {}
 
-constexpr Identification::
-    Identification(const id::number::ErrorType& id_error) :
-        Flag{0, 0, 0},
-        Error{id_error}
+template<typename TRecord>
+constexpr Identification<TRecord>::Identification(const RecordType& rec) 
+    noexcept :
+        RecordType(rec)
 {}
 
-constexpr Identification::Identification(const uint8_t& is_default, 
-    const uint8_t& is_standard, const uint8_t& is_catch,
-    const id::number::ErrorType& id_error) :
-        Flag{is_default, is_standard, is_catch},
-        Error{id_error}
+template<typename TRecord>
+Identification<TRecord>::Identification(const Identification<TRecord>& cpy) 
+    noexcept :
+        RecordType(cpy)
 {}
 
-Identification::Identification(const Identification& cpy) :
-    Flag{cpy.Flag},
-    Error{cpy.Error}
+template<typename TRecord>
+Identification<TRecord>::Identification(Identification<TRecord>&& mov) 
+    noexcept :
+        RecordType(std::move(RecordType))
 {}
 
-Identification::Identification(Identification&& mov) :
-    Flag{mov.Flag},
-    Error{mov.Error}
-{}
+template<typename TRecord>
+typename Identification<TRecord>::ErrorType 
+Identification<TRecord>::Error() const noexcept
+{
+    return std::move(RecordType::Error());
+}
+
+template<typename TRecord>
+typename Identification<TRecord>::SystemErrorType 
+Identification<TRecord>::SystemError() const noexcept
+{
+    return std::move(RecordType::SystemError());
+}
 
 } //!error
 
