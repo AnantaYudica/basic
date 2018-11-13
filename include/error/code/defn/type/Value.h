@@ -14,7 +14,7 @@ namespace defn
 namespace type
 {
 
-using Value = BASIC_ERROR_CODE_TYPE;
+using Value = BASIC_ERROR_CODE_VALUE_TYPE;
 
 } //!type
 
