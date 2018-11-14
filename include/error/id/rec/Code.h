@@ -12,46 +12,46 @@ namespace id
 namespace rec
 {
 
-template<typename TErrorCodeValue, typename TSystemErrorCodeValue>
+template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
 union Code
 {
     TErrorCodeValue Error;
-    TSystemErrorCodeValue SystemError;
+    TErrorSystemCodeValue ErrorSystem;
     constexpr Code() noexcept;
     constexpr Code(const TErrorCodeValue& error, 
-        const TSystemErrorCodeValue& system_error) noexcept;
+        const TErrorSystemCodeValue& error_system) noexcept;
     constexpr Code(const Code<TErrorCodeValue, 
-        TSystemErrorCodeValue>& cpy) noexcept;
+        TErrorSystemCodeValue>& cpy) noexcept;
     constexpr Code(Code<TErrorCodeValue, 
-        TSystemErrorCodeValue>&& mov) noexcept;
+        TErrorSystemCodeValue>&& mov) noexcept;
 };
 
-template<typename TErrorCodeValue, typename TSystemErrorCodeValue>
-constexpr Code<TErrorCodeValue, TSystemErrorCodeValue>::Code() noexcept :
+template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::Code() noexcept :
     Error{0},
-    SystemError{0}
+    ErrorSystem{0}
 {}
 
-template<typename TErrorCodeValue, typename TSystemErrorCodeValue>
-constexpr Code<TErrorCodeValue, TSystemErrorCodeValue>::
+template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::
     Code(const TErrorCodeValue& error, 
-        const TSystemErrorCodeValue& system_error) noexcept :
+        const TErrorSystemCodeValue& error_system) noexcept :
             Error{error},
-            SystemError{SystemError | system_error}
+            ErrorSystem{ErrorSystem | error_system}
 {}
 
-template<typename TErrorCodeValue, typename TSystemErrorCodeValue>
-constexpr Code<TErrorCodeValue, TSystemErrorCodeValue>::
-    Code(const Code<TErrorCodeValue, TSystemErrorCodeValue>& cpy) noexcept :
+template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::
+    Code(const Code<TErrorCodeValue, TErrorSystemCodeValue>& cpy) noexcept :
         Error{cpy.Error},
-        SystemError{SystemError | cpy.SystemError}
+        ErrorSystem{ErrorSystem | cpy.ErrorSystem}
 {}
 
-template<typename TErrorCodeValue, typename TSystemErrorCodeValue>
-constexpr Code<TErrorCodeValue, TSystemErrorCodeValue>::
-    Code(Code<TErrorCodeValue, TSystemErrorCodeValue>&& mov) noexcept :
+template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::
+    Code(Code<TErrorCodeValue, TErrorSystemCodeValue>&& mov) noexcept :
         Error{mov.Error},
-        SystemError{SystemError | mov.SystemError}
+        ErrorSystem{ErrorSystem | mov.ErrorSystem}
 {}
 
 } //!rec
