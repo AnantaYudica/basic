@@ -40,8 +40,11 @@ public:
     constexpr Flag(const flag::System&) noexcept;
     constexpr Flag(const flag::System&, const flag::Standard&) noexcept;
     constexpr Flag(const flag::Catch&) noexcept;
-    constexpr Flag(const flag::Catch&, const Flag& flag) noexcept;
     constexpr Flag(const flag::Catch&, const flag::Standard&) noexcept;
+    constexpr Flag(const flag::Catch&, const flag::System&) noexcept;
+    constexpr Flag(const flag::Catch&, const flag::System&, 
+        const flag::Standard&) noexcept;
+    constexpr Flag(const flag::Catch&, const Flag& flag) noexcept;
     constexpr Flag(const flag::Catch&, const flag::Standard&, 
         const Flag& flag) noexcept;
 public:
@@ -123,20 +126,37 @@ constexpr Flag::Flag(const flag::Catch&) noexcept :
     m_system(std::uint8_t(0))
 {}
 
-constexpr Flag::Flag(const flag::Catch& catch_, const Flag& flag) noexcept :
-    m_default(flag.m_default),
-    m_bad(IsBadFlag(catch_, flag)),
-    m_standard(flag.m_standard),
-    m_catch(std::uint8_t(1)),
-    m_system(flag.m_system)
-{}
-
 constexpr Flag::Flag(const flag::Catch&, const flag::Standard&) noexcept :
     m_default(std::uint8_t(0)),
     m_bad(std::uint8_t(0)),
     m_standard(std::uint8_t(1)),
     m_catch(std::uint8_t(1)),
     m_system(std::uint8_t(0))
+{}
+
+constexpr Flag::Flag(const flag::Catch&, const flag::System&) noexcept :
+    m_default(std::uint8_t(0)),
+    m_bad(std::uint8_t(0)),
+    m_standard(std::uint8_t(0)),
+    m_catch(std::uint8_t(1)),
+    m_system(std::uint8_t(1))
+{}
+
+constexpr Flag::Flag(const flag::Catch&, const flag::System&, 
+    const flag::Standard&) noexcept  :
+        m_default(std::uint8_t(0)),
+        m_bad(std::uint8_t(0)),
+        m_standard(std::uint8_t(1)),
+        m_catch(std::uint8_t(1)),
+        m_system(std::uint8_t(1))
+{}
+
+constexpr Flag::Flag(const flag::Catch& catch_, const Flag& flag) noexcept :
+    m_default(flag.m_default),
+    m_bad(IsBadFlag(catch_, flag)),
+    m_standard(flag.m_standard),
+    m_catch(std::uint8_t(1)),
+    m_system(flag.m_system)
 {}
 
 constexpr Flag::Flag(const flag::Catch& catch_, const flag::Standard&,
