@@ -1,7 +1,10 @@
 #ifndef BASIC_ERROR_IDENTIFICATION_H_
 #define BASIC_ERROR_IDENTIFICATION_H_
 
-#include "id/Record.h"
+#include "../system/defn/type/category/Value.h"
+#include "../system/defn/type/code/Value.h"
+#include "id/defn/type/Record.h"
+#include "id/Flag.h"
 
 #include <utility>
 
@@ -10,58 +13,122 @@ namespace basic
 namespace error
 {
 
-template<typename TRecord = id::Record>
-class Identification : public TRecord
+class Identification : public id::Flag
 {
 public:
-    typedef TRecord RecordType;
+    typedef error::code::defn::type::Value CodeValueType;
+    typedef error::system::defn::type::category::Value SystemCategoryValueType;
+    typedef error::system::defn::type::code::Value SystemCodeValueType;
+public:
+    typedef id::defn::type::Record RecordType;
     typedef typename RecordType::ErrorType ErrorType;
-    typedef typename RecordType::SystemErrorType SystemErrorType;
+    typedef typename RecordType::ErrorSystemType ErrorSystemType;
+private:
+    RecordType m_record;
 public:
     constexpr Identification() noexcept;
-    constexpr Identification(const RecordType& rec) noexcept;
+    constexpr Identification(const CodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Standard&, 
+        const CodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::System&, 
+        const SystemCategoryValueType& category, 
+        const SystemCodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::System&, 
+        const id::flag::Standard&, const SystemCategoryValueType& category, 
+        const SystemCodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, 
+        const CodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, 
+        const Identification& id) noexcept;
+    constexpr Identification(const id::flag::Catch&, 
+        const id::flag::Standard&, const CodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, 
+        const id::flag::Standard&, const Identification& id) noexcept;
 public:
-    Identification(const Identification<TRecord>& cpy) noexcept;
-    Identification(Identification<TRecord>&& mov) noexcept;
+    Identification(const Identification& cpy) noexcept;
+    Identification(Identification&& mov) noexcept;
 public:
     ErrorType Error() const noexcept;
-    SystemErrorType SystemError() const noexcept;
+    ErrorSystemType ErrorSystem() const noexcept;
 };
 
-template<typename TRecord>
-constexpr Identification<TRecord>::Identification() noexcept :
+constexpr Identification::Identification() noexcept :
+    id::Flag(),
+    m_record()
 {}
 
-template<typename TRecord>
-constexpr Identification<TRecord>::Identification(const RecordType& rec) 
+constexpr Identification::Identification(const CodeValueType& code_val) 
     noexcept :
-        RecordType(rec)
+        id::Flag(id::flag::Error{}),
+        m_record(code_val)
 {}
 
-template<typename TRecord>
-Identification<TRecord>::Identification(const Identification<TRecord>& cpy) 
+constexpr Identification::Identification(const id::flag::Standard& standard, 
+    const CodeValueType& code_val) noexcept :
+        id::Flag(id::flag::Error{}, standard),
+        m_record(code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::System& system, 
+    const SystemCategoryValueType& category, 
+    const SystemCodeValueType& code_val) noexcept :
+        id::Flag(system),
+        m_record(system, category, code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::System& system, 
+    const id::flag::Standard& standard, 
+    const SystemCategoryValueType& category, 
+    const SystemCodeValueType& code_val) noexcept :
+        id::Flag(system, standard),
+        m_record(system, category, code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const CodeValueType& code_val) noexcept :
+        id::Flag(catch_),
+        m_record(code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const Identification& id) noexcept :
+        id::Flag(catch_, id),
+        m_record(id.m_record)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const id::flag::Standard& standard, const CodeValueType& code_val) 
     noexcept :
-        RecordType(cpy)
+        id::Flag(catch_, standard),
+        m_record(code_val)
 {}
 
-template<typename TRecord>
-Identification<TRecord>::Identification(Identification<TRecord>&& mov) 
-    noexcept :
-        RecordType(std::move(RecordType))
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const id::flag::Standard& standard, const Identification& id) noexcept :
+        id::Flag(catch_, standard, id),
+        m_record(id.m_record)
 {}
 
-template<typename TRecord>
-typename Identification<TRecord>::ErrorType 
-Identification<TRecord>::Error() const noexcept
+Identification::Identification(const Identification& cpy) noexcept :
+    id::Flag(cpy),
+    m_record(cpy.m_record)
+{}
+
+Identification::Identification(Identification&& mov) noexcept :
+    id::Flag(std::move(mov)),
+    m_record(std::move(mov.m_record))
+{}
+
+typename Identification::ErrorType 
+Identification::Error() const noexcept
 {
-    return std::move(RecordType::Error());
+    return std::move(m_record.Error());
 }
 
-template<typename TRecord>
-typename Identification<TRecord>::SystemErrorType 
-Identification<TRecord>::SystemError() const noexcept
+typename Identification::ErrorSystemType 
+Identification::ErrorSystem() const noexcept
 {
-    return std::move(RecordType::SystemError());
+    return std::move(m_record.ErrorSystem());
 }
 
 } //!error
