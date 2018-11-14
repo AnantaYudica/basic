@@ -31,17 +31,24 @@ public:
     constexpr Identification(const id::flag::Standard&, 
         const CodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::System&, 
-        const SystemCategoryValueType& category, 
+        const SystemCategoryValueType& category_val, 
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::System&, 
-        const id::flag::Standard&, const SystemCategoryValueType& category, 
+        const id::flag::Standard&, const SystemCategoryValueType& category_val, 
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const CodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
-        const Identification& id) noexcept;
-    constexpr Identification(const id::flag::Catch&, 
         const id::flag::Standard&, const CodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, const id::flag::System&, 
+        const SystemCategoryValueType& category_val,
+        const SystemCodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, const id::flag::System&, 
+        const id::flag::Standard&,
+        const SystemCategoryValueType& category_val,
+        const SystemCodeValueType& code_val) noexcept;
+    constexpr Identification(const id::flag::Catch&, 
+        const Identification& id) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const id::flag::Standard&, const Identification& id) noexcept;
 public:
@@ -70,18 +77,33 @@ constexpr Identification::Identification(const id::flag::Standard& standard,
 {}
 
 constexpr Identification::Identification(const id::flag::System& system, 
-    const SystemCategoryValueType& category, 
+    const SystemCategoryValueType& category_val, 
     const SystemCodeValueType& code_val) noexcept :
         id::Flag(system),
-        m_record(system, category, code_val)
+        m_record(system, category_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::System& system, 
     const id::flag::Standard& standard, 
-    const SystemCategoryValueType& category, 
+    const SystemCategoryValueType& category_val, 
     const SystemCodeValueType& code_val) noexcept :
         id::Flag(system, standard),
-        m_record(system, category, code_val)
+        m_record(system, category_val, code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const id::flag::System& system, const SystemCategoryValueType& category_val,
+    const SystemCodeValueType& code_val) noexcept :
+        id::Flag(catch_, system),
+        m_record(system, category_val, code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const id::flag::System& system, const id::flag::Standard& standard,
+    const SystemCategoryValueType& category_val,
+    const SystemCodeValueType& code_val) noexcept :
+        id::Flag(catch_, system, standard),
+        m_record(system, category_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
@@ -91,16 +113,16 @@ constexpr Identification::Identification(const id::flag::Catch& catch_,
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
-    const Identification& id) noexcept :
-        id::Flag(catch_, id),
-        m_record(id.m_record)
-{}
-
-constexpr Identification::Identification(const id::flag::Catch& catch_, 
     const id::flag::Standard& standard, const CodeValueType& code_val) 
     noexcept :
         id::Flag(catch_, standard),
         m_record(code_val)
+{}
+
+constexpr Identification::Identification(const id::flag::Catch& catch_, 
+    const Identification& id) noexcept :
+        id::Flag(catch_, id),
+        m_record(id.m_record)
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
