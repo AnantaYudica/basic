@@ -1,7 +1,9 @@
-#ifndef BASIC_ERROR_IDENTIFICATION_STANDARD_H_
-#define BASIC_ERROR_IDENTIFICATION_STANDARD_H_
+#ifndef BASIC_ERROR_ID_STANDARD_H_
+#define BASIC_ERROR_ID_STANDARD_H_
 
 #include "../Identification.h"
+#include "../code/defn/type/Value.h"
+#include "Flag.h"
 
 #include <utility>
 
@@ -15,11 +17,13 @@ namespace id
 class Standard : public Identification
 {
 public:
-    constexpr Standard();
-    constexpr Standard(const Identification& id);
+    typedef code::defn::type::Value CodeValueType;
 public:
-    Standard(const Standard& cpy);
-    Standard(Standard&& mov);
+    constexpr Standard() noexcept;
+    constexpr Standard(const CodeValueType& code_val) noexcept;
+public:
+    Standard(const Standard& cpy) noexcept;
+    Standard(Standard&& mov) noexcept;
 public:
     ~Standard();
 public:
@@ -27,20 +31,23 @@ public:
     Standard& operator=(Standard&&) = delete;
 };
 
-constexpr Standard::Standard() :
+constexpr Standard::Standard() noexcept :
     Identification()
 {}
 
-constexpr Standard::Standard(const Identification& id) :
-    Identification(id.Flag.Default, 1, id.Flag.Catch, id.Error)
+constexpr Standard::Standard(const CodeValueType& code_val) noexcept :
+    Identification(flag::Standard(), code_val)
 {}
 
-Standard::Standard(const Standard& cpy) :
+Standard::Standard(const Standard& cpy) noexcept :
     Identification(cpy)
 {}
 
-Standard::Standard(Standard&& mov) :
+Standard::Standard(Standard&& mov) noexcept :
     Identification(std::move(mov))
+{}
+
+Standard::~Standard()
 {}
 
 } //!id
@@ -49,4 +56,4 @@ Standard::Standard(Standard&& mov) :
 
 } //!basic
 
-#endif //!BASIC_ERROR_IDENTIFICATION_STANDARD_H_
+#endif //!BASIC_ERROR_ID_STANDARD_H_
