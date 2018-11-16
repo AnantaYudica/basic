@@ -16,6 +16,8 @@ namespace error
 class Identification : public id::Flag
 {
 public:
+    typedef id::Flag FlagType;
+public:
     typedef error::code::defn::type::Value CodeValueType;
     typedef error::system::defn::type::category::Value SystemCategoryValueType;
     typedef error::system::defn::type::code::Value SystemCodeValueType;
@@ -66,13 +68,13 @@ constexpr Identification::Identification() noexcept :
 
 constexpr Identification::Identification(const CodeValueType& code_val) 
     noexcept :
-        id::Flag(id::flag::Error{}),
+        id::Flag(id::flag::Error()),
         m_record(code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::Standard& standard, 
     const CodeValueType& code_val) noexcept :
-        id::Flag(id::flag::Error{}, standard),
+        id::Flag(id::flag::Error(), standard),
         m_record(code_val)
 {}
 
