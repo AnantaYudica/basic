@@ -41,9 +41,9 @@ public:
         const ErrorSystemCategoryValueType& error_system_category_val, 
         const ErrorSystemCodeValueType& error_system_code_val) noexcept;
 public:
-    Record(const Record<TErrorCodeValue, TErrorSystemCategoryValue,
+    constexpr Record(const Record<TErrorCodeValue, TErrorSystemCategoryValue,
         TErrorSystemCodeValue>& cpy) noexcept;
-    Record(Record<TErrorCodeValue, TErrorSystemCategoryValue,
+    constexpr Record(Record<TErrorCodeValue, TErrorSystemCategoryValue,
         TErrorSystemCodeValue>&& mov) noexcept;
 public:
     ErrorType Error() const noexcept;
@@ -79,7 +79,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
     typename TErrorSystemCodeValue>
-Record<TErrorCodeValue, TErrorSystemCategoryValue,
+constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue>& cpy) noexcept :
             m_errorSystemCategoryValue(cpy.m_errorSystemCategoryValue),
@@ -88,7 +88,7 @@ Record<TErrorCodeValue, TErrorSystemCategoryValue,
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
     typename TErrorSystemCodeValue>
-Record<TErrorCodeValue, TErrorSystemCategoryValue,
+constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue>&& mov) noexcept :
             m_errorSystemCategoryValue(std::move(mov.
