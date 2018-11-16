@@ -25,8 +25,6 @@ public:
     Standard(const Standard& cpy) noexcept;
     Standard(Standard&& mov) noexcept;
 public:
-    ~Standard();
-public:
     Standard& operator=(const Standard&) = delete;
     Standard& operator=(Standard&&) = delete;
 };
@@ -45,9 +43,6 @@ Standard::Standard(const Standard& cpy) noexcept :
 
 Standard::Standard(Standard&& mov) noexcept :
     Identification(std::move(mov))
-{}
-
-Standard::~Standard()
 {}
 
 } //!id
