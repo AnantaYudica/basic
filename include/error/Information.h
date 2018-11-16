@@ -2,7 +2,7 @@
 #define BASIC_ERROR_INFORMATION_H_
 
 #include "Identification.h"
-#include "id/Number.h"
+#include "id/ToBytes.h"
 #include "../Error.h"
 
 #include <ostream>
@@ -86,8 +86,11 @@ std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar,
     if (!info.GetIdentification().Flag.Default)
     {
         if (!info.GetIdentification().Flag.Catch)
-            out << "code " << 
-                basic::error::id::Number(info.GetIdentification());
+        {
+            const auto flags = out.flags();
+            out << std::hex << std::uppercase;
+            out << "code " << info.GetIdentification();
+        }
         else
             out << "\nin catch";
         out << " file " << info.GetFile();
