@@ -5,8 +5,12 @@
 #include "../system/defn/type/code/Value.h"
 #include "id/defn/type/Record.h"
 #include "id/Flag.h"
+#include "id/Size.h"
+#include "id/ToBytes.h"
 
 #include <utility>
+#include <ostream>
+#include <iomanip>
 
 namespace basic
 {
@@ -36,7 +40,7 @@ public:
         const SystemCategoryValueType& category_val, 
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::System&, 
-        const id::flag::Standard&, const SystemCategoryValueType& category_val, 
+        const id::flag::Standard&, const SystemCategoryValueType& category_val,
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const CodeValueType& code_val) noexcept;
@@ -94,7 +98,8 @@ constexpr Identification::Identification(const id::flag::System& system,
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
-    const id::flag::System& system, const SystemCategoryValueType& category_val,
+    const id::flag::System& system, 
+    const SystemCategoryValueType& category_val,
     const SystemCodeValueType& code_val) noexcept :
         id::Flag(catch_, system),
         m_record(system, category_val, code_val)
@@ -158,5 +163,22 @@ Identification::ErrorSystem() const noexcept
 } //!error
 
 } //!basic
+
+template<typename TChar, typename TCharTraits>
+std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar, 
+    TCharTraits>& out, const basic::error::Identification& id)
+{
+    const auto flags = out.flags();
+    out << std::hex << std::uppercase;
+    out << "0x";
+    std::uint8_t bytes[id::Size<basic::error::Identification>()];
+    id::ToBytes(id, bytes);
+    for (size_t i = 0; i < id::Size<basic::error::Identification>(); i++)
+    {
+        out << std::setfill('0') << std::setw(2);
+        out << (int)bytes[i];
+    }
+    out.setf(flags);
+}
 
 #endif //!BASIC_ERROR_IDENTIFICATION_H_
