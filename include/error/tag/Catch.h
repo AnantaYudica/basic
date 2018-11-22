@@ -8,10 +8,7 @@
 #define BASIC_ERROR_TAG_CATCH_H_
 
 #include "Trigger.h"
-#include "Standard.h"
-#include "../Identification.h"
 #include "../id/Catch.h"
-#include "../Information.h"
 
 #include <ostream>
 #include <exception>
@@ -23,16 +20,16 @@ namespace error
 namespace tag
 {
 
-template<typename TError = Error<error::tag::Trigger>>
+template<typename TTrigger = Error<error::tag::Trigger>>
 struct Catch {};
 
 } //!tag
 
 } //!error
 
-template<typename TError>
-class Error<error::tag::Catch<TError>> : 
-    public Error<error::tag::Trigger>
+template<typename TTrigger>
+class Error<error::tag::Catch<TTrigger>> : 
+    public virtual Error<error::tag::Trigger>
 {
 public:
     typedef Error<error::tag::Trigger> BaseType;
@@ -41,44 +38,50 @@ public:
     typedef BASIC_ERROR_CHARTRAIT_TYPE CharTraitType;
     typedef BASIC_ERROR_OUTPUT_TYPE OutputType;
 private:
-    TError m_error;
+    TTrigger m_trigger;
 public:
-    Error();
-    Error(const TError& err, const char* file, 
-        const std::size_t& line);
+    Error() noexcept;
+    Error(const TTrigger& trigger, const error::id::Catch& id, 
+        const char* file, const std::size_t& line) noexcept;
 public:
-    Error(const Error<error::tag::Catch<TError>>& cpy);
-    Error(Error<error::tag::Catch<TError>>&& mov);
-public:
-    ~Error();
+    Error(const Error<error::tag::Catch<TTrigger>>& cpy) noexcept;
+    Error(Error<error::tag::Catch<TTrigger>>&& mov) noexcept;
 public:
     Error<error::tag::Catch>& 
         operator=(const Error<error::tag::Catch>&) = delete;
     Error<error::tag::Catch>& 
         operator=(Error<error::tag::Catch>&&) = delete;
 public:
-    const TError& GetError() const;
+    OutputType& Message(OutputType& out) const noexcept;
+public:
+    const TTrigger& Trigger() const noexcept;
 };
 
-template<typename TError>
-Error<error::tag::Catch<TError>>::Error() :
+template<typename TTrigger>
+Error<error::tag::Catch<TTrigger>>::Error() noexcept :
     BaseType(),
     m_trigger()
 {}
 
-template<typename TError>
-Error<error::tag::Catch<TError>>::Error(const TError& err,
-    const char* file, const std::size_t& line) :
-        m_trigger(err),
-        BaseType(error::id::Catch(error::id::Get(err)), file, line),
+template<typename TTrigger>
+Error<error::tag::Catch<TTrigger>>::Error(const TTrigger& trigger, 
+    const error::id::Catch& id, const char* file, const std::size_t& line) 
+        noexcept :
+            m_trigger(err),
+            BaseType(id, file, line),
 {}
 
-template<typename TError>
-Error<error::tag::Catch<TError>>::~Error()
-{}
+template<typename TTrigger>
+typename Error<error::tag::Catch<TTrigger>>::OutputType& 
+    Error<error::tag::Catch<TTrigger>>::Message(OutputType& out) const noexcept
+{
+    BASIC_ERROR_OUTPUT_OPERATOR(out, "in catch ");
+    BASIC_ERROR_OUTPUT_OPERATOR(out, this->GetInformation());
+    return out;
+}
 
-template<typename TError>
-const TError& Error<error::tag::Catch<TError>>::GetError() const
+template<typename TTrigger>
+const TTrigger& Error<error::tag::Catch<TTrigger>>::Trigger() const noexcept
 {
     return m_trigger;
 }
