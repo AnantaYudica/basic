@@ -3,7 +3,6 @@
 
 #include "Identification.h"
 #include "id/ToBytes.h"
-#include "../Error.h"
 
 #include <ostream>
 #include <cstddef>
@@ -86,13 +85,7 @@ std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar,
     if (!info.GetIdentification().Flag.Default)
     {
         if (!info.GetIdentification().Flag.Catch)
-        {
-            const auto flags = out.flags();
-            out << std::hex << std::uppercase;
             out << "code " << info.GetIdentification();
-        }
-        else
-            out << "\nin catch";
         out << " file " << info.GetFile();
         out << " line " << info.GetLine();
     }
