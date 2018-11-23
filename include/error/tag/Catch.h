@@ -29,7 +29,7 @@ struct Catch {};
 
 template<typename TTrigger>
 class Error<error::tag::Catch<TTrigger>> : 
-    public virtual Error<error::tag::Trigger>
+    public Error<error::tag::Trigger>
 {
 public:
     typedef Error<error::tag::Trigger> BaseType;
