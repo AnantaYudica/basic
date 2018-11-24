@@ -1,9 +1,10 @@
 #ifndef BASIC_ERROR_IDENTIFICATION_H_
 #define BASIC_ERROR_IDENTIFICATION_H_
 
-#include "../system/defn/type/category/Value.h"
-#include "../system/defn/type/code/Value.h"
-#include "id/defn/type/Record.h"
+#include "defn/type/code/Value.h"
+#include "defn/type/system/category/Value.h"
+#include "defn/type/system/code/Value.h"
+#include "defn/type/id/Record.h"
 #include "id/Flag.h"
 #include "id/Size.h"
 #include "id/ToBytes.h"
@@ -22,11 +23,11 @@ class Identification : public id::Flag
 public:
     typedef id::Flag FlagType;
 public:
-    typedef error::code::defn::type::Value CodeValueType;
-    typedef error::system::defn::type::category::Value SystemCategoryValueType;
-    typedef error::system::defn::type::code::Value SystemCodeValueType;
+    typedef defn::type::code::Value CodeValueType;
+    typedef defn::type::system::category::Value SystemCategoryValueType;
+    typedef defn::type::system::code::Value SystemCodeValueType;
 public:
-    typedef id::defn::type::Record RecordType;
+    typedef defn::type::id::Record RecordType;
     typedef typename RecordType::ErrorType ErrorType;
     typedef typename RecordType::ErrorSystemType ErrorSystemType;
 private:
@@ -171,9 +172,10 @@ std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar,
     const auto flags = out.flags();
     out << std::hex << std::uppercase;
     out << "0x";
-    std::uint8_t bytes[id::Size<basic::error::Identification>()];
-    id::ToBytes(id, bytes);
-    for (size_t i = 0; i < id::Size<basic::error::Identification>(); i++)
+    std::uint8_t bytes[basic::error::id::Size<basic::error::Identification>()];
+    basic::error::id::ToBytes(id, bytes);
+    for (size_t i = 0; i < basic::error::id::
+        Size<basic::error::Identification>(); i++)
     {
         out << std::setfill('0') << std::setw(2);
         out << (int)bytes[i];
