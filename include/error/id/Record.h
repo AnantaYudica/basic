@@ -64,7 +64,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::
         Record(const ErrorCodeValueType& error_code_val) noexcept :
             m_errorSystemCategoryValue{0},
-            m_codeValue(error_code_val, 0)
+            m_codeValue(error_code_val)
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
@@ -74,7 +74,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
         const ErrorSystemCategoryValueType& error_system_category_val, 
         const ErrorSystemCodeValueType& error_system_code_val) noexcept :
             m_errorSystemCategoryValue{error_system_category_val},
-            m_codeValue(0, error_system_code_val)
+            m_codeValue(error_system_code_val)
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
