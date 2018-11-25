@@ -22,7 +22,7 @@ typename std::enable_if<has::st::mmbr::func::Instance<TCategoryTrait>::Value,
 }
 
 template<typename TCategoryTrait>
-typename std::enable_if<has::st::mmbr::func::Instance<TCategoryTrait>::Value,
+typename std::enable_if<!has::st::mmbr::func::Instance<TCategoryTrait>::Value,
     TCategoryTrait>::type Instance() noexcept
 {
     return {};
