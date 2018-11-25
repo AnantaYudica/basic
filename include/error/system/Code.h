@@ -37,7 +37,7 @@ class Code;
 #define BASIC_ERROR_SYSTEM_CODE_H_
 
 #include "../../Error.h"
-#include "defn/type/Code/Value.h"
+#include "../defn/type/system/code/Value.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 
 #include <utility>
@@ -57,10 +57,10 @@ class Code
 public:
     typedef TCategoryTrait CategoryTraitType;
 public:
-    typedef system::defn::type::code::Value ValueType;
+    typedef defn::type::system::code::Value ValueType;
 public:
-    typedef typename Category<TCategoryTrait> CategoryType;
-    typedef typename Condition<TCategoryTrait> ConditionType;
+    typedef Category<TCategoryTrait> CategoryType;
+    typedef Condition<TCategoryTrait> ConditionType;
 public:
     typedef typename CategoryType::CodeSetValueType SetValueType;
 public:
@@ -328,7 +328,7 @@ template<typename TCategoryTrait>
 typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
     CodeEnum<TCategoryTrait>::Value, bool>::type
 operator<(const typename basic::error::system::
-    Code<TCategoryTrait>::SetValueType& code_a_emum, 
+    Code<TCategoryTrait>::SetValueType& code_a_val, 
     const basic::error::system::Code<TCategoryTrait>& code_b)
 {
     return code_a_val < code_b.Value();

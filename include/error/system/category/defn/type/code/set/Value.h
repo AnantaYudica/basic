@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYSTEM_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
 #define BASIC_ERROR_SYSTEM_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
 
-#include "../../../../../defn/type/code/Value.h"
+#include "../../../../../../defn/type/system/code/Value.h"
 
 #include "../../../../has/mmbr/defn/type/CodeEnum.h"
 
@@ -28,7 +28,7 @@ template<typename TCategoryTrait, bool = basic::error::system::category::has::
     mmbr::defn::type::CodeEnum<TCategoryTrait>::Value>
 struct _Value
 {
-    typedef basic::error::system::defn::type::code::Value Type;
+    typedef basic::error::defn::type::system::code::Value Type;
 };
 
 template<typename TCategoryTrait>

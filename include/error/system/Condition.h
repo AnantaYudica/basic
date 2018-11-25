@@ -37,7 +37,7 @@ class Condition;
 #define BASIC_ERROR_SYSTEM_CONDITION_H_
 
 #include "../../Error.h"
-#include "defn/type/Condition/Value.h"
+#include "../defn/type/system/Condition/Value.h"
 #include "category/has/mmbr/defn/type/ConditionEnum.h"
 
 #include <utility>
@@ -57,10 +57,10 @@ class Condition
 public:
     typedef TCategoryTrait CategoryTraitType;
 public:
-    typedef system::defn::type::condition::Value ValueType;
+    typedef defn::type::system::condition::Value ValueType;
 public:
-    typedef typename Category<TCategoryTrait> CategoryType;
-    typedef typename Condition<TCategoryTrait> CodeType;
+    typedef Category<TCategoryTrait> CategoryType;
+    typedef Code<TCategoryTrait> CodeType;
 public:
     typedef typename CategoryType::ConditionSetValueType SetValueType;
 public:

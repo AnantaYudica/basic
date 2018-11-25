@@ -37,9 +37,9 @@ class Category;
 #define BASIC_ERROR_SYSTEM_CATEGORY_H_
 
 #include "../../Error.h"
-#include "defn/type/category/Value.h"
-#include "defn/type/Code/Value.h"
-#include "defn/type/Condition/Value.h"
+#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/code/Value.h"
+#include "../defn/type/system/condition/Value.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
 #include "category/DefaultCode.h"
@@ -68,17 +68,17 @@ class Category
 public:
     typedef TCategoryTrait TraitType;
 public:
-    typedef system::defn::type::category::Value ValueType;
-    typedef system::defn::type::code::Value CodeValueType;
-    typedef system::defn::type::condition ConditionValueType;
+    typedef defn::type::system::category::Value ValueType;
+    typedef defn::type::system::code::Value CodeValueType;
+    typedef defn::type::system::condition::Value ConditionValueType;
 public:
     typedef typename category::defn::type::code::set::
         Value<TCategoryTrait>::Type CodeSetValueType;
     typedef typename category::defn::type::condition::set::
         Value<TCategoryTrait>::Type ConditionSetValueType;
 public:
-    typedef typename Code<TCategoryTrait> CodeType;
-    typedef typename Condition<TCategoryTrait> ConditionType;
+    typedef Code<TCategoryTrait> CodeType;
+    typedef Condition<TCategoryTrait> ConditionType;
 private:
     TraitType m_trait;
 public:
@@ -198,7 +198,7 @@ template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeType& code,
     const ConditionValueType& cond_val) const noexcept
 {
-    return category::Equivalent(m_trait, code_val, cond);
+    return category::Equivalent(m_trait, code, cond_val);
 }
 
 template<typename TCategoryTrait>

@@ -1,9 +1,9 @@
 #ifndef BASIC_ERROR_ID_CATCH_H_
 #define BASIC_ERROR_ID_CATCH_H_
 
-#include "../code/defn/type/Value.h"
-#include "../system/defn/type/category/Value.h"
-#include "../system/defn/type/code/Value.h"
+#include "../defn/type/code/Value.h"
+#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/code/Value.h"
 #include "../Identification.h"
 #include "../id/Flag.h"
 
@@ -19,9 +19,9 @@ namespace id
 class Catch : public Identification
 {
 public:
-    typedef code::defn::type::Value CodeValueType;
-    typedef system::defn::type::category::Value SystemCategoryValueType;
-    typedef system::defn::type::code::Value SystemCodeValueType;
+    typedef defn::type::code::Value CodeValueType;
+    typedef defn::type::system::category::Value SystemCategoryValueType;
+    typedef defn::type::system::code::Value SystemCodeValueType;
 public:
     constexpr Catch() noexcept;
     constexpr Catch(const CodeValueType& code_val) noexcept;

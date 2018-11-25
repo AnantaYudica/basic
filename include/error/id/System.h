@@ -2,8 +2,8 @@
 #define BASIC_ERROR_ID_SYSTEM_H_
 
 #include "../Identification.h"
-#include "../system/defn/type/category/Value.h"
-#include "../system/defn/type/code/Value.h"
+#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/code/Value.h"
 #include "Flag.h"
 
 #include <utility>
@@ -18,8 +18,8 @@ namespace id
 class System : public Identification
 {
 public:
-    typedef system::defn::type::category::Value CategoryValueType;
-    typedef system::defn::type::code::Value CodeValueType;
+    typedef defn::type::system::category::Value CategoryValueType;
+    typedef defn::type::system::code::Value CodeValueType;
 public:
     constexpr System() noexcept;
     constexpr System(const CategoryValueType& category_val,
