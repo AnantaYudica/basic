@@ -15,12 +15,12 @@ namespace error
 class Information
 {
 private:
-    const Identification m_id;
+    const error::Identification m_id;
     const char* m_file;
     const std::size_t m_line;
 public:
     constexpr Information();
-    constexpr Information(const Identification& id, const char* file,
+    constexpr Information(const error::Identification& id, const char* file,
         const std::size_t& line);
 public:
     Information(const Information& cpy);
@@ -29,7 +29,7 @@ public:
     Information& operator=(const Information& cpy) = delete;
     Information& operator=(Information&& mov) = delete;
 public:
-    const Identification& GetIdentification() const;
+    const error::Identification& Identification() const;
     const char* GetFile() const;
     const std::size_t& GetLine() const;
 };
@@ -40,7 +40,7 @@ constexpr Information::Information() :
     m_line((std::size_t)-1)
 {}
 
-constexpr Information::Information(const Identification& id, 
+constexpr Information::Information(const error::Identification& id, 
     const char* file, const std::size_t& line) :
         m_id(id),
         m_file(file),
@@ -59,7 +59,7 @@ Information::Information(Information&& mov) :
     m_line(mov.m_line)
 {}
 
-const Identification& Information::GetIdentification() const
+const error::Identification& Information::Identification() const
 {
     return m_id;
 }
@@ -82,10 +82,10 @@ template<typename TChar, typename TCharTraits>
 std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar, 
     TCharTraits>& out, const basic::error::Information& info)
 {
-    if (!info.GetIdentification().Flag.Default)
+    if (!info.Identification().IsDefault())
     {
-        if (!info.GetIdentification().Flag.Catch)
-            out << "id " << info.GetIdentification();
+        if (!info.Identification().IsCatch())
+            out << "id " << info.Identification();
         out << " file " << info.GetFile();
         out << " line " << info.GetLine();
     }
