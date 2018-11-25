@@ -17,22 +17,9 @@ class Error{};
 #include <string>
 #include <cstdint>
 
-#ifndef BASIC_ERROR_CHAR_TYPE
-#define BASIC_ERROR_CHAR_TYPE char
-#endif //!BASIC_ERROR_CHAR_TYPE
-
-#ifndef BASIC_ERROR_CHARTRAIT_TYPE
-#define BASIC_ERROR_CHARTRAIT_TYPE std::char_traits<BASIC_ERROR_CHAR_TYPE>
-#endif //!BASIC_ERROR_CHARTRAIT_TYPE
-
 #ifndef BASIC_ERROR_OUTPUT
 #define BASIC_ERROR_OUTPUT std::cerr
 #endif //!BASIC_ERROR_OUTPUT
-
-#ifndef BASIC_ERROR_OUTPUT_TYPE
-#define BASIC_ERROR_OUTPUT_TYPE\
-    std::basic_ostream<BASIC_ERROR_CHAR_TYPE, BASIC_ERROR_CHARTRAIT_TYPE>
-#endif //!BASIC_ERROR_OUTPUT_TYPE
 
 #ifndef BASIC_ERROR_OUTPUT_OPERATOR
 #define BASIC_ERROR_OUTPUT_OPERATOR(OUTPUT_NAME, ARG,...)\
@@ -41,6 +28,7 @@ class Error{};
 
 #include "error/tag/Trigger.h"
 #include "error/tag/Catch.h"
+#include "error/tag/System.h"
 #include "Error.h"
 
 #else //else BASIC_ERROR_H__FORWARD_DECLARATION_
@@ -141,41 +129,6 @@ basic::Error<basic::error::tag::Output>(__VA_ARGS__)
 #endif //!USING_EXCEPTION
 
 #endif //!BASIC_ERROR_CATCH_OPERATOR
-
-#ifndef BASIC_ERROR_CODE_VALUE_TYPE
-
-#define BASIC_ERROR_CODE_VALUE_TYPE std::uint16_t
-
-#endif //!BASIC_ERROR_CODE_VALUE_TYPE
-
-#ifndef BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE
-
-#define BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE std::uint16_t
-
-#endif //!BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE
-
-#ifndef BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE
-
-#define BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE std::uint16_t
-
-#endif //!BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE
-
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE
-
-#define BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE std::uint8_t
-
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE
-
-#ifndef BASIC_ERROR_IDENTIFICATION_RECORD_TYPE
-
-#include "error/id/Record.h"
-
-#define BASIC_ERROR_IDENTIFICATION_RECORD_TYPE \
-    basic::error::id::Record<BASIC_ERROR_CODE_VALUE_TYPE,\
-        BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE,\
-        BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE>
-
-#endif //!BASIC_ERROR_IDENTIFICATION_RECORD_TYPE
 
 #endif //!BASIC_ERROR_H_
 
