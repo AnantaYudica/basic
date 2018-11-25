@@ -59,8 +59,8 @@ public:
     constexpr Identification(const id::flag::Catch&, 
         const id::flag::Standard&, const Identification& id) noexcept;
 public:
-    Identification(const Identification& cpy) noexcept;
-    Identification(Identification&& mov) noexcept;
+    constexpr Identification(const Identification& cpy) noexcept;
+    constexpr Identification(Identification&& mov) noexcept;
 public:
     ErrorType Error() const noexcept;
     ErrorSystemType ErrorSystem() const noexcept;
@@ -139,12 +139,12 @@ constexpr Identification::Identification(const id::flag::Catch& catch_,
         m_record(id.m_record)
 {}
 
-Identification::Identification(const Identification& cpy) noexcept :
+constexpr Identification::Identification(const Identification& cpy) noexcept :
     id::Flag(cpy),
     m_record(cpy.m_record)
 {}
 
-Identification::Identification(Identification&& mov) noexcept :
+constexpr Identification::Identification(Identification&& mov) noexcept :
     id::Flag(std::move(mov)),
     m_record(std::move(mov.m_record))
 {}
