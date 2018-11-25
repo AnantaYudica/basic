@@ -48,8 +48,8 @@ public:
     constexpr Flag(const flag::Catch&, const flag::Standard&, 
         const Flag& flag) noexcept;
 public:
-    Flag(const Flag& cpy) noexcept;
-    Flag(Flag&& mov) noexcept;
+    constexpr Flag(const Flag& cpy) noexcept;
+    constexpr Flag(Flag&& mov) noexcept;
 public:
     Flag& operator=(const Flag& cpy) = delete;
     Flag& operator=(Flag&& mov) = delete;
@@ -168,7 +168,7 @@ constexpr Flag::Flag(const flag::Catch& catch_, const flag::Standard&,
         m_system(flag.m_system)
 {}
 
-Flag::Flag(const Flag& cpy) noexcept :
+constexpr Flag::Flag(const Flag& cpy) noexcept :
     m_default(cpy.m_default),
     m_bad(cpy.m_bad),
     m_standard(cpy.m_standard),
@@ -176,19 +176,13 @@ Flag::Flag(const Flag& cpy) noexcept :
     m_system(cpy.m_system)
 {}
 
-Flag::Flag(Flag&& mov) noexcept :
+constexpr Flag::Flag(Flag&& mov) noexcept :
     m_default(mov.m_default),
     m_bad(mov.m_bad),
     m_standard(mov.m_standard),
     m_catch(mov.m_catch),
     m_system(mov.m_system)
-{
-    mov.m_default = std::uint8_t(1);
-    mov.m_bad = std::uint8_t(0);
-    mov.m_standard = std::uint8_t(0);
-    mov.m_catch = std::uint8_t(0);
-    mov.m_system = std::uint8_t(0);
-}
+{}
 
 Flag& Flag::operator=(const flag::Catch& catch_) noexcept
 {
