@@ -57,7 +57,7 @@ namespace func
 
 template<typename TCategoryTrait, typename TCondition, typename TCode>
 using DefaultCondition = _helper::_basic::_error::_system::_category::_has::
-    _mmbr::_func::_DefaultCondition<TCategoryTrait, TValue, const TCode&>;
+    _mmbr::_func::_DefaultCondition<TCategoryTrait, TCondition, const TCode&>;
 
 } //!func
 
