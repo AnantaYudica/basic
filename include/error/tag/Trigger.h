@@ -9,7 +9,9 @@
 
 #include "../Identification.h"
 #include "../Information.h"
-#include "../code/defn/type/Value.h"
+#include "../defn/type/Output.h"
+#include "../defn/type/code/Value.h"
+#include "../defn/type/Output.h"
 
 namespace basic
 {
@@ -28,13 +30,11 @@ template<>
 class Error<error::tag::Trigger>
 {
 public:
-    typedef BASIC_ERROR_CHAR_TYPE CharType;
-    typedef BASIC_ERROR_CHARTRAIT_TYPE CharTraitType;
-    typedef BASIC_ERROR_OUTPUT_TYPE OutputType;
+    typedef error::defn::type::Output OutputType;
 public:
     typedef error::Identification IdType;
 public:
-    typedef error::code::defn::type::Value CodeValueType;
+    typedef error::defn::type::code::Value CodeValueType;
 public:
     typedef error::Information InfoType;
 private:
@@ -92,7 +92,7 @@ const typename Error<error::tag::Trigger>::InfoType&
 typename Error<error::tag::Trigger>::CodeValueType
     Error<error::tag::Trigger>::Code() const noexcept
 {
-    return this->m_info.GetIdentification().Error().Code();
+    return this->m_info.Identification().Error().Code();
 }
 
 } //!basic
