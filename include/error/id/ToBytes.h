@@ -2,6 +2,7 @@
 #define BASIC_ERROR_ID_TOBYTES_H_
 
 #include "Size.h"
+#include "Flag.h"
 
 #include <cstring>
 #include <cstdint>
