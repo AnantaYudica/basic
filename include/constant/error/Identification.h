@@ -1,8 +1,8 @@
 #ifndef BASIC_CONSTANT_ERROR_IDENTIFICATION_H_
 #define BASIC_CONSTANT_ERROR_IDENTIFICATION_H_
 
+#include "../../error/defn/type/code/Value.h"
 #include "../../error/Identification.h"
-
 
 namespace basic
 {
@@ -11,9 +11,9 @@ namespace constant
 namespace error
 {
 
-enum : basic::error::id::number::ErrorType
+enum : basic::error::defn::type::code::Value
 {
-    undefined_id = static_cast<basic::error::id::number::ErrorType>(-1),
+    undefined_id = static_cast<basic::error::defn::type::code::Value>(-1),
     exception_id = 1,
     logic_id = 11,
     logic_invalid_id = 111,
