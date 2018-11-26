@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_CODE_H_
 #define BASIC_ERROR_CODE_H_
 
-#include "code/defn/type/Value.h"
+#include "defn/type/code/Value.h"
 
 #include <utility>
 
@@ -13,7 +13,7 @@ namespace error
 class Code
 {
 public:
-    typedef code::defn::type::Value CodeValueType;
+    typedef defn::type::code::Value CodeValueType;
 private:
     CodeValueType m_value;
 public:

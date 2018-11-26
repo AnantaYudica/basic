@@ -2,7 +2,7 @@
 #define BASIC_ERROR_ID_STANDARD_H_
 
 #include "../Identification.h"
-#include "../code/defn/type/Value.h"
+#include "../defn/type/code/Value.h"
 #include "Flag.h"
 
 #include <utility>
@@ -17,7 +17,7 @@ namespace id
 class Standard : public Identification
 {
 public:
-    typedef code::defn::type::Value CodeValueType;
+    typedef defn::type::code::Value CodeValueType;
 public:
     constexpr Standard() noexcept;
     constexpr Standard(const CodeValueType& code_val) noexcept;
