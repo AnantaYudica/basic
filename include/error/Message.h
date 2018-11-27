@@ -2,7 +2,6 @@
 #define BASIC_ERROR_MESSAGE_H_
 
 #include "../macro/HasMemberFunction.h"
-#include "../Error.h"
 
 #include <type_traits>
 
@@ -48,40 +47,34 @@ namespace error
 template<typename TError>
 typename std::enable_if<
     _helper::_basic::_error::_msg::_has::_mmbr::_Message<TError, 
-        BASIC_ERROR_OUTPUT_TYPE&, BASIC_ERROR_OUTPUT_TYPE&>::Value && 
+        const char *>::Value && 
     !_helper::_basic::_error::_msg::_has::_mmbr::_What<TError, 
         const char *>::Value, 
-    BASIC_ERROR_OUTPUT_TYPE>::type& 
-        Message(BASIC_ERROR_OUTPUT_TYPE& out, const TError& error)
+    const char>::type * Message(const TError& error) noexcept
 {
-    error.Message(out);
-    return  out;
+    return error.Message();
 }
 
 template<typename TError>
 typename std::enable_if<
     !_helper::_basic::_error::_msg::_has::_mmbr::_Message<TError, 
-        BASIC_ERROR_OUTPUT_TYPE&, BASIC_ERROR_OUTPUT_TYPE&>::Value && 
+        const char *>::Value && 
     _helper::_basic::_error::_msg::_has::_mmbr::_What<TError, 
         const char *>::Value, 
-    BASIC_ERROR_OUTPUT_TYPE>::type& 
-        Message(BASIC_ERROR_OUTPUT_TYPE& out, const TError& error)
+    const char>::type * Message(const TError& error) noexcept
 {
-    BASIC_ERROR_OUTPUT_OPERATOR(out, error.what());
-    return out;
+    return error.what();
 }
 
 template<typename TError>
 typename std::enable_if<
     _helper::_basic::_error::_msg::_has::_mmbr::_Message<TError, 
-        BASIC_ERROR_OUTPUT_TYPE&, BASIC_ERROR_OUTPUT_TYPE&>::Value && 
+        const char *>::Value && 
     _helper::_basic::_error::_msg::_has::_mmbr::_What<TError, 
         const char *>::Value, 
-    BASIC_ERROR_OUTPUT_TYPE>::type& 
-        Message(BASIC_ERROR_OUTPUT_TYPE& out, const TError& error)
+    const char>::type * Message(const TError& error)
 {
-    BASIC_ERROR_OUTPUT_OPERATOR(out, error.what());
-    return out;
+    return error.what();
 }
 
 } //!error
