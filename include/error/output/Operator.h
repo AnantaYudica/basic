@@ -20,6 +20,14 @@ defn::type::Output& Operator(defn::type::Output& out, TArg&& arg) noexcept
     return out;
 }
 
+template<typename TArg, typename... TArgs>
+defn::type::Output& Operator(defn::type::Output& out, TArg&& arg, 
+    TArgs... args) noexcept
+{
+    BASIC_ERROR_OUTPUT_OPERATOR(out, std::forward<TArg>(arg));
+    return Operator(out, std::forward<TArgs>(args)...);
+}
+
 } //!output
 
 } //!error
