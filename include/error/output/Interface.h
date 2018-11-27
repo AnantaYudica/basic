@@ -15,7 +15,10 @@ class Interface
 public:
     typedef defn::type::Output ValueType;
 protected:
-    Interface() noexcept;
+    constexpr Interface() noexcept;
+public:
+    Interface(const Interface& cpy) noexcept = default;
+    Interface(Interface&& mov) noexcept = default;
 public:
     Interface& operator=(const Interface&) = delete;
     Interface& operator=(Interface&&) = delete;
@@ -23,7 +26,7 @@ public:
     virtual ValueType& Output(ValueType&) const noexcept = 0;
 };
 
-Interface::Interface() noexcept
+constexpr Interface::Interface() noexcept
 {}
 
 } //!output
