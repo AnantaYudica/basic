@@ -6,6 +6,8 @@
 #include "Identification.h"
 #include "id/Get.h"
 #include "id/Standard.h"
+#include "defn/type/Output.h"
+#include "output/Operator.h"
 #include "../constant/error/Identification.h"
 
 #include <exception>
@@ -20,38 +22,52 @@ namespace error
 class Exception : public virtual Error<tag::Trigger>
 {
 public:
-    typedef Error<tag::Trigger> ErrorType;
+    typedef Error<tag::Trigger> TriggerType;
+public:
+    typedef defn::type::Output OutputValueType;
 protected:
-    Exception();
+    Exception() noexcept;
 public:
-    Exception(const char* file, const std::size_t& line);
+    Exception(const char* file, const std::size_t& line) noexcept;
 public:
-    Exception(const Exception& cpy);
-    Exception(Exception&& mov);
-public:
-    ~Exception();
+    Exception(const Exception& cpy) noexcept;
+    Exception(Exception&& mov) noexcept;
 public:
     Exception& operator=(const Exception&) = delete;
     Exception& operator=(Exception&&) = delete;
+public:
+    virtual const char* Message() const noexcept;
+protected:
+    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
 };
 
-Exception::Exception()
+Exception::Exception() noexcept
 {}
 
-Exception::Exception(const char* file, const std::size_t& line) :
-    ErrorType(constant::error::exception_id, file, line)
+Exception::Exception(const char* file, const std::size_t& line) noexcept :
+    TriggerType(constant::error::exception_id, file, line)
 {}
 
-Exception::Exception(const Exception& cpy) :
-    ErrorType(cpy)
+Exception::Exception(const Exception& cpy) noexcept :
+    TriggerType(cpy)
 {}
 
-Exception::Exception(Exception&& mov) :
-    ErrorType(std::move(mov))
+Exception::Exception(Exception&& mov) noexcept :
+    TriggerType(std::move(mov))
 {}
 
-Exception::~Exception()
-{}
+const char* Exception::Message() const noexcept
+{
+    return "Exception";
+}
+
+typename Exception::OutputValueType& 
+Exception::Output(OutputValueType& out) const noexcept
+{
+    output::Operator(out, this->Message(), " ");
+    TriggerType::Output(out);
+    return out;
+}
 
 #elif USING_STANDARD_EXCEPTION
 
@@ -61,17 +77,22 @@ typedef std::exception Exception;
 
 #ifndef USING_STANDARD_EXCEPTION
 
-constexpr Identification id::Get(const Exception& e)
+namespace id
+{
+
+constexpr Identification Get(const Exception& e) noexcept
 {
     return Identification(constant::error::exception_id);
-};
+}
 
 #endif
 
-constexpr Identification id::Get(const std::exception& e)
+constexpr Identification Get(const std::exception& e) noexcept
 {
-    return id::Standard(Identification(constant::error::exception_id));
-};
+    return Standard(constant::error::exception_id);
+}
+
+} //!id
 
 } //!error
 
