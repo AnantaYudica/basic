@@ -10,6 +10,8 @@
 #include "Trigger.h"
 #include "../id/Catch.h"
 #include "../defn/type/Output.h"
+#include "../output/Interface.h"
+#include "../output/Operator.h"
 
 #include <ostream>
 #include <exception>
@@ -33,9 +35,9 @@ class Error<error::tag::Catch<TTrigger>> :
     public Error<error::tag::Trigger>
 {
 public:
-    typedef Error<error::tag::Trigger> BaseType;
+    typedef Error<error::tag::Trigger> TriggerType;
 public:
-    typedef error::defn::type::Output OutputType;
+    typedef error::defn::type::Output OutputValueType;
 private:
     TTrigger m_trigger;
 public:
@@ -51,14 +53,16 @@ public:
     Error<error::tag::Catch<TTrigger>>& 
         operator=(Error<error::tag::Catch<TTrigger>>&&) = delete;
 public:
-    OutputType& Message(OutputType& out) const noexcept;
+    const char * Message() const noexcept;
 public:
     const TTrigger& Trigger() const noexcept;
+protected:
+    OutputValueType& Output(OutputValueType& out) const noexcept;
 };
 
 template<typename TTrigger>
 Error<error::tag::Catch<TTrigger>>::Error() noexcept :
-    BaseType(),
+    TriggerType(),
     m_trigger()
 {}
 
@@ -67,22 +71,28 @@ Error<error::tag::Catch<TTrigger>>::Error(const TTrigger& trigger,
     const error::id::Catch& id, const char* file, const std::size_t& line) 
         noexcept :
             m_trigger(trigger),
-            BaseType(id, file, line)
+            TriggerType(id, file, line)
 {}
 
 template<typename TTrigger>
-typename Error<error::tag::Catch<TTrigger>>::OutputType& 
-    Error<error::tag::Catch<TTrigger>>::Message(OutputType& out) const noexcept
+const char * Error<error::tag::Catch<TTrigger>>::Message() const noexcept
 {
-    BASIC_ERROR_OUTPUT_OPERATOR(out, "in catch ");
-    BASIC_ERROR_OUTPUT_OPERATOR(out, this->Information());
-    return out;
+    return "";
 }
 
 template<typename TTrigger>
 const TTrigger& Error<error::tag::Catch<TTrigger>>::Trigger() const noexcept
 {
     return m_trigger;
+}
+
+template<typename TTrigger>
+typename Error<error::tag::Catch<TTrigger>>::OutputValueType& 
+Error<error::tag::Catch<TTrigger>>::Output(OutputValueType& out) const noexcept
+{
+    error::output::Operator(out, "in catch ");
+    TriggerType::Output(out);
+    return out;
 }
 
 } //!basic
