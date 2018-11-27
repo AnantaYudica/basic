@@ -32,9 +32,9 @@ class Error<error::tag::System> :
     public Error<error::tag::Trigger>
 {
 public:
-    typedef Error<error::tag::Trigger> BaseType;
+    typedef Error<error::tag::Trigger> TriggerType;
 public:
-    typedef error::defn::type::Output OutputType;
+    typedef error::defn::type::Output OutputValueType;
 public:
     typedef error::defn::type::system::category::Value 
         CategoryValueType;
@@ -53,47 +53,54 @@ public:
     Error<error::tag::System>& 
         operator=(Error<error::tag::System>&&) = delete;
 public:
-    OutputType& Message(OutputType& out) const noexcept;
+    virtual const char * Message() const noexcept;
 public:
     CategoryValueType Category() const noexcept;
     CodeValueType Code() const noexcept;
+protected:
+    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
 };
 
 Error<error::tag::System>::Error() noexcept :
-    BaseType()
+    TriggerType()
 {}
 
 Error<error::tag::System>::Error(const error::id::System& id, 
     const char* file, const std::size_t& line) noexcept :
-        BaseType(id, file, line)
+        TriggerType(id, file, line)
 {}
 
 Error<error::tag::System>::Error(const Error<error::tag::System>& cpy) 
     noexcept :
-        BaseType(cpy)
+        TriggerType(cpy)
 {}
 
 Error<error::tag::System>::Error(Error<error::tag::System>&& mov) noexcept :
-    BaseType(std::move(mov))
+    TriggerType(std::move(mov))
 {}
 
-typename Error<error::tag::System>::OutputType& 
-    Error<error::tag::System>::Message(OutputType& out) const noexcept 
+const char * Error<error::tag::System>::Message() const noexcept 
 {
-
-    return out;
+    return "";
 }
 
 typename Error<error::tag::System>::CategoryValueType 
     Error<error::tag::System>::Category() const noexcept
 {
-    return this->Information().Identification().ErrorSystem().Category();
+    return this->Identification().ErrorSystem().Category();
 }
 
 typename Error<error::tag::System>::CodeValueType 
     Error<error::tag::System>::Code() const noexcept
 {
-    return this->Information().Identification().ErrorSystem().Code();
+    return this->Identification().ErrorSystem().Code();
+}
+
+typename Error<error::tag::System>::OutputValueType& 
+Error<error::tag::System>::Output(OutputValueType& out) const noexcept
+{
+    TriggerType::Output(out);
+    return out;
 }
 
 } //!basic
