@@ -42,6 +42,7 @@ class Category;
 #include "../defn/type/system/condition/Value.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
+#include "category/has/func/DefaultCode.h"
 #include "category/DefaultCode.h"
 #include "category/DefaultCondition.h"
 #include "category/Equivalent.h"
@@ -98,7 +99,10 @@ public:
 public:
     const char* Name() const noexcept;
 public:
-    CodeType DefaultCode() const noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait>
+    typename std::enable_if<category::has::func::
+        DefaultCode<_TCategoryTrait>::Value, CodeType>::type 
+    DefaultCode() const noexcept;
     CodeType DefaultCode(const CodeSetValueType& code_val) 
         const noexcept;
 public:
@@ -151,7 +155,10 @@ const char* Category<TCategoryTrait>::Name() const noexcept
 }
 
 template<typename TCategoryTrait>
-typename Category<TCategoryTrait>::CodeType 
+template<typename _TCategoryTrait>
+typename std::enable_if<category::has::func::
+    DefaultCode<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::CodeType>::type 
 Category<TCategoryTrait>::DefaultCode() const noexcept
 {
     return CodeType(category::DefaultCode(m_trait));
