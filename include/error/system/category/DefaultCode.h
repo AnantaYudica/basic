@@ -3,6 +3,7 @@
 
 #include "has/mmbr/func/DefaultCode.h"
 #include "defn/type/code/set/Value.h"
+#include "has/mmbr/defn/type/CodeEnum.h"
 
 #include <type_traits>
 
@@ -26,7 +27,8 @@ DefaultCode(const TCategoryTrait& category_trait) noexcept
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::DefaultCode<TCategoryTrait,
-    typename defn::type::code::set::Value<TCategoryTrait>::Type>::Value, 
+    typename defn::type::code::set::Value<TCategoryTrait>::Type>::Value &&
+    !has::mmbr::defn::type::CodeEnum<TCategoryTrait>::Value, 
     typename defn::type::code::set::Value<TCategoryTrait>::Type>::type  
 DefaultCode(const TCategoryTrait& category_trait) noexcept
 {
