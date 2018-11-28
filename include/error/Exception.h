@@ -19,6 +19,7 @@ namespace error
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
+
 class Exception : public virtual Error<tag::Trigger>
 {
 public:
@@ -69,28 +70,72 @@ Exception::Output(OutputValueType& out) const noexcept
     return out;
 }
 
-#elif USING_STANDARD_EXCEPTION
+#endif //!USING_BASIC_ERROR_EXCEPTION
 
-typedef std::exception Exception;
+#ifdef USING_STANDARD_EXCEPTION
 
-#endif
+class Exception : public std::exception
+{
+protected:
+    Exception() noexcept;
+public:
+    Exception(const char* file, const std::size_t& line) noexcept;
+public:
+    Exception(const Exception& cpy) noexcept;
+    Exception(Exception&& mov) noexcept;
+public:
+    virtual ~Exception() noexcept;
+public:
+    Exception& operator=(const Exception&) = delete;
+    Exception& operator=(Exception&)& = delete;
+public:
+    virtual const char * what() const noexcept;
+};
 
-#ifndef USING_STANDARD_EXCEPTION
+Exception::Exception() noexcept
+{}
+
+Exception::Exception(const char* file, const std::size_t& line) noexcept
+{}
+
+Exception::Exception(const Exception& cpy) noexcept :
+    std::exception(cpy)
+{}
+
+Exception::Exception(Exception&& mov) noexcept :
+    std::exception(mov)
+{}
+
+Exception::~Exception() noexcept
+{}
+
+const char * Exception::what() const noexcept
+{
+    return std::exception::what();
+}
+
+#endif //!USING_STANDARD_EXCEPTION
 
 namespace id
 {
+
+#ifdef USING_EXCEPTION
+
+#ifndef USING_STANDARD_EXCEPTION
 
 constexpr Identification Get(const Exception& e) noexcept
 {
     return Identification(constant::error::exception_id);
 }
 
-#endif
+#endif //!USING_STANDARD_EXCEPTION
 
 constexpr Identification Get(const std::exception& e) noexcept
 {
     return Standard(constant::error::exception_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 
