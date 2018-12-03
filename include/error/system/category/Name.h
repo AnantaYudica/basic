@@ -1,6 +1,7 @@
 #ifndef BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
 #define BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
 
+#include "../../defn/type/Char.h"
 #include "has/mmbr/func/Name.h"
 
 #include <type_traits>
@@ -16,7 +17,7 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::Name<TCategoryTrait>::Value, 
-    const char *>::type  
+    const error::defn::type::Char *>::type  
 Name(const TCategoryTrait& category_trait) noexcept
 {
     return category_trait.Name();
@@ -24,7 +25,7 @@ Name(const TCategoryTrait& category_trait) noexcept
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::Name<TCategoryTrait>::Value, 
-    const char *>::type  
+    const error::defn::type::Char *>::type  
 Name(const TCategoryTrait& category_trait) noexcept
 {
     return "";
