@@ -38,6 +38,8 @@ public:
     static Future Instance() noexcept;
 public:
     Future() noexcept = default;
+    Future(const Future&) noexcept = default;
+    Future(Future&&) noexcept = default;
 public:
     template<typename TCode>
     ConditionEnumType DefaultCondition(const TCode& code) const noexcept;
