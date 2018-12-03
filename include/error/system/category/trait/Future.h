@@ -3,9 +3,11 @@
 
 #include "../../../../constant/error/system/Category.h"
 
+#include "../../../defn/type/Char.h"
 #include "../../../defn/type/system/category/Value.h"
 #include "../../../defn/type/system/code/Value.h"
 #include "../../../defn/type/system/condition/Value.h"
+#include "../../../msg/String.h"
 
 #include <future>
 
@@ -26,13 +28,16 @@ public:
     typedef std::future_errc CodeEnumType;
     typedef std::future_errc ConditionEnumType;
 public:
+    typedef error::defn::type::Char CharType;
     typedef error::defn::type::system::category::Value CategoryValueType;
     typedef error::defn::type::system::code::Value CodeValueType;
     typedef error::defn::type::system::condition::Value ConditionValueType;
 public:
-    Future() noexcept;
+    typedef msg::String StringType;
 public:
     static Future Instance() noexcept;
+public:
+    Future() noexcept = default;
 public:
     template<typename TCode>
     ConditionEnumType DefaultCondition(const TCode& code) const noexcept;
@@ -45,9 +50,9 @@ public:
         const TCondition& cond) const noexcept;
 public:
     template<typename TValue>
-    const char * Message(const TValue& val) const noexcept;
+    StringType Message(const TValue& val) const noexcept;
 public:
-    const char * Name() const noexcept;
+    const CharType * Name() const noexcept;
 public:
     CategoryValueType Value() const noexcept;
 };
@@ -81,12 +86,13 @@ bool Future::Equivalent(const CodeValueType& code,
 }
 
 template<typename TValue>
-const char * Future::Message(const TValue& val) const noexcept
+typename Future::StringType 
+Future::Message(const TValue& val) const noexcept
 {
-    return std::future_category().message(val.Value());
+    return {std::future_category().message(val.Value())};
 }
 
-const char * Future::Name() const noexcept
+const typename Future::CharType * Future::Name() const noexcept
 {
     return std::future_category().name();
 }
