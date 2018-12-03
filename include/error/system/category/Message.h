@@ -1,9 +1,11 @@
 #ifndef BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
 #define BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
 
+#include "../../msg/String.h"
 #include "has/mmbr/func/Message.h"
 
 #include <type_traits>
+#include <utility>
 
 namespace basic
 {
@@ -16,18 +18,18 @@ namespace category
 
 template<typename TCategoryTrait, typename TValue>
 typename std::enable_if<has::mmbr::func::Message<TCategoryTrait,
-    TValue>::Value, const char *>::type  
+    TValue>::Value, msg::String>::type  
 Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 {
-    return category_trait.Message(value);
+    return std::move(category_trait.Message(value));
 }
 
 template<typename TCategoryTrait, typename TValue>
 typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
-    TValue>::Value, const char *>::type  
+    TValue>::Value, msg::String>::type  
 Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 {
-    return "";
+    return {};
 }
 
 } //!category
