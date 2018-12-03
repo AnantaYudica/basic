@@ -142,7 +142,7 @@ Category<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait>&& mov) noexcept :
-    m_trait(std::move(mov))
+    m_trait(std::move(mov.m_trait))
 {}
 
 template<typename TCategoryTrait>
