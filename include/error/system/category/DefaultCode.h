@@ -18,8 +18,8 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::DefaultCode<TCategoryTrait,
-    typename defn::type::code::set::Value<TCategoryTrait>::Type>::Value, 
-    typename defn::type::code::set::Value<TCategoryTrait>::Type>::type  
+    defn::type::code::set::Value<TCategoryTrait>>::Value, 
+    defn::type::code::set::Value<TCategoryTrait>>::type  
 DefaultCode(const TCategoryTrait& category_trait) noexcept
 {
     return category_trait.DefaultCode();
@@ -27,9 +27,9 @@ DefaultCode(const TCategoryTrait& category_trait) noexcept
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::DefaultCode<TCategoryTrait,
-    typename defn::type::code::set::Value<TCategoryTrait>::Type>::Value &&
+    typename defn::type::code::set::Value<TCategoryTrait>>::Value &&
     !has::mmbr::defn::type::CodeEnum<TCategoryTrait>::Value, 
-    typename defn::type::code::set::Value<TCategoryTrait>::Type>::type  
+    typename defn::type::code::set::Value<TCategoryTrait>>::type  
 DefaultCode(const TCategoryTrait& category_trait) noexcept
 {
     return 0;
