@@ -37,9 +37,11 @@ class Category;
 #define BASIC_ERROR_SYSTEM_CATEGORY_H_
 
 #include "../../Error.h"
+#include "../defn/type/Char.h"
 #include "../defn/type/system/category/Value.h"
 #include "../defn/type/system/code/Value.h"
 #include "../defn/type/system/condition/Value.h"
+#include "../msg/String.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
 #include "category/has/func/DefaultCode.h"
@@ -69,14 +71,17 @@ class Category
 public:
     typedef TCategoryTrait TraitType;
 public:
+    typedef defn::type::Char CharType;
     typedef defn::type::system::category::Value ValueType;
     typedef defn::type::system::code::Value CodeValueType;
     typedef defn::type::system::condition::Value ConditionValueType;
 public:
-    typedef typename category::defn::type::code::set::
-        Value<TCategoryTrait>::Type CodeSetValueType;
-    typedef typename category::defn::type::condition::set::
-        Value<TCategoryTrait>::Type ConditionSetValueType;
+    typedef msg::String StringType;
+public:
+    typedef category::defn::type::code::set::
+        Value<TCategoryTrait> CodeSetValueType;
+    typedef category::defn::type::condition::set::
+        Value<TCategoryTrait> ConditionSetValueType;
 public:
     typedef Code<TCategoryTrait> CodeType;
     typedef Condition<TCategoryTrait> ConditionType;
@@ -97,7 +102,7 @@ public:
 public:
     ValueType Value() const noexcept;
 public:
-    const char* Name() const noexcept;
+    const CharType * Name() const noexcept;
 public:
     template<typename _TCategoryTrait = TCategoryTrait>
     typename std::enable_if<category::has::func::
@@ -106,7 +111,10 @@ public:
     CodeType DefaultCode(const CodeSetValueType& code_val) 
         const noexcept;
 public:
-    ConditionType DefaultCondition() const noexcept; 
+    template<typename _TCategoryTrait = TCategoryTrait>
+    typename std::enable_if<category::has::func::
+        DefaultCode<_TCategoryTrait>::Value, ConditionType>::type 
+    DefaultCondition() const noexcept; 
     ConditionType DefaultCondition(const CodeSetValueType& code_val) 
         const noexcept;
     ConditionType DefaultCondition(const CodeType& code) 
@@ -117,8 +125,8 @@ public:
     bool Equivalent(const CodeType& code,
         const ConditionValueType& cond_val) const noexcept;
 public:
-    const char* Message(const CodeType& code) const noexcept;
-    const char* Message(const ConditionType& cond) const noexcept;
+    StringType Message(const CodeType& code) const noexcept;
+    StringType Message(const ConditionType& cond) const noexcept;
 };
 
 template<typename TCategoryTrait>
@@ -149,7 +157,8 @@ Category<TCategoryTrait>::Value() const noexcept
 }
 
 template<typename TCategoryTrait>
-const char* Category<TCategoryTrait>::Name() const noexcept
+const typename Category<TCategoryTrait>::CharType * 
+Category<TCategoryTrait>::Name() const noexcept
 {
     return category::Name(m_trait);
 }
@@ -173,7 +182,10 @@ Category<TCategoryTrait>::
 }
 
 template<typename TCategoryTrait>
-typename Category<TCategoryTrait>::ConditionType 
+template<typename _TCategoryTrait>
+typename std::enable_if<category::has::func::
+    DefaultCode<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::ConditionType>::type 
 Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
     return ConditionType(DefaultCode());
@@ -209,17 +221,17 @@ bool Category<TCategoryTrait>::Equivalent(const CodeType& code,
 }
 
 template<typename TCategoryTrait>
-const char* Category<TCategoryTrait>::
-    Message(const CodeType& code) const noexcept
+typename Category<TCategoryTrait>::StringType 
+Category<TCategoryTrait>::Message(const CodeType& code) const noexcept
 {
-    return category::Message(m_trait, code);
+    return std::move(category::Message(m_trait, code));
 }
 
 template<typename TCategoryTrait>
-const char* Category<TCategoryTrait>::
-    Message(const ConditionType& cond) const noexcept
+typename Category<TCategoryTrait>::StringType 
+Category<TCategoryTrait>::Message(const ConditionType& cond) const noexcept
 {
-    return category::Message(m_trait, cond);
+    return std::move(category::Message(m_trait, cond));
 }
 
 } //!system
