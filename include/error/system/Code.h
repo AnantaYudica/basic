@@ -37,7 +37,10 @@ class Code;
 #define BASIC_ERROR_SYSTEM_CODE_H_
 
 #include "../../Error.h"
+#include "../defn/type/Char.h"
 #include "../defn/type/system/code/Value.h"
+#include "../msg/String.h"
+#include "category/has/func/DefaultCode.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 
 #include <utility>
@@ -57,15 +60,28 @@ class Code
 public:
     typedef TCategoryTrait CategoryTraitType;
 public:
+    typedef defn::type::Char CharType;
     typedef defn::type::system::code::Value ValueType;
+public:
+    typedef msg::String StringType;
 public:
     typedef Category<TCategoryTrait> CategoryType;
     typedef Condition<TCategoryTrait> ConditionType;
 public:
     typedef typename CategoryType::CodeSetValueType SetValueType;
+private:
+    template<typename _TCategoryTrait = TCategoryTrait>
+    static constexpr typename std::enable_if<category::has::func::
+        DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
+    DefaultCodeValue(const CategoryType& category) noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait>
+    static constexpr typename std::enable_if<!category::has::func::
+        DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
+    DefaultCodeValue(const CategoryType& category) noexcept;
 public:
     ValueType m_value;
     CategoryType m_category;
+    StringType m_message;
 public:
     Code() noexcept;
     Code(const SetValueType& code_val) noexcept;
@@ -90,33 +106,57 @@ public:
 public:
     ConditionType DefaultCondition() const noexcept;
 public:
-    const char * Message() const noexcept;
+    const CharType * Message() const noexcept;
 public:
     operator bool() const noexcept;
 };
 
 template<typename TCategoryTrait>
+template<typename _TCategoryTrait>
+constexpr typename std::enable_if<category::has::func::
+    DefaultCode<_TCategoryTrait>::Value, 
+    typename Code<TCategoryTrait>::ValueType>::type 
+Code<TCategoryTrait>::DefaultCodeValue(const CategoryType& category) noexcept
+{
+    return category.DefaultCode().m_value;
+}
+
+template<typename TCategoryTrait>
+template<typename _TCategoryTrait >
+constexpr typename std::enable_if<!category::has::func::
+    DefaultCode<_TCategoryTrait>::Value, 
+    typename Code<TCategoryTrait>::ValueType>::type 
+Code<TCategoryTrait>::DefaultCodeValue(const CategoryType& category) noexcept
+{
+    return 0;
+}
+
+template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code() noexcept :
     m_category(),
-    m_value(m_category.DefaultCode().m_value)
+    m_value(DefaultCodeValue(this->m_category)),
+    m_message(this->m_category.Message(*this))
 {}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code(const SetValueType& code_val) noexcept :
     m_category(),
-    m_value(code_val)
+    m_value(static_cast<ValueType>(code_val)),
+    m_message(this->m_category.Message(*this))
 {}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code(const Code<TCategoryTrait>& cpy) noexcept :
     m_category(cpy.m_category),
-    m_value(cpy.m_value)
+    m_value(cpy.m_value),
+    m_message(cpy.m_message)
 {}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code(Code<TCategoryTrait>&& mov) noexcept :
     m_category(std::move(mov.m_category)),
-    m_value(std::move(mov.m_value))
+    m_value(std::move(mov.m_value)),
+    m_message(std::move(mov.m_message))
 {}
 
 template<typename TCategoryTrait>
@@ -130,6 +170,7 @@ Code<TCategoryTrait>& Code<TCategoryTrait>::
     operator=(const Code<TCategoryTrait>& cpy) noexcept
 {
     this->m_value = cpy.m_value;
+    this->m_message = cpy.m_message;
     return *this;
 }
 
@@ -138,6 +179,7 @@ Code<TCategoryTrait>& Code<TCategoryTrait>::
     operator=(Code<TCategoryTrait>&& mov) noexcept
 {
     this->m_value = std::move(mov.m_value);
+    this->m_message = std::move(mov.m_message);
     return *this;
 }
 
@@ -145,25 +187,28 @@ template<typename TCategoryTrait>
 Code<TCategoryTrait>& Code<TCategoryTrait>::
     operator=(const SetValueType& code_val) noexcept
 {
-    this->m_value = code_val;
+    this->m_value = static_cast<ValueType>(code_val);
+    this->m_message = this->m_category.Message(*this);
     return *this;
 }
 
 template<typename TCategoryTrait>
 void Code<TCategoryTrait>::Assign(const SetValueType& code_val) noexcept
 {
-    this->m_value = code_val;
+    this->m_value = static_cast<ValueType>(code_val);
+    this->m_message = this->m_category.Message(*this);
 }
 
 template<typename TCategoryTrait>
 void Code<TCategoryTrait>::Clear() noexcept
 {
-    this->m_value = this->m_category.DefaultCode().m_value;
+    this->m_value = DefaultCodeValue(this->m_category);
+    this->m_message = std::move(StringType());
 }
 
 template<typename TCategoryTrait>
 typename Code<TCategoryTrait>::ValueType 
-    Code<TCategoryTrait>::Value() const noexcept
+Code<TCategoryTrait>::Value() const noexcept
 {
     return this->m_value;
 }
@@ -183,15 +228,16 @@ typename Code<TCategoryTrait>::ConditionType
 }
 
 template<typename TCategoryTrait>
-const char * Code<TCategoryTrait>::Message() const noexcept
+const typename Code<TCategoryTrait>::CharType * 
+Code<TCategoryTrait>::Message() const noexcept
 {
-    return this->m_category.Message(*this);
+    return this->m_message.Value();
 }
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::operator bool() const noexcept
 {
-    return m_value != this->m_category.DefaultCode().m_value;
+    return m_value != DefaultCodeValue(this->m_category);
 }
 
 } //!system
