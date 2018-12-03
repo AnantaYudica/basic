@@ -22,7 +22,7 @@ template<typename TCategoryTrait>
 struct DefaultCode
 {
     static constexpr bool Value = has::mmbr::func::DefaultCode<TCategoryTrait,
-        typename defn::type::code::set::Value<TCategoryTrait>::Type>::Value || 
+        defn::type::code::set::Value<TCategoryTrait>>::Value || 
         !has::mmbr::defn::type::CodeEnum<TCategoryTrait>::Value;
 };
 
