@@ -5,8 +5,10 @@
 #include "../Identification.h"
 #include "../id/Get.h"
 #include "../id/Standard.h"
+#include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
 #include "../output/Operator.h"
+#include "../msg/String.h"
 #include "../../constant/error/Identification.h"
 
 #include <stdexcept>
@@ -26,68 +28,90 @@ class Logic : public error::Exception
 public:
     typedef typename error::Exception::TriggerType TriggerType;
 public:
+    typedef defn::type::Char CharType;
     typedef defn::type::Output OutputValueType;
+public:
+    typedef msg::String StringType;
 private:
-    const char * m_message;
+    StringType m_message;
 protected:
     Logic() noexcept;
-    Logic(const char * message) noexcept;
-public:
-    Logic(const char* file, const std::size_t& line) noexcept;
-    Logic(const char * message, const char* file, 
-        const std::size_t& line) noexcept;
-public:
-    Logic(const Logic& cpy) noexcept;
-    Logic(Logic&& mov) noexcept;
-public:
-    Logic& operator=(const Logic&) = delete;
-    Logic& operator=(Logic&&) = delete;
-public:
-    virtual const char* Message() const noexcept;
+
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
 protected:
-    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
+    Logic(const CharType * message) noexcept;
+public:
+    Logic(const CharType * message, const char * file, 
+        const std::size_t & line) noexcept;
+
+#else
+
+public:
+    Logic(const CharType * message) noexcept;
+
+#endif //!USING_BASIC_ERROR_FILE_AND_LINE
+
+protected:
+    Logic(StringType && message) noexcept;
+public:
+    Logic(const Logic & cpy) noexcept;
+    Logic(Logic && mov) noexcept;
+public:
+    Logic& operator=(const Logic &) = delete;
+    Logic& operator=(Logic &&) = delete;
+public:
+    virtual const CharType * Message() const noexcept;
+protected:
+    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
 };
 
 Logic::Logic() noexcept :
-    m_message(nullptr)
+    TriggerType(constant::error::logic_id),
+    m_message("Logic Exception")
 {}
 
-Logic::Logic(const char * message) noexcept :
+Logic::Logic(const CharType * message) noexcept :
+    TriggerType(constant::error::logic_id),
     m_message(message)
 {}
 
-Logic::Logic(const char* file, const std::size_t& line) noexcept :
-    m_message(nullptr),
-    TriggerType(constant::error::logic_id, file, line)
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
+Logic::Logic(const CharType * message, const char * file, 
+    const std::size_t & line) noexcept :
+        TriggerType(constant::error::logic_id, file, line),
+        m_message(message)
 {}
 
-Logic::Logic(const char * message, const char* file, 
-    const std::size_t& line) noexcept :
-        m_message(message),
-        TriggerType(constant::error::logic_id, file, line)
+#endif //!USING_BASIC_ERROR_FILE_AND_LINE
+
+Logic::Logic(StringType && message) noexcept :
+    TriggerType(constant::error::logic_id),
+    m_message(std::move(message))
 {}
 
-Logic::Logic(const Logic& cpy) noexcept :
-    m_message(cpy.m_message),
+Logic::Logic(const Logic & cpy) noexcept :
     TriggerType(cpy),
+    m_message(cpy.m_message),
     error::Exception(cpy)
 {}
 
-Logic::Logic(Logic&& mov) noexcept :
-    m_message(std::move(mov.m_message)),
+Logic::Logic(Logic && mov) noexcept :
     TriggerType(std::move(mov)),
+    m_message(std::move(mov.m_message)),
     error::Exception(std::move(mov))
 {}
 
-const char* Logic::Message() const noexcept
+const typename Logic::CharType * Logic::Message() const noexcept
 {
-    if (m_message != nullptr)
-        return m_message;
+    if (m_message)
+        return m_message.Value();
     return "Logic Exception";
 }
 
-typename Logic::OutputValueType& 
-Logic::Output(OutputValueType& out) const noexcept
+typename Logic::OutputValueType & 
+Logic::Output(OutputValueType & out) const noexcept
 {
     error::Exception::Output(out);
     return out;
@@ -97,48 +121,7 @@ Logic::Output(OutputValueType& out) const noexcept
 
 #ifdef USING_STANDARD_EXCEPTION
 
-class Logic : public std::logic_error
-{
-public:
-    Logic(const char* file, const std::size_t& line) noexcept;
-    Logic(const char * message, const char* file, 
-        const std::size_t& line) noexcept;
-public:
-    Logic(const Logic& cpy) noexcept;
-    Logic(Logic&& mov) noexcept;
-public:
-    virtual ~Logic() noexcept;
-public:
-    Logic& operator=(const Logic&) = delete;
-    Logic& operator=(Logic&)& = delete;
-public:
-    virtual const char * what() const noexcept;
-};
-
-Logic::Logic(const char* file, const std::size_t& line) noexcept :
-    std::logic_error("Logic Exception")
-{}
-
-Logic::Logic(const char * what_arg, const char* file, 
-    const std::size_t& line) noexcept :
-        std::logic_error(what_arg)
-{}
-
-Logic::Logic(const Logic& cpy) noexcept :
-    std::logic_error(cpy)
-{}
-
-Logic::Logic(Logic&& mov) noexcept :
-    std::logic_error(mov)
-{}
-
-Logic::~Logic() noexcept
-{}
-
-const char * Logic::what() const noexcept
-{
-    return std::logic_error::what();
-}
+using Logic = std::logic_error;
 
 #endif //!USING_STANDARD_EXCEPTION
 
@@ -151,17 +134,17 @@ namespace id
 
 #ifndef USING_STANDARD_EXCEPTION
 
-constexpr Identification Get(const exception::Logic& e)
+constexpr Identification Get(const exception::Logic & e)
 {
     return Identification(constant::error::logic_id);
-};
+}
 
 #endif //!USING_STANDARD_EXCEPTION
 
-constexpr Identification Get(const std::logic_error& e)
+constexpr Identification Get(const std::logic_error & e)
 {
     return Standard(constant::error::logic_id);
-};
+}
 
 #endif //!USING_EXCEPTION
 
