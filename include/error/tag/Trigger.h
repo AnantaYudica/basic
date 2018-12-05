@@ -11,8 +11,11 @@
 #include "../Information.h"
 #include "../output/Interface.h"
 #include "../output/Operator.h"
+#include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
 #include "../defn/type/code/Value.h"
+
+#include <utility>
 
 namespace basic
 {
@@ -32,17 +35,17 @@ class Error<error::tag::Trigger> :
     public error::Information
 {
 public:
+    typedef error::defn::type::Char CharType;
     typedef error::defn::type::Output OutputValueType;
+    typedef error::defn::type::code::Value CodeValueType;
 public:
     typedef error::Identification IdType;
-public:
-    typedef error::defn::type::code::Value CodeValueType;
 public:
     typedef error::Information InfoType;
 public:
     Error() noexcept;
-    Error(const IdType& id, const char* file, 
-        const std::size_t& line) noexcept;
+    template<typename... TArgs>
+    Error(const IdType& id, TArgs&&... args) noexcept;
 public:
     Error(const Error<error::tag::Trigger>& cpy) noexcept;
     Error(Error<error::tag::Trigger>&& mov) noexcept;
@@ -52,7 +55,7 @@ public:
     Error<error::tag::Trigger>& 
         operator=(Error<error::tag::Trigger>&&) = delete;
 public:
-    virtual const char* Message() const noexcept;
+    virtual const CharType * Message() const noexcept;
 public:
     const InfoType& Information() const noexcept;
     CodeValueType Code() const noexcept;
@@ -64,13 +67,13 @@ Error<error::tag::Trigger>::Error() noexcept :
     InfoType()
 {}
 
-Error<error::tag::Trigger>::Error(const IdType& id, const char* file, 
-    const std::size_t& line) noexcept :
-        InfoType(id, file, line)
+template<typename... TArgs>
+Error<error::tag::Trigger>::Error(const IdType& id, TArgs&&... args) noexcept :
+    InfoType(id, std::forward<TArgs>(args)...)
 {}
 
-Error<error::tag::Trigger>::Error(const Error<error::tag::Trigger>& cpy) 
-    noexcept :
+Error<error::tag::Trigger>::
+    Error(const Error<error::tag::Trigger>& cpy) noexcept :
         InfoType(cpy)
 {}
 
@@ -78,7 +81,8 @@ Error<error::tag::Trigger>::Error(Error<error::tag::Trigger>&& mov) noexcept :
     InfoType(std::move(mov))
 {}
 
-const char * Error<error::tag::Trigger>::Message() const noexcept
+const typename Error<error::tag::Trigger>::CharType * 
+Error<error::tag::Trigger>::Message() const noexcept
 {
     return "";
 }
