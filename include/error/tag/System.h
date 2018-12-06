@@ -7,7 +7,7 @@
 #ifndef BASIC_ERROR_TAG_SYSTEM_H_
 #define BASIC_ERROR_TAG_SYSTEM_H_
 
-#include "Trigger.h"
+#include "../Information.h"
 #include "../id/System.h"
 #include "../system/Category.h"
 #include "../defn/type/Char.h"
@@ -32,10 +32,8 @@ struct System {};
 
 template<>
 class Error<error::tag::System> :
-    public Error<error::tag::Trigger>
+    public error::Information
 {
-public:
-    typedef Error<error::tag::Trigger> TriggerType;
 public:
     typedef error::defn::type::Char CharType;
     typedef error::defn::type::Output OutputValueType;
@@ -43,6 +41,10 @@ public:
         CategoryValueType;
     typedef error::defn::type::system::code::Value 
         CodeValueType;
+public:
+    typedef error::Identification IdType;
+public:
+    typedef error::Information InfoType;
 public:
     Error() noexcept;
     template<typename... TArgs>
@@ -64,23 +66,22 @@ protected:
     virtual OutputValueType& Output(OutputValueType& out) const noexcept;
 };
 
-Error<error::tag::System>::Error() noexcept :
-    TriggerType()
+Error<error::tag::System>::Error() noexcept
 {}
 
 template<typename... TArgs>
 Error<error::tag::System>::Error(const error::id::System& id, 
     TArgs&&... args) noexcept :
-        TriggerType(id, std::forward<TArgs>(args)...)
+        InfoType(id, std::forward<TArgs>(args)...)
 {}
 
 Error<error::tag::System>::Error(const Error<error::tag::System>& cpy) 
     noexcept :
-        TriggerType(cpy)
+        InfoType(cpy)
 {}
 
 Error<error::tag::System>::Error(Error<error::tag::System>&& mov) noexcept :
-    TriggerType(std::move(mov))
+    InfoType(std::move(mov))
 {}
 
 const Error<error::tag::System>::CharType * 
@@ -104,7 +105,7 @@ typename Error<error::tag::System>::CodeValueType
 typename Error<error::tag::System>::OutputValueType& 
 Error<error::tag::System>::Output(OutputValueType& out) const noexcept
 {
-    TriggerType::Output(out);
+    error::Information::Output(out);
     return out;
 }
 
