@@ -101,16 +101,9 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-#ifndef USING_STANDARD_EXCEPTION
-
-constexpr Identification Get(const Exception & e) noexcept
-{
-    return Identification(constant::error::exception_id);
-}
-
-#endif //!USING_STANDARD_EXCEPTION
-
-constexpr Identification Get(const std::exception & e) noexcept
+template<typename TTagError = tag::Trigger>
+typename enable_if::tag::Trigger<TTagError>::Type 
+Get(const std::exception & e) noexcept
 {
     return Standard(constant::error::exception_id);
 }

@@ -120,16 +120,9 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-#ifndef USING_STANDARD_EXCEPTION
-
-constexpr Identification Get(const exception::logic::Domain & e)
-{
-    return Identification(constant::error::logic_domain_id);
-}
-
-#endif //!USING_STANDARD_EXCEPTION
-
-constexpr Identification Get(const std::domain_error & e)
+template<typename TTagError = tag::Trigger>
+typename enable_if::tag::Trigger<TTagError>::Type  
+Get(const std::domain_error & e)
 {
     return Standard(constant::error::logic_domain_id);
 }
