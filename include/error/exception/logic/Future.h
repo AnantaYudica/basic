@@ -67,8 +67,8 @@ public:
     Future(const Future & cpy) noexcept;
     Future(Future && mov) noexcept;
 public:
-    Future& operator=(const Future &) = delete;
-    Future& operator=(Future &&) = delete;
+    Future & operator=(const Future &) = delete;
+    Future & operator=(Future &&) = delete;
 public:
     virtual const CharType * Message() const noexcept;
 protected:
@@ -145,14 +145,14 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::future_error & e)
+Get(const std::future_error & e) noexcept
 {
     return Standard(constant::error::logic_future_id);
 }
 
 template<typename TTagError = tag::Trigger>
 typename enable_if::tag::System<TTagError>::Type 
-Get(const std::future_error & e)
+Get(const std::future_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
         constant::error::system::future_category, e.code().value());

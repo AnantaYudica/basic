@@ -58,8 +58,8 @@ public:
     Logic(const Logic & cpy) noexcept;
     Logic(Logic && mov) noexcept;
 public:
-    Logic& operator=(const Logic &) = delete;
-    Logic& operator=(Logic &&) = delete;
+    Logic & operator=(const Logic &) = delete;
+    Logic & operator=(Logic &&) = delete;
 public:
     virtual const CharType * Message() const noexcept;
 protected:
@@ -134,7 +134,7 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::logic_error & e)
+Get(const std::logic_error & e) noexcept
 {
     return Standard(constant::error::logic_id);
 }

@@ -54,8 +54,8 @@ public:
     Domain(const Domain & cpy) noexcept;
     Domain(Domain && mov) noexcept;
 public:
-    Domain& operator=(const Domain &) = delete;
-    Domain& operator=(Domain &&) = delete;
+    Domain & operator=(const Domain &) = delete;
+    Domain & operator=(Domain &&) = delete;
 public:
     virtual const CharType * Message() const noexcept;
 protected:
@@ -122,7 +122,7 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 typename enable_if::tag::Trigger<TTagError>::Type  
-Get(const std::domain_error & e)
+Get(const std::domain_error & e) noexcept
 {
     return Standard(constant::error::logic_domain_id);
 }
