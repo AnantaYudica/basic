@@ -5,6 +5,9 @@
 #include "../../Identification.h"
 #include "../../id/Get.h"
 #include "../../id/Standard.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/Output.h"
+#include "../../output/Operator.h"
 #include "../../../constant/error/Identification.h"
 
 #include <stdexcept>
@@ -24,62 +27,103 @@ namespace logic
 class OutOfRange : public exception::Logic
 {
 public:
-    typedef typename exception::Logic::ErrorType ErrorType;
+    typedef typename exception::Logic::TriggerType TriggerType;
+public:
+    typedef defn::type::Char CharType;
+    typedef defn::type::Output OutputValueType;
 protected:
-    OutOfRange();
+    OutOfRange() noexcept;
+
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
+protected:
+    OutOfRange(const CharType * message) noexcept;
 public:
-    OutOfRange(const char* file, const std::size_t& line);
+    OutOfRange(const CharType * message, const char * file, 
+    const std::size_t& line) noexcept;
+
+#else
+
 public:
-    OutOfRange(const OutOfRange& cpy);
-    OutOfRange(OutOfRange&& mov);
+    OutOfRange(const CharType * message) noexcept;
+
+#endif //USING_BASIC_ERROR_FILE_AND_LINE
+
 public:
-    ~OutOfRange();
+    OutOfRange(const OutOfRange& cpy) noexcept;
+    OutOfRange(OutOfRange&& mov) noexcept;
 public:
-    OutOfRange& operator=(const OutOfRange&) = delete;
-    OutOfRange& operator=(OutOfRange&&) = delete;
+    OutOfRange & operator=(const OutOfRange&) = delete;
+    OutOfRange & operator=(OutOfRange&&) = delete;
+public:
+    virtual const CharType * Message() const noexcept;
+protected:
+    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
 };
 
-OutOfRange::OutOfRange()
+OutOfRange::OutOfRange() noexcept :
+    TriggerType(constant::error::logic_outofrange_id),
+    exception::Logic("Domain Logic Out of Range")
 {}
 
-OutOfRange::OutOfRange(const char* file, const std::size_t& line) :
-    ErrorType(constant::error::logic_outofrange_id, file, line)
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
+OutOfRange::OutOfRange(const CharType * message, const char * file, 
+    const std::size_t & line) noexcept :
+        ErrorType(constant::error::logic_outofrange_id, file, line),
+        exception::Logic(message)
 {}
 
-OutOfRange::OutOfRange(const OutOfRange& cpy) :
+#endif //!USING_BASIC_ERROR_FILE_AND_LINE
+
+OutOfRange::OutOfRange(const OutOfRange & cpy) noexcept :
+    TriggerType(cpy),
     exception::Logic(cpy)
 {}
 
-OutOfRange::OutOfRange(OutOfRange&& mov) :
+OutOfRange::OutOfRange(OutOfRange && mov) noexcept :
+    TriggerType(std::move(mov)),
     exception::Logic(std::move(mov))
 {}
 
-OutOfRange::~OutOfRange()
-{}
+const typename OutOfRange::CharType * OutOfRange::Message() const noexcept
+{
+    return exception::Logic::Message();
+}
 
-#elif USING_STANDARD_EXCEPTION
+typename OutOfRange::OutputValueType & 
+OutOfRange::Output(OutputValueType & out) const noexcept
+{
+    return exception::Logic::Output(out);
+}
+
+#endif //!USING_BASIC_ERROR_EXCEPTION
+
+#ifdef USING_STANDARD_EXCEPTION
 
 typedef std::out_of_range OutOfRange;
 
-#endif
+#endif //!USING_STANDARD_EXCEPTION
 
 } //!logic
 
 } //!exception
 
-#ifndef USING_STANDARD_EXCEPTION
-
-constexpr Identification id::Get(const exception::logic::OutOfRange& e)
+namespace id
 {
-    return Identification(constant::error::logic_outofrange_id);
+
+#ifdef USING_EXCEPTION
+
+template<typename TTagError = tag::Trigger>
+typename enable_if::tag::Trigger<TTagError>::Type 
+Get(const std::out_of_range& e) noexcept
+{
+    return Standard(constant::error::logic_outofrange_id);
 };
 
-#endif
+#endif //!USING_EXCEPTION
 
-constexpr Identification id::Get(const std::out_of_range& e)
-{
-    return id::Standard(Identification(constant::error::logic_outofrange_id));
-};
+}
 
 } //!error
 
