@@ -4,9 +4,12 @@
 #include "../Logic.h"
 #include "../../Identification.h"
 #include "../../id/Get.h"
+#include "../../id/Standard.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/Output.h"
+#include "../../output/Operator.h"
 #include "../../../constant/error/Identification.h"
 
-#include <stdexcept>
 #include <utility>
 
 namespace basic
@@ -23,57 +26,115 @@ namespace logic
 class Invalid : public exception::Logic
 {
 public:
-    typedef typename exception::Logic::ErrorType ErrorType;
+    typedef typename error::Exception::TriggerType TriggerType;
+public:
+    typedef defn::type::Char CharType;
+    typedef defn::type::Output OutputValueType;
 protected:
-    Invalid();
+    Invalid() noexcept;
+
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
+protected:
+    Invalid(const CharType * message) noexcept;
 public:
-    Invalid(const char* file, const std::size_t& line);
+    Invalid(const CharType * message, const char * file, 
+        const std::size_t & line) noexcept;
+
+#else
+
 public:
-    Invalid(const Invalid& cpy);
-    Invalid(Invalid&& mov);
+    Invalid(const CharType * message) noexcept;
+
+#endif //!USING_BASIC_ERROR_FILE_AND_LINE
+
 public:
-    ~Invalid();
+    Invalid(const Invalid & cpy) noexcept;
+    Invalid(Invalid && mov) noexcept;
 public:
-    Invalid& operator=(const Invalid&) = delete;
-    Invalid& operator=(Invalid&&) = delete;
+    Invalid & operator=(const Invalid &) = delete;
+    Invalid & operator=(Invalid &&) = delete;
+public:
+    virtual const CharType * Message() const noexcept;
+protected:
+    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
 };
 
-Invalid::Invalid()
+Invalid::Invalid() noexcept :
+    TriggerType(constant::error::logic_invalid_id),
+    exception::Logic("Domain Logic Invalid")
 {}
 
-Invalid::Invalid(const char* file, const std::size_t& line) :
-    ErrorType(constant::error::logic_invalid_id, file, line)
+Invalid::Invalid(const CharType * message) noexcept :
+    TriggerType(constant::error::logic_invalid_id),
+    exception::Logic(message)
 {}
 
-Invalid::Invalid(const Invalid& cpy) :
+#ifdef USING_BASIC_ERROR_FILE_AND_LINE
+
+Invalid::Invalid(const CharType * message, const char * file, 
+    const std::size_t & line) noexcept :
+        TriggerType(constant::error::logic_invalid_id, file, line),
+        exception::Logic(message)
+{}
+
+#endif //!USING_BASIC_ERROR_FILE_AND_LINE
+
+Invalid::Invalid(const Invalid & cpy) noexcept :
+    TriggerType(cpy),
     exception::Logic(cpy)
 {}
 
-Invalid::Invalid(Invalid&& mov) :
+Invalid::Invalid(Invalid && mov) noexcept :
+    TriggerType(std::move(mov)),
     exception::Logic(std::move(mov))
 {}
 
-Invalid::~Invalid()
-{}
+const typename Invalid::CharType * Invalid::Message() const noexcept
+{
+    return exception::Logic::Message();
+}
 
-#elif USING_STANDARD_EXCEPTION
+typename Invalid::OutputValueType & 
+Invalid::Output(OutputValueType & out) const noexcept
+{
+    return exception::Logic::Output(out);
+}
 
-typedef std::logic_error Invalid;
+#endif //!USING_BASIC_ERROR_EXCEPTION
 
-#endif
+#ifdef USING_STANDARD_EXCEPTION
+
+class Invalid : public std::logic_error
+{
+
+};
+
+#endif //!USING_STANDARD_EXCEPTION
 
 } //!logic
 
 } //!exception
 
-#ifndef USING_STANDARD_EXCEPTION
-
-constexpr Identification id::Get(const exception::logic::Invalid& e)
+namespace id
 {
-    return Identification(constant::error::logic_invalid_id);
-};
 
-#endif
+#ifdef USING_EXCEPTION
+
+#ifdef USING_STANDARD_EXCEPTION
+
+template<typename TTagError = tag::Trigger>
+typename enable_if::tag::Trigger<TTagError>::Type  
+Get(const exception::logic::Invalid& e) noexcept
+{
+    return Standard(constant::error::logic_invalid_id);
+}
+
+#endif //!USING_STANDARD_EXCEPTION
+
+#endif //!USING_EXCEPTION
+
+} //!id
 
 } //!error
 
