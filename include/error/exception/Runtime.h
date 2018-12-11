@@ -52,6 +52,8 @@ public:
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
+protected:
+    Runtime(StringType && message) noexcept;
 public:
     Runtime(const Runtime & cpy) noexcept;
     Runtime(Runtime && mov) noexcept;
@@ -61,7 +63,7 @@ public:
 public:
     virtual const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
+    virtual OutputValueType & Output(OutputValueType& out) const noexcept;
 };
 
 Runtime::Runtime() noexcept :
@@ -84,12 +86,17 @@ Runtime::Runtime(const CharType * message, const char* file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Runtime::Runtime(const Runtime& cpy) noexcept :
+Runtime::Runtime(StringType && message) noexcept :
+    TriggerType(constant::error::runtime_id),
+    m_message(std::move(message))
+{}
+
+Runtime::Runtime(const Runtime & cpy) noexcept :
     TriggerType(cpy),
     error::Exception(cpy)
 {}
 
-Runtime::Runtime(Runtime&& mov) noexcept :
+Runtime::Runtime(Runtime && mov) noexcept :
     TriggerType(std::move(mov)),
     error::Exception(std::move(mov))
 {}
@@ -101,8 +108,8 @@ const typename Runtime::CharType * Runtime::Message() const noexcept
     return "Runtime Exception";
 }
 
-typename Runtime::OutputValueType& 
-Runtime::Output(OutputValueType& out) const noexcept
+typename Runtime::OutputValueType & 
+Runtime::Output(OutputValueType & out) const noexcept
 {
     error::Exception::Output(out);
     return out;
@@ -128,7 +135,7 @@ typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::runtime_error& e) noexcept
 {
     return Standard(constant::error::runtime_id);
-};
+}
 
 #endif //!USING_EXCEPTION
 
