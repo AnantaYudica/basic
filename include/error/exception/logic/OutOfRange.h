@@ -119,7 +119,7 @@ typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::out_of_range& e) noexcept
 {
     return Standard(constant::error::logic_outofrange_id);
-};
+}
 
 #endif //!USING_EXCEPTION
 

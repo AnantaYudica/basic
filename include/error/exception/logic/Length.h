@@ -124,7 +124,7 @@ typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::length_error& e) noexcept
 {
     return Standard(constant::error::logic_length_id);
-};
+}
 
 #endif //!USING_EXCEPTION
 

@@ -126,7 +126,7 @@ typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::invalid_argument& e) noexcept
 {
     return Standard(constant::error::logic_invalid_argument_id);
-};
+}
 
 } //!id
 
