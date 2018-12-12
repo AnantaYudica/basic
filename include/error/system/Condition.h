@@ -78,7 +78,7 @@ private:
     static constexpr typename std::enable_if<!category::has::func::
         DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
     DefaultConditionValue(const CategoryType& category) noexcept;
-public:
+private:
     ValueType m_value;
     CategoryType m_category;
     StringType m_message;
@@ -86,6 +86,10 @@ public:
     Condition() noexcept;
     Condition(const CodeType& code) noexcept;
     Condition(const SetValueType& cond_val) noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait, typename = typename
+        std::enable_if<!std::is_same<typename _TCategoryTrait::ValueType,
+        typename _TCategoryTrait::SetValueType>::value>::type>
+    Condition(const ValueType& val) noexcept;
 public:
     Condition(const Condition<TCategoryTrait>& cpy) noexcept;
     Condition(Condition<TCategoryTrait>&& mov) noexcept;
@@ -156,6 +160,14 @@ template<typename TCategoryTrait>
 Condition<TCategoryTrait>::Condition(const SetValueType& cond_val) noexcept :
     m_category(),
     m_value(static_cast<ValueType>(cond_val)),
+    m_message(this->m_category.Message(*this))
+{}
+
+template<typename TCategoryTrait>
+template<typename _TCategoryTrai, typename>
+Condition<TCategoryTrait>::Condition(const ValueType& val) noexcept :
+    m_category(),
+    m_value(val),
     m_message(this->m_category.Message(*this))
 {}
 
