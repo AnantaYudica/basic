@@ -78,7 +78,7 @@ private:
     static constexpr typename std::enable_if<!category::has::func::
         DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
     DefaultCodeValue(const CategoryType& category) noexcept;
-public:
+private:
     ValueType m_value;
     CategoryType m_category;
     StringType m_message;
