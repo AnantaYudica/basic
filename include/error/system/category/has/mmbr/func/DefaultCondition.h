@@ -22,7 +22,7 @@ namespace _func
 
 __DEFINE_HAS_MMBR_FUNC_(_DefaultCondition, __DefaultCondition, TCategoryTrait,
     TRet, TArgs, const,,, T_NAME_,,,,, PROTO_FUNC_T_NAME_,, 
-    PROTO_FUNC_T_RET_NAME_,, DefaultCondition);
+    PROTO_FUNC_T_RET_NAME_,, template DefaultCondition<TRet>);
 
 } //!_func
 
