@@ -22,7 +22,7 @@ namespace _func
 
 __DEFINE_HAS_MMBR_FUNC_(_DefaultCode, __DefaultCode, TCategoryTrait, TRet, 
     TArgs, const,,, T_NAME_,,,,, PROTO_FUNC_T_NAME_,, PROTO_FUNC_T_RET_NAME_,, 
-    DefaultCode);
+    template DefaultCode<TRet>);
 
 } //!_func
 
@@ -55,9 +55,9 @@ namespace mmbr
 namespace func
 {
 
-template<typename TCategoryTrait, typename TValue>
+template<typename TCategoryTrait, typename TCode>
 using DefaultCode = _helper::_basic::_error::_system::_category::_has::
-    _mmbr::_func::_DefaultCode<TCategoryTrait, TValue>;
+    _mmbr::_func::_DefaultCode<TCategoryTrait, TCode>;
 
 } //!func
 
