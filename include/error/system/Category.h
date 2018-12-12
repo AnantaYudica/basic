@@ -178,7 +178,7 @@ typename Category<TCategoryTrait>::CodeType
 Category<TCategoryTrait>::
     DefaultCode(const CodeSetValueType& code_val) const noexcept
 {
-    return CodeType(code_val);
+    return {code_val};
 }
 
 template<typename TCategoryTrait>
@@ -188,7 +188,7 @@ typename std::enable_if<category::has::func::
     typename Category<TCategoryTrait>::ConditionType>::type 
 Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
-    return ConditionType(DefaultCode());
+    return {DefaultCode()};
 }
 
 template<typename TCategoryTrait>
@@ -196,14 +196,14 @@ typename Category<TCategoryTrait>::ConditionType
 Category<TCategoryTrait>::DefaultCondition(const CodeSetValueType& code_val)
     const noexcept
 {
-    return ConditionType(DefaultCode(code_val));
+    return {DefaultCode(code_val)};
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionType 
 Category<TCategoryTrait>::DefaultCondition(const CodeType& code) const noexcept
 {
-    return ConditionType(category::DefaultCondition(m_trait, code));
+    return std::move(category::DefaultCondition(m_trait, code));
 }
 
 template<typename TCategoryTrait>
