@@ -7,6 +7,7 @@
 #include "intf/Condition.dec.h"
 
 #include "../defn/type/Char.h"
+#include "../defn/type/Output.h"
 #include "../defn/type/system/condition/Value.h"
 #include "../msg/String.h"
 
@@ -21,6 +22,7 @@ class Condition
 {
 public:
     typedef defn::type::Char CharType;
+    typedef defn::type::Output OutputType;
     typedef defn::type::system::condition::Value ValueType;
 public:
     typedef msg::String StringType;
@@ -60,6 +62,10 @@ public:
     inline const CategoryInterfaceType & Category() const noexcept;
 public:
     inline const CharType * Message() const noexcept;
+private:
+    inline OutputType & Output(OutputType &) const noexcept;
+private:
+    friend OutputType & operator<<(OutputType &, const Condition &);
 };
 
 } //!system
