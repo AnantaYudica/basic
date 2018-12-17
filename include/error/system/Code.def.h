@@ -7,6 +7,7 @@
 #include "intf/Code.dec.h"
 
 #include "../defn/type/Char.h"
+#include "../defn/type/Output.h"
 #include "../defn/type/system/code/Value.h"
 #include "../msg/String.h"
 
@@ -21,6 +22,7 @@ class Code
 {
 public:
     typedef defn::type::Char CharType;
+    typedef defn::type::Output OutputType;
     typedef defn::type::system::code::Value ValueType;
 public:
     typedef msg::String StringType;
@@ -64,6 +66,10 @@ public:
     inline ConditionType DefaultCondition() const noexcept;
 public:
     inline const CharType * Message() const noexcept;
+private:
+    inline OutputType & Output(OutputType & out) const noexcept;
+private:
+    friend OutputType & operator<<(OutputType &, const Code &);
 };
 
 } //!system
