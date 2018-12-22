@@ -25,7 +25,7 @@ public:
     Output & operator=(const Output &) = delete;
     Output & operator=(Output &&) = delete;
 public:
-    virtual ValueType & operator<<(ValueType &) const noexcept = 0;
+    virtual Output & operator>>(ValueType &) const noexcept = 0;
 };
 
 } //!intf
@@ -39,7 +39,7 @@ std::basic_ostream<TChar, TCharTraits> &
     operator<<(std::basic_ostream<TChar, TCharTraits> & out,
         const basic::error::intf::Output & obj)
 {
-    obj << out;
+    obj >> out;
     return out;
 }
 
