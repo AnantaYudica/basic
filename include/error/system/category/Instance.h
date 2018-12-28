@@ -2,6 +2,7 @@
 #define BASIC_ERROR_SYSTEM_CATEGORY_INSTANCE_H_
 
 #include "has/st/mmbr/func/Instance.h"
+#include "../Category.h"
 
 #include <type_traits>
 
