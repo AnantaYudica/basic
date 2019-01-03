@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_NAME_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_NAME_H_
 
 #include "../../defn/type/Char.h"
 #include "has/mmbr/func/Name.h"
@@ -11,6 +11,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -33,6 +35,8 @@ Name(const TCategoryTrait& category_trait) noexcept
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
@@ -40,4 +44,4 @@ Name(const TCategoryTrait& category_trait) noexcept
 } //!basic
 
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_NAME_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_NAME_H_

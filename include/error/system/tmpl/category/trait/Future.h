@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_TRAIT_FUTURE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_TRAIT_FUTURE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_
 
 #include "../../../../constant/error/system/Category.h"
 #include "../../../defn/type/Char.h"
@@ -15,6 +15,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -107,10 +109,12 @@ inline typename Future::CategoryValueType Future::Value() const noexcept
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_TRAIT_FUTURE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_

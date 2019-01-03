@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCONDITION_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCONDITION_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCONDITION_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCONDITION_H_
 
 #include "has/mmbr/func/DefaultCondition.h"
 
@@ -11,6 +11,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -38,10 +40,12 @@ DefaultCondition(const TCategoryTrait& category_trait, const TCode& code)
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCONDITION_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCONDITION_H_

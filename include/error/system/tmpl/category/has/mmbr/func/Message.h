@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_
 
 #include "../../../../../../macro/HasMemberFunction.h"
 
@@ -10,6 +10,8 @@ namespace _basic
 namespace _error
 {
 namespace _system
+{
+namespace _tmpl
 {
 namespace _category
 {
@@ -32,6 +34,8 @@ __DEFINE_HAS_MMBR_FUNC_(_Message, __Message, TCategoryTrait, TRet, TArgs,
 
 } //!_category
 
+} //!_tmpl
+
 } //!_system
 
 } //!_error
@@ -46,6 +50,8 @@ namespace error
 {
 namespace system
 {
+namespace tmpl
+{
 namespace category
 {
 namespace has
@@ -56,8 +62,8 @@ namespace func
 {
 
 template<typename TCategoryTrait, typename TValue>
-using Message = _helper::_basic::_error::_system::_category::_has::
-    _mmbr::_func::_Message<TCategoryTrait, const char *, const TValue&>;
+using Message = _helper::_basic::_error::_system::_tmpl::_category::
+    _has::_mmbr::_func::_Message<TCategoryTrait, const char *, const TValue&>;
 
 } //!func
 
@@ -67,10 +73,12 @@ using Message = _helper::_basic::_error::_system::_category::_has::
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_MESSAGE_H_

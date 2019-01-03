@@ -1,7 +1,7 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
 
-#include "../../../../../../defn/type/system/code/Value.h"
+#include "../../../../../../../defn/type/system/code/Value.h"
 
 #include "../../../../has/mmbr/defn/type/CodeEnum.h"
 
@@ -12,6 +12,8 @@ namespace _basic
 namespace _error
 {
 namespace _system
+{
+namespace _tmpl
 {
 namespace _category
 {
@@ -47,6 +49,8 @@ struct _Value<TCategoryTrait, true>
 
 } //!_category
 
+} //!_tmpl
+
 } //!_system
 
 } //!_error
@@ -61,6 +65,8 @@ namespace error
 {
 namespace system
 {
+namespace tmpl
+{
 namespace category
 {
 namespace defn
@@ -73,7 +79,7 @@ namespace set
 {
 
 template<typename TCategoryTrait>
-using Value = typename _helper::_basic::_error::_system::_category::
+using Value = typename _helper::_basic::_error::_system::_tmpl::_category::
     _defn::_type::_code::_set::_Value<TCategoryTrait>::Type;
 
 } //!set
@@ -86,10 +92,12 @@ using Value = typename _helper::_basic::_error::_system::_category::
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFN_TYPE_CODE_SET_VALUE_H_

@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_VALUE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_VALUE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_VALUE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_VALUE_H_
 
 #include "../../../../../../macro/HasMemberFunction.h"
 
@@ -10,6 +10,8 @@ namespace _basic
 namespace _error
 {
 namespace _system
+{
+namespace _tmpl
 {
 namespace _category
 {
@@ -31,6 +33,8 @@ __DEFINE_HAS_MMBR_FUNC_(_Value, __Value, TCategoryTrait, TRet, TArgs, const,,,
 
 } //!_category
 
+} //!_tmpl
+
 } //!_system
 
 } //!_error
@@ -45,6 +49,8 @@ namespace error
 {
 namespace system
 {
+namespace tmpl
+{
 namespace category
 {
 namespace has
@@ -55,8 +61,8 @@ namespace func
 {
 
 template<typename TCategoryTrait, typename TValue>
-using Value = _helper::_basic::_error::_system::_category::_has::
-    _mmbr::_func::_Value<TCategoryTrait, TValue>;
+using Value = _helper::_basic::_error::_system::_tmpl::_category::
+    _has::_mmbr::_func::_Value<TCategoryTrait, TValue>;
 
 } //!func
 
@@ -66,10 +72,12 @@ using Value = _helper::_basic::_error::_system::_category::_has::
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_FUNC_VALUE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_VALUE_H_

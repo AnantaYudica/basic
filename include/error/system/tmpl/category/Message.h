@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_
 
 #include "../../msg/String.h"
 #include "has/mmbr/func/Message.h"
@@ -12,6 +12,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -34,6 +36,8 @@ Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
@@ -41,4 +45,4 @@ Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
 } //!basic
 
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_MESSAGE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_

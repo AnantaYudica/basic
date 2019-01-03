@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_HAS_FUNC_DEFAULTCODE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_HAS_FUNC_DEFAULTCODE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_FUNC_DEFAULTCODE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_FUNC_DEFAULTCODE_H_
 
 #include "../../defn/type/code/set/Value.h"
 #include "../mmbr/func/DefaultCode.h"
@@ -10,6 +10,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -32,10 +34,12 @@ struct DefaultCode
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_HAS_FUNC_DEFAULTCODE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_FUNC_DEFAULTCODE_H_

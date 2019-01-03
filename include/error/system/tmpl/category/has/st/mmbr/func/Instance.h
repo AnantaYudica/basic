@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_
 
 #include "../../../../../../../macro/HasStaticMemberFunction.h"
 
@@ -10,6 +10,8 @@ namespace _basic
 namespace _error
 {
 namespace _system
+{
+namespace _tmpl
 {
 namespace _category
 {
@@ -36,6 +38,8 @@ __DEFINE_HAS_STATIC_MMBR_FUNC_(_Instance, __Instance, TCategoryTrait, TRet,
 
 } //!_category
 
+} //!_tmpl
+
 } //!_system
 
 } //!_error
@@ -50,6 +54,8 @@ namespace error
 {
 namespace system
 {
+namespace tmpl
+{
 namespace category
 {
 namespace has
@@ -62,8 +68,8 @@ namespace func
 {
 
 template<typename TCategoryTrait>
-using Instance = _helper::_basic::_error::_system::_category::_has::_st::
-    _mmbr::_func::_Instance<TCategoryTrait, TCategoryTrait>;
+using Instance = _helper::_basic::_error::_system::_tmpl::_category::
+    _has::_st::_mmbr::_func::_Instance<TCategoryTrait, TCategoryTrait>;
 
 } //!func
 
@@ -75,10 +81,12 @@ using Instance = _helper::_basic::_error::_system::_category::_has::_st::
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_ST_MMBR_FUNC_INSTANCE_H_

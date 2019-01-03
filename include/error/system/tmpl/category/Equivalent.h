@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_EQUIVALENT_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_EQUIVALENT_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_EQUIVALENT_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_EQUIVALENT_H_
 
 #include "has/mmbr/func/Equivalent.h"
 
@@ -10,6 +10,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -34,6 +36,8 @@ Equivalent(const TCategoryTrait& category_trait, const TCode& code,
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
@@ -41,4 +45,4 @@ Equivalent(const TCategoryTrait& category_trait, const TCode& code,
 } //!basic
 
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_EQUIVALENT_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_EQUIVALENT_H_

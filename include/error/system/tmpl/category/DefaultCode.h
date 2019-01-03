@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCODE_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCODE_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCODE_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCODE_H_
 
 #include "has/mmbr/func/DefaultCode.h"
 #include "has/mmbr/defn/type/CodeEnum.h"
@@ -12,6 +12,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 namespace category
 {
@@ -38,10 +40,12 @@ DefaultCode(const TCategoryTrait& category_trait) noexcept
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_DEFAULTCODE_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCODE_H_

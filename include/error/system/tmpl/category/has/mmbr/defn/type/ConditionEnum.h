@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
 
 #include "../../../../../../../macro/HasMemberDefinition.h"
 
@@ -10,6 +10,8 @@ namespace _basic
 namespace _error
 {
 namespace _system
+{
+namespace _tmpl
 {
 namespace _category
 {
@@ -35,6 +37,8 @@ __DEFINE_HAS_MMBR_DEFN_(_ConditionEnum, __ConditionEnum, TCategoryTrait,,
 
 } //!_category
 
+} //!_tmpl
+
 } //!_system
 
 } //!_error
@@ -50,6 +54,8 @@ namespace error
 {
 namespace system
 {
+namespace tmpl
+{
 namespace category
 {
 namespace has
@@ -62,8 +68,8 @@ namespace type
 {
 
 template<typename TCategoryTrait>
-using ConditionEnum = _helper::_basic::_error::_system::_category::_has::
-    _mmbr::_defn::_type::_ConditionEnum<TCategoryTrait>;
+using ConditionEnum = _helper::_basic::_error::_system::_tmpl::_category::
+    _has::_mmbr::_defn::_type::_ConditionEnum<TCategoryTrait>;
 
 } //!type
 
@@ -75,10 +81,12 @@ using ConditionEnum = _helper::_basic::_error::_system::_category::_has::
 
 } //!category
 
+} //!tmpl
+
 } //!system
 
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_DEFN_TYPE_CONDITIONENUM_H_
