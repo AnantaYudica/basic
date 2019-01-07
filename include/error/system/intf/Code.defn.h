@@ -1,14 +1,15 @@
-#ifndef BASIC_ERROR_SYSTEM_INTF_CODE_DEF_H_
-#define BASIC_ERROR_SYSTEM_INTF_CODE_DEF_H_
+#ifndef BASIC_ERROR_SYSTEM_INTF_CODE_H_DEFN_
+#define BASIC_ERROR_SYSTEM_INTF_CODE_H_DEFN_
 
-#include "Code.dec.h"
-#include "Category.dec.h"
-#include "../Condition.dec.h"
+#include "Code.decl.h"
+#include "Category.decl.h"
+#include "../Condition.decl.h"
 
-#include "../defn/type/Char.h"
-#include "../defn/type/Output.h"
-#include "../defn/type/system/code/Value.h"
-#include "../msg/String.h"
+#include "../../intf/Output.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/Output.h"
+#include "../../defn/type/system/code/Value.h"
+#include "../../msg/String.h"
 
 namespace basic
 {
@@ -19,7 +20,7 @@ namespace system
 namespace intf
 {
 
-class Code
+class Code : public error::intf::Output
 {
 public:
     typedef defn::type::Char CharType;
@@ -28,7 +29,7 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    typedef Category CategoryInterfaceType;
+    typedef intf::Category CategoryInterfaceType;
     typedef system::Condition ConditionType;
 protected:
     Code() noexcept = default;
@@ -52,8 +53,9 @@ public:
     virtual ConditionType DefaultCondition() const noexcept = 0;
 public:
     virtual StringType Message() const noexcept = 0;
-public:
-    virtual OutputType & Output(OutputType &) const noexcept = 0;
+private:
+    virtual const error::intf::Output & 
+        operator>>(OutputType &) const noexcept = 0;
 };
 
 } //!intf
@@ -64,4 +66,4 @@ public:
 
 } //!basic 
 
-#endif //!BASIC_ERROR_SYSTEM_INTF_CODE_DEF_H_
+#endif //!BASIC_ERROR_SYSTEM_INTF_CODE_H_DEFN_
