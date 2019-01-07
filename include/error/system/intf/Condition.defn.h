@@ -1,13 +1,14 @@
-#ifndef BASIC_ERROR_SYSTEM_INTF_CONDITION_DEF_H_
-#define BASIC_ERROR_SYSTEM_INTF_CONDITION_DEF_H_
+#ifndef BASIC_ERROR_SYSTEM_INTF_CONDITION_H_DEFN_
+#define BASIC_ERROR_SYSTEM_INTF_CONDITION_H_DEFN_
 
-#include "Condition.dec.h"
-#include "Category.dec.h"
+#include "Condition.decl.h"
+#include "Category.decl.h"
 
-#include "../defn/type/Char.h"
-#include "../defn/type/Output.h"
-#include "../defn/type/system/condition/Value.h"
-#include "../msg/String.h"
+#include "../../intf/Output.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/Output.h"
+#include "../../defn/type/system/condition/Value.h"
+#include "../../msg/String.h"
 
 namespace basic
 {
@@ -18,7 +19,7 @@ namespace system
 namespace intf
 {
 
-class Condition
+class Condition : public error::intf::Output
 {
 public:
     typedef defn::type::Char CharType;
@@ -49,7 +50,8 @@ public:
 public:
     virtual StringType Message() const noexcept = 0;
 public:
-    virtual OutputType & Output(OutputType &) const noexcept = 0;
+    virtual const error::intf::Output & 
+        operator>>(OutputType &) const noexcept = 0;
 };
 
 } //!intf
@@ -60,4 +62,4 @@ public:
 
 } //!basic 
 
-#endif //!BASIC_ERROR_SYSTEM_INTF_CONDITION_DEF_H_
+#endif //!BASIC_ERROR_SYSTEM_INTF_CONDITION_H_DEFN_
