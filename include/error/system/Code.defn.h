@@ -1,11 +1,12 @@
-#ifndef BASIC_ERROR_SYSTEM_CODE_DEF_H_
-#define BASIC_ERROR_SYSTEM_CODE_DEF_H_
+#ifndef BASIC_ERROR_SYSTEM_CODE_H_DEFN_
+#define BASIC_ERROR_SYSTEM_CODE_H_DEFN_
 
-#include "Code.dec.h"
-#include "Condition.dec.h"
-#include "intf/Category.dec.h"
-#include "intf/Code.dec.h"
+#include "Code.decl.h"
+#include "Condition.decl.h"
+#include "intf/Category.decl.h"
+#include "intf/Code.decl.h"
 
+#include "../intf/Output.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
 #include "../defn/type/system/code/Value.h"
@@ -18,7 +19,7 @@ namespace error
 namespace system
 {
 
-class Code
+class Code : public error::intf::Output
 {
 public:
     typedef defn::type::Char CharType;
@@ -67,9 +68,7 @@ public:
 public:
     inline const CharType * Message() const noexcept;
 private:
-    inline OutputType & Output(OutputType & out) const noexcept;
-private:
-    friend OutputType & operator<<(OutputType &, const Code &);
+    inline error::intf::Output & operator>>(OutputType & out) const noexcept;
 };
 
 } //!system
@@ -78,4 +77,4 @@ private:
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CODE_DEF_H_
+#endif //!BASIC_ERROR_SYSTEM_CODE_H_DEFN_
