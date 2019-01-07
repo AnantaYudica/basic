@@ -25,7 +25,7 @@ public:
     Output & operator=(const Output &) = delete;
     Output & operator=(Output &&) = delete;
 public:
-    virtual Output & operator>>(ValueType &) const noexcept = 0;
+    virtual const Output & operator>>(ValueType &) const noexcept = 0;
 };
 
 } //!intf
