@@ -1,9 +1,9 @@
 #ifndef BASIC_ERROR_SYSTEM_INTF_CATEGORY_H_
 #define BASIC_ERROR_SYSTEM_INTF_CATEGORY_H_
 
-#include "Category.dec.h"
-#include "../Code.dec.h"
-#include "../Condition.dec.h"
+#include "Category.decl.h"
+#include "../Code.decl.h"
+#include "../Condition.decl.h"
 
 #include "../../intf/Output.h"
 #include "../../defn/type/Char.h"
