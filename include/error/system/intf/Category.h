@@ -5,6 +5,7 @@
 #include "../Code.dec.h"
 #include "../Condition.dec.h"
 
+#include "../../intf/Output.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/type/system/category/Value.h"
@@ -23,7 +24,7 @@ namespace system
 namespace intf
 {
 
-class Category
+class Category : public error::intf::Output
 {
 public:
     typedef defn::type::Char CharType;
@@ -67,8 +68,9 @@ public:
 public:
     virtual StringType Message(const CodeType &) const noexcept = 0;
     virtual StringType Message(const ConditionType &) const noexcept = 0;
-public:
-    virtual OutputType & Output(OutputType &) const noexcept = 0;
+private:
+    virtual const error::intf::Output & 
+        operator>>(OutputType &) const noexcept = 0;
 };
 
 } //!intf
@@ -101,15 +103,6 @@ bool operator>(const basic::error::system::intf::Category & a,
     const basic::error::system::intf::Category & b) noexcept
 {
     return b < a;
-}
-
-template<typename TChar, typename TCharTraits>
-std::basic_ostream<TChar, TCharTraits> & 
-    operator<<(std::basic_ostream<TChar, TCharTraits> & out,
-        const basic::error::system::intf::Category & category)
-{
-    category.Output(out);
-    return out;
 }
 
 #endif //!BASIC_ERROR_SYSTEM_INTF_CATEGORY_H_
