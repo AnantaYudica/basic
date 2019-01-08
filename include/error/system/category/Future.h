@@ -1,12 +1,12 @@
-#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_
-#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_
+#ifndef BASIC_ERROR_SYSTEM_CATEGORY_FUTURE_H_
+#define BASIC_ERROR_SYSTEM_CATEGORY_FUTURE_H_
 
-#include "../../../../constant/error/system/Category.h"
-#include "../../../defn/type/Char.h"
-#include "../../../defn/type/system/category/Value.h"
-#include "../../../defn/type/system/code/Value.h"
-#include "../../../defn/type/system/condition/Value.h"
-#include "../../../msg/String.h"
+#include "../../constant/error/system/Category.h"
+#include "../defn/type/Char.h"
+#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/code/Value.h"
+#include "../defn/type/system/condition/Value.h"
+#include "../msg/String.h"
 
 #include <future>
 
@@ -16,11 +16,7 @@ namespace error
 {
 namespace system
 {
-namespace tmpl
-{
 namespace category
-{
-namespace trait
 {
 
 class Future
@@ -105,11 +101,7 @@ inline typename Future::CategoryValueType Future::Value() const noexcept
     return constant::error::system::future_category;
 }
 
-} //!trait
-
 } //!category
-
-} //!tmpl
 
 } //!system
 
@@ -117,4 +109,4 @@ inline typename Future::CategoryValueType Future::Value() const noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TRAIT_FUTURE_H_
+#endif //!BASIC_ERROR_SYSTEM_CATEGORY_FUTURE_H_
