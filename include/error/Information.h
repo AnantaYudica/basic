@@ -3,7 +3,7 @@
 
 #include "Identification.h"
 #include "id/ToBytes.h"
-#include "output/Interface.h"
+#include "intf/Output.h"
 #include "output/Operator.h"
 #include "defn/type/Output.h"
 
@@ -15,11 +15,10 @@ namespace basic
 namespace error
 {
 
-class Information :
-    public output::Interface
+class Information : public intf::Output
 {
 public:
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 private:
     const error::Identification m_id;
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -45,7 +44,7 @@ public:
     const char * File() const noexcept;
     std::size_t Line() const noexcept;
 protected:
-    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
+    virtual const intf::Output & operator>>(OutputType & out) const noexcept;
 };
 
 constexpr Information::Information() noexcept :
@@ -108,8 +107,8 @@ std::size_t Information::Line() const noexcept
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 }
 
-typename Information::OutputValueType& 
-Information::Output(OutputValueType& out) const noexcept
+typename const intf::Output & 
+    Information::operator>>(OutputType & out) const noexcept
 {
     if (!this->m_id.IsDefault())
     {
@@ -126,13 +125,5 @@ Information::Output(OutputValueType& out) const noexcept
 } //!error
 
 } //!basic
-
-template<typename TChar, typename TCharTraits>
-std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar, 
-    TCharTraits>& out, const basic::error::Information& info)
-{
-    static_cast<const basic::error::output::Interface&>(info).Output(out);
-    return out;
-}
 
 #endif //!BASIC_ERROR_INFORMATION_H_
