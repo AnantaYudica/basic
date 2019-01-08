@@ -9,7 +9,7 @@
 
 #include "../Identification.h"
 #include "../Information.h"
-#include "../output/Interface.h"
+#include "../intf/Output.h"
 #include "../output/Operator.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
@@ -36,7 +36,7 @@ class Error<error::tag::Trigger> :
 {
 public:
     typedef error::defn::type::Char CharType;
-    typedef error::defn::type::Output OutputValueType;
+    typedef error::defn::type::Output OutputType;
     typedef error::defn::type::code::Value CodeValueType;
 public:
     typedef error::Identification IdType;
@@ -45,22 +45,22 @@ public:
 public:
     Error() noexcept;
     template<typename... TArgs>
-    Error(const IdType& id, TArgs&&... args) noexcept;
+    Error(const IdType & id, TArgs && ... args) noexcept;
 public:
-    Error(const Error<error::tag::Trigger>& cpy) noexcept;
-    Error(Error<error::tag::Trigger>&& mov) noexcept;
+    Error(const Error<error::tag::Trigger> & cpy) noexcept;
+    Error(Error<error::tag::Trigger> && mov) noexcept;
 public:
-    Error<error::tag::Trigger>& 
-        operator=(const Error<error::tag::Trigger>&) = delete;
-    Error<error::tag::Trigger>& 
-        operator=(Error<error::tag::Trigger>&&) = delete;
+    Error<error::tag::Trigger> & 
+        operator=(const Error<error::tag::Trigger> &) = delete;
+    Error<error::tag::Trigger> & 
+        operator=(Error<error::tag::Trigger> &&) = delete;
 public:
     virtual const CharType * Message() const noexcept;
 public:
-    const InfoType& Information() const noexcept;
+    const InfoType & Information() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
-    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
+    virtual intf::Output & operator>>(OutputType & out) const noexcept;
 };
 
 Error<error::tag::Trigger>::Error() noexcept :
@@ -68,16 +68,17 @@ Error<error::tag::Trigger>::Error() noexcept :
 {}
 
 template<typename... TArgs>
-Error<error::tag::Trigger>::Error(const IdType& id, TArgs&&... args) noexcept :
-    InfoType(id, std::forward<TArgs>(args)...)
+Error<error::tag::Trigger>::Error(const IdType & id, 
+    TArgs && ... args) noexcept :
+        InfoType(id, std::forward<TArgs>(args)...)
 {}
 
 Error<error::tag::Trigger>::
-    Error(const Error<error::tag::Trigger>& cpy) noexcept :
+    Error(const Error<error::tag::Trigger> & cpy) noexcept :
         InfoType(cpy)
 {}
 
-Error<error::tag::Trigger>::Error(Error<error::tag::Trigger>&& mov) noexcept :
+Error<error::tag::Trigger>::Error(Error<error::tag::Trigger> && mov) noexcept :
     InfoType(std::move(mov))
 {}
 
@@ -87,7 +88,7 @@ Error<error::tag::Trigger>::Message() const noexcept
     return "";
 }
 
-const typename Error<error::tag::Trigger>::InfoType& 
+const typename Error<error::tag::Trigger>::InfoType & 
     Error<error::tag::Trigger>::Information() const noexcept
 {
     return *this;
@@ -99,22 +100,13 @@ typename Error<error::tag::Trigger>::CodeValueType
     return this->Identification().Error().Code();
 }
 
-typename Error<error::tag::Trigger>::OutputValueType& 
-Error<error::tag::Trigger>::Output(OutputValueType& out) const noexcept
+const intf::Output & Error<error::tag::Trigger>::
+    operator>>(OutputType & out) const noexcept
 {
-    error::Information::Output(out);
-    return out;
+    return error::Information::operator>>(out);
 }
 
 } //!basic
-
-template<typename TChar, typename TCharTraits>
-std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar, 
-    TCharTraits>& out, const basic::Error<basic::error::tag::Trigger>& err)
-{
-    static_cast<const basic::error::output::Interface&>(err).Output(out);
-    return out;
-}
 
 #endif //!BASIC_ERROR_TAG_TRIGGER_H_
 
