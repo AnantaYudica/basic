@@ -31,12 +31,11 @@ struct System {};
 } //!error
 
 template<>
-class Error<error::tag::System> :
-    public error::Information
+class Error<error::tag::System> : public error::Information
 {
 public:
     typedef error::defn::type::Char CharType;
-    typedef error::defn::type::Output OutputValueType;
+    typedef error::defn::type::Output OutputType;
     typedef error::defn::type::system::category::Value 
         CategoryValueType;
     typedef error::defn::type::system::code::Value 
@@ -47,40 +46,41 @@ public:
     typedef error::Information InfoType;
 public:
     Error() noexcept;
-    template<typename... TArgs>
-    Error(const error::id::System& id, TArgs&&... args) noexcept;
+    template<typename ... TArgs>
+    Error(const error::id::System & id, TArgs && ... args) noexcept;
 public:
-    Error(const Error<error::tag::System>& cpy) noexcept;
-    Error(Error<error::tag::System>&& mov) noexcept;
+    Error(const Error<error::tag::System> & cpy) noexcept;
+    Error(Error<error::tag::System> && mov) noexcept;
 public:
-    Error<error::tag::System>& 
-        operator=(const Error<error::tag::System>&) = delete;
-    Error<error::tag::System>& 
-        operator=(Error<error::tag::System>&&) = delete;
+    Error<error::tag::System> & 
+        operator=(const Error<error::tag::System> &) = delete;
+    Error<error::tag::System> & 
+        operator=(Error<error::tag::System> &&) = delete;
 public:
     virtual const CharType * Message() const noexcept;
 public:
     CategoryValueType Category() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
-    virtual OutputValueType& Output(OutputValueType& out) const noexcept;
+    virtual const Error<error::tag::System> & 
+        operator>>(OutputType & out) const noexcept;
 };
 
 Error<error::tag::System>::Error() noexcept
 {}
 
-template<typename... TArgs>
-Error<error::tag::System>::Error(const error::id::System& id, 
-    TArgs&&... args) noexcept :
-        InfoType(id, std::forward<TArgs>(args)...)
+template<typename ... TArgs>
+Error<error::tag::System>::Error(const error::id::System & id, 
+    TArgs && ... args) noexcept :
+        InfoType(id, std::forward<TArgs>(args) ...)
 {}
 
-Error<error::tag::System>::Error(const Error<error::tag::System>& cpy) 
+Error<error::tag::System>::Error(const Error<error::tag::System> & cpy) 
     noexcept :
         InfoType(cpy)
 {}
 
-Error<error::tag::System>::Error(Error<error::tag::System>&& mov) noexcept :
+Error<error::tag::System>::Error(Error<error::tag::System> && mov) noexcept :
     InfoType(std::move(mov))
 {}
 
@@ -102,11 +102,11 @@ typename Error<error::tag::System>::CodeValueType
     return this->Identification().ErrorSystem().Code();
 }
 
-typename Error<error::tag::System>::OutputValueType& 
-Error<error::tag::System>::Output(OutputValueType& out) const noexcept
+const Error<error::tag::System> & Error<error::tag::System>::
+    operator>>(OutputType & out) const noexcept
 {
-    error::Information::Output(out);
-    return out;
+    error::Information::operator>>(out);
+    return *this;
 }
 
 } //!basic
