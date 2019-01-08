@@ -26,28 +26,29 @@ private:
     const std::size_t m_line;
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 public:
-    constexpr Information() noexcept;
+    inline constexpr Information() noexcept;
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
-    constexpr Information(const error::Identification& id, const char* file,
-        const std::size_t& line) noexcept;
+    inline constexpr Information(const error::Identification& id, 
+        const char* file, const std::size_t& line) noexcept;
 #else
-    constexpr Information(const error::Identification& id) noexcept;
+    inline constexpr Information(const error::Identification& id) noexcept;
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 public:
-    Information(const Information& cpy) noexcept;
-    Information(Information&& mov) noexcept;
+    inline Information(const Information& cpy) noexcept;
+    inline Information(Information&& mov) noexcept;
 public:
     Information& operator=(const Information& cpy) = delete;
     Information& operator=(Information&& mov) = delete;
 public:
-    const error::Identification& Identification() const noexcept;
-    const char * File() const noexcept;
-    std::size_t Line() const noexcept;
+    inline const error::Identification& Identification() const noexcept;
+    inline const char * File() const noexcept;
+    inline std::size_t Line() const noexcept;
 protected:
-    virtual const intf::Output & operator>>(OutputType & out) const noexcept;
+    virtual inline const Information & 
+        operator>>(OutputType & out) const noexcept;
 };
 
-constexpr Information::Information() noexcept :
+inline constexpr Information::Information() noexcept :
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
     m_file(nullptr),
     m_line(static_cast<std::size_t>(-1)),
@@ -56,19 +57,20 @@ constexpr Information::Information() noexcept :
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
-constexpr Information::Information(const error::Identification& id, 
+inline constexpr Information::Information(const error::Identification& id, 
     const char* file, const std::size_t& line) noexcept :
         m_file(file),
         m_line(line),
         m_id(id)
 {}
 #else
-constexpr Information::Information(const error::Identification& id) noexcept :
-    m_id(id)
+inline constexpr Information::
+    Information(const error::Identification & id) noexcept :
+        m_id(id)
 {}
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Information::Information(const Information& cpy) noexcept :
+inline Information::Information(const Information & cpy) noexcept :
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
     m_file(cpy.m_file),
     m_line(cpy.m_line),
@@ -76,7 +78,7 @@ Information::Information(const Information& cpy) noexcept :
     m_id(cpy.m_id)
 {}
 
-Information::Information(Information&& mov) noexcept :
+inline Information::Information(Information && mov) noexcept :
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
     m_file(mov.m_file),
     m_line(mov.m_line),
@@ -84,12 +86,13 @@ Information::Information(Information&& mov) noexcept :
     m_id(mov.m_id)
 {}
 
-const error::Identification& Information::Identification() const noexcept
+inline const error::Identification& Information::
+    Identification() const noexcept
 {
     return m_id;
 }
 
-const char* Information::File() const noexcept
+inline const char* Information::File() const noexcept
 {
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
     return m_file;
@@ -98,7 +101,7 @@ const char* Information::File() const noexcept
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 }
 
-std::size_t Information::Line() const noexcept
+inline std::size_t Information::Line() const noexcept
 {
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
     return m_line;
@@ -107,8 +110,8 @@ std::size_t Information::Line() const noexcept
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 }
 
-typename const intf::Output & 
-    Information::operator>>(OutputType & out) const noexcept
+inline const Information & Information::
+    operator>>(OutputType & out) const noexcept
 {
     if (!this->m_id.IsDefault())
     {
@@ -119,7 +122,7 @@ typename const intf::Output &
         output::Operator(out, "line ", this->m_file);
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
     }
-    return out;
+    return *this;
 }
 
 } //!error
