@@ -9,7 +9,6 @@
 
 #include "../Identification.h"
 #include "../Information.h"
-#include "../intf/Output.h"
 #include "../output/Operator.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
@@ -31,8 +30,7 @@ struct Trigger {};
 } //!error
 
 template<>
-class Error<error::tag::Trigger> :
-    public error::Information
+class Error<error::tag::Trigger> : public error::Information
 {
 public:
     typedef error::defn::type::Char CharType;
@@ -60,7 +58,8 @@ public:
     const InfoType & Information() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
-    virtual intf::Output & operator>>(OutputType & out) const noexcept;
+    virtual const Error<error::tag::Trigger> & 
+        operator>>(OutputType & out) const noexcept;
 };
 
 Error<error::tag::Trigger>::Error() noexcept :
@@ -100,10 +99,11 @@ typename Error<error::tag::Trigger>::CodeValueType
     return this->Identification().Error().Code();
 }
 
-const intf::Output & Error<error::tag::Trigger>::
+const Error<error::tag::Trigger> & Error<error::tag::Trigger>::
     operator>>(OutputType & out) const noexcept
 {
-    return error::Information::operator>>(out);
+    error::Information::operator>>(out);
+    return *this;
 }
 
 } //!basic
