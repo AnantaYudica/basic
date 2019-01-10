@@ -19,7 +19,8 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::
-    DefaultCodeValue<TCategoryTrait>::Value, defn::type::code::Value>::type 
+    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::code::
+    Value>::type 
 DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 {
     return category_trait.DefaultCodeValue();
@@ -27,7 +28,8 @@ DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::
-    DefaultCodeValue<TCategoryTrait>::Value, defn::type::code::Value>::type 
+    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::code::
+    Value>::type 
 DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 {
     return 0;
