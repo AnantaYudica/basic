@@ -83,6 +83,8 @@ public:
 public:
     const CharType * Name() const noexcept;
 public:
+    CodeValueType DefaultCodeValue() const noexcept;
+public:
     CodeType DefaultCode() const noexcept;
 private:
     template<typename _TCategoryTrait = TCategoryTrait>
@@ -98,6 +100,8 @@ public:
     typename std::enable_if<category::has::mmbr::defn::type::
         CodeEnum<_TCategoryTrait>::Value, CodeType>::type
     DefaultCode(const CodeSetValueType &) const noexcept;
+public:
+    ConditionValueType DefaultConditionValue() const noexcept;
 public:
     ConditionType DefaultCondition() const noexcept;
 private:
