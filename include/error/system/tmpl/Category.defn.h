@@ -9,11 +9,14 @@
 
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 #include "../../intf/Category.h"
+#include "../../intf/Exit.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/system/category/Value.h"
 #include "../../defn/type/system/code/Value.h"
 #include "../../defn/type/system/condition/Value.h"
 #include "../../msg/String.h"
+
+#include <type_traits>
 
 namespace basic
 {
@@ -25,7 +28,9 @@ namespace tmpl
 {
 
 template<typename TCategoryTrait>
-class Category : public intf::Category
+class Category : 
+    public intf::Category,
+    public intf::Exit
 {
 public:
     typedef TCategoryTrait TraitType;
@@ -44,10 +49,18 @@ public:
 public:
     typedef system::Code CodeType;
     typedef system::Condition ConditionType;
+private:
+    static Category<TCategoryTrait> * ms_instance;
+private:
+    TCategoryTrait m_category;
+private:
+    static Category<TCategoryTrait> & ConstructInstance() noexcept;
 public:
+    static const Category<TCategoryTrait> & GetInstance() noexcept;
+private:
     Category() noexcept;
 public:
-    Category(const Category<TCategoryTrait> & cpy) noexcept;
+    Category(const Category<TCategoryTrait> & cpy) noexcept = delete;
     Category(Category<TCategoryTrait> && mov) noexcept;
 public:
     ~Category() noexcept;
@@ -56,6 +69,15 @@ public:
         operator=(const Category<TCategoryTrait> &) = delete;
     Category<TCategoryTrait> & 
         operator=(Category<TCategoryTrait> &&) = delete;
+private:
+    template<typename _TCategoryTrait = TCategoryTrait,
+        typename = typename std::enable_if<std::is_base_of<intf::Exit, 
+        _TCategoryTrait>::value>::type>
+    void Cleanup(int sig) noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait,
+        typename = typename std::enable_if<!std::is_base_of<intf::Exit, 
+        _TCategoryTrait>::value>::type>
+    void Cleanup(int sig) noexcept;
 public:
     ValueType Value() const noexcept;
 public:
@@ -78,13 +100,21 @@ public:
     DefaultCode(const CodeSetValueType &) const noexcept;
 public:
     ConditionType DefaultCondition() const noexcept;
+private:
+    template<typename _TCategoryTrait = TCategoryTrait>
+    typename std::enable_if<category::has::mmbr::defn::type::
+        ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
+    DefaultCondition(const CodeValueType & code) const noexcept;
 public:
     template<typename _TCategoryTrait = TCategoryTrait>
     typename std::enable_if<!category::has::mmbr::defn::type::
         ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
     DefaultCondition(const CodeValueType & code) const noexcept;
     template<typename _TCategoryTrait = TCategoryTrait>
-    ConditionType DefaultCondition(const Code & code) const noexcept;
+    typename std::enable_if<category::has::mmbr::defn::type::
+        ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
+    DefaultCondition(const CodeSetValueType & code) const noexcept;
+    ConditionType DefaultCondition(const Code<TCategoryTrait> & code) const noexcept;
 private:
     bool Equivalent(const CodeValueType & code, 
         const ConditionType & cond) const noexcept;
