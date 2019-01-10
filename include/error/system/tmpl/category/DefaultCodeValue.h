@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCODEVALUE_H_
 
 #include "has/mmbr/func/DefaultCodeValue.h"
-#include "../../../defn/type/code/Value.h"
+#include "../../defn/type/system/code/Value.h"
 
 #include <type_traits>
 
@@ -18,8 +18,8 @@ namespace category
 {
 
 template<typename TCategoryTrait>
-typename std::enable_if<has::mmbr::func::
-    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::code::
+inline typename std::enable_if<has::mmbr::func::
+    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::system::code::
     Value>::type 
 DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 {
@@ -27,8 +27,8 @@ DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 }
 
 template<typename TCategoryTrait>
-typename std::enable_if<!has::mmbr::func::
-    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::code::
+inline typename std::enable_if<!has::mmbr::func::
+    DefaultCodeValue<TCategoryTrait>::Value, error::defn::type::system::code::
     Value>::type 
 DefaultCodeValue(const TCategoryTrait & category_trait) noexcept
 {
