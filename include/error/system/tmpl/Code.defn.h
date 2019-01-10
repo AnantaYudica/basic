@@ -61,7 +61,7 @@ private:
     template<typename _TCategoryTrait = TCategoryTrait, 
         typename = typename std::enable_if<category::has::mmbr::defn::type::
         CodeEnum<_TCategoryTrait>::Value>::type>
-    Code<TCategoryTrait> & operator=(const ValueType & code) noexcept 
+    Code<TCategoryTrait> & operator=(const ValueType & code) noexcept;
 public:
     template<typename _TCategoryTrait = TCategoryTrait, 
         typename = typename std::enable_if<category::has::mmbr::defn::type::
@@ -70,7 +70,7 @@ public:
     template<typename _TCategoryTrait = TCategoryTrait, 
         typename = typename std::enable_if<!category::has::mmbr::defn::type::
         CodeEnum<_TCategoryTrait>::Value>::type>
-    Code<TCategoryTrait> & operator=(const ValueType & code) noexcept 
+    Code<TCategoryTrait> & operator=(const ValueType & code) noexcept;
 public:
     void Clear() noexcept;
 public:
