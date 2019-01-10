@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_DEFAULTCONDITIONVALUE_H_
 
 #include "../../../../../../macro/HasMemberFunction.h"
-#include "../../../../../defn/type/code/Value.h"
+#include "../../../../../defn/type/system/condition/Value.h"
 
 namespace _helper
 {
@@ -65,7 +65,7 @@ namespace func
 template<typename TCategoryTrait>
 using DefaultConditionValue = _helper::_basic::_error::_system::_tmpl::_category::
     _has::_mmbr::_func::_DefaultConditionValue<TCategoryTrait, error::defn::type::
-    code::Value>;
+    system::condition::Value>;
 
 } //!func
 
