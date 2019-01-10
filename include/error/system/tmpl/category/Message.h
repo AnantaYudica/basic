@@ -2,6 +2,8 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_
 
 #include "../../msg/String.h"
+#include "msg/tag/Code.h"
+#include "msg/tag/Condition.h"
 #include "has/mmbr/func/Message.h"
 
 #include <type_traits>
@@ -18,20 +20,20 @@ namespace tmpl
 namespace category
 {
 
-template<typename TCategoryTrait, typename TValue>
-typename std::enable_if<has::mmbr::func::Message<TCategoryTrait,
-    TValue>::Value, msg::String>::type  
-Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
+template<typename TTag, typename TCategoryTrait, typename TValue>
+inline typename std::enable_if<has::mmbr::func::Message<TCategoryTrait,
+    error::msg::String, TTag, TValue>::Value, error::msg::String>::type  
+Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
 {
-    return std::move(category_trait.Message(value));
+    return std::move(category_trait.Message(TTag{}, value));
 }
 
-template<typename TCategoryTrait, typename TValue>
-typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
-    TValue>::Value, msg::String>::type  
-Message(const TCategoryTrait& category_trait, const TValue& value) noexcept
+template<typename TTag, typename TCategoryTrait, typename TValue>
+inline typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
+    error::msg::String, TTag, TValue>::Value, error::msg::String>::type  
+Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
 {
-    return {};
+    return std::move(msg::String{});
 }
 
 } //!category
