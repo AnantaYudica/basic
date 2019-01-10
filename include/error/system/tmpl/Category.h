@@ -14,6 +14,7 @@
 #include "category/DefaultCode.h"
 #include "category/DefaultCodeValue.h"
 #include "category/DefaultCondition.h"
+#include "category/DefaultConditionValue.h"
 #include "category/Equivalent.h"
 #include "category/Instance.h"
 #include "category/Message.h"
@@ -30,6 +31,8 @@ namespace basic
 namespace error
 {
 namespace system
+{
+namespace tmpl
 {
 
 template<typename TCategoryTrait>
@@ -81,7 +84,8 @@ void Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {}
 
 template<typename TCategoryTrait>
-ValueType Category<TCategoryTrait>::Value() const noexcept
+typename Category<TCategoryTrait>::ValueType 
+Category<TCategoryTrait>::Value() const noexcept
 {
     return category::Value(this->m_category);
 }
@@ -93,7 +97,15 @@ const CharType * Category<TCategoryTrait>::Name() const noexcept
 }
 
 template<typename TCategoryTrait>
-CodeType Category<TCategoryTrait>::DefaultCode() const noexcept
+typename Category<TCategoryTrait>::CodeValueType 
+Category<TCategoryTrait>::DefaultCodeValue() const noexcept
+{
+    return category::DefaultCodeValue(this->m_category);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::CodeType 
+Category<TCategoryTrait>::DefaultCode() const noexcept
 {
     return category::DefaultCode(this->m_category);
 }
@@ -129,8 +141,15 @@ Category<TCategoryTrait>::
 }
 
 template<typename TCategoryTrait>
-ConditionType Category<TCategoryTrait>::
-    DefaultCondition() const noexcept
+typename Category<TCategoryTrait>::ConditionValueType 
+Category<TCategoryTrait>::DefaultConditionValue() const noexcept
+{
+    return category::DefaultConditionValue(this->m_category);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
     return category::DefaultCondition(this->m_category,
         category::DefaultCodeValue(this->m_category));
@@ -244,6 +263,8 @@ const error::intf::Output & Category<TCategoryTrait>::
     output::Operator(out, this->Name(), ":", this->Value());
     return *this;
 }
+
+} //!tmpl
 
 } //!system
 
