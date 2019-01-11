@@ -20,6 +20,8 @@
 #include "category/Message.h"
 #include "category/Name.h"
 #include "category/Value.h"
+#include "category/ToCodeValue.h"
+#include "category/ToConditionValue.h"
 
 #include <cstdint>
 #include <utility>
@@ -192,6 +194,22 @@ Category<TCategoryTrait>::
     DefaultCondition(const Code<TCategoryTrait> & code) const noexcept
 {
     return category::DefaultCondition(this->m_category, code.Value());
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::CodeValueType 
+Category<TCategoryTrait>::
+    ToCodeValue(const CodeSetValueType & code) const noexcept
+{
+    return category::ToCodeValue(this->m_category, code);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionValueType 
+Category<TCategoryTrait>::
+    ToConditionValue(const ConditionSetValueType & cond) const noexcept
+{
+    return Category::ToConditionValue(this->m_category, cond);
 }
 
 template<typename TCategoryTrait>
