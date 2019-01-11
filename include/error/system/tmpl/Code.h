@@ -20,12 +20,12 @@ namespace tmpl
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code() noexcept :
-    m_value(Category<TCategoryTrait>::GetInstance().DefaultCode())
+    m_value(Category<TCategoryTrait>::GetInstance().DefaultCodeValue())
 {}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code(const SetValueType & code) noexcept :
-    m_value(Category<TCategoryTrait>::GetInstance().DefaultCode(code))
+    m_value(Category<TCategoryTrait>::GetInstance().ToCodeValue(code))
 {}
 
 template<typename TCategoryTrait>
@@ -40,7 +40,9 @@ Code<TCategoryTrait>::Code(Code<TCategoryTrait> && mov) noexcept :
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::~Code()
-{}
+{
+    this->Clear();
+}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait> & Code<TCategoryTrait>::
@@ -90,7 +92,8 @@ template<typename _TCategoryTrait, typename>
 Code<TCategoryTrait> & Code<TCategoryTrait>::
     operator=(const SetValueType & code) noexcept
 {
-    this->m_value = Category<TCategoryTrait>::GetInstance().DefaultCode(code); 
+    this->m_value = Category<TCategoryTrait>::
+        GetInstance().ToCodeValue(code); 
     return *this;
 }
 
