@@ -75,9 +75,6 @@ public:
     Condition<TCategoryTrait> & operator=(const ValueType& cond) noexcept;
     Condition<TCategoryTrait> & 
         operator=(const CodeTemplateType & code) noexcept;
-private:
-    Condition<TCategoryTrait> & operator=(const Condition & cond) noexcept;
-    Condition<TCategoryTrait> & operator=(Condition && cond) noexcept;
 public:
     void Clear() noexcept;
 public:
