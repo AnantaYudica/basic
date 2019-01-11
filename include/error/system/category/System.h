@@ -32,7 +32,7 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    static System Instance() noexcept;
+    static inline System Instance() noexcept;
 public:
     inline System() noexcept = default;
     inline System(const System &) noexcept = default;
