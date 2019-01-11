@@ -36,7 +36,9 @@ Code<TCategoryTrait>::Code(const Code<TCategoryTrait> & cpy) noexcept :
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::Code(Code<TCategoryTrait> && mov) noexcept :
     m_value(std::move(mov.m_value))
-{}
+{
+    mov.Clear();
+}
 
 template<typename TCategoryTrait>
 Code<TCategoryTrait>::~Code()
