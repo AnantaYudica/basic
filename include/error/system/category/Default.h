@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_SYSTEM_H_
-#define BASIC_ERROR_SYSTEM_CATEGORY_SYSTEM_H_
+#ifndef BASIC_ERROR_SYSTEM_CATEGORY_DEFAULT_H_
+#define BASIC_ERROR_SYSTEM_CATEGORY_DEFAULT_H_
 
 #include "../../constant/error/system/Category.h"
 #include "../defn/type/Char.h"
@@ -19,7 +19,7 @@ namespace system
 namespace category
 {
 
-class System
+class Default
 {
 public:
     typedef std::errc CodeEnumType;
@@ -32,11 +32,11 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    static inline System Instance() noexcept;
+    static inline Default Instance() noexcept;
 public:
-    inline System() noexcept = default;
-    inline System(const System &) noexcept = default;
-    inline System(System &&) noexcept = default;
+    inline Default() noexcept = default;
+    inline Default(const Default &) noexcept = default;
+    inline Default(Default &&) noexcept = default;
 public:
     template<typename TCondition, typename TCode>
     inline TCondition DefaultCondition(const TCode& code) const noexcept;
@@ -57,14 +57,14 @@ public:
 };
 
 template<typename TCondition, typename TCode>
-inline TCondition System::DefaultCondition(const TCode& code) const noexcept
+inline TCondition Default::DefaultCondition(const TCode& code) const noexcept
 {
     return {std::system_category().
         default_error_condition(code.Value()).value()};
 }
 
 template<typename TCode>
-inline bool System::Equivalent(const TCode& code, 
+inline bool Default::Equivalent(const TCode& code, 
     const ConditionValueType& cond) const noexcept
 {
     return std::system_category().equivalent(std::error_code(code.Value(), 
@@ -72,7 +72,7 @@ inline bool System::Equivalent(const TCode& code,
 }
 
 template<typename TCondition>
-inline bool System::Equivalent(const CodeValueType& code, 
+inline bool Default::Equivalent(const CodeValueType& code, 
     const TCondition& cond) const noexcept
 {
     return std::system_category().equivalent(code, 
@@ -80,18 +80,18 @@ inline bool System::Equivalent(const CodeValueType& code,
 }
     
 template<typename TValue>
-inline typename System::StringType 
-System::Message(const TValue& val) const noexcept
+inline typename Default::StringType 
+Default::Message(const TValue& val) const noexcept
 {
     return {std::system_category().message(val.Value())};
 }
 
-inline const typename System::CharType * System::Name() const noexcept
+inline const typename Default::CharType * Default::Name() const noexcept
 {
     return std::system_category().name();
 }
 
-inline typename System::CategoryValueType System::Value() const noexcept
+inline typename Default::CategoryValueType Default::Value() const noexcept
 {
     return constant::error::system::system_category; 
 }
@@ -104,4 +104,4 @@ inline typename System::CategoryValueType System::Value() const noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_SYSTEM_H_
+#endif //!BASIC_ERROR_SYSTEM_CATEGORY_DEFAULT_H_
