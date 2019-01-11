@@ -119,6 +119,11 @@ public:
         ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
     DefaultCondition(const CodeSetValueType & code) const noexcept;
     ConditionType DefaultCondition(const Code<TCategoryTrait> & code) const noexcept;
+public:
+    CodeValueType ToCodeValue(const CodeSetValueType & code) const noexcept;
+public:
+    ConditionValueType 
+    ToConditionValue(const ConditionSetValueType & cond) const noexcept;
 private:
     bool Equivalent(const CodeValueType & code, 
         const ConditionType & cond) const noexcept;
