@@ -3,6 +3,7 @@
 
 #include "../defn/type/Char.h"
 #include "../defn/type/msg/str/Storage.h"
+#include "../intf/Exit.h"
 #include "str/Default.h"
 #include "str/Allocate.h"
 #include "str/Size.h"
@@ -19,7 +20,8 @@ namespace error
 namespace msg
 {
 
-class String
+class String :
+    public error::intf::Exit
 {
 public:
     typedef defn::type::Char CharType;
@@ -29,22 +31,24 @@ private:
 public:
     constexpr String() noexcept;
     template<std::size_t N>
-    String(const CharType (&cstr)[N]) noexcept;
-    String(const CharType *cstr) noexcept;
+    String(const CharType (& cstr)[N]) noexcept;
+    String(const CharType * cstr) noexcept;
     template<typename TString>
-    String(const TString &str) noexcept;
+    String(const TString & str) noexcept;
 public:
-    String(const String &cpy) noexcept;
-    String(String &&mov) noexcept;
+    String(const String & cpy) noexcept;
+    String(String && mov) noexcept;
 public:
     ~String() noexcept;
 public:
-    String & operator=(const String &cpy) noexcept;
-    String & operator=(String &&mov) noexcept;
+    String & operator=(const String & cpy) noexcept;
+    String & operator=(String && mov) noexcept;
 public:
-    const CharType *Value() const noexcept;
+    const CharType * Value() const noexcept;
 public:
     operator bool() const noexcept;
+private:
+    void Cleanup(int sig) noexcept;
 };
 
 constexpr String::String() noexcept :
@@ -52,7 +56,7 @@ constexpr String::String() noexcept :
 {}
 
 template<std::size_t N>
-String::String(const CharType (&cstr)[N]) noexcept :
+String::String(const CharType (& cstr)[N]) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -60,7 +64,7 @@ String::String(const CharType (&cstr)[N]) noexcept :
     msg::str::Copy(m_storage, N, cstr);
 }
 
-String::String(const CharType *cstr) noexcept :
+String::String(const CharType * cstr) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -70,7 +74,7 @@ String::String(const CharType *cstr) noexcept :
 }
 
 template<typename TString>
-String::String(const TString &str) noexcept :
+String::String(const TString & str) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -79,7 +83,7 @@ String::String(const TString &str) noexcept :
     msg::str::Copy(m_storage, size, str);
 }
 
-String::String(const String &cpy) noexcept :
+String::String(const String & cpy) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -89,7 +93,7 @@ String::String(const String &cpy) noexcept :
 
 }
 
-String::String(String &&mov) noexcept :
+String::String(String && mov) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -101,7 +105,7 @@ String::~String() noexcept
     msg::str::Deallocate(m_storage);
 }
 
-String & String::operator=(const String &cpy) noexcept
+String & String::operator=(const String & cpy) noexcept
 {
     msg::str::Deallocate(m_storage);
     const std::size_t size = msg::str::Size(cpy.m_storage);
@@ -110,7 +114,7 @@ String & String::operator=(const String &cpy) noexcept
     return *this;
 }
 
-String & String::operator=(String &&mov) noexcept
+String & String::operator=(String && mov) noexcept
 {
     msg::str::Deallocate(m_storage);
     msg::str::Move(m_storage, std::move(mov.m_storage));
@@ -125,6 +129,11 @@ const typename String::CharType * String::Value() const noexcept
 String::operator bool() const noexcept
 {
     return !msg::str::IsDefault(m_storage);
+}
+
+void String::Cleanup(int sig) noexcept
+{
+    msg::str::Deallocate(m_storage);
 }
 
 } //!msg
