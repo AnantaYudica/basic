@@ -132,7 +132,7 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::runtime_error& e) noexcept
+Get(const std::runtime_error & e) noexcept
 {
     return Standard(constant::error::runtime_id);
 }
