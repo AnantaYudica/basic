@@ -3,10 +3,10 @@
 
 #include "Code.decl.h"
 #include "Condition.decl.h"
-#include "intf/Category.decl.h"
-#include "intf/Code.decl.h"
 
+#include "Category.h"
 #include "../intf/Output.h"
+#include "../intf/Exit.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
 #include "../defn/type/system/code/Value.h"
@@ -19,7 +19,9 @@ namespace error
 namespace system
 {
 
-class Code : public error::intf::Output
+class Code : 
+    public error::intf::Output,
+    public error::intf::Exit
 {
 public:
     typedef defn::type::Char CharType;
@@ -28,47 +30,47 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    typedef intf::Category CategoryInterfaceType;
-    typedef intf::Code CodeInterfaceType;
+    typedef Category CategoryType;
 public:
     typedef Condition ConditionType;
 private:
     ValueType m_value;
-    const CategoryInterfaceType & m_category;
+    CategoryType * m_category;
     StringType m_message;
 public:
     template<typename TCodeEnum>
     inline Code(const TCodeEnum & code) noexcept;
-    inline Code(const CodeInterfaceType & code) noexcept;
     inline Code(const ValueType & code, 
-        const CategoryInterfaceType & category) noexcept;
+        const CategoryType & category) noexcept;
 public:
     inline Code(const Code & cpy) noexcept;
     inline Code(Code && mov) noexcept;
 public:
     inline ~Code() noexcept;
 public:
-    Code & operator=(const Code & cpy) noexcept = delete;
-    Code & operator=(Code && mov) noexcept = delete;
+    inline Code & operator=(const Code & cpy) noexcept;
+    inline Code & operator=(Code && mov) noexcept;
 public:
     template<typename TCodeEnum>
     inline Code & operator=(const TCodeEnum& code) noexcept;
-    inline Code & operator=(const CodeInterfaceType & code) noexcept;
+    inline Code & operator=(const CategoryType & code) noexcept;
 public:
     inline void Assign(const ValueType& code,
-        const CategoryInterfaceType & category) noexcept;
+        const CategoryType & category) noexcept;
 public:
     inline void Clear() noexcept;
 public:
     inline ValueType Value() const noexcept;
 public:
-    inline const CategoryInterfaceType & Category() const noexcept;
+    inline const CategoryType & Category() const noexcept;
 public:
     inline ConditionType DefaultCondition() const noexcept;
 public:
     inline const CharType * Message() const noexcept;
 private:
-    inline error::intf::Output & operator>>(OutputType & out) const noexcept;
+    inline const error::intf::Output & operator>>(OutputType & out) const noexcept;
+private:
+    inline void Cleanup(int sig) noexcept;
 };
 
 } //!system
