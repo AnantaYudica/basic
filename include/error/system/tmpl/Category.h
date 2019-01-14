@@ -189,14 +189,6 @@ Category<TCategoryTrait>::
 }
 
 template<typename TCategoryTrait>
-typename Category<TCategoryTrait>::ConditionType 
-Category<TCategoryTrait>::
-    DefaultCondition(const Code<TCategoryTrait> & code) const noexcept
-{
-    return category::DefaultCondition(this->m_category, code.Value());
-}
-
-template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::CodeValueType 
 Category<TCategoryTrait>::
     ToCodeValue(const CodeSetValueType & code) const noexcept
@@ -227,20 +219,6 @@ bool Category<TCategoryTrait>::Equivalent(const CodeType & code,
 }
 
 template<typename TCategoryTrait>
-bool Category<TCategoryTrait>::Equivalent(const CodeValueType & code, 
-    const Condition<TCategoryTrait> & cond) const noexcept
-{
-    return category::Equivalent(this->m_category, code, cond);
-}
-
-template<typename TCategoryTrait>
-bool Category<TCategoryTrait>::Equivalent(const Code<TCategoryTrait> & code,
-    const ConditionValueType & cond) const noexcept
-{
-    return category::Equivalent(this->m_category, code, cond);
-}
-
-template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::StringType 
 Category<TCategoryTrait>::Message(const CodeType & code) const noexcept
 {
@@ -257,28 +235,10 @@ Category<TCategoryTrait>::Message(const ConditionType & cond) const noexcept
 }
 
 template<typename TCategoryTrait>
-typename Category<TCategoryTrait>::StringType 
-Category<TCategoryTrait>::
-    Message(const Code<TCategoryTrait> & code) const noexcept
-{
-    return category::Message<category::msg::tag::Code>(this->m_category,
-        code.Value());
-}
-
-template<typename TCategoryTrait>
-typename Category<TCategoryTrait>::StringType 
-Category<TCategoryTrait>::
-    Message(const Condition<TCategoryTrait> & cond) const noexcept
-{
-    return category::Message<category::msg::tag::Condition>(this->m_category,
-        cond.Value());
-}
-
-template<typename TCategoryTrait>
 const error::intf::Output & Category<TCategoryTrait>::
     operator>>(OutputType & out) const noexcept
 {
-    output::Operator(out, this->Name(), ":", this->Value());
+    output::Operator(out, "category ", this->Name(), ":", this->Value());
     return *this;
 }
 
