@@ -26,8 +26,8 @@ namespace _condition
 namespace _set
 {
 
-template<typename TCategoryTrait, bool = basic::error::system::category::has::
-    mmbr::defn::type::ConditionEnum<TCategoryTrait>::Value>
+template<typename TCategoryTrait, bool = basic::error::system::tmpl::category::
+    has::mmbr::defn::type::ConditionEnum<TCategoryTrait>::Value>
 struct _Value
 {
     typedef basic::error::defn::type::system::condition::Value Type;
