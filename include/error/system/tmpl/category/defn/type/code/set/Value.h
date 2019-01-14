@@ -26,8 +26,8 @@ namespace _code
 namespace _set
 {
 
-template<typename TCategoryTrait, bool = basic::error::system::category::has::
-    mmbr::defn::type::CodeEnum<TCategoryTrait>::Value>
+template<typename TCategoryTrait, bool = basic::error::system::tmpl::category::
+    has::mmbr::defn::type::CodeEnum<TCategoryTrait>::Value>
 struct _Value
 {
     typedef basic::error::defn::type::system::code::Value Type;
