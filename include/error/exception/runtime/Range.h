@@ -102,11 +102,13 @@ Range::Output(OutputValueType & out) const noexcept
     return exception::Runtime::Output(out);
 }
 
-#elif USING_STANDARD_EXCEPTION
+#endif //!USING_BASIC_ERROR_EXCEPTION
+
+#ifdef USING_STANDARD_EXCEPTION
 
 typedef std::range_error Range;
 
-#endif
+#endif //!USING_STANDARD_EXCEPTION
 
 } //!runtime
 
