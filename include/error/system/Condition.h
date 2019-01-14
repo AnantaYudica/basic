@@ -1,51 +1,13 @@
-#ifndef BASIC_ERROR_SYSTEM_CONDITION_H__FORWARD_DECLARATION_
-#define BASIC_ERROR_SYSTEM_CONDITION_H__FORWARD_DECLARATION_
-
-namespace basic
-{
-namespace error
-{
-namespace system
-{
-
-template<typename TCategoryTrait>
-class Condition;
-
-} //!system
-
-} //!error
-
-} //!basic
-
-#ifndef BASIC_ERROR_SYSTEM_CATEGORY_H__FORWARD_DECLARATION_
-
-#include "Category.h"
-
-#endif //!BASIC_ERROR_SYSTEM_CATEGORY_H__FORWARD_DECLARATION_
-
-#ifndef BASIC_ERROR_SYSTEM_CODE_H__FORWARD_DECLARATION_
-
-#include "Code.h"
-
-#endif //!BASIC_ERROR_SYSTEM_CODE_H__FORWARD_DECLARATION_
-
-#include "Condition.h"
-
-#else //else BASIC_ERROR_SYSTEM_CONDITION_H__FORWARD_DECLARATION_
-
 #ifndef BASIC_ERROR_SYSTEM_CONDITION_H_
 #define BASIC_ERROR_SYSTEM_CONDITION_H_
 
-#include "../../Error.h"
-#include "../defn/type/Char.h"
-#include "../defn/type/system/Condition/Value.h"
-#include "../msg/String.h"
-#include "category/has/func/DefaultCode.h"
-#include "category/has/mmbr/defn/type/ConditionEnum.h"
+#include "Condition.defn.h"
+
+#include "make/Category.h"
+#include "make/condition/Value.h"
+#include "../defn/type/system/condition/Value.h"
 
 #include <utility>
-#include <type_traits>
-#include <ostream>
 
 namespace basic
 {
@@ -54,424 +16,304 @@ namespace error
 namespace system
 {
 
-template<typename TCategoryTrait>
-class Condition
-{
-public:
-    typedef TCategoryTrait CategoryTraitType;
-public:
-    typedef defn::type::Char CharType;
-    typedef defn::type::system::condition::Value ValueType;
-public:
-    typedef msg::String StringType;
-public:
-    typedef Category<TCategoryTrait> CategoryType;
-    typedef Code<TCategoryTrait> CodeType;
-public:
-    typedef typename CategoryType::ConditionSetValueType SetValueType;
-private:
-    template<typename _TCategoryTrait = TCategoryTrait>
-    static constexpr typename std::enable_if<category::has::func::
-        DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
-    DefaultConditionValue(const CategoryType& category) noexcept;
-    template<typename _TCategoryTrait = TCategoryTrait>
-    static constexpr typename std::enable_if<!category::has::func::
-        DefaultCode<_TCategoryTrait>::Value, ValueType>::type 
-    DefaultConditionValue(const CategoryType& category) noexcept;
-private:
-    ValueType m_value;
-    CategoryType m_category;
-    StringType m_message;
-public:
-    Condition() noexcept;
-    Condition(const CodeType& code) noexcept;
-    Condition(const SetValueType& cond_val) noexcept;
-    template<typename _TCategoryTrait = TCategoryTrait, typename = typename
-        std::enable_if<!std::is_same<typename _TCategoryTrait::ValueType,
-        typename _TCategoryTrait::SetValueType>::value>::type>
-    Condition(const ValueType& val) noexcept;
-public:
-    Condition(const Condition<TCategoryTrait>& cpy) noexcept;
-    Condition(Condition<TCategoryTrait>&& mov) noexcept;
-public:
-    ~Condition() noexcept;
-public:
-    Condition<TCategoryTrait>& 
-        operator=(const Condition<TCategoryTrait>& cpy) noexcept;
-    Condition<TCategoryTrait>& 
-        operator=(Condition<TCategoryTrait>&& mov) noexcept;
-public:
-    Condition<TCategoryTrait>& 
-        operator=(const SetValueType& cond_val) noexcept;
-    Condition<TCategoryTrait>& 
-        operator=(const CodeType& code) noexcept;
-public:
-    void Assign(const SetValueType& cond_val) noexcept;
-    void Assign(const CodeType& code) noexcept;
-public:
-    void Clear() noexcept;
-public:
-    ValueType Value() const noexcept;
-public:
-    const CategoryType& Category() const noexcept;
-public:
-    const CharType * Message() const noexcept;
-public:
-    operator bool() const noexcept;
-};
+template<typename TConditionEnum>
+inline Condition::Condition(const TConditionEnum & cond) noexcept :
+    m_value(system::make::condition::Value(cond)),
+    m_category(const_cast<CategoryType *>(&system::make::Category(cond))),
+    m_message(m_category->Message(*this))
+{}
 
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-constexpr typename std::enable_if<category::has::func::
-    DefaultCode<_TCategoryTrait>::Value, 
-    typename Condition<TCategoryTrait>::ValueType>::type 
-Condition<TCategoryTrait>::
-    DefaultConditionValue(const CategoryType& category) noexcept
+inline Condition::Condition(const ValueType & val, 
+    const CategoryType & category) noexcept :
+        m_value(val),
+        m_category(const_cast<CategoryType *>(&category)),
+        m_message(m_category->Message(*this))
+{}
+
+inline Condition::Condition(const Condition & cpy) noexcept :
+    m_value(cpy.m_value),
+    m_category(cpy.m_category),
+    m_message(cpy.m_message)
+{}
+
+inline Condition::Condition(Condition && mov) noexcept :
+    m_value(std::move(mov.m_value)),
+    m_category(std::move(mov.m_category)),
+    m_message(std::move(mov.m_message))
 {
-    return category.DefaultCondition().m_value;
+    this->Clear();
 }
 
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait >
-constexpr typename std::enable_if<!category::has::func::
-    DefaultCode<_TCategoryTrait>::Value, 
-    typename Condition<TCategoryTrait>::ValueType>::type 
-Condition<TCategoryTrait>::
-    DefaultConditionValue(const CategoryType& category) noexcept
-{
-    return 0;
-}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::Condition() noexcept :
-    m_category(),
-    m_value(DefaultConditionValue(this->m_category)),
-    m_message(this->m_category.Message(*this))
+inline Condition::~Condition() noexcept
 {}
 
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::Condition(const CodeType& code) noexcept :
-    m_category(),
-    m_value(this->m_category.DefaultCondition(code).m_value),
-    m_message(this->m_category.Message(*this))
-{}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::Condition(const SetValueType& cond_val) noexcept :
-    m_category(),
-    m_value(static_cast<ValueType>(cond_val)),
-    m_message(this->m_category.Message(*this))
-{}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrai, typename>
-Condition<TCategoryTrait>::Condition(const ValueType& val) noexcept :
-    m_category(),
-    m_value(val),
-    m_message(this->m_category.Message(*this))
-{}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::Condition(const Condition<TCategoryTrait>& cpy) 
-    noexcept :
-        m_category(cpy.m_category),
-        m_value(cpy.m_value),
-        m_message(cpy.m_message)
-{}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::Condition(Condition<TCategoryTrait>&& mov) 
-    noexcept :
-        m_category(std::move(mov.m_category)),
-        m_value(std::move(mov.m_value)),
-        m_message(std::move(mov.m_message))
-{}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::~Condition() noexcept
-{
-    Clear();
-}
-
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>& 
-Condition<TCategoryTrait>::operator=(const Condition<TCategoryTrait>& cpy) 
-    noexcept
+inline Condition & Condition::operator=(const Condition & cpy) noexcept
 {
     this->m_value = cpy.m_value;
+    this->m_category = cpy.m_category;
     this->m_message = cpy.m_message;
     return *this;
 }
-    
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>& 
-Condition<TCategoryTrait>::operator=(Condition<TCategoryTrait>&& mov) noexcept
+
+inline Condition & Condition::operator=(Condition && mov) noexcept
 {
     this->m_value = std::move(mov.m_value);
+    this->m_category = std::move(mov.m_category);
     this->m_message = std::move(mov.m_message);
+    mov.Clear();
     return *this;
 }
 
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>& 
-Condition<TCategoryTrait>::operator=(const SetValueType& cond_val) noexcept
+template<typename TConditionEnum>
+inline Condition & Condition::operator=(const TConditionEnum & cond) noexcept
 {
-    this->m_value = static_cast<ValueType>(cond_val);
-    this->m_message = this->m_category.Message(*this);
+    this->m_value = system::make::condition::Value(cond);
+    this->m_category = const_cast<CategoryType *>(&system::make::
+        Category(cond));
+    this->m_message = std::move(m_category->Message(*this));
     return *this;
 }
 
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>& 
-Condition<TCategoryTrait>::operator=(const CodeType& code) noexcept
+inline void Condition::Assign(const ValueType & cond, 
+    const CategoryType & category) noexcept
 {
-    this->m_value = this->m_category.DefaultCondition(code).m_value;
-    this->m_message = this->m_category.Message(*this);
-    return *this;
+    this->m_value = cond;
+    this->m_category = const_cast<CategoryType *>(&category);
+    this->m_message = std::move(m_category->Message(*this));
 }
 
-template<typename TCategoryTrait>
-void Condition<TCategoryTrait>::Assign(const SetValueType& cond_val) noexcept
+inline void Condition::Clear() noexcept
 {
-    this->m_value = static_cast<ValueType>(cond_val);
-    this->m_message = this->m_category.Message(*this);
+    this->m_value = this->m_category->DefaultCondition().Value();
+    this->m_message = std::move(m_category->Message(*this));
 }
 
-template<typename TCategoryTrait>
-void Condition<TCategoryTrait>::Assign(const CodeType& code) noexcept
-{
-    this->m_value = this->m_category.DefaultCondition(code).m_value;
-    this->m_message = this->m_category.Message(*this);
-}
-
-template<typename TCategoryTrait>
-void Condition<TCategoryTrait>::Clear() noexcept
-{
-    this->m_value = this->m_category.DefaultCondition().m_value;
-    this->m_message = std::move(StringType());
-}
-
-template<typename TCategoryTrait>
-typename Condition<TCategoryTrait>::ValueType 
-Condition<TCategoryTrait>::Value() const noexcept
+inline typename Condition::ValueType 
+Condition::Value() const noexcept
 {
     return this->m_value;
 }
 
-template<typename TCategoryTrait>
-const typename Condition<TCategoryTrait>::CategoryType& 
-Condition<TCategoryTrait>::Category() const noexcept
+inline const typename Condition::CategoryType & 
+Condition::Category() const noexcept
 {
-    return this->m_category;
+    return *this->m_category;
 }
 
-template<typename TCategoryTrait>
-const char * Condition<TCategoryTrait>::Message() const noexcept
+inline const typename Condition::CharType * 
+Condition::Message() const noexcept
 {
-    return this->m_category.Message(*this);
+    return this->m_message.Value();
 }
 
-template<typename TCategoryTrait>
-Condition<TCategoryTrait>::operator bool() const noexcept
+inline const error::intf::Output & 
+Condition::operator>>(OutputType & out) const noexcept
 {
-    return this->m_value != DefaultConditionValue(this->m_category);
+    error::output::Operator(out, "code ", this->m_value);
+    error::output::Operator(out, "msg ", this->Message());
+    return *this;
 }
 
-} //!system
-
-} //!error
+inline void Condition::Cleanup(int sig) noexcept
+{
+    static_cast<error::intf::Exit &>(this->m_message).Cleanup(sig);
+}
 
 } //!basic
 
+} //!error
 
-template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator==(const basic::error::system::
-    Condition<TCategoryTraitA>& cond_a, const basic::error::system::
-    Condition<TCategoryTraitA>& cond_b) noexcept
+} //!system 
+
+inline bool operator==(const basic::error::system::Condition & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
 {
     return cond_a.Category() == cond_b.Category() &&
         cond_a.Value() == cond_b.Value();
 }
 
-template<typename TCategoryTrait>
-bool operator==(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_b_val) noexcept
+inline bool operator==(const basic::error::system::Condition & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
 {
-    return cond_a.Value() == cond_b_val;
+    return cond_a.Value() == cond_b;
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator==(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_b_val)
+template<typename TConditionEnum>
+inline bool operator==(const basic::error::system::Condition & cond_a, 
+    const typename TConditionEnum & cond_b) noexcept
 {
-    return cond_a.Value() == cond_b_val;
+    return cond_a.Category() == basic::error::system::make::Category(cond_b) &&
+        cond_a.Value() == basic::error::system::make::condition::Value(cond_b);
 }
 
-template<typename TCategoryTrait>
-bool operator==(const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b) noexcept
+inline bool operator==(const basic::error::defn::type::system::condition::
+    Value & cond_a, const basic::error::system::Condition & cond_b) noexcept
 {
-    return cond_b == cond_a_val;
+    return cond_b == cond_a;
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator==(const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b)
+template<typename TConditionEnum>
+inline bool operator==(const basic::error::defn::type::system::condition::
+    Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return cond_b == cond_a_val;
+    return cond_a == basic::error::system::make::code::Value(cond_b);
 }
 
-template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator!=(const basic::error::system::
-    Condition<TCategoryTraitA>& cond_a, const basic::error::system::
-    Condition<TCategoryTraitA>& cond_b) noexcept
+template<typename TConditionEnum>
+inline bool operator==(const TConditionEnum & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
+{
+    return cond_b == basic::error::system::make::condition::
+        Value(cond_a);
+}
+
+template<typename TConditionEnum>
+inline bool operator==(const TConditionEnum & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
+{
+    return cond_b == cond_a;
+}
+
+inline bool operator!=(const basic::error::system::Condition & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
 {
     return !(cond_a == cond_b);
 }
 
-template<typename TCategoryTrait>
-bool operator!=(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_b_val) noexcept
+inline bool operator!=(const basic::error::system::Condition & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
 {
-    return !(cond_a == cond_b_val);
+    return !(cond_a == cond_b);
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator!=(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_b_val)
+template<typename TConditionEnum>
+inline bool operator!=(const basic::error::system::Condition & cond_a, 
+    const TConditionEnum & cond_b) noexcept
 {
-    return !(cond_a == cond_b_val);
+    return !(cond_a == cond_b);
 }
 
-template<typename TCategoryTrait>
-bool operator!=(const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b) noexcept
+inline bool operator!=(const basic::error::defn::type::system::condition::
+    Value & cond_a, const basic::error::system::Condition & cond_b) noexcept
 {
-    return !(cond_a_val == cond_b);
+    return !(cond_a == cond_b);
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator!=(const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b)
+template<typename TConditionEnum>
+inline bool operator!=(const basic::error::defn::type::system::condition::
+    Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return !(cond_a_val == cond_b);
+    return !(cond_a == cond_b);
 }
 
-template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator<(const basic::error::system::
-    Condition<TCategoryTraitA>& cond_a, const basic::error::system::
-    Condition<TCategoryTraitA>& cond_b) noexcept
+template<typename TConditionEnum>
+inline bool operator!=(const TConditionEnum & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
+{
+    return !(cond_a == cond_b);
+}
+
+template<typename TConditionEnum>
+inline bool operator!=(const TConditionEnum & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
+{
+    return !(cond_a == cond_b);
+}
+
+inline bool operator<(const basic::error::system::Condition & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
 {
     return cond_a.Category() == cond_b.Category() &&
         cond_a.Value() < cond_b.Value();
 }
 
-template<typename TCategoryTrait>
-bool operator<(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_b_val) noexcept
+inline bool operator<(const basic::error::system::Condition & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
 {
-    return cond_a.Value() < cond_b_val;
+    return cond_a.Value() < cond_b;
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator<(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_b_val)
+template<typename TConditionEnum>
+inline bool operator<(const basic::error::system::Condition & cond_a, 
+    const TConditionEnum & cond_b) noexcept
 {
-    return cond_a.Value() < cond_b_val;
+    return cond_a.Category() == basic::error::system::make::Category(cond_b) &&
+        cond_a.Value() < basic::error::system::make::condition::Value(cond_b);
 }
 
-template<typename TCategoryTrait>
-bool operator<(const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b) noexcept
+inline bool operator<(const basic::error::defn::type::system::condition::
+    Value & cond_a, const basic::error::system::Condition & cond_b) noexcept
 {
-    return cond_a_val < cond_b.Value();
+    return cond_a < cond_b.Value();
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator<(const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b)
+template<typename TConditionEnum>
+inline bool operator<(const basic::error::defn::type::system::condition::
+    Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return cond_a_val < cond_b.Value();
+    return cond_a < basic::error::system::make::condition::Value(cond_b);
 }
 
-template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator>(const basic::error::system::
-    Condition<TCategoryTraitA>& cond_a, const basic::error::system::
-    Condition<TCategoryTraitA>& cond_b) noexcept
+template<typename TConditionEnum>
+inline bool operator<(const TConditionEnum & cond_a, 
+    const basic::error::system::tmpl::Condition & cond_b) noexcept
 {
-    return cond_a.Category() == cond_b.Category() &&
-        cond_a.Value() > cond_b.Value();
+    return basic::error::system::make::Category(cond_a) == cond_b.Category() &&
+        basic::error::system::make::condition::Value(cond_a) < cond_b.Value();
 }
 
-template<typename TCategoryTrait>
-bool operator>(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_b_val) noexcept
+template<typename TConditionEnum>
+inline bool operator<( const TConditionEnum & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
 {
-    return cond_a.Value() > cond_b_val;
+    return basic::error::system::make::condition::Value(cond_a) < cond_b;
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator>(const basic::error::system::
-    Condition<TCategoryTrait>& cond_a, const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_b_val)
+inline bool operator>(const basic::error::system::Condition & cond_a, 
+    const basic::error::system::Condition & cond_b) noexcept
 {
-    return cond_a.Value() > cond_b_val;
+    return cond_b < cond_a;
 }
 
-template<typename TCategoryTrait>
-bool operator>(const typename basic::error::system::
-    Condition<TCategoryTrait>::ValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b) noexcept
+inline bool operator>(const basic::error::system::Condition & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
 {
-    return cond_a_val > cond_b.Value();
+    return cond_b < cond_a;
 }
 
-template<typename TCategoryTrait>
-typename std::enable_if<basic::error::system::category::has::mmbr::defn::type::
-    ConditionEnum<TCategoryTrait>::Value, bool>::type
-operator>(const typename basic::error::system::
-    Condition<TCategoryTrait>::SetValueType& cond_a_val, 
-    const basic::error::system::Condition<TCategoryTrait>& cond_b)
+template<typename TConditionEnum>
+inline bool operator>(const basic::error::system::Condition & cond_a, 
+    const TConditionEnum & cond_b) noexcept
 {
-    return cond_a_val > cond_b.Value();
+    return cond_b < cond_a;
 }
 
-template<typename TChar, typename TCharTraits, typename TCategoryTrait>
-std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar, 
-    TCharTraits>& out, const basic::error::system::
-    Condition<TCategoryTrait>& cond)
+inline bool operator>(const basic::error::defn::type::system::condition::
+    Value & cond_a, const basic::error::system::Condition & cond_b) noexcept
 {
-    out << cond.Message();
-    return out;
+    return cond_b < cond_a;
 }
+
+template<typename TConditionEnum>
+inline bool operator>(const basic::error::defn::type::system::condition::
+    Value & cond_a, const TConditionEnum & cond_b) noexcept
+{
+    return cond_b < cond_a;
+}
+
+template<typename TConditionEnum>
+inline bool operator>(const TConditionEnum & cond_a, 
+    const basic::error::system::tmpl::Condition & cond_b) noexcept
+{
+    return cond_b < cond_a;
+}
+
+template<typename TConditionEnum>
+inline bool operator>(const TConditionEnum & cond_a, 
+    const basic::error::defn::type::system::condition::Value & cond_b) noexcept
+{
+    return cond_b < cond_a;
+}
+
 
 #endif //!BASIC_ERROR_SYSTEM_CONDITION_H_
-
-#endif //!BASIC_ERROR_SYSTEM_CONDITION_H__FORWARD_DECLARATION_
