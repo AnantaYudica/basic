@@ -2,13 +2,11 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_H_DEFN_
 
 #include "Category.decl.h"
-#include "Code.decl.h"
-#include "Condition.decl.h"
 #include "../Code.decl.h"
 #include "../Condition.decl.h"
 
 #include "category/has/mmbr/defn/type/CodeEnum.h"
-#include "../../intf/Category.h"
+#include "../intf/Category.h"
 #include "../../intf/Exit.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/system/category/Value.h"
@@ -30,7 +28,7 @@ namespace tmpl
 template<typename TCategoryTrait>
 class Category : 
     public intf::Category,
-    public intf::Exit
+    public error::intf::Exit
 {
 public:
     typedef TCategoryTrait TraitType;
@@ -71,11 +69,11 @@ public:
         operator=(Category<TCategoryTrait> &&) = delete;
 private:
     template<typename _TCategoryTrait = TCategoryTrait,
-        typename = typename std::enable_if<std::is_base_of<intf::Exit, 
+        typename = typename std::enable_if<std::is_base_of<error::intf::Exit, 
         _TCategoryTrait>::value>::type>
     void Cleanup(int sig) noexcept;
     template<typename _TCategoryTrait = TCategoryTrait,
-        typename = typename std::enable_if<!std::is_base_of<intf::Exit, 
+        typename = typename std::enable_if<!std::is_base_of<error::intf::Exit, 
         _TCategoryTrait>::value>::type>
     void Cleanup(int sig) noexcept;
 public:
@@ -104,7 +102,7 @@ public:
     ConditionValueType DefaultConditionValue() const noexcept;
 public:
     ConditionType DefaultCondition() const noexcept;
-private:
+public:
     template<typename _TCategoryTrait = TCategoryTrait>
     typename std::enable_if<category::has::mmbr::defn::type::
         ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
@@ -118,28 +116,19 @@ public:
     typename std::enable_if<category::has::mmbr::defn::type::
         ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
     DefaultCondition(const CodeSetValueType & code) const noexcept;
-    ConditionType DefaultCondition(const Code<TCategoryTrait> & code) const noexcept;
 public:
     CodeValueType ToCodeValue(const CodeSetValueType & code) const noexcept;
 public:
     ConditionValueType 
     ToConditionValue(const ConditionSetValueType & cond) const noexcept;
-private:
+public:
     bool Equivalent(const CodeValueType & code, 
         const ConditionType & cond) const noexcept;
     bool Equivalent(const CodeType & code,
         const ConditionValueType & cond) const noexcept;
 public:
-    bool Equivalent(const CodeValueType & code, 
-        const Condition<TCategoryTrait> & cond) const noexcept;
-    bool Equivalent(const Code<TCategoryTrait> & code,
-        const ConditionValueType & cond) const noexcept;
-private:
     StringType Message(const CodeType & code) const noexcept;
     StringType Message(const ConditionType & cond) const noexcept;
-public:
-    StringType Message(const Code<TCategoryTrait> & code) const noexcept;
-    StringType Message(const Condition<TCategoryTrait> & cond) const noexcept;
 private:
     const error::intf::Output & operator>>(OutputType &) const noexcept;
 };
