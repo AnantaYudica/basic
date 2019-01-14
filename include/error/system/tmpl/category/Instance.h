@@ -21,14 +21,14 @@ template<typename TCategoryTrait>
 typename std::enable_if<has::st::mmbr::func::Instance<TCategoryTrait>::Value,
     TCategoryTrait>::type Instance() noexcept
 {
-    return TCategoryTrait::Instance();
+    return std::move(TCategoryTrait::Instance());
 }
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::st::mmbr::func::Instance<TCategoryTrait>::Value,
     TCategoryTrait>::type Instance() noexcept
 {
-    return {};
+    return std::move(TCategoryTrait{});
 }
 
 } //!category
