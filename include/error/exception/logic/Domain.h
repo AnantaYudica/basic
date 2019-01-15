@@ -31,50 +31,50 @@ public:
     typedef typename error::Exception::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 protected:
-    Domain() noexcept;
+    inline Domain() noexcept;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Domain(const CharType * message) noexcept;
+    inline Domain(const CharType * message) noexcept;
 public:
-    Domain(const CharType * message, const char * file, 
+    inline Domain(const CharType * message, const char * file, 
         const std::size_t & line) noexcept;
 
 #else
 
 public:
-    Domain(const CharType * message) noexcept;
+    inline Domain(const CharType * message) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Domain(const Domain & cpy) noexcept;
-    Domain(Domain && mov) noexcept;
+    inline Domain(const Domain & cpy) noexcept;
+    inline Domain(Domain && mov) noexcept;
 public:
     Domain & operator=(const Domain &) = delete;
     Domain & operator=(Domain &&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
+    virtual inline const Domain & operator>>(OutputType & out) const noexcept;
 };
 
-Domain::Domain() noexcept :
+inline Domain::Domain() noexcept :
     TriggerType(constant::error::logic_domain_id),
     exception::Logic("Domain Logic Exception")
 {}
 
-Domain::Domain(const CharType * message) noexcept :
+inline Domain::Domain(const CharType * message) noexcept :
     TriggerType(constant::error::logic_domain_id),
     exception::Logic(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Domain::Domain(const CharType * message, const char * file, 
+inline Domain::Domain(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::logic_domain_id, file, line),
         exception::Logic(message)
@@ -82,25 +82,25 @@ Domain::Domain(const CharType * message, const char * file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Domain::Domain(const Domain & cpy) noexcept :
+inline Domain::Domain(const Domain & cpy) noexcept :
     TriggerType(cpy),
     exception::Logic(cpy)
 {}
 
-Domain::Domain(Domain && mov) noexcept :
+inline Domain::Domain(Domain && mov) noexcept :
     TriggerType(std::move(mov)),
     exception::Logic(std::move(mov))
 {}
 
-const typename Domain::CharType * Domain::Message() const noexcept
+inline const typename Domain::CharType * Domain::Message() const noexcept
 {
     return exception::Logic::Message();
 }
 
-typename Domain::OutputValueType & 
-Domain::Output(OutputValueType & out) const noexcept
+inline const Domain & Domain::operator>>(OutputType & out) const noexcept
 {
-    return exception::Logic::Output(out);
+    exception::Logic::operator>>(out);
+    return *this;
 }
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
@@ -121,7 +121,7 @@ namespace id
 #ifdef USING_EXCEPTION
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type  
+inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const std::domain_error & e) noexcept
 {
     return Standard(constant::error::logic_domain_id);
