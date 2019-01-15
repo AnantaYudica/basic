@@ -27,65 +27,67 @@ public:
     typedef Error<tag::Trigger> TriggerType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Exception() noexcept;
+    inline Exception() noexcept;
 public:
-    Exception(const char * file, const std::size_t & line) noexcept;
+    inline Exception(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    Exception() noexcept;
+    inline Exception() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Exception(const Exception & cpy) noexcept;
-    Exception(Exception && mov) noexcept;
+    inline Exception(const Exception & cpy) noexcept;
+    inline Exception(Exception && mov) noexcept;
 public:
     Exception & operator=(const Exception &) = delete;
     Exception & operator=(Exception &&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
+    virtual inline const Exception & 
+        operator>>(OutputType & out) const noexcept;
 };
 
-Exception::Exception() noexcept :
+inline Exception::Exception() noexcept :
     TriggerType(constant::error::exception_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Exception::Exception(const char * file, const std::size_t & line) noexcept :
-    TriggerType(constant::error::exception_id, file, line)
+inline Exception::Exception(const char * file, 
+    const std::size_t & line) noexcept :
+        TriggerType(constant::error::exception_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Exception::Exception(const Exception & cpy) noexcept :
+inline Exception::Exception(const Exception & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-Exception::Exception(Exception && mov) noexcept :
+inline Exception::Exception(Exception && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-const typename Exception::CharType * Exception::Message() const noexcept
+inline const typename Exception::CharType * Exception::Message() const noexcept
 {
     return "Exception";
 }
 
-typename Exception::OutputValueType & 
-Exception::Output(OutputValueType & out) const noexcept
+inline const Exception & Exception::
+    operator>>(OutputType & out) const noexcept
 {
     output::Operator(out, this->Message(), " ");
-    TriggerType::Output(out);
-    return out;
+    TriggerType::operator>>(out);
+    return *this;
 }
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
@@ -102,7 +104,7 @@ namespace id
 #ifdef USING_EXCEPTION
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type 
+inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::exception & e) noexcept
 {
     return Standard(constant::error::exception_id);
