@@ -62,7 +62,7 @@ public:
     CategoryValueType Category() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
-    virtual const Error<error::tag::System> & 
+    virtual const error::intf::Output & 
         operator>>(OutputType & out) const noexcept;
 };
 
@@ -102,7 +102,7 @@ typename Error<error::tag::System>::CodeValueType
     return this->Identification().ErrorSystem().Code();
 }
 
-const Error<error::tag::System> & Error<error::tag::System>::
+const error::intf::Output & Error<error::tag::System>::
     operator>>(OutputType & out) const noexcept
 {
     error::Information::operator>>(out);

@@ -58,7 +58,7 @@ public:
 public:
     const TTrigger & Trigger() const noexcept;
 protected:
-    virtual const Error<error::tag::Catch<TTrigger>> & 
+    virtual const error::intf::Output & 
         operator>>(OutputType & out) const noexcept;
 };
 
@@ -105,7 +105,7 @@ const TTrigger& Error<error::tag::Catch<TTrigger>>::Trigger() const noexcept
 }
 
 template<typename TTrigger>
-const Error<error::tag::Catch<TTrigger>> & Error<error::tag::Catch<TTrigger>>::
+const error::intf::Output & Error<error::tag::Catch<TTrigger>>::
     operator>>(OutputType & out) const noexcept
 {
     error::output::Operator(out, "in catch ");

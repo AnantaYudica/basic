@@ -63,7 +63,7 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline const Runtime & 
+    virtual inline const error::intf::Output & 
     operator>>(OutputType & out) const noexcept;
 };
 
@@ -109,7 +109,8 @@ inline const typename Runtime::CharType * Runtime::Message() const noexcept
     return "Runtime Exception";
 }
 
-inline const Runtime & Runtime::operator>>(OutputType & out) const noexcept
+inline const error::intf::Output & 
+Runtime::operator>>(OutputType & out) const noexcept
 {
     error::Exception::operator>>(out);
     return *this;

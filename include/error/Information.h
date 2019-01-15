@@ -44,7 +44,7 @@ public:
     inline const char * File() const noexcept;
     inline std::size_t Line() const noexcept;
 protected:
-    virtual inline const Information & 
+    virtual inline const error::intf::Output & 
         operator>>(OutputType & out) const noexcept;
 };
 
@@ -110,7 +110,7 @@ inline std::size_t Information::Line() const noexcept
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 }
 
-inline const Information & Information::
+inline const error::intf::Output & Information::
     operator>>(OutputType & out) const noexcept
 {
     if (!this->m_id.IsDefault())

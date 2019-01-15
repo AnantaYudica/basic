@@ -58,7 +58,7 @@ public:
     const InfoType & Information() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
-    virtual const Error<error::tag::Trigger> & 
+    virtual const error::intf::Output & 
         operator>>(OutputType & out) const noexcept;
 };
 
@@ -99,7 +99,7 @@ typename Error<error::tag::Trigger>::CodeValueType
     return this->Identification().Error().Code();
 }
 
-const Error<error::tag::Trigger> & Error<error::tag::Trigger>::
+const error::intf::Output & Error<error::tag::Trigger>::
     operator>>(OutputType & out) const noexcept
 {
     error::Information::operator>>(out);

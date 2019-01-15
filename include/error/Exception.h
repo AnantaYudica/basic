@@ -52,7 +52,7 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline const Exception & 
+    virtual inline const error::intf::Output & 
         operator>>(OutputType & out) const noexcept;
 };
 
@@ -82,7 +82,7 @@ inline const typename Exception::CharType * Exception::Message() const noexcept
     return "Exception";
 }
 
-inline const Exception & Exception::
+inline const error::intf::Output & Exception::
     operator>>(OutputType & out) const noexcept
 {
     output::Operator(out, this->Message(), " ");

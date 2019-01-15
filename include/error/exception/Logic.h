@@ -63,7 +63,8 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline const Logic & operator>>(OutputType & out) const noexcept;
+    virtual inline const error::intf::Output & 
+        operator>>(OutputType & out) const noexcept;
 };
 
 inline Logic::Logic() noexcept :
@@ -110,7 +111,7 @@ inline const typename Logic::CharType * Logic::Message() const noexcept
     return "Logic Exception";
 }
 
-inline const Logic & 
+inline const error::intf::Output & 
 Logic::operator>>(OutputType & out) const noexcept
 {
     error::Exception::operator>>(out);

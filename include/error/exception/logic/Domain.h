@@ -59,7 +59,8 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline const Domain & operator>>(OutputType & out) const noexcept;
+    virtual inline const error::intf::Output & 
+    operator>>(OutputType & out) const noexcept;
 };
 
 inline Domain::Domain() noexcept :
@@ -97,7 +98,8 @@ inline const typename Domain::CharType * Domain::Message() const noexcept
     return exception::Logic::Message();
 }
 
-inline const Domain & Domain::operator>>(OutputType & out) const noexcept
+inline const error::intf::Output & 
+Domain::operator>>(OutputType & out) const noexcept
 {
     exception::Logic::operator>>(out);
     return *this;
