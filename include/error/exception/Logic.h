@@ -63,8 +63,7 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline const Logic & 
-    operator>>(OutputType & out) const noexcept;
+    virtual inline const Logic & operator>>(OutputType & out) const noexcept;
 };
 
 inline Logic::Logic() noexcept :
