@@ -10,9 +10,9 @@
 #include "../../defn/type/Output.h"
 #include "../../output/Operator.h"
 #include "../../msg/String.h"
-#include "../../system/category/trait/Future.h"
-#include "../../system/category/Message.h"
+#include "../../system/category/Future.h"
 #include "../../system/Category.h"
+#include "../../system/tmpl/Category.h"
 #include "../../system/Code.h"
 #include "../../../constant/error/Identification.h"
 #include "../../../constant/error/system/Category.h"
@@ -32,99 +32,103 @@ namespace logic
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
 class Future : public exception::Logic,
-    public virtual basic::Error<basic::error::tag::System>
+    virtual public basic::Error<basic::error::tag::System>
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
     typedef basic::Error<basic::error::tag::System> SystemType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 public:
-    typedef system::Category<system::category::trait::Future> 
+    typedef system::tmpl::Category<system::category::Future> 
         FutureCategoryType;
-    typedef system::Code<system::category::trait::Future> CodeType;
+    typedef system::Code CodeType;
     typedef typename FutureCategoryType::CodeSetValueType CodeSetValueType;
 private:
-    CodeSetValueType m_code;
+    CodeType m_code;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Future(const CodeSetValueType & code) noexcept;
+    inline Future(const CodeSetValueType & code) noexcept;
 public:
-    Future(const CodeSetValueType & code, const char * file, 
+    inline Future(const CodeSetValueType & code, const char * file, 
         const std::size_t & line) noexcept;
 
 #else
 
 public:
-    Future(const CodeSetValueType & code) noexcept;
+    inline Future(const CodeSetValueType & code) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Future(const Future & cpy) noexcept;
-    Future(Future && mov) noexcept;
+    inline Future(const Future & cpy) noexcept;
+    inline Future(Future && mov) noexcept;
 public:
-    Future & operator=(const Future &) = delete;
-    Future & operator=(Future &&) = delete;
+    inline Future & operator=(const Future &) = delete;
+    inline Future & operator=(Future &&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
+public:
+    virtual inline const CodeType & Code() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
-public:
-    CodeType Code() const noexcept;
+    virtual inline const error::intf::Output & 
+        operator>>(OutputType & out) const noexcept;
 };
 
-Future::Future(const CodeSetValueType & code) noexcept :
+inline Future::Future(const CodeSetValueType & code) noexcept :
     TriggerType(constant::error::logic_future_id),
-    SystemType(),
+    exception::Logic("Future Logic Exception"),
     m_code(code),
-    exception::Logic(std::move(FutureCategoryType().Message(CodeType(code))))
+    SystemType(error::id::System{m_code.Category().Value(), m_code.Value()})
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Future::Future(const CodeSetValueType & code, const char * file, 
+inline Future::Future(const CodeSetValueType & code, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::logic_future_id, file, line),
+        exception::Logic("Future Logic Exception"),
         m_code(code),
-        exception::Logic(std::move(FutureCategoryType().
-            Message(CodeType(code))))
+        SystemType(error::id::System{m_code.Category().Value(), 
+            m_code.Value()}, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Future::Future(const Future & cpy) noexcept :
+inline Future::Future(const Future & cpy) noexcept :
     TriggerType(cpy),
     SystemType(cpy),
     m_code(cpy.m_code),
     exception::Logic(cpy)
 {}
 
-Future::Future(Future && mov) noexcept :
+inline Future::Future(Future && mov) noexcept :
     TriggerType(std::move(mov)),
     SystemType(std::move(mov)),
     m_code(std::move(mov.m_code)),
     exception::Logic(std::move(mov))
 {}
 
-const typename Future::CharType * Future::Message() const noexcept
+inline const typename Future::CharType * Future::Message() const noexcept
 {
     return exception::Logic::Message();
 }
 
-typename Future::OutputValueType & 
-Future::Output(OutputValueType & out) const noexcept
+inline const typename Future::CodeType & Future::Code() const noexcept
 {
-    return exception::Logic::Output(out);
+    return m_code;
 }
 
-typename Future::CodeType Future::Code() const noexcept
+inline const error::intf::Output & 
+Future::operator>>(OutputType & out) const noexcept
 {
-    return {m_code};
+    exception::Logic::operator>>(out);
+    return static_cast<const exception::Logic &>(*this);
 }
+
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
 
@@ -144,14 +148,14 @@ namespace id
 #ifdef USING_EXCEPTION
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type 
+inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::future_error & e) noexcept
 {
     return Standard(constant::error::logic_future_id);
 }
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::System<TTagError>::Type 
+inline typename enable_if::tag::System<TTagError>::Type 
 Get(const std::future_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
