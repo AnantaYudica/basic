@@ -36,7 +36,7 @@ class Future : public exception::Logic,
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
-    typedef basic::Error<basic::error::tag::System> SystemType;
+    typedef basic::Error<basic::error::tag::System> ErrorSystemType;
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
@@ -82,7 +82,8 @@ inline Future::Future(const CodeSetValueType & code) noexcept :
     TriggerType(constant::error::logic_future_id),
     exception::Logic("Future Logic Exception"),
     m_code(code),
-    SystemType(error::id::System{m_code.Category().Value(), m_code.Value()})
+    ErrorSystemType(error::id::System{m_code.Category().Value(), 
+        m_code.Value()})
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -92,7 +93,7 @@ inline Future::Future(const CodeSetValueType & code, const char * file,
         TriggerType(constant::error::logic_future_id, file, line),
         exception::Logic("Future Logic Exception"),
         m_code(code),
-        SystemType(error::id::System{m_code.Category().Value(), 
+        ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()}, file, line)
 {}
 
@@ -100,14 +101,14 @@ inline Future::Future(const CodeSetValueType & code, const char * file,
 
 inline Future::Future(const Future & cpy) noexcept :
     TriggerType(cpy),
-    SystemType(cpy),
+    ErrorSystemType(cpy),
     m_code(cpy.m_code),
     exception::Logic(cpy)
 {}
 
 inline Future::Future(Future && mov) noexcept :
     TriggerType(std::move(mov)),
-    SystemType(std::move(mov)),
+    ErrorSystemType(std::move(mov)),
     m_code(std::move(mov.m_code)),
     exception::Logic(std::move(mov))
 {}
