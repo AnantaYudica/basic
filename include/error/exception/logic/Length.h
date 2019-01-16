@@ -30,50 +30,51 @@ public:
     typedef typename exception::Logic::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 protected:
-    Length() noexcept;
+    inline Length() noexcept;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Length(const CharType * message) noexcept;
+    inline Length(const CharType * message) noexcept;
 public:
-    Length(const CharType * message, const char* file, 
+    inline Length(const CharType * message, const char* file, 
         const std::size_t & line) noexcept;
 
 #else
 
 public:
-    Length(const CharType * message) noexcept;
+    inline Length(const CharType * message) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Length(const Length & cpy) noexcept;
-    Length(Length && mov) noexcept;
+    inline Length(const Length & cpy) noexcept;
+    inline Length(Length && mov) noexcept;
 public:
-    Length & operator=(const Length &) = delete;
-    Length & operator=(Length &&) = delete;
+    inline Length & operator=(const Length &) = delete;
+    inline Length & operator=(Length &&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType& out) const noexcept;
+    virtual inline const error::intf::Output & 
+    operator>>(OutputType& out) const noexcept;
 };
 
-Length::Length() noexcept :
+inline Length::Length() noexcept :
     TriggerType(constant::error::logic_length_id),
     exception::Logic("Domain Logic Length")
 {}
 
-Length::Length(const CharType * message) noexcept :
+inline Length::Length(const CharType * message) noexcept :
     TriggerType(constant::error::logic_length_id),
     exception::Logic(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Length::Length(const CharType * message, const char* file, 
+inline Length::Length(const CharType * message, const char* file, 
     const std::size_t& line) noexcept :
         TriggerType(constant::error::logic_length_id, file, line),
         exception::Logic(message)
@@ -81,25 +82,26 @@ Length::Length(const CharType * message, const char* file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Length::Length(const Length & cpy) noexcept :
+inline Length::Length(const Length & cpy) noexcept :
     TriggerType(cpy),
     exception::Logic(cpy)
 {}
 
-Length::Length(Length && mov) noexcept :
+inline Length::Length(Length && mov) noexcept :
     TriggerType(std::move(mov)),
     exception::Logic(std::move(mov))
 {}
 
-const typename Length::CharType * Length::Message() const noexcept
+inline const typename Length::CharType * Length::Message() const noexcept
 {
     return exception::Logic::Message();
 }
 
-typename Length::OutputValueType & 
-Length::Output(OutputValueType & out) const noexcept
+inline const error::intf::Output & 
+Length::operator>>(OutputType & out) const noexcept
 {
-    return exception::Logic::Output(out);
+    exception::Logic::operator>>(out);
+    return *this;
 }
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
@@ -120,7 +122,7 @@ namespace id
 #ifdef USING_EXCEPTION
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type 
+inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::length_error& e) noexcept
 {
     return Standard(constant::error::logic_length_id);
