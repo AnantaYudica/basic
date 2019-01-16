@@ -37,8 +37,7 @@ enum : basic::error::defn::type::code::Value
     bad_function_call_id = 1341,
     bad_allocation_id = 135,
     bad_allocation_array_id = 1351,
-    bad_allocation_array_length_id = 13511,
-    bad_exception_id = 136
+    bad_allocation_array_length_id = 13511
 };
 
 } //!error
