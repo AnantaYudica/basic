@@ -8,7 +8,6 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../output/Operator.h"
-#include "../../msg/String.h"
 #include "../../../constant/error/Identification.h"
 
 #include <typeinfo>
@@ -17,6 +16,10 @@
 namespace basic
 {
 namespace error
+{
+namespace exception
+{
+namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
@@ -97,6 +100,10 @@ inline const error::intf::Output & Cast::
 using Cast = std::bad_cast;
 
 #endif //!USING_STANDARD_EXCEPTION
+
+} //!bad
+
+} //!exception
 
 namespace id
 {

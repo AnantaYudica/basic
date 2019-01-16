@@ -8,7 +8,6 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../output/Operator.h"
-#include "../../msg/String.h"
 #include "../../../constant/error/Identification.h"
 
 #include <utility>
@@ -16,6 +15,10 @@
 namespace basic
 {
 namespace error
+{
+namespace exception
+{
+namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
@@ -99,6 +102,10 @@ class Function : public error::exception::Bad
 };
 
 #endif //!USING_STANDARD_EXCEPTION
+
+} //!bad
+
+} //!exception
 
 namespace id
 {
