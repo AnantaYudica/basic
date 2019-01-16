@@ -32,52 +32,51 @@ public:
     typedef typename error::Exception::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 protected:
-    Argument() noexcept;
+    inline Argument() noexcept;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Argument(const CharType * message) noexcept;
+    inline Argument(const CharType * message) noexcept;
 public:
-    Argument(const CharType * message, const char* file, 
+    inline Argument(const CharType * message, const char* file, 
         const std::size_t& line) noexcept;
 
 #else
 
 public:
-    Argument(const CharType * message) noexcept;
+    inline Argument(const CharType * message) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Argument(const Argument & cpy) noexcept;
-    Argument(Argument && mov) noexcept;
+    inline Argument(const Argument & cpy) noexcept;
+    inline Argument(Argument && mov) noexcept;
 public:
-    ~Argument();
+    inline Argument & operator=(const Argument &) = delete;
+    inline Argument & operator=(Argument &&) = delete;  
 public:
-    Argument & operator=(const Argument &) = delete;
-    Argument & operator=(Argument &&) = delete;  
-public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
+    virtual inline error::intf::Output & 
+    operator>>(OutputType & out) const noexcept;
 };
 
-Argument::Argument() noexcept :
+inline Argument::Argument() noexcept :
     TriggerType(constant::error::logic_invalid_argument_id),
     exception::logic::Invalid("Domain Logic Invalid Argument Exception")
 {}
 
-Argument::Argument(const CharType * message) noexcept :
+inline Argument::Argument(const CharType * message) noexcept :
     TriggerType(constant::error::logic_invalid_argument_id),
     exception::logic::Invalid(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Argument::Argument(const CharType * message, const char* file, 
+inline Argument::Argument(const CharType * message, const char* file, 
     const std::size_t& line) noexcept:
         TriggerType(constant::error::logic_invalid_argument_id, file, line),
         exception::logic::Invalid(message)
@@ -85,25 +84,26 @@ Argument::Argument(const CharType * message, const char* file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Argument::Argument(const Argument & cpy) noexcept :
+inline Argument::Argument(const Argument & cpy) noexcept :
     TriggerType(cpy),
     exception::logic::Invalid(cpy)
 {}
 
-Argument::Argument(Argument && mov) noexcept :
+inline Argument::Argument(Argument && mov) noexcept :
     TriggerType(std::move(mov)),
     logic::Invalid(std::move(mov))
 {}
 
-const typename Argument::CharType * Argument::Message() const noexcept
+inline const typename Argument::CharType * Argument::Message() const noexcept
 {
     return exception::logic::Invalid::Message();
 }
 
-typename Argument::OutputValueType & 
-Argument::Output(OutputValueType & out) const noexcept
+inline const error::intf::Output & 
+Argument::operator>>(OutputType & out) const noexcept
 {
-    return exception::logic::Invalid::Output(out);
+    exception::logic::Invalid::operator>>(out);
+    return *this;
 }
 
 #elif USING_STANDARD_EXCEPTION
@@ -122,7 +122,7 @@ namespace id
 {
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type  
+inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const std::invalid_argument& e) noexcept
 {
     return Standard(constant::error::logic_invalid_argument_id);
