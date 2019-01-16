@@ -32,43 +32,44 @@ public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputValueType;
 protected:
-    OutOfRange() noexcept;
+    inline OutOfRange() noexcept;
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    OutOfRange(const CharType * message) noexcept;
+    inline OutOfRange(const CharType * message) noexcept;
 public:
-    OutOfRange(const CharType * message, const char * file, 
-    const std::size_t& line) noexcept;
+    inline OutOfRange(const CharType * message, const char * file, 
+        const std::size_t& line) noexcept;
 
 #else
 
 public:
-    OutOfRange(const CharType * message) noexcept;
+    inline OutOfRange(const CharType * message) noexcept;
 
 #endif //USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    OutOfRange(const OutOfRange& cpy) noexcept;
-    OutOfRange(OutOfRange&& mov) noexcept;
+    inline OutOfRange(const OutOfRange& cpy) noexcept;
+    inline OutOfRange(OutOfRange&& mov) noexcept;
 public:
-    OutOfRange & operator=(const OutOfRange&) = delete;
-    OutOfRange & operator=(OutOfRange&&) = delete;
+    inline OutOfRange & operator=(const OutOfRange&) = delete;
+    inline OutOfRange & operator=(OutOfRange&&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
+    virtual inline const error::intf::Output & 
+    operator>>(OutputType & out) const noexcept;
 };
 
-OutOfRange::OutOfRange() noexcept :
+inline OutOfRange::OutOfRange() noexcept :
     TriggerType(constant::error::logic_outofrange_id),
     exception::Logic("Domain Logic Out of Range")
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-OutOfRange::OutOfRange(const CharType * message, const char * file, 
+inline OutOfRange::OutOfRange(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         ErrorType(constant::error::logic_outofrange_id, file, line),
         exception::Logic(message)
@@ -76,25 +77,27 @@ OutOfRange::OutOfRange(const CharType * message, const char * file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-OutOfRange::OutOfRange(const OutOfRange & cpy) noexcept :
+inline OutOfRange::OutOfRange(const OutOfRange & cpy) noexcept :
     TriggerType(cpy),
     exception::Logic(cpy)
 {}
 
-OutOfRange::OutOfRange(OutOfRange && mov) noexcept :
+inline OutOfRange::OutOfRange(OutOfRange && mov) noexcept :
     TriggerType(std::move(mov)),
     exception::Logic(std::move(mov))
 {}
 
-const typename OutOfRange::CharType * OutOfRange::Message() const noexcept
+inline const typename OutOfRange::CharType * 
+OutOfRange::Message() const noexcept
 {
     return exception::Logic::Message();
 }
 
-typename OutOfRange::OutputValueType & 
-OutOfRange::Output(OutputValueType & out) const noexcept
+inline const error::intf::Output & 
+OutOfRange::operator>>(OutputType & out) const noexcept
 {
-    return exception::Logic::Output(out);
+    exception::Logic::operator>>(out);
+    return *this;
 }
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
@@ -115,7 +118,7 @@ namespace id
 #ifdef USING_EXCEPTION
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type 
+inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::out_of_range & e) noexcept
 {
     return Standard(constant::error::logic_outofrange_id);
