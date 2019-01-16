@@ -30,50 +30,51 @@ public:
     typedef typename error::Exception::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
-    typedef defn::type::Output OutputValueType;
+    typedef defn::type::Output OutputType;
 protected:
-    Range() noexcept;
+    inline Range() noexcept;
     
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    Range(const CharType * message) noexcept;
+    inline Range(const CharType * message) noexcept;
 public:
-    Range(const CharType * message, const char * file, 
+    inline Range(const CharType * message, const char * file, 
         const std::size_t & line) noexcept;
 
 #else
 
 public:
-    Range(const CharType * message) noexcept;
+    inline Range(const CharType * message) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    Range(const Range & cpy) noexcept;
-    Range(Range && mov) noexcept;
+    inline Range(const Range & cpy) noexcept;
+    inline Range(Range && mov) noexcept;
 public:
-    Range & operator=(const Range &) = delete;
-    Range & operator=(Range &&) = delete;
+    inline Range & operator=(const Range &) = delete;
+    inline Range & operator=(Range &&) = delete;
 public:
-    virtual const CharType * Message() const noexcept;
+    virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual OutputValueType & Output(OutputValueType & out) const noexcept;
+    virtual inline const error::intf::Output & 
+    operator>>(OutputType & out) const noexcept;
 };
 
-Range::Range() noexcept : 
+inline Range::Range() noexcept : 
     TriggerType(constant::error::runtime_range_id),
     exception::Runtime("Range Runtime Exception")
 {}
 
-Range::Range(const CharType * message) noexcept : 
+inline Range::Range(const CharType * message) noexcept : 
     TriggerType(constant::error::runtime_range_id),
     exception::Runtime(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-Range::Range(const CharType * message, const char* file, 
+inline Range::Range(const CharType * message, const char* file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_range_id, file, line),
         exception::Runtime(message)
@@ -81,25 +82,26 @@ Range::Range(const CharType * message, const char* file,
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-Range::Range(const Range & cpy) noexcept :
+inline Range::Range(const Range & cpy) noexcept :
     TriggerType(cpy),
     exception::Runtime(cpy)
 {}
 
-Range::Range(Range && mov) noexcept :
+inline Range::Range(Range && mov) noexcept :
     TriggerType(std::move(mov)),
     exception::Runtime(std::move(mov))
 {}
 
-const typename Range::CharType * Range::Message() const noexcept
+inline const typename Range::CharType * Range::Message() const noexcept
 {
     return exception::Runtime::Message();
 }
 
-typename Range::OutputValueType & 
-Range::Output(OutputValueType & out) const noexcept
+inline const error::intf::Output & 
+Range::operator>>(OutputType & out) const noexcept
 {
-    return exception::Runtime::Output(out);
+    exception::Runtime::operator>>(out);
+    return *this;
 }
 
 #endif //!USING_BASIC_ERROR_EXCEPTION
@@ -118,7 +120,7 @@ namespace id
 {
 
 template<typename TTagError = tag::Trigger>
-typename enable_if::tag::Trigger<TTagError>::Type
+inline typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::range_error & e)
 {
     return Standard(constant::error::runtime_range_id);
