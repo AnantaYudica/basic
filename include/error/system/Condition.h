@@ -140,7 +140,7 @@ inline bool operator==(const basic::error::system::Condition & cond_a,
 
 template<typename TConditionEnum>
 inline bool operator==(const basic::error::system::Condition & cond_a, 
-    const typename TConditionEnum & cond_b) noexcept
+    const TConditionEnum & cond_b) noexcept
 {
     return cond_a.Category() == basic::error::system::make::Category(cond_b) &&
         cond_a.Value() == basic::error::system::make::condition::Value(cond_b);
@@ -156,7 +156,7 @@ template<typename TConditionEnum>
 inline bool operator==(const basic::error::defn::type::system::condition::
     Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return cond_a == basic::error::system::make::code::Value(cond_b);
+    return cond_a == basic::error::system::make::condition::Value(cond_b);
 }
 
 template<typename TConditionEnum>
