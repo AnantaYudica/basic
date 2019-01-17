@@ -18,7 +18,7 @@ template<typename TCodeEnum>
 inline error::defn::type::system::code::Value 
 Value(const TCodeEnum & code) noexcept
 {
-    return static_cast<const error::defn::type::system::code::Value &>(code);
+    return static_cast<error::defn::type::system::code::Value>(code);
 }
 
 } //!code
