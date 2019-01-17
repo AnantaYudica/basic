@@ -1,40 +1,16 @@
-#ifndef BASIC_ERROR_H__FORWARD_DECLARATION_
-#define BASIC_ERROR_H__FORWARD_DECLARATION_
+#ifndef BASIC_ERROR_H_
+#define BASIC_ERROR_H_
 
-#include <iostream>
-#include <string>
-
-namespace basic
-{
-
-template<typename TErrorTag>
-class Error{};
-
-}
+#include "Error.defn.h"
 
 #include <cstddef>
 #include <ostream>
 #include <string>
 #include <cstdint>
 
-#ifndef BASIC_ERROR_OUTPUT
-#define BASIC_ERROR_OUTPUT std::cerr
-#endif //!BASIC_ERROR_OUTPUT
-
-#ifndef BASIC_ERROR_OUTPUT_OPERATOR
-#define BASIC_ERROR_OUTPUT_OPERATOR(OUTPUT_NAME, ARG,...)\
-    OUTPUT_NAME << ARG,##__VA_ARGS__
-#endif //!BASIC_ERROR_OUTPUT_OPERATOR
-
 #include "error/tag/Trigger.h"
 #include "error/tag/Catch.h"
 #include "error/tag/System.h"
-#include "Error.h"
-
-#else //else BASIC_ERROR_H__FORWARD_DECLARATION_
-
-#ifndef BASIC_ERROR_H_
-#define BASIC_ERROR_H_
 
 #ifdef USING_ABORT
 #ifdef USING_EXCEPTION
@@ -42,11 +18,15 @@ class Error{};
 #endif //!USING_EXCEPTION
 #endif //!USING_ABORT
 
-#define USING_EXCEPTION
-#define USING_BASIC_ERROR_EXCEPTION
+//#define USING_EXCEPTION
+//#define USING_BASIC_ERROR_EXCEPTION
 //#define USING_STANDARD_EXCEPTION
-#define USING_BASIC_ERROR_CATCH_OPERATOR_THROW_AGAIN
+//#define USING_BASIC_ERROR_CATCH_OPERATOR_THROW_AGAIN
 //#define USING_BASIC_ERROR_CATCH_OPERATOR_OUTPUT
+//#define USING_BASIC_ERROR_ALLOCATE_MESSAGE_DYNAMIC
+//#define USING_BASIC_ERROR_ALLOCATE_MESSAGE_AUTOMATIC
+//#define USING_BASIC_ERROR_FILE_AND_LINE
+//#define BASIC_ERROR_ALLOCATE_MESSAGE_AUTOMATIC_SIZE
 
 #ifdef USING_EXCEPTION
 
@@ -131,5 +111,3 @@ basic::Error<basic::error::tag::Output>(__VA_ARGS__)
 #endif //!BASIC_ERROR_CATCH_OPERATOR
 
 #endif //!BASIC_ERROR_H_
-
-#endif //!BASIC_ERROR_H__FORWARD_DECLARATION_
