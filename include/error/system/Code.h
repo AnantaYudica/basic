@@ -238,7 +238,7 @@ inline bool operator<(const basic::error::system::Code & code_a,
 
 template<typename TCodeEnum>
 inline bool operator<(const basic::error::system::Code & code_a, 
-    const typename TCodeEnum & code_b) noexcept
+    const TCodeEnum & code_b) noexcept
 {
     return code_a.Category() == basic::error::system::make::Category(code_b) &&
         code_a.Value() < basic::error::system::make::code::Value(code_b);
