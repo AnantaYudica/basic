@@ -5,6 +5,8 @@
 #include "../Code.decl.h"
 #include "../Condition.decl.h"
 
+#include "category/defn/type/code/set/Value.h"
+#include "category/defn/type/condition/set/Value.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 #include "../intf/Category.h"
 #include "../../intf/Exit.h"
@@ -68,14 +70,12 @@ public:
     Category<TCategoryTrait> & 
         operator=(Category<TCategoryTrait> &&) = delete;
 private:
-    template<typename _TCategoryTrait = TCategoryTrait,
-        typename = typename std::enable_if<std::is_base_of<error::intf::Exit, 
-        _TCategoryTrait>::value>::type>
-    void Cleanup(int sig) noexcept;
-    template<typename _TCategoryTrait = TCategoryTrait,
-        typename = typename std::enable_if<!std::is_base_of<error::intf::Exit, 
-        _TCategoryTrait>::value>::type>
-    void Cleanup(int sig) noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait>
+    typename std::enable_if<std::is_base_of<error::intf::Exit, 
+        _TCategoryTrait>::value, void>::type Cleanup(int sig) noexcept;
+    template<typename _TCategoryTrait = TCategoryTrait>
+    typename std::enable_if<!std::is_base_of<error::intf::Exit, 
+        _TCategoryTrait>::value>::type Cleanup(int sig) noexcept;
 public:
     ValueType Value() const noexcept;
 public:

@@ -74,15 +74,19 @@ Category<TCategoryTrait>::~Category() noexcept
 {}
 
 template<typename TCategoryTrait>
-template<typename _TCategoryTrait, typename>
-void Category<TCategoryTrait>::Cleanup(int sig) noexcept
+template<typename _TCategoryTrait>
+typename std::enable_if<std::is_base_of<error::intf::Exit, 
+    _TCategoryTrait>::value, void>::type 
+Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {
     static_cast<intf::Exit &>(this->m_category).Cleanup(sig);
 }
 
 template<typename TCategoryTrait>
-template<typename _TCategoryTrait, typename>
-void Category<TCategoryTrait>::Cleanup(int sig) noexcept
+template<typename _TCategoryTrait>
+typename std::enable_if<!std::is_base_of<error::intf::Exit, 
+    _TCategoryTrait>::value>::type 
+Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {}
 
 template<typename TCategoryTrait>
