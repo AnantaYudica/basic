@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_TOCONDITIONVALUE_H_
 
 #include "has/mmbr/func/ToConditionValue.h"
-#include "../../defn/type/system/condition/Value.h"
+#include "../../../defn/type/system/condition/Value.h"
 
 #include <type_traits>
 

@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_MESSAGE_H_
 
-#include "../../msg/String.h"
+#include "../../../msg/String.h"
 #include "msg/tag/Code.h"
 #include "msg/tag/Condition.h"
 #include "has/mmbr/func/Message.h"

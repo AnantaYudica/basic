@@ -1,8 +1,8 @@
 #ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_TOCONDITIONVALUE_H_
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_HAS_MMBR_FUNC_TOCONDITIONVALUE_H_
 
-#include "../../../../../../macro/HasMemberFunction.h"
-#include "../../../../../defn/type/system/condition/Value.h"
+#include "../../../../../../../macro/HasMemberFunction.h"
+#include "../../../../../../defn/type/system/condition/Value.h"
 
 namespace _helper
 {

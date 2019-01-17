@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_NAME_H_
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_NAME_H_
 
-#include "../../defn/type/Char.h"
+#include "../../../defn/type/Char.h"
 #include "has/mmbr/func/Name.h"
 
 #include <type_traits>
