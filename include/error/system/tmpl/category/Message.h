@@ -33,7 +33,7 @@ inline typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
     error::msg::String, TTag, TValue>::Value, error::msg::String>::type  
 Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
 {
-    return std::move(msg::String{});
+    return std::move(error::msg::String{});
 }
 
 } //!category

@@ -79,7 +79,7 @@ typename std::enable_if<std::is_base_of<error::intf::Exit,
     _TCategoryTrait>::value, void>::type 
 Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {
-    static_cast<intf::Exit &>(this->m_category).Cleanup(sig);
+    static_cast<error::intf::Exit &>(this->m_category).Cleanup(sig);
 }
 
 template<typename TCategoryTrait>

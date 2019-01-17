@@ -65,7 +65,7 @@ namespace func
 template<typename TCategoryTrait, typename TConditionEnum>
 using ToConditionValue = _helper::_basic::_error::_system::_tmpl::_category::
     _has::_mmbr::_func::_ToConditionValue<TCategoryTrait, 
-    defn::type::system::condition::Value, TConditionEnum>;
+    error::defn::type::system::condition::Value, TConditionEnum>;
 
 } //!func
 
