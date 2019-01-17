@@ -1,12 +1,12 @@
 #ifndef BASIC_ERROR_SYSTEM_CATEGORY_GENERIC_H_
 #define BASIC_ERROR_SYSTEM_CATEGORY_GENERIC_H_
 
-#include "../../constant/error/system/Category.h"
-#include "../defn/type/Char.h"
-#include "../defn/type/system/category/Value.h"
-#include "../defn/type/system/code/Value.h"
-#include "../defn/type/system/condition/Value.h"
-#include "../msg/String.h"
+#include "../../../constant/error/system/Category.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/system/category/Value.h"
+#include "../../defn/type/system/code/Value.h"
+#include "../../defn/type/system/condition/Value.h"
+#include "../../msg/String.h"
 
 #include <system_error>
 

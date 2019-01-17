@@ -1,12 +1,13 @@
 #ifndef BASIC_ERROR_SYSTEM_CATEGORY_FUTURE_H_
 #define BASIC_ERROR_SYSTEM_CATEGORY_FUTURE_H_
 
-#include "../../constant/error/system/Category.h"
-#include "../defn/type/Char.h"
-#include "../defn/type/system/category/Value.h"
-#include "../defn/type/system/code/Value.h"
-#include "../defn/type/system/condition/Value.h"
-#include "../msg/String.h"
+#include "../../../constant/error/system/Category.h"
+#include "../../intf/Exit.h"
+#include "../../defn/type/Char.h"
+#include "../../defn/type/system/category/Value.h"
+#include "../../defn/type/system/code/Value.h"
+#include "../../defn/type/system/condition/Value.h"
+#include "../../msg/String.h"
 
 #include <future>
 
@@ -19,7 +20,8 @@ namespace system
 namespace category
 {
 
-class Future
+class Future :
+    public error::intf::Exit
 {
 public:
     typedef std::future_errc CodeEnumType;
@@ -32,11 +34,14 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    static Future Instance() noexcept;
-public:
+    static inline Future Instance() noexcept;
+private:
     inline Future() noexcept = default;
+public:
     inline Future(const Future&) noexcept = default;
     inline Future(Future&&) noexcept = default;
+private:
+    inline void Cleanup(int sig) noexcept;
 public:
     template<typename TCondition, typename TCode>
     inline TCondition DefaultCondition(const TCode& code) const noexcept;
@@ -49,7 +54,7 @@ public:
         const TCondition& cond) const noexcept;
 public:
     template<typename TValue>
-    inline StringType Message(const TValue& val) const noexcept;
+    inline StringType Message(const TValue & val) const noexcept;
 public:
     inline const CharType * Name() const noexcept;
 public:
