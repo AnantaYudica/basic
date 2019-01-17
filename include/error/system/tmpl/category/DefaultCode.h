@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_DEFAULTCODE_H_
 
 #include "has/mmbr/func/DefaultCode.h"
-#include "has/mmbr/defn/type/CodeEnum.h"
+#include "../../Code.h"
 
 #include <type_traits>
 #include <utility>
@@ -20,19 +20,15 @@ namespace category
 
 template<typename TCategoryTrait>
 typename std::enable_if<has::mmbr::func::DefaultCode<TCategoryTrait,
-    typename TCategoryTrait::CodeType>::Value, 
-    typename TCategoryTrait::CodeType>::type  
+    system::Code>::Value, system::Code>::type  
 DefaultCode(const TCategoryTrait& category_trait) noexcept
 {
-    return std::move(category_trait.template 
-        DefaultCode<typename TCategoryTrait::CodeType>());
+    return std::move(category_trait.template DefaultCode<system::Code>());
 }
 
 template<typename TCategoryTrait>
 typename std::enable_if<!has::mmbr::func::DefaultCode<TCategoryTrait,
-    typename TCategoryTrait::CodeType>::Value &&
-    !has::mmbr::defn::type::CodeEnum<TCategoryTrait>::Value, 
-    typename TCategoryTrait::CodeType>::type  
+    system::Code>::Value, system::Code>::type  
 DefaultCode(const TCategoryTrait& category_trait) noexcept
 {
     return {};
