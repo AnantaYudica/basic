@@ -6,8 +6,10 @@
 #include "make/Category.h"
 #include "make/code/Value.h"
 #include "../defn/type/system/code/Value.h"
+#include "code/has/Enum.h"
 
 #include <utility>
+#include <type_traits>
 
 namespace basic
 {
@@ -143,7 +145,9 @@ inline bool operator==(const basic::error::system::Code & code_a,
 }
 
 template<typename TCodeEnum>
-inline bool operator==(const basic::error::system::Code & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator==(const basic::error::system::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
     return code_a.Category() == basic::error::system::make::Category(code_b) &&
@@ -157,21 +161,27 @@ inline bool operator==(const basic::error::defn::type::system::code::
 }
 
 template<typename TCodeEnum>
-inline bool operator==(const basic::error::defn::type::system::code::
-    Value & code_a, const TCodeEnum & code_b) noexcept
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator==(const basic::error::defn::type::system::code::Value & code_a, 
+    const TCodeEnum & code_b) noexcept
 {
     return code_a == basic::error::system::make::code::Value(code_b);
 }
 
 template<typename TCodeEnum>
-inline bool operator==(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator==(const TCodeEnum & code_a, 
     const basic::error::system::Code & code_b) noexcept
 {
     return code_b == code_a;
 }
 
 template<typename TCodeEnum>
-inline bool operator==(const TCodeEnum & code_a,
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator==(const TCodeEnum & code_a,
     const basic::error::defn::type::system::code::Value & code_b) noexcept
 {
     return code_a == code_b;
@@ -190,7 +200,9 @@ inline bool operator!=(const basic::error::system::Code & code_a,
 }
 
 template<typename TCodeEnum>
-inline bool operator!=(const basic::error::system::Code & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator!=(const basic::error::system::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
     return !(code_a == code_b);
@@ -203,21 +215,27 @@ inline bool operator!=(const basic::error::defn::type::system::code::
 }
 
 template<typename TCodeEnum>
-inline bool operator!=(const basic::error::defn::type::system::code::
-    Value & code_a, const TCodeEnum & code_b) noexcept
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator!=(const basic::error::defn::type::system::code::Value & code_a, 
+    const TCodeEnum & code_b) noexcept
 {
     return !(code_a == code_b);
 }
 
 template<typename TCodeEnum>
-inline bool operator!=(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator!=(const TCodeEnum & code_a, 
     const basic::error::system::Code & code_b) noexcept
 {
     return !(code_a == code_b);
 }
 
 template<typename TCodeEnum>
-inline bool operator!=(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator!=(const TCodeEnum & code_a, 
     const basic::error::defn::type::system::code::Value & code_b) noexcept
 {
     return !(code_a == code_b);
@@ -237,7 +255,9 @@ inline bool operator<(const basic::error::system::Code & code_a,
 }
 
 template<typename TCodeEnum>
-inline bool operator<(const basic::error::system::Code & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator<(const basic::error::system::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
     return code_a.Category() == basic::error::system::make::Category(code_b) &&
@@ -251,14 +271,18 @@ inline bool operator<(const basic::error::defn::type::system::code::
 }
 
 template<typename TCodeEnum>
-inline bool operator<(const basic::error::defn::type::system::code::
-    Value & code_a, const TCodeEnum & code_b) noexcept
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator<(const basic::error::defn::type::system::code::Value & code_a, 
+    const TCodeEnum & code_b) noexcept
 {
     return code_a < basic::error::system::make::code::Value(code_b);
 }
 
 template<typename TCodeEnum>
-inline bool operator<(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator<(const TCodeEnum & code_a, 
     const basic::error::system::Code & code_b) noexcept
 {
     return basic::error::system::make::Category(code_a) == code_b.Category() &&
@@ -266,7 +290,9 @@ inline bool operator<(const TCodeEnum & code_a,
 }
 
 template<typename TCodeEnum>
-inline bool operator<(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator<(const TCodeEnum & code_a, 
     const basic::error::defn::type::system::code::Value & code_b) noexcept
 {
     return basic::error::system::make::code::Value(code_a) < code_b;
@@ -285,7 +311,9 @@ inline bool operator>(const basic::error::system::Code & code_a,
 }
 
 template<typename TCodeEnum>
-inline bool operator>(const basic::error::system::Code & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator>(const basic::error::system::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
     return code_b < code_a;
@@ -298,21 +326,27 @@ inline bool operator>(const basic::error::defn::type::system::code::
 }
 
 template<typename TCodeEnum>
-inline bool operator>(const basic::error::defn::type::system::code::
-    Value & code_a, const TCodeEnum & code_b) noexcept
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator>(const basic::error::defn::type::system::code::Value & code_a, 
+    const TCodeEnum & code_b) noexcept
 {
     return code_b < code_a;
 }
 
 template<typename TCodeEnum>
-inline bool operator>(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator>(const TCodeEnum & code_a, 
     const basic::error::system::Code & code_b) noexcept
 {
     return code_b < code_a;
 }
 
 template<typename TCodeEnum>
-inline bool operator>(const TCodeEnum & code_a, 
+inline typename std::enable_if<basic::error::system::code::has::
+    Enum<TCodeEnum>::Value, bool>::type 
+operator>(const TCodeEnum & code_a, 
     const basic::error::defn::type::system::code::Value & code_b) noexcept
 {
     return code_b < code_a;
