@@ -262,33 +262,33 @@ const error::intf::Output & Category<TCategoryTrait>::
 } //!basic
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator==(const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_a, const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_b) noexcept
+bool operator==(const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_b) noexcept
 {
     return category_a.Value() == category_b.Value();
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator!=(const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_a, const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_b) noexcept
+bool operator!=(const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_b) noexcept
 {
     return !(category_a == category_b);
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator<(const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_a, const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_b) noexcept
+bool operator<(const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_b) noexcept
 {
     return category_a.Value() < category_b.Value();
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
-bool operator>(const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_a, const basic::error::system::
-    CategoryT<TCategoryTraitA>& category_b) noexcept
+bool operator>(const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& category_b) noexcept
 {
     return category_b < category_a;
 }
