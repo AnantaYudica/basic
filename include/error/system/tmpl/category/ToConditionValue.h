@@ -21,7 +21,7 @@ template<typename TCategoryTrait, typename TConditionEnum>
 inline typename std::enable_if<has::mmbr::func::
     ToConditionValue<TCategoryTrait, TConditionEnum>::Value, 
     error::defn::type::system::condition::Value>::type 
-DefaultConditionValue(const TCategoryTrait & category_trait, 
+ToConditionValue(const TCategoryTrait & category_trait, 
     const TConditionEnum & cond) noexcept
 {
     return category_trait.ToConditionValue(cond);
@@ -31,7 +31,7 @@ template<typename TCategoryTrait, typename TConditionEnum>
 inline typename std::enable_if<!has::mmbr::func::
     ToConditionValue<TCategoryTrait, TConditionEnum>::Value, 
     error::defn::type::system::condition::Value>::type 
-DefaultConditionValue(const TCategoryTrait & category_trait, 
+ToConditionValue(const TCategoryTrait & category_trait, 
     const TConditionEnum & cond) noexcept
 {
     return static_cast<error::defn::type::system::condition::Value>(cond);

@@ -21,7 +21,7 @@ template<typename TCategoryTrait, typename TCodeEnum>
 inline typename std::enable_if<has::mmbr::func::
     ToCodeValue<TCategoryTrait, TCodeEnum>::Value, 
     error::defn::type::system::code::Value>::type 
-DefaultCodeValue(const TCategoryTrait & category_trait, 
+ToCodeValue(const TCategoryTrait & category_trait, 
     const TCodeEnum & code) noexcept
 {
     return category_trait.ToCodeValue(code);
@@ -31,7 +31,7 @@ template<typename TCategoryTrait, typename TCodeEnum>
 inline typename std::enable_if<!has::mmbr::func::
     ToCodeValue<TCategoryTrait, TCodeEnum>::Value, 
     error::defn::type::system::code::Value>::type 
-DefaultCodeValue(const TCategoryTrait & category_trait, 
+ToCodeValue(const TCategoryTrait & category_trait, 
     const TCodeEnum & code) noexcept
 {
     return static_cast<error::defn::type::system::code::Value>(code);
