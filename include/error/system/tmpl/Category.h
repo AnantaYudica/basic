@@ -97,7 +97,8 @@ Category<TCategoryTrait>::Value() const noexcept
 }
 
 template<typename TCategoryTrait>
-const CharType * Category<TCategoryTrait>::Name() const noexcept
+const typename Category<TCategoryTrait>::CharType * 
+Category<TCategoryTrait>::Name() const noexcept
 {
     return category::Name(this->m_category);
 }
@@ -119,7 +120,8 @@ Category<TCategoryTrait>::DefaultCode() const noexcept
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, CodeType>::type
+    CodeEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::CodeType>::type
 Category<TCategoryTrait>::
     DefaultCode(const CodeValueType & code) const noexcept
 {
@@ -129,7 +131,8 @@ Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<!category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, CodeType>::type
+    CodeEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::CodeType>::type
 Category<TCategoryTrait>::
     DefaultCode(const CodeValueType & code) const noexcept
 {
@@ -139,7 +142,8 @@ Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, CodeType>::type
+    CodeEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::CodeType>::type
 Category<TCategoryTrait>::
     DefaultCode(const CodeSetValueType & code) const noexcept
 {
@@ -164,7 +168,8 @@ Category<TCategoryTrait>::DefaultCondition() const noexcept
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
+    ConditionEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::ConditionType>::type
 Category<TCategoryTrait>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
@@ -174,7 +179,8 @@ Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<!category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
+    ConditionEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::ConditionType>::type
 Category<TCategoryTrait>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
@@ -185,7 +191,8 @@ Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
+    ConditionEnum<_TCategoryTrait>::Value, 
+    typename Category<TCategoryTrait>::ConditionType>::type
 Category<TCategoryTrait>::
     DefaultCondition(const CodeSetValueType & code) const noexcept
 {
