@@ -75,7 +75,7 @@ private:
         _TCategoryTrait>::value, void>::type Cleanup(int sig) noexcept;
     template<typename _TCategoryTrait = TCategoryTrait>
     typename std::enable_if<!std::is_base_of<error::intf::Exit, 
-        _TCategoryTrait>::value>::type Cleanup(int sig) noexcept;
+        _TCategoryTrait>::value, void>::type Cleanup(int sig) noexcept;
 public:
     ValueType Value() const noexcept;
 public:
@@ -116,6 +116,8 @@ public:
     typename std::enable_if<category::has::mmbr::defn::type::
         ConditionEnum<_TCategoryTrait>::Value, ConditionType>::type
     DefaultCondition(const CodeSetValueType & code) const noexcept;
+public:
+    ConditionType DefaultCondition(const CodeType & code) const noexcept;
 public:
     CodeValueType ToCodeValue(const CodeSetValueType & code) const noexcept;
 public:

@@ -55,7 +55,7 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
     GetInstance() noexcept
 {
     if (ms_instance == nullptr)
-        ms_instance = *ConstructInstance();
+        ms_instance = &ConstructInstance();
     return *ms_instance;
 }
 
@@ -85,7 +85,7 @@ Category<TCategoryTrait>::Cleanup(int sig) noexcept
 template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<!std::is_base_of<error::intf::Exit, 
-    _TCategoryTrait>::value>::type 
+    _TCategoryTrait>::value, void>::type 
 Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {}
 
@@ -184,8 +184,7 @@ typename std::enable_if<!category::has::mmbr::defn::type::
 Category<TCategoryTrait>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
-    return category::DefaultCondition(this->m_category,
-        category::DefaultCodeValue(this->m_category));
+    return category::DefaultCondition(this->m_category, code);
 }
 
 template<typename TCategoryTrait>
@@ -197,6 +196,14 @@ Category<TCategoryTrait>::
     DefaultCondition(const CodeSetValueType & code) const noexcept
 {
     return category::DefaultCondition(this->m_category, code);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::
+    DefaultCondition(const CodeType & code) const noexcept
+{
+    return category::DefaultCondition(this->m_category, code.Value());
 }
 
 template<typename TCategoryTrait>
