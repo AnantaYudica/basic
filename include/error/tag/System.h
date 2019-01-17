@@ -1,11 +1,7 @@
-#ifndef BASIC_ERROR_H__FORWARD_DECLARATION_
-
-#include "../../Error.h"
-
-#else //else BASIC_ERROR_H__FORWARD_DECLARATION_
-
 #ifndef BASIC_ERROR_TAG_SYSTEM_H_
 #define BASIC_ERROR_TAG_SYSTEM_H_
+
+#include "../../Error.defn.h"
 
 #include "../Information.h"
 #include "../id/System.h"
@@ -112,5 +108,3 @@ const error::intf::Output & Error<error::tag::System>::
 } //!basic
 
 #endif //!BASIC_ERROR_TAG_SYSTEM_H_
-
-#endif //!BASIC_ERROR_H__FORWARD_DECLARATION_

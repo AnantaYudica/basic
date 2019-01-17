@@ -1,11 +1,7 @@
-#ifndef BASIC_ERROR_H__FORWARD_DECLARATION_
-
-#include "../../Error.h"
-
-#else //else BASIC_ERROR_H__FORWARD_DECLARATION_
-
 #ifndef BASIC_ERROR_TAG_CATCH_H_
 #define BASIC_ERROR_TAG_CATCH_H_
+
+#include "../../Error.defn.h"
 
 #include "Trigger.h"
 #include "../id/Catch.h"
@@ -116,5 +112,3 @@ const error::intf::Output & Error<error::tag::Catch<TTrigger>>::
 } //!basic
 
 #endif //!BASIC_ERROR_TAG_CATCH_H_
-
-#endif //!BASIC_ERROR_H__FORWARD_DECLARATION_
