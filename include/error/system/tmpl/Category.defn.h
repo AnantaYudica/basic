@@ -5,6 +5,7 @@
 #include "../Code.decl.h"
 #include "../Condition.decl.h"
 
+#include "category/Base.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
@@ -29,6 +30,7 @@ namespace tmpl
 
 template<typename TCategoryTrait>
 class Category : 
+    virtual public tmpl::category::Base<TCategoryTrait>,
     public intf::Category,
     public error::intf::Exit
 {
@@ -52,8 +54,6 @@ public:
 private:
     static Category<TCategoryTrait> * ms_instance;
 private:
-    TCategoryTrait m_category;
-private:
     static Category<TCategoryTrait> & ConstructInstance() noexcept;
 public:
     static const Category<TCategoryTrait> & GetInstance() noexcept;
@@ -69,6 +69,9 @@ public:
         operator=(const Category<TCategoryTrait> &) = delete;
     Category<TCategoryTrait> & 
         operator=(Category<TCategoryTrait> &&) = delete;
+private:
+    const TCategoryTrait & GetCategoryTrait() const noexcept;
+    TCategoryTrait & GetCategoryTrait() noexcept;
 private:
     template<typename _TCategoryTrait = TCategoryTrait>
     typename std::enable_if<std::is_base_of<error::intf::Exit, 
