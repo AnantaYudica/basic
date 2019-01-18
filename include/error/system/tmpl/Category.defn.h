@@ -10,7 +10,7 @@
 #include "category/defn/type/condition/set/Value.h"
 #include "category/has/mmbr/defn/type/CodeEnum.h"
 #include "../intf/Category.h"
-#include "../../intf/Exit.h"
+#include "imp/exit/HasCleanup.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/system/category/Value.h"
 #include "../../defn/type/system/code/Value.h"
@@ -32,7 +32,7 @@ template<typename TCategoryTrait>
 class Category : 
     virtual public tmpl::category::Base<TCategoryTrait>,
     public intf::Category,
-    public error::intf::Exit
+    public tmpl::imp::Exit<TCategoryTrait>
 {
 public:
     typedef TCategoryTrait TraitType;
@@ -72,13 +72,6 @@ public:
 private:
     const TCategoryTrait & GetCategoryTrait() const noexcept;
     TCategoryTrait & GetCategoryTrait() noexcept;
-private:
-    template<typename _TCategoryTrait = TCategoryTrait>
-    typename std::enable_if<std::is_base_of<error::intf::Exit, 
-        _TCategoryTrait>::value, void>::type Cleanup(int sig) noexcept;
-    template<typename _TCategoryTrait = TCategoryTrait>
-    typename std::enable_if<!std::is_base_of<error::intf::Exit, 
-        _TCategoryTrait>::value, void>::type Cleanup(int sig) noexcept;
 public:
     ValueType Value() const noexcept;
 public:
