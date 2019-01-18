@@ -5,6 +5,7 @@
 #include "../Code.defn.h"
 #include "../Condition.defn.h"
 
+#include "imp/category/HasCodeEnum.h"
 #include "../../output/Operator.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
@@ -60,12 +61,14 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
     tmpl::category::Base<TCategoryTrait>(),
+    tmpl::imp::Category<TCategoryTrait>(),
     tmpl::imp::Exit<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
     tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+    tmpl::imp::Category<TCategoryTrait>(std::move(mov)),
     tmpl::imp::Exit<TCategoryTrait>(std::move(mov))
 {}
 
@@ -112,40 +115,7 @@ typename Category<TCategoryTrait>::CodeType
 Category<TCategoryTrait>::DefaultCode() const noexcept
 {
     return category::DefaultCode(this->GetCategoryTrait(),
-        GetInstance());
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::CodeType>::type
-Category<TCategoryTrait>::
-    DefaultCode(const CodeValueType & code) const noexcept
-{
-    return CodeType{code, GetInstance()}; 
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<!category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::CodeType>::type
-Category<TCategoryTrait>::
-    DefaultCode(const CodeValueType & code) const noexcept
-{
-    return CodeType{code, GetInstance()};
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<category::has::mmbr::defn::type::
-    CodeEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::CodeType>::type
-Category<TCategoryTrait>::
-    DefaultCode(const CodeSetValueType & code) const noexcept
-{
-    return {code};
+        *this);
 }
 
 template<typename TCategoryTrait>
@@ -160,42 +130,7 @@ typename Category<TCategoryTrait>::ConditionType
 Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
     return category::DefaultCondition(this->GetCategoryTrait(),
-        category::DefaultCodeValue(this->GetCategoryTrait()), GetInstance());
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::ConditionType>::type
-Category<TCategoryTrait>::
-    DefaultCondition(const CodeValueType & code) const noexcept
-{
-    return category::DefaultCondition(this->GetCategoryTrait(), code, 
-        GetInstance());
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<!category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::ConditionType>::type
-Category<TCategoryTrait>::
-    DefaultCondition(const CodeValueType & code) const noexcept
-{
-    return category::DefaultCondition(this->GetCategoryTrait(), code, 
-        GetInstance());
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<category::has::mmbr::defn::type::
-    ConditionEnum<_TCategoryTrait>::Value, 
-    typename Category<TCategoryTrait>::ConditionType>::type
-Category<TCategoryTrait>::
-    DefaultCondition(const CodeSetValueType & code) const noexcept
-{
-    return {code};
+        category::DefaultCodeValue(this->GetCategoryTrait()), *this);
 }
 
 template<typename TCategoryTrait>
@@ -204,7 +139,7 @@ Category<TCategoryTrait>::
     DefaultCondition(const CodeType & code) const noexcept
 {
     return category::DefaultCondition(this->GetCategoryTrait(), code.Value(),
-        GetInstance());
+        *this);
 }
 
 template<typename TCategoryTrait>
