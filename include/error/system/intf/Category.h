@@ -68,7 +68,7 @@ public:
 public:
     virtual StringType Message(const CodeType &) const noexcept = 0;
     virtual StringType Message(const ConditionType &) const noexcept = 0;
-private:
+protected:
     virtual const error::intf::Output & 
         operator>>(OutputType &) const noexcept = 0;
 };
