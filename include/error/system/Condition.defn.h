@@ -35,7 +35,7 @@ private:
     ValueType m_value;
     CategoryType * m_category;
     StringType m_message;
-protected:
+public:
     template<typename TConditionEnum>
     inline Condition(const TConditionEnum & cond) noexcept;
     inline Condition(const ValueType & val, 
