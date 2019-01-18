@@ -59,12 +59,14 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
-    tmpl::category::Base<TCategoryTrait>()
+    tmpl::category::Base<TCategoryTrait>(),
+    tmpl::imp::Exit<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
-    tmpl::category::Base<TCategoryTrait>(std::move(mov))
+    tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+    tmpl::imp::Exit<TCategoryTrait>(std::move(mov))
 {}
 
 template<typename TCategoryTrait>
@@ -83,22 +85,6 @@ TCategoryTrait & Category<TCategoryTrait>::GetCategoryTrait() noexcept
 {
     return tmpl::category::Base<TCategoryTrait>::GetCategoryTrait();
 }
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<std::is_base_of<error::intf::Exit, 
-    _TCategoryTrait>::value, void>::type 
-Category<TCategoryTrait>::Cleanup(int sig) noexcept
-{
-    static_cast<error::intf::Exit &>(this->GetCategoryTrait()).Cleanup(sig);
-}
-
-template<typename TCategoryTrait>
-template<typename _TCategoryTrait>
-typename std::enable_if<!std::is_base_of<error::intf::Exit, 
-    _TCategoryTrait>::value, void>::type 
-Category<TCategoryTrait>::Cleanup(int sig) noexcept
-{}
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ValueType 
