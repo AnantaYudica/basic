@@ -15,7 +15,6 @@
 #include "category/DefaultCondition.h"
 #include "category/DefaultConditionValue.h"
 #include "category/Equivalent.h"
-#include "category/Instance.h"
 #include "category/Message.h"
 #include "category/Name.h"
 #include "category/Value.h"
@@ -60,12 +59,12 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
-    m_category(std::move(category::Instance<TCategoryTrait>()))
+    tmpl::category::Base<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
-    m_category(std::move(mov.m_category))
+    tmpl::category::Base<TCategoryTrait>(std::move(mov))
 {}
 
 template<typename TCategoryTrait>
@@ -73,12 +72,25 @@ Category<TCategoryTrait>::~Category() noexcept
 {}
 
 template<typename TCategoryTrait>
+const TCategoryTrait & Category<TCategoryTrait>::
+    GetCategoryTrait() const noexcept
+{
+    return tmpl::category::Base<TCategoryTrait>::GetCategoryTrait();
+}
+
+template<typename TCategoryTrait>
+TCategoryTrait & Category<TCategoryTrait>::GetCategoryTrait() noexcept
+{
+    return tmpl::category::Base<TCategoryTrait>::GetCategoryTrait();
+}
+
+template<typename TCategoryTrait>
 template<typename _TCategoryTrait>
 typename std::enable_if<std::is_base_of<error::intf::Exit, 
     _TCategoryTrait>::value, void>::type 
 Category<TCategoryTrait>::Cleanup(int sig) noexcept
 {
-    static_cast<error::intf::Exit &>(this->m_category).Cleanup(sig);
+    static_cast<error::intf::Exit &>(this->GetCategoryTrait()).Cleanup(sig);
 }
 
 template<typename TCategoryTrait>
@@ -92,28 +104,28 @@ template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ValueType 
 Category<TCategoryTrait>::Value() const noexcept
 {
-    return category::Value(this->m_category);
+    return category::Value(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 const typename Category<TCategoryTrait>::CharType * 
 Category<TCategoryTrait>::Name() const noexcept
 {
-    return category::Name(this->m_category);
+    return category::Name(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::CodeValueType 
 Category<TCategoryTrait>::DefaultCodeValue() const noexcept
 {
-    return category::DefaultCodeValue(this->m_category);
+    return category::DefaultCodeValue(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::CodeType 
 Category<TCategoryTrait>::DefaultCode() const noexcept
 {
-    return category::DefaultCode(this->m_category,
+    return category::DefaultCode(this->GetCategoryTrait(),
         GetInstance());
 }
 
@@ -154,15 +166,15 @@ template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionValueType 
 Category<TCategoryTrait>::DefaultConditionValue() const noexcept
 {
-    return category::DefaultConditionValue(this->m_category);
+    return category::DefaultConditionValue(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionType 
 Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
-    return category::DefaultCondition(this->m_category,
-        category::DefaultCodeValue(this->m_category), GetInstance());
+    return category::DefaultCondition(this->GetCategoryTrait(),
+        category::DefaultCodeValue(this->GetCategoryTrait()), GetInstance());
 }
 
 template<typename TCategoryTrait>
@@ -173,7 +185,8 @@ typename std::enable_if<category::has::mmbr::defn::type::
 Category<TCategoryTrait>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
-    return category::DefaultCondition(this->m_category, code, GetInstance());
+    return category::DefaultCondition(this->GetCategoryTrait(), code, 
+        GetInstance());
 }
 
 template<typename TCategoryTrait>
@@ -184,7 +197,8 @@ typename std::enable_if<!category::has::mmbr::defn::type::
 Category<TCategoryTrait>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
-    return category::DefaultCondition(this->m_category, code, GetInstance());
+    return category::DefaultCondition(this->GetCategoryTrait(), code, 
+        GetInstance());
 }
 
 template<typename TCategoryTrait>
@@ -203,7 +217,7 @@ typename Category<TCategoryTrait>::ConditionType
 Category<TCategoryTrait>::
     DefaultCondition(const CodeType & code) const noexcept
 {
-    return category::DefaultCondition(this->m_category, code.Value(),
+    return category::DefaultCondition(this->GetCategoryTrait(), code.Value(),
         GetInstance());
 }
 
@@ -212,7 +226,7 @@ typename Category<TCategoryTrait>::CodeValueType
 Category<TCategoryTrait>::
     ToCodeValue(const CodeSetValueType & code) const noexcept
 {
-    return category::ToCodeValue(this->m_category, code);
+    return category::ToCodeValue(this->GetCategoryTrait(), code);
 }
 
 template<typename TCategoryTrait>
@@ -220,37 +234,37 @@ typename Category<TCategoryTrait>::ConditionValueType
 Category<TCategoryTrait>::
     ToConditionValue(const ConditionSetValueType & cond) const noexcept
 {
-    return Category::ToConditionValue(this->m_category, cond);
+    return Category::ToConditionValue(this->GetCategoryTrait(), cond);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeValueType & code, 
     const ConditionType & cond) const noexcept
 {
-    return category::Equivalent(this->m_category, code, cond);
+    return category::Equivalent(this->GetCategoryTrait(), code, cond);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeType & code,
     const ConditionValueType & cond) const noexcept
 {
-    return category::Equivalent(this->m_category, code, cond);
+    return category::Equivalent(this->GetCategoryTrait(), code, cond);
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::StringType 
 Category<TCategoryTrait>::Message(const CodeType & code) const noexcept
 {
-    return category::Message<category::msg::tag::Code>(this->m_category, 
-        code.Value());
+    return category::Message<category::msg::tag::
+        Code>(this->GetCategoryTrait(), code.Value());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::StringType 
 Category<TCategoryTrait>::Message(const ConditionType & cond) const noexcept
 {
-    return category::Message<category::msg::tag::Condition>(this->m_category, 
-        cond.Value());
+    return category::Message<category::msg::tag::
+        Condition>(this->GetCategoryTrait(), cond.Value());
 }
 
 template<typename TCategoryTrait>
