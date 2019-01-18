@@ -61,10 +61,11 @@ namespace mmbr
 namespace func
 {
 
-template<typename TCategoryTrait, typename TCondition, typename TCode>
+template<typename TCategoryTrait, typename TCondition, typename TCode,
+    typename TCategory>
 using DefaultCondition = _helper::_basic::_error::_system::_tmpl::_category::
     _has::_mmbr::_func::_DefaultCondition<TCategoryTrait, TCondition, 
-    const TCode&>;
+    const TCode &, const TCategory &>;
 
 } //!func
 
