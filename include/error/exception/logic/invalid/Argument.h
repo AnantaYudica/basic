@@ -60,7 +60,7 @@ public:
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
-    virtual inline error::intf::Output & 
+    virtual inline const error::intf::Output & 
     operator>>(OutputType & out) const noexcept;
 };
 
