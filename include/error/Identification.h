@@ -181,6 +181,7 @@ std::basic_ostream<TChar, TCharTraits>& operator<<(std::basic_ostream<TChar,
         out << (int)bytes[i];
     }
     out.setf(flags);
+    return out;
 }
 
 #endif //!BASIC_ERROR_IDENTIFICATION_H_
