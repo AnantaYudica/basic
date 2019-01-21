@@ -43,6 +43,9 @@ public:
 private:
     inline void Cleanup(int sig) noexcept;
 public:
+    template<typename TCondition>
+    inline TCondition 
+        DefaultCondition(const CodeValueType& code) const noexcept = delete;
     template<typename TCondition, typename TCode>
     inline TCondition DefaultCondition(const TCode& code) const noexcept;
 public:
@@ -65,6 +68,9 @@ inline Future Future::Instance() noexcept
 {
     return {};
 }
+
+inline void Future::Cleanup(int sig) noexcept
+{}
 
 template<typename TCondition, typename TCode>
 inline TCondition Future::DefaultCondition(const TCode& code) const noexcept
