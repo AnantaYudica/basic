@@ -7,6 +7,7 @@
 
 #include "error/Definition.h"
 
+#include "error/id/Record.h"
 #include "error/defn/type/Char.h"
 #include "error/defn/type/Output.h"
 #include "error/defn/type/code/Value.h"
@@ -229,7 +230,7 @@ struct basic::test::type::Name<std::basic_stringstream<TArg1, TArg2, TArg3>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "std::basic_ostream<%s, %s, %s>";
+        static char _format[] = "std::basic_stringstream<%s, %s, %s>";
         basic::test::CString<char> tArg1CStr = 
             std::move(basic::test::type::Name<TArg1>::CStr());
         basic::test::CString<char> tArg2CStr = 
