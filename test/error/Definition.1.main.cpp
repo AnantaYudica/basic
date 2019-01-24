@@ -24,7 +24,7 @@ REGISTER_TEST(t1, new TestDefinition<Case1,
 typedef VariableIsSameType<basic::error::defn::type::Output,
     BASIC_ERROR_OUTPUT_TYPE> T2Var1;
 
-T2Var1 t2_var1{"basic::error::defn::type::Char", "BASIC_ERROR_OUTPUT_TYPE"};
+T2Var1 t2_var1{"basic::error::defn::type::Output", "BASIC_ERROR_OUTPUT_TYPE"};
 
 REGISTER_TEST(t2, new TestDefinition<Case1,
     typename T2Var1::BaseType>(t2_var1));
@@ -93,7 +93,7 @@ REGISTER_TEST(t9, new TestDefinition<Case1,
     typename T9Var1::BaseType>(t9_var1));
 
 typedef VariableIsSameType<basic::error::defn::type::system::condition::Value,
-    BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE> T10Var1;
+    BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE> T10Var1;
 
 T10Var1 t10_var1{"basic::error::defn::type::system::condition::Value", 
     "BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE"};
