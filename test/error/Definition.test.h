@@ -24,6 +24,7 @@
 #include <utility>
 
 struct TestIsSameType {};
+struct TestSizeofAType {};
 struct TestCallOutputOperator {};
 
 template<typename TIsSameA, typename TIsSameB, typename TOutputFuncParam,
@@ -31,6 +32,7 @@ template<typename TIsSameA, typename TIsSameB, typename TOutputFuncParam,
 using VariableDefinition = basic::test::Variable<
     basic::test::Value<const char *>, TIsSameA, 
     basic::test::Value<const char *>, TIsSameB,
+    basic::test::Value<std::size_t>,
     basic::test::Value<const char *>,
     basic::test::val::Function<TOutputFuncParam & (TOutputFuncParam &, 
         TOutputFuncArgs && ...)>,
@@ -44,13 +46,14 @@ constexpr std::size_t IIsSameAName = 0;
 constexpr std::size_t IIsSameAType = 1;
 constexpr std::size_t IIsSameBName = 2;
 constexpr std::size_t IIsSameBType = 3;
-constexpr std::size_t IOutputOperatorFuncName = 4;
-constexpr std::size_t IOutputOperatorFunc = 5;
-constexpr std::size_t IOutputResultCBFuncName = 6;
-constexpr std::size_t IOutputResultCBFunc = 7;
-constexpr std::size_t IOutputType = 8;
-constexpr std::size_t IParameterType = 9;
-constexpr std::size_t IParameterVal = 10;
+constexpr std::size_t ISizeofAType = 4;
+constexpr std::size_t IOutputOperatorFuncName = 5;
+constexpr std::size_t IOutputOperatorFunc = 6;
+constexpr std::size_t IOutputResultCBFuncName = 7;
+constexpr std::size_t IOutputResultCBFunc = 8;
+constexpr std::size_t IOutputType = 9;
+constexpr std::size_t IParameterType = 10;
+constexpr std::size_t IParameterVal = 11;
 
 template<typename TOutput, typename ... TArgs>
 TOutput & DefaultOperator(TOutput & out, TArgs && ...)
@@ -71,11 +74,26 @@ struct VariableIsSameType : public VariableDefinition<T1, T2,
     typedef VariableDefinition<T1, T2, std::basic_ostream<char>,
         std::basic_ostream<char>> BaseType;
     VariableIsSameType(const char * arg1, const char * arg2) :
-        BaseType(arg1, arg2, "DefaultOperator", 
+        BaseType(arg1, arg2, 0, "DefaultOperator", 
             &DefaultOperator<std::basic_ostream<char>>, "DefaultResultCallBack",
             &DefaultResultCallBack<std::basic_ostream<char>>, std::cout)
     {}
 };
+
+template<typename T1, typename T2>
+struct VariableIsSameAndSizeofAType : public VariableDefinition<T1, T2, 
+    std::basic_ostream<char>, std::basic_ostream<char>>
+{
+    typedef VariableDefinition<T1, T2, std::basic_ostream<char>,
+        std::basic_ostream<char>> BaseType;
+    VariableIsSameAndSizeofAType(const char * arg1, const char * arg2, 
+        const std::size_t & size) :
+            BaseType(arg1, arg2, size, "DefaultOperator", 
+                &DefaultOperator<std::basic_ostream<char>>, "DefaultResultCallBack",
+                &DefaultResultCallBack<std::basic_ostream<char>>, std::cout)
+    {}
+};
+
 
 template<typename TOutput, typename TArg, typename ... TArgs>
 struct VariableCallOutputOperator : public VariableDefinition<void, void, 
@@ -86,7 +104,7 @@ struct VariableCallOutputOperator : public VariableDefinition<void, void,
         TOutput & (&operatorFunc) (TOutput &, TArgs && ...), 
         const char * resultCBName, bool (&resultCBFunc)(TArg &),
         TArg & arg, TArgs && ... args) :
-            BaseType("undefined", "undefined", oprName, operatorFunc,
+            BaseType("undefined", "undefined", 0, oprName, operatorFunc,
                 resultCBName, resultCBFunc, arg, std::forward<TArgs>(args) ...)
     {}
 };
@@ -100,6 +118,15 @@ typedef basic::test::msg::Argument<TestIsSameType,
 typedef basic::test::msg::Base<TestIsSameType, char, 
     ArgTestIsSameType, ArgTestIsSameType, 
     ArgTestIsSameType> MessageBaseTestIsSameType;
+
+typedef basic::test::msg::Argument<TestSizeofAType,
+    basic::test::msg::arg::Value<IIsSameAName>,
+    basic::test::msg::arg::type::Name<IIsSameAType>,
+    basic::test::msg::arg::Value<ISizeofAType>> ArgTestSizeofAType;
+
+typedef basic::test::msg::Base<TestSizeofAType, char, 
+    ArgTestSizeofAType, ArgTestSizeofAType, 
+    ArgTestSizeofAType> MessageBaseTestSizeofAType;
 
 typedef basic::test::msg::Argument<TestCallOutputOperator,
     basic::test::msg::arg::Value<IOutputOperatorFuncName>,
@@ -123,6 +150,7 @@ typedef basic::test::msg::Base<TestCallOutputOperator, char,
 template<typename TCases, typename... TVariables>
 class TestDefinition :
     public MessageBaseTestIsSameType,
+    public MessageBaseTestSizeofAType,
     public MessageBaseTestCallOutputOperator,
     public basic::test::Message<BASIC_TEST, TestDefinition<TCases, 
         TVariables...>>,
@@ -135,6 +163,9 @@ public:
     using MessageBaseTestIsSameType::Format;
     using MessageBaseTestIsSameType::SetFormat;
     using MessageBaseTestIsSameType::Argument;
+    using MessageBaseTestSizeofAType::Format;
+    using MessageBaseTestSizeofAType::SetFormat;
+    using MessageBaseTestSizeofAType::Argument;
     using MessageBaseTestCallOutputOperator::Format;
     using MessageBaseTestCallOutputOperator::SetFormat;
     using MessageBaseTestCallOutputOperator::Argument;
@@ -163,6 +194,14 @@ public:
         SetFormat(error, testIsSameType, "Error %s{%s} and %s{%s}"
             " is not same type\n");
 
+        TestSizeofAType testSizeofAType;
+        basic::test::msg::Format<char> formatSizeofAType("Test size of %s{%s}"
+            " is %zu bytes\n");
+        SetFormat(debug, testSizeofAType, formatSizeofAType);
+        SetFormat(info, testSizeofAType, std::move(formatSizeofAType));
+        SetFormat(error, testSizeofAType, "Error size of %s{%s}"
+            " is not %zu bytes\n");
+
         TestCallOutputOperator testCallOutputOperator;
         basic::test::msg::Format<char> formatCallOutputOperatorType("Test "
             "call Output operator function %s(%s, %s)\n");
@@ -180,6 +219,14 @@ public:
         VariableDefinition<T1, T2, TOutput, TValOutput, TArgs...> & var)
     {
         return typeid(T1).hash_code() == typeid(T2).hash_code();
+    }
+    template<typename T1, typename T2, typename TOutput, 
+        typename TValOutput, typename ... TArgs>
+    bool Result(const TestSizeofAType &, 
+        VariableDefinition<T1, T2, TOutput, TValOutput, TArgs...> & var)
+    {
+        return sizeof(T1) == 
+            basic::test::var::At<ISizeofAType>(var).Get().Get();
     }
     template<typename T1, typename T2, typename TOutput, 
         typename TValOutput, typename ... TArgs>
