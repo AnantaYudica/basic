@@ -305,14 +305,23 @@ REGISTER_TEST(t3, new TestIdRecError<Case1, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8>(t3_var1, t3_var2, t3_var3,
         t3_var4, t3_var5, t3_var6, t3_var7, t3_var8));
 
-basic::error::id::rec::Error<std::int8_t> obj4_1{std::move(obj3_1)};
-basic::error::id::rec::Error<std::uint8_t> obj4_2{std::move(obj3_2)};
-basic::error::id::rec::Error<std::int16_t> obj4_3{std::move(obj3_3)};
-basic::error::id::rec::Error<std::uint16_t> obj4_4{std::move(obj3_4)};
-basic::error::id::rec::Error<std::int32_t> obj4_5{std::move(obj3_5)};
-basic::error::id::rec::Error<std::uint32_t> obj4_6{std::move(obj3_6)};
-basic::error::id::rec::Error<std::int64_t> obj4_7{std::move(obj3_7)};
-basic::error::id::rec::Error<std::uint64_t> obj4_8{std::move(obj3_8)};
+basic::error::id::rec::Error<std::int8_t> obj3_1_c{obj3_1};
+basic::error::id::rec::Error<std::uint8_t> obj3_2_c{obj3_2};
+basic::error::id::rec::Error<std::int16_t> obj3_3_c{obj3_3};
+basic::error::id::rec::Error<std::uint16_t> obj3_4_c{obj3_4};
+basic::error::id::rec::Error<std::int32_t> obj3_5_c{obj3_5};
+basic::error::id::rec::Error<std::uint32_t> obj3_6_c{obj3_6};
+basic::error::id::rec::Error<std::int64_t> obj3_7_c{obj3_7};
+basic::error::id::rec::Error<std::uint64_t> obj3_8_c{obj3_8};
+
+basic::error::id::rec::Error<std::int8_t> obj4_1{std::move(obj3_1_c)};
+basic::error::id::rec::Error<std::uint8_t> obj4_2{std::move(obj3_2_c)};
+basic::error::id::rec::Error<std::int16_t> obj4_3{std::move(obj3_3_c)};
+basic::error::id::rec::Error<std::uint16_t> obj4_4{std::move(obj3_4_c)};
+basic::error::id::rec::Error<std::int32_t> obj4_5{std::move(obj3_5_c)};
+basic::error::id::rec::Error<std::uint32_t> obj4_6{std::move(obj3_6_c)};
+basic::error::id::rec::Error<std::int64_t> obj4_7{std::move(obj3_7_c)};
+basic::error::id::rec::Error<std::uint64_t> obj4_8{std::move(obj3_8_c)};
 
 T1Var1 t4_var1{"obj4_1", &obj4_1, 0, error1_int8};
 T1Var2 t4_var2{"obj4_2", &obj4_2, 0, error1_uint8};
@@ -323,14 +332,14 @@ T1Var6 t4_var6{"obj4_6", &obj4_6, 0, error1_uint32};
 T1Var7 t4_var7{"obj4_7", &obj4_7, 0, error1_int64};
 T1Var8 t4_var8{"obj4_8", &obj4_8, 0, error1_uint64};
 
-T1Var1 t4_var9{"obj3_1", &obj3_1, 0, 0};
-T1Var2 t4_var10{"obj3_2", &obj3_2, 0, 0};
-T1Var3 t4_var11{"obj3_3", &obj3_3, 0, 0};
-T1Var4 t4_var12{"obj3_4", &obj3_4, 0, 0};
-T1Var5 t4_var13{"obj3_5", &obj3_5, 0, 0};
-T1Var6 t4_var14{"obj3_6", &obj3_6, 0, 0};
-T1Var7 t4_var15{"obj3_7", &obj3_7, 0, 0};
-T1Var8 t4_var16{"obj3_8", &obj3_8, 0, 0};
+T1Var1 t4_var9{"obj3_1", &obj3_1_c, 0, 0};
+T1Var2 t4_var10{"obj3_2", &obj3_2_c, 0, 0};
+T1Var3 t4_var11{"obj3_3", &obj3_3_c, 0, 0};
+T1Var4 t4_var12{"obj3_4", &obj3_4_c, 0, 0};
+T1Var5 t4_var13{"obj3_5", &obj3_5_c, 0, 0};
+T1Var6 t4_var14{"obj3_6", &obj3_6_c, 0, 0};
+T1Var7 t4_var15{"obj3_7", &obj3_7_c, 0, 0};
+T1Var8 t4_var16{"obj3_8", &obj3_8_c, 0, 0};
 
 REGISTER_TEST(t4, new TestIdRecError<Case1, T1Var1, T1Var2, T1Var3, T1Var4, 
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var1, T1Var2, T1Var3, T1Var4, 
