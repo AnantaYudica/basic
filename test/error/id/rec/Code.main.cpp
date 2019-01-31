@@ -1518,5 +1518,5 @@ REGISTER_TEST(t15, new TestIdRecCode<Case1, T1Var1, T1Var2, T1Var3, T1Var4,
 
 int main()
 {
-    RUN_TEST();
+    return RUN_TEST();
 }

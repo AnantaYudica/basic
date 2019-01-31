@@ -730,5 +730,5 @@ REGISTER_TEST(t12, new TestIdFlagType<Case3, VariableTestIdFlag,
 
 int main()
 {
-    RUN_TEST();
+    return RUN_TEST();
 }

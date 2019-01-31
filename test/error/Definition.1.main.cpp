@@ -159,5 +159,5 @@ REGISTER_TEST(t11, new TestDefinition<Case2,
 
 int main()
 {
-    RUN_TEST();
+    return RUN_TEST();
 }

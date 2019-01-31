@@ -24,5 +24,5 @@ REGISTER_TEST(t1, new TestDefinition<Case1,
 
 int main()
 {
-    RUN_TEST();
+    return RUN_TEST();
 }
