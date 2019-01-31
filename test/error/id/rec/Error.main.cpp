@@ -8,6 +8,7 @@
 
 #include "error/id/rec/Error.h"
 
+#include <typeinfo>
 #include <cstdint>
 #include <utility>
 
@@ -15,6 +16,7 @@ struct TestCodeValue {};
 struct TestValueAssignment {};
 struct TestCopyAssignment {};
 struct TestMoveAssignment {};
+struct TestAliasTypeCodeValue {};
 
 template<typename TCodeValue, typename TAssignValue = int>
 using VariableTestIdRecError = basic::test::Variable<
@@ -72,12 +74,22 @@ typedef basic::test::msg::Base<TestMoveAssignment, char,
     ArgTestMoveAssignment, ArgTestMoveAssignment, 
     ArgTestMoveAssignment> MessageBaseTestMoveAssignment;
 
+typedef basic::test::msg::Argument<TestAliasTypeCodeValue,
+    basic::test::msg::arg::type::Name<IIdRecErrorType>,
+    basic::test::msg::arg::type::Name<ICodeValueType>> 
+        ArgTestAliasTypeCodeValue;
+
+typedef basic::test::msg::Base<TestAliasTypeCodeValue, char, 
+    ArgTestAliasTypeCodeValue, ArgTestAliasTypeCodeValue, 
+    ArgTestAliasTypeCodeValue> MessageBaseTestAliasTypeCodeValue;
+
 template<typename TCases, typename... TVariables>
 class TestIdRecError :
     public MessageBaseTestCodeValue,
     public MessageBaseTestValueAssignment,
     public MessageBaseTestCopyAssignment,
     public MessageBaseTestMoveAssignment,
+    public MessageBaseTestAliasTypeCodeValue,
     public basic::test::Message<BASIC_TEST, TestIdRecError<TCases, 
         TVariables...>>,
     public basic::test::Case<TestIdRecError<TCases, TVariables...>,
@@ -98,6 +110,9 @@ public:
     using MessageBaseTestMoveAssignment::Format;
     using MessageBaseTestMoveAssignment::SetFormat;
     using MessageBaseTestMoveAssignment::Argument;
+    using MessageBaseTestAliasTypeCodeValue::Format;
+    using MessageBaseTestAliasTypeCodeValue::SetFormat;
+    using MessageBaseTestAliasTypeCodeValue::Argument;
     using basic::test::Case<TestIdRecError<TCases, TVariables...>,
         TCases>::Run;
     using basic::test::Base<TestIdRecError<TCases, TVariables...>, 
@@ -143,6 +158,15 @@ public:
         SetFormat(debug, testMoveAssignment, formatMoveAssignment);
         SetFormat(info, testMoveAssignment, std::move(formatMoveAssignment));
         SetFormat(error, testMoveAssignment, "Error %s is nullptr\n");
+
+        TestAliasTypeCodeValue testAliasTypeCodeValue;
+        basic::test::msg::Format<char> formatAliasTypeCodeValue("Test "
+            "alias type %s::CodeValueType is same type with %s\n");
+        SetFormat(debug, testAliasTypeCodeValue, formatAliasTypeCodeValue);
+        SetFormat(info, testAliasTypeCodeValue, 
+            std::move(formatAliasTypeCodeValue));
+        SetFormat(error, testAliasTypeCodeValue, "Error alias type "
+            "%s::CodeValueType is not same type with %s\n");
     }
 public:
     template<typename TCodeValue, typename TAssignValue>
@@ -189,12 +213,23 @@ public:
         }
         return false;
     }
+    template<typename TCodeValue, typename TAssignValue>
+    bool Result(const TestAliasTypeCodeValue &, 
+        VariableTestIdRecError<TCodeValue, TAssignValue> & var)
+    {
+        return typeid(typename basic::error::id::rec::Error<TCodeValue>::
+            CodeValueType).hash_code() == typeid(TCodeValue).hash_code();
+    }
 };
 
-using Case1 = basic::test::type::Parameter<TestCodeValue>;
-using Case2 = basic::test::type::Parameter<TestValueAssignment, TestCodeValue>;
-using Case3 = basic::test::type::Parameter<TestCopyAssignment, TestCodeValue>;
-using Case4 = basic::test::type::Parameter<TestMoveAssignment, TestCodeValue>;
+using Case1 = basic::test::type::Parameter<TestAliasTypeCodeValue, 
+    TestCodeValue>;
+using Case2 = basic::test::type::Parameter<TestAliasTypeCodeValue, 
+    TestValueAssignment, TestCodeValue>;
+using Case3 = basic::test::type::Parameter<TestAliasTypeCodeValue, 
+    TestCopyAssignment, TestCodeValue>;
+using Case4 = basic::test::type::Parameter<TestAliasTypeCodeValue,
+    TestMoveAssignment, TestCodeValue>;
 
 BASIC_TEST_TYPE_NAME("signed char", signed char);
 BASIC_TEST_TYPE_NAME("char", char);
