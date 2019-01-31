@@ -675,56 +675,83 @@ REGISTER_TEST(t5, new TestIdRecCode<Case3, T1Var1, T1Var2, T1Var3, T1Var4,
         t5_var11, t5_var12, t5_var13, t5_var14, t5_var15, t5_var16, t5_var17,
         t5_var18, t5_var19, t5_var20, t5_var21, t5_var22, t5_var23, t5_var24));
 
-basic::error::id::rec::Code<std::int8_t, 
-    std::int8_t> obj6_1{std::move(obj4_1)};
-basic::error::id::rec::Code<std::uint8_t, 
-    std::uint8_t> obj6_2{std::move(obj4_2)};
-basic::error::id::rec::Code<std::int16_t, 
-    std::int16_t> obj6_3{std::move(obj4_3)};
-basic::error::id::rec::Code<std::uint16_t, 
-    std::uint16_t> obj6_4{std::move(obj4_4)};
-basic::error::id::rec::Code<std::int32_t, 
-    std::int32_t> obj6_5{std::move(obj4_5)};
-basic::error::id::rec::Code<std::uint32_t, 
-    std::uint32_t> obj6_6{std::move(obj4_6)};
-basic::error::id::rec::Code<std::int64_t, 
-    std::int64_t> obj6_7{std::move(obj4_7)};
-basic::error::id::rec::Code<std::uint64_t, 
-    std::uint64_t> obj6_8{std::move(obj4_8)};
+basic::error::id::rec::Code<std::int8_t, std::int8_t> obj4_1_c{obj4_1};
+basic::error::id::rec::Code<std::uint8_t, std::uint8_t> obj4_2_c{obj4_2};
+basic::error::id::rec::Code<std::int16_t, std::int16_t> obj4_3_c{obj4_3};
+basic::error::id::rec::Code<std::uint16_t, std::uint16_t> obj4_4_c{obj4_4};
+basic::error::id::rec::Code<std::int32_t, std::int32_t> obj4_5_c{obj4_5};
+basic::error::id::rec::Code<std::uint32_t, std::uint32_t> obj4_6_c{obj4_6};
+basic::error::id::rec::Code<std::int64_t, std::int64_t> obj4_7_c{obj4_7};
+basic::error::id::rec::Code<std::uint64_t, std::uint64_t> obj4_8_c{obj4_8};
+
+basic::error::id::rec::Code<std::int8_t, std::int64_t> obj4_9_c{obj4_9};
+basic::error::id::rec::Code<std::uint8_t, std::uint64_t> obj4_10_c{obj4_10};
+basic::error::id::rec::Code<std::int16_t, std::int32_t> obj4_11_c{obj4_11};
+basic::error::id::rec::Code<std::uint16_t, std::uint32_t> obj4_12_c{obj4_12};
+basic::error::id::rec::Code<std::int32_t, std::int16_t> obj4_13_c{obj4_13};
+basic::error::id::rec::Code<std::uint32_t, std::uint16_t> obj4_14_c{obj4_14};
+basic::error::id::rec::Code<std::int64_t, std::int8_t> obj4_15_c{obj4_15};
+basic::error::id::rec::Code<std::uint64_t, std::uint8_t> obj4_16_c{obj4_16};
+
+basic::error::id::rec::Code<std::int8_t, std::uint64_t> obj4_17_c{obj4_17};
+basic::error::id::rec::Code<std::uint8_t, std::int64_t> obj4_18_c{obj4_18};
+basic::error::id::rec::Code<std::int16_t, std::uint32_t> obj4_19_c{obj4_19};
+basic::error::id::rec::Code<std::uint16_t, std::int32_t> obj4_20_c{obj4_20};
+basic::error::id::rec::Code<std::int32_t, std::uint16_t> obj4_21_c{obj4_21};
+basic::error::id::rec::Code<std::uint32_t, std::int16_t> obj4_22_c{obj4_22};
+basic::error::id::rec::Code<std::int64_t, std::uint8_t> obj4_23_c{obj4_23};
+basic::error::id::rec::Code<std::uint64_t, std::int8_t> obj4_24_c{obj4_24};
 
 basic::error::id::rec::Code<std::int8_t, 
-    std::int64_t> obj6_9{std::move(obj4_9)};
+    std::int8_t> obj6_1{std::move(obj4_1_c)};
 basic::error::id::rec::Code<std::uint8_t, 
-    std::uint64_t> obj6_10{std::move(obj4_10)};
+    std::uint8_t> obj6_2{std::move(obj4_2_c)};
 basic::error::id::rec::Code<std::int16_t, 
-    std::int32_t> obj6_11{std::move(obj4_11)};
+    std::int16_t> obj6_3{std::move(obj4_3_c)};
 basic::error::id::rec::Code<std::uint16_t, 
-    std::uint32_t> obj6_12{std::move(obj4_12)};
+    std::uint16_t> obj6_4{std::move(obj4_4_c)};
 basic::error::id::rec::Code<std::int32_t, 
-    std::int16_t> obj6_13{std::move(obj4_13)};
+    std::int32_t> obj6_5{std::move(obj4_5_c)};
 basic::error::id::rec::Code<std::uint32_t, 
-    std::uint16_t> obj6_14{std::move(obj4_14)};
+    std::uint32_t> obj6_6{std::move(obj4_6_c)};
 basic::error::id::rec::Code<std::int64_t, 
-    std::int8_t> obj6_15{std::move(obj4_15)};
+    std::int64_t> obj6_7{std::move(obj4_7_c)};
 basic::error::id::rec::Code<std::uint64_t, 
-    std::uint8_t> obj6_16{std::move(obj4_16)};
+    std::uint64_t> obj6_8{std::move(obj4_8_c)};
 
 basic::error::id::rec::Code<std::int8_t, 
-    std::uint64_t> obj6_17{std::move(obj4_17)};
+    std::int64_t> obj6_9{std::move(obj4_9_c)};
 basic::error::id::rec::Code<std::uint8_t, 
-    std::int64_t> obj6_18{std::move(obj4_18)};
+    std::uint64_t> obj6_10{std::move(obj4_10_c)};
 basic::error::id::rec::Code<std::int16_t, 
-    std::uint32_t> obj6_19{std::move(obj4_19)};
+    std::int32_t> obj6_11{std::move(obj4_11_c)};
 basic::error::id::rec::Code<std::uint16_t, 
-    std::int32_t> obj6_20{std::move(obj4_20)};
+    std::uint32_t> obj6_12{std::move(obj4_12_c)};
 basic::error::id::rec::Code<std::int32_t, 
-    std::uint16_t> obj6_21{std::move(obj4_21)};
+    std::int16_t> obj6_13{std::move(obj4_13_c)};
 basic::error::id::rec::Code<std::uint32_t, 
-    std::int16_t> obj6_22{std::move(obj4_22)};
+    std::uint16_t> obj6_14{std::move(obj4_14_c)};
 basic::error::id::rec::Code<std::int64_t, 
-    std::uint8_t> obj6_23{std::move(obj4_23)};
+    std::int8_t> obj6_15{std::move(obj4_15_c)};
 basic::error::id::rec::Code<std::uint64_t, 
-    std::int8_t> obj6_24{std::move(obj4_24)};
+    std::uint8_t> obj6_16{std::move(obj4_16_c)};
+
+basic::error::id::rec::Code<std::int8_t, 
+    std::uint64_t> obj6_17{std::move(obj4_17_c)};
+basic::error::id::rec::Code<std::uint8_t, 
+    std::int64_t> obj6_18{std::move(obj4_18_c)};
+basic::error::id::rec::Code<std::int16_t, 
+    std::uint32_t> obj6_19{std::move(obj4_19_c)};
+basic::error::id::rec::Code<std::uint16_t, 
+    std::int32_t> obj6_20{std::move(obj4_20_c)};
+basic::error::id::rec::Code<std::int32_t, 
+    std::uint16_t> obj6_21{std::move(obj4_21_c)};
+basic::error::id::rec::Code<std::uint32_t, 
+    std::int16_t> obj6_22{std::move(obj4_22_c)};
+basic::error::id::rec::Code<std::int64_t, 
+    std::uint8_t> obj6_23{std::move(obj4_23_c)};
+basic::error::id::rec::Code<std::uint64_t, 
+    std::int8_t> obj6_24{std::move(obj4_24_c)};
 
 T1Var1 t6_var1{"obj6_1", &obj6_1, 0, obj2_1.Error, 0};
 T1Var2 t6_var2{"obj6_2", &obj6_2, 0, obj2_2.Error, 0};
@@ -753,32 +780,32 @@ T1Var22 t6_var22{"obj6_22", &obj6_22, 0, obj2_22.Error, 0};
 T1Var23 t6_var23{"obj6_23", &obj6_23, 0, obj2_23.Error, 0};
 T1Var24 t6_var24{"obj6_24", &obj6_24, 0, obj2_24.Error, 0};
 
-T1Var1 t6_var25{"obj4_1", &obj4_1, 0, 0, 0};
-T1Var2 t6_var26{"obj4_2", &obj4_2, 0, 0, 0};
-T1Var3 t6_var27{"obj4_3", &obj4_3, 0, 0, 0};
-T1Var4 t6_var28{"obj4_4", &obj4_4, 0, 0, 0};
-T1Var5 t6_var29{"obj4_5", &obj4_5, 0, 0, 0};
-T1Var6 t6_var30{"obj4_6", &obj4_6, 0, 0, 0};
-T1Var7 t6_var31{"obj4_7", &obj4_7, 0, 0, 0};
-T1Var8 t6_var32{"obj4_8", &obj4_8, 0, 0, 0};
+T1Var1 t6_var25{"obj4_1", &obj4_1_c, 0, 0, 0};
+T1Var2 t6_var26{"obj4_2", &obj4_2_c, 0, 0, 0};
+T1Var3 t6_var27{"obj4_3", &obj4_3_c, 0, 0, 0};
+T1Var4 t6_var28{"obj4_4", &obj4_4_c, 0, 0, 0};
+T1Var5 t6_var29{"obj4_5", &obj4_5_c, 0, 0, 0};
+T1Var6 t6_var30{"obj4_6", &obj4_6_c, 0, 0, 0};
+T1Var7 t6_var31{"obj4_7", &obj4_7_c, 0, 0, 0};
+T1Var8 t6_var32{"obj4_8", &obj4_8_c, 0, 0, 0};
 
-T1Var9 t6_var33{"obj4_9", &obj4_9, 0, 0, 0};
-T1Var10 t6_var34{"obj4_10", &obj4_10, 0, 0, 0};
-T1Var11 t6_var35{"obj4_11", &obj4_11, 0, 0, 0};
-T1Var12 t6_var36{"obj4_12", &obj4_12, 0, 0, 0};
-T1Var13 t6_var37{"obj4_13", &obj4_13, 0, 0, 0};
-T1Var14 t6_var38{"obj4_14", &obj4_14, 0, 0, 0};
-T1Var15 t6_var39{"obj4_15", &obj4_15, 0, 0, 0};
-T1Var16 t6_var40{"obj4_16", &obj4_16, 0, 0, 0};
+T1Var9 t6_var33{"obj4_9", &obj4_9_c, 0, 0, 0};
+T1Var10 t6_var34{"obj4_10", &obj4_10_c, 0, 0, 0};
+T1Var11 t6_var35{"obj4_11", &obj4_11_c, 0, 0, 0};
+T1Var12 t6_var36{"obj4_12", &obj4_12_c, 0, 0, 0};
+T1Var13 t6_var37{"obj4_13", &obj4_13_c, 0, 0, 0};
+T1Var14 t6_var38{"obj4_14", &obj4_14_c, 0, 0, 0};
+T1Var15 t6_var39{"obj4_15", &obj4_15_c, 0, 0, 0};
+T1Var16 t6_var40{"obj4_16", &obj4_16_c, 0, 0, 0};
 
-T1Var17 t6_var41{"obj4_17", &obj4_17, 0, 0, 0};
-T1Var18 t6_var42{"obj4_18", &obj4_18, 0, 0, 0};
-T1Var19 t6_var43{"obj4_19", &obj4_19, 0, 0, 0};
-T1Var20 t6_var44{"obj4_20", &obj4_20, 0, 0, 0};
-T1Var21 t6_var45{"obj4_21", &obj4_21, 0, 0, 0};
-T1Var22 t6_var46{"obj4_22", &obj4_22, 0, 0, 0};
-T1Var23 t6_var47{"obj4_23", &obj4_23, 0, 0, 0};
-T1Var24 t6_var48{"obj4_24", &obj4_24, 0, 0, 0};
+T1Var17 t6_var41{"obj4_17", &obj4_17_c, 0, 0, 0};
+T1Var18 t6_var42{"obj4_18", &obj4_18_c, 0, 0, 0};
+T1Var19 t6_var43{"obj4_19", &obj4_19_c, 0, 0, 0};
+T1Var20 t6_var44{"obj4_20", &obj4_20_c, 0, 0, 0};
+T1Var21 t6_var45{"obj4_21", &obj4_21_c, 0, 0, 0};
+T1Var22 t6_var46{"obj4_22", &obj4_22_c, 0, 0, 0};
+T1Var23 t6_var47{"obj4_23", &obj4_23_c, 0, 0, 0};
+T1Var24 t6_var48{"obj4_24", &obj4_24_c, 0, 0, 0};
 
 REGISTER_TEST(t6, new TestIdRecCode<Case2, T1Var1, T1Var2, T1Var3, T1Var4, 
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
@@ -795,56 +822,83 @@ REGISTER_TEST(t6, new TestIdRecCode<Case2, T1Var1, T1Var2, T1Var3, T1Var4,
         t6_var39, t6_var40, t6_var41, t6_var42, t6_var43, t6_var44, t6_var45, 
         t6_var46, t6_var47, t6_var48));
 
-basic::error::id::rec::Code<std::int8_t, 
-    std::int8_t> obj7_1{std::move(obj5_1)};
-basic::error::id::rec::Code<std::uint8_t, 
-    std::uint8_t> obj7_2{std::move(obj5_2)};
-basic::error::id::rec::Code<std::int16_t, 
-    std::int16_t> obj7_3{std::move(obj5_3)};
-basic::error::id::rec::Code<std::uint16_t, 
-    std::uint16_t> obj7_4{std::move(obj5_4)};
-basic::error::id::rec::Code<std::int32_t, 
-    std::int32_t> obj7_5{std::move(obj5_5)};
-basic::error::id::rec::Code<std::uint32_t, 
-    std::uint32_t> obj7_6{std::move(obj5_6)};
-basic::error::id::rec::Code<std::int64_t, 
-    std::int64_t> obj7_7{std::move(obj5_7)};
-basic::error::id::rec::Code<std::uint64_t, 
-    std::uint64_t> obj7_8{std::move(obj5_8)};
+basic::error::id::rec::Code<std::int8_t, std::int8_t> obj5_1_c{obj5_1};
+basic::error::id::rec::Code<std::uint8_t, std::uint8_t> obj5_2_c{obj5_2};
+basic::error::id::rec::Code<std::int16_t, std::int16_t> obj5_3_c{obj5_3};
+basic::error::id::rec::Code<std::uint16_t, std::uint16_t> obj5_4_c{obj5_4};
+basic::error::id::rec::Code<std::int32_t, std::int32_t> obj5_5_c{obj5_5};
+basic::error::id::rec::Code<std::uint32_t, std::uint32_t> obj5_6_c{obj5_6};
+basic::error::id::rec::Code<std::int64_t, std::int64_t> obj5_7_c{obj5_7};
+basic::error::id::rec::Code<std::uint64_t, std::uint64_t> obj5_8_c{obj5_8};
+
+basic::error::id::rec::Code<std::int8_t, std::int64_t> obj5_9_c{obj5_9};
+basic::error::id::rec::Code<std::uint8_t, std::uint64_t> obj5_10_c{obj5_10};
+basic::error::id::rec::Code<std::int16_t, std::int32_t> obj5_11_c{obj5_11};
+basic::error::id::rec::Code<std::uint16_t, std::uint32_t> obj5_12_c{obj5_12};
+basic::error::id::rec::Code<std::int32_t, std::int16_t> obj5_13_c{obj5_13};
+basic::error::id::rec::Code<std::uint32_t, std::uint16_t> obj5_14_c{obj5_14};
+basic::error::id::rec::Code<std::int64_t, std::int8_t> obj5_15_c{obj5_15};
+basic::error::id::rec::Code<std::uint64_t, std::uint8_t> obj5_16_c{obj5_16};
+
+basic::error::id::rec::Code<std::int8_t, std::uint64_t> obj5_17_c{obj5_17};
+basic::error::id::rec::Code<std::uint8_t, std::int64_t> obj5_18_c{obj5_18};
+basic::error::id::rec::Code<std::int16_t, std::uint32_t> obj5_19_c{obj5_19};
+basic::error::id::rec::Code<std::uint16_t, std::int32_t> obj5_20_c{obj5_20};
+basic::error::id::rec::Code<std::int32_t, std::uint16_t> obj5_21_c{obj5_21};
+basic::error::id::rec::Code<std::uint32_t, std::int16_t> obj5_22_c{obj5_22};
+basic::error::id::rec::Code<std::int64_t, std::uint8_t> obj5_23_c{obj5_23};
+basic::error::id::rec::Code<std::uint64_t, std::int8_t> obj5_24_c{obj5_24};
 
 basic::error::id::rec::Code<std::int8_t, 
-    std::int64_t> obj7_9{std::move(obj5_9)};
+    std::int8_t> obj7_1{std::move(obj5_1_c)};
 basic::error::id::rec::Code<std::uint8_t, 
-    std::uint64_t> obj7_10{std::move(obj5_10)};
+    std::uint8_t> obj7_2{std::move(obj5_2_c)};
 basic::error::id::rec::Code<std::int16_t, 
-    std::int32_t> obj7_11{std::move(obj5_11)};
+    std::int16_t> obj7_3{std::move(obj5_3_c)};
 basic::error::id::rec::Code<std::uint16_t, 
-    std::uint32_t> obj7_12{std::move(obj5_12)};
+    std::uint16_t> obj7_4{std::move(obj5_4_c)};
 basic::error::id::rec::Code<std::int32_t, 
-    std::int16_t> obj7_13{std::move(obj5_13)};
+    std::int32_t> obj7_5{std::move(obj5_5_c)};
 basic::error::id::rec::Code<std::uint32_t, 
-    std::uint16_t> obj7_14{std::move(obj5_14)};
+    std::uint32_t> obj7_6{std::move(obj5_6_c)};
 basic::error::id::rec::Code<std::int64_t, 
-    std::int8_t> obj7_15{std::move(obj5_15)};
+    std::int64_t> obj7_7{std::move(obj5_7_c)};
 basic::error::id::rec::Code<std::uint64_t, 
-    std::uint8_t> obj7_16{std::move(obj5_16)};
+    std::uint64_t> obj7_8{std::move(obj5_8_c)};
 
 basic::error::id::rec::Code<std::int8_t, 
-    std::uint64_t> obj7_17{std::move(obj5_17)};
+    std::int64_t> obj7_9{std::move(obj5_9_c)};
 basic::error::id::rec::Code<std::uint8_t, 
-    std::int64_t> obj7_18{std::move(obj5_18)};
+    std::uint64_t> obj7_10{std::move(obj5_10_c)};
 basic::error::id::rec::Code<std::int16_t, 
-    std::uint32_t> obj7_19{std::move(obj5_19)};
+    std::int32_t> obj7_11{std::move(obj5_11_c)};
 basic::error::id::rec::Code<std::uint16_t, 
-    std::int32_t> obj7_20{std::move(obj5_20)};
+    std::uint32_t> obj7_12{std::move(obj5_12_c)};
 basic::error::id::rec::Code<std::int32_t, 
-    std::uint16_t> obj7_21{std::move(obj5_21)};
+    std::int16_t> obj7_13{std::move(obj5_13_c)};
 basic::error::id::rec::Code<std::uint32_t, 
-    std::int16_t> obj7_22{std::move(obj5_22)};
+    std::uint16_t> obj7_14{std::move(obj5_14_c)};
 basic::error::id::rec::Code<std::int64_t, 
-    std::uint8_t> obj7_23{std::move(obj5_23)};
+    std::int8_t> obj7_15{std::move(obj5_15_c)};
 basic::error::id::rec::Code<std::uint64_t, 
-    std::int8_t> obj7_24{std::move(obj5_24)};
+    std::uint8_t> obj7_16{std::move(obj5_16_c)};
+
+basic::error::id::rec::Code<std::int8_t, 
+    std::uint64_t> obj7_17{std::move(obj5_17_c)};
+basic::error::id::rec::Code<std::uint8_t, 
+    std::int64_t> obj7_18{std::move(obj5_18_c)};
+basic::error::id::rec::Code<std::int16_t, 
+    std::uint32_t> obj7_19{std::move(obj5_19_c)};
+basic::error::id::rec::Code<std::uint16_t, 
+    std::int32_t> obj7_20{std::move(obj5_20_c)};
+basic::error::id::rec::Code<std::int32_t, 
+    std::uint16_t> obj7_21{std::move(obj5_21_c)};
+basic::error::id::rec::Code<std::uint32_t, 
+    std::int16_t> obj7_22{std::move(obj5_22_c)};
+basic::error::id::rec::Code<std::int64_t, 
+    std::uint8_t> obj7_23{std::move(obj5_23_c)};
+basic::error::id::rec::Code<std::uint64_t, 
+    std::int8_t> obj7_24{std::move(obj5_24_c)};
 
 T1Var1 t7_var1{"obj7_1", &obj7_1, 0, 0, obj3_1.ErrorSystem};
 T1Var2 t7_var2{"obj7_2", &obj7_2, 0, 0, obj3_2.ErrorSystem};
@@ -873,32 +927,32 @@ T1Var22 t7_var22{"obj7_22", &obj7_22, 0, 0, obj3_22.ErrorSystem};
 T1Var23 t7_var23{"obj7_23", &obj7_23, 0, 0, obj3_23.ErrorSystem};
 T1Var24 t7_var24{"obj7_24", &obj7_24, 0, 0, obj3_24.ErrorSystem};
 
-T1Var1 t7_var25{"obj5_1", &obj5_1, 0, 0, 0};
-T1Var2 t7_var26{"obj5_2", &obj5_2, 0, 0, 0};
-T1Var3 t7_var27{"obj5_3", &obj5_3, 0, 0, 0};
-T1Var4 t7_var28{"obj5_4", &obj5_4, 0, 0, 0};
-T1Var5 t7_var29{"obj5_5", &obj5_5, 0, 0, 0};
-T1Var6 t7_var30{"obj5_6", &obj5_6, 0, 0, 0};
-T1Var7 t7_var31{"obj5_7", &obj5_7, 0, 0, 0};
-T1Var8 t7_var32{"obj5_8", &obj5_8, 0, 0, 0};
+T1Var1 t7_var25{"obj5_1", &obj5_1_c, 0, 0, 0};
+T1Var2 t7_var26{"obj5_2", &obj5_2_c, 0, 0, 0};
+T1Var3 t7_var27{"obj5_3", &obj5_3_c, 0, 0, 0};
+T1Var4 t7_var28{"obj5_4", &obj5_4_c, 0, 0, 0};
+T1Var5 t7_var29{"obj5_5", &obj5_5_c, 0, 0, 0};
+T1Var6 t7_var30{"obj5_6", &obj5_6_c, 0, 0, 0};
+T1Var7 t7_var31{"obj5_7", &obj5_7_c, 0, 0, 0};
+T1Var8 t7_var32{"obj5_8", &obj5_8_c, 0, 0, 0};
 
-T1Var9 t7_var33{"obj5_9", &obj5_9, 0, 0, 0};
-T1Var10 t7_var34{"obj5_10", &obj5_10, 0, 0, 0};
-T1Var11 t7_var35{"obj5_11", &obj5_11, 0, 0, 0};
-T1Var12 t7_var36{"obj5_12", &obj5_12, 0, 0, 0};
-T1Var13 t7_var37{"obj5_13", &obj5_13, 0, 0, 0};
-T1Var14 t7_var38{"obj5_14", &obj5_14, 0, 0, 0};
-T1Var15 t7_var39{"obj5_15", &obj5_15, 0, 0, 0};
-T1Var16 t7_var40{"obj5_16", &obj5_16, 0, 0, 0};
+T1Var9 t7_var33{"obj5_9", &obj5_9_c, 0, 0, 0};
+T1Var10 t7_var34{"obj5_10", &obj5_10_c, 0, 0, 0};
+T1Var11 t7_var35{"obj5_11", &obj5_11_c, 0, 0, 0};
+T1Var12 t7_var36{"obj5_12", &obj5_12_c, 0, 0, 0};
+T1Var13 t7_var37{"obj5_13", &obj5_13_c, 0, 0, 0};
+T1Var14 t7_var38{"obj5_14", &obj5_14_c, 0, 0, 0};
+T1Var15 t7_var39{"obj5_15", &obj5_15_c, 0, 0, 0};
+T1Var16 t7_var40{"obj5_16", &obj5_16_c, 0, 0, 0};
 
-T1Var17 t7_var41{"obj5_17", &obj5_17, 0, 0, 0};
-T1Var18 t7_var42{"obj5_18", &obj5_18, 0, 0, 0};
-T1Var19 t7_var43{"obj5_19", &obj5_19, 0, 0, 0};
-T1Var20 t7_var44{"obj5_20", &obj5_20, 0, 0, 0};
-T1Var21 t7_var45{"obj5_21", &obj5_21, 0, 0, 0};
-T1Var22 t7_var46{"obj5_22", &obj5_22, 0, 0, 0};
-T1Var23 t7_var47{"obj5_23", &obj5_23, 0, 0, 0};
-T1Var24 t7_var48{"obj5_24", &obj5_24, 0, 0, 0};
+T1Var17 t7_var41{"obj5_17", &obj5_17_c, 0, 0, 0};
+T1Var18 t7_var42{"obj5_18", &obj5_18_c, 0, 0, 0};
+T1Var19 t7_var43{"obj5_19", &obj5_19_c, 0, 0, 0};
+T1Var20 t7_var44{"obj5_20", &obj5_20_c, 0, 0, 0};
+T1Var21 t7_var45{"obj5_21", &obj5_21_c, 0, 0, 0};
+T1Var22 t7_var46{"obj5_22", &obj5_22_c, 0, 0, 0};
+T1Var23 t7_var47{"obj5_23", &obj5_23_c, 0, 0, 0};
+T1Var24 t7_var48{"obj5_24", &obj5_24_c, 0, 0, 0};
 
 REGISTER_TEST(t7, new TestIdRecCode<Case3, T1Var1, T1Var2, T1Var3, T1Var4, 
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
