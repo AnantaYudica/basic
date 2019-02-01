@@ -60,7 +60,10 @@ ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(ErrorSystem<TCategoryValue, TCodeValue>&& mov) noexcept :
         m_categoryValue{std::move(mov.m_categoryValue)},
         m_codeValue{std::move(mov.m_codeValue)}
-{}
+{
+    mov.m_codeValue = ErrorSystem<TCategoryValue, 
+        TCodeValue>{mov.m_categoryValue}.m_codeValue;
+}
 
 template<typename TCategoryValue, typename TCodeValue>
 const typename ErrorSystem<TCategoryValue, TCodeValue>::CategoryValueType& 
