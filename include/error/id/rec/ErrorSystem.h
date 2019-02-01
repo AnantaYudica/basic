@@ -22,7 +22,7 @@ private:
     CategoryValueType m_categoryValue;
     CodeValueType m_codeValue;
 public:
-    ErrorSystem() noexcept;
+    ErrorSystem(const CategoryValueType & category_value) noexcept;
     ErrorSystem(const CategoryValueType& category_value, 
         const CodeValueType& code_value) noexcept;
 public:
@@ -34,9 +34,10 @@ public:
 };
 
 template<typename TCategoryValue, typename TCodeValue>
-ErrorSystem<TCategoryValue, TCodeValue>::ErrorSystem() noexcept :
-    m_categoryValue{0},
-    m_codeValue{0}
+ErrorSystem<TCategoryValue, TCodeValue>::
+    ErrorSystem(const CategoryValueType & category_value) noexcept :
+        m_categoryValue{category_value},
+        m_codeValue{0}
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
