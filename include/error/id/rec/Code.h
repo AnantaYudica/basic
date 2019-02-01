@@ -62,6 +62,9 @@ Code<TErrorCodeValue, TErrorSystemCodeValue>::
         Error{mov.Error}
 {
     this->ErrorSystem |= mov.ErrorSystem;
+    mov.Error = Code<TErrorCodeValue, TErrorSystemCodeValue>{}.Error;
+    mov.ErrorSystem |= Code<TErrorCodeValue, 
+        TErrorSystemCodeValue>{}.ErrorSystem;
 }
 
 } //!rec
