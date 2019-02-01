@@ -54,7 +54,7 @@ public:
     Flag& operator=(const Flag& cpy) = delete;
     Flag& operator=(Flag&& mov) = delete;
 public:
-    Flag& operator=(const flag::Catch&) noexcept;
+    inline Flag& operator=(const flag::Catch&) noexcept;
 public:
     constexpr bool IsDefault() const noexcept;
     constexpr bool IsBad() const noexcept;
@@ -190,7 +190,7 @@ inline Flag::Flag(Flag&& mov) noexcept :
     mov.m_system = Flag{}.m_system;
 }
 
-Flag& Flag::operator=(const flag::Catch& catch_) noexcept
+inline Flag& Flag::operator=(const flag::Catch& catch_) noexcept
 {
     this->m_bad = IsBadFlag(catch_, *this);
     this->m_catch = std::uint8_t(1);
