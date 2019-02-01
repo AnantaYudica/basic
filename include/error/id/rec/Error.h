@@ -47,7 +47,9 @@ Error<TCodeValue>::Error(const Error<TCodeValue>& cpy) noexcept :
 template<typename TCodeValue>
 Error<TCodeValue>::Error(Error<TCodeValue>&& mov) noexcept :
     m_codeValue(std::move(mov.m_codeValue))
-{}
+{
+    mov.m_codeValue = Error<TCodeValue>{}.m_codeValue;
+}
 
 template<typename TCodeValue>
 const typename Error<TCodeValue>::CodeValueType& 
