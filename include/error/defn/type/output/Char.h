@@ -14,7 +14,7 @@ namespace type
 namespace output
 {
 
-using Char = BASIC_ERROR_OUTPUT_CHAR_TYPE;
+using Char = BASIC_ERROR_CHAR_TYPE;
 
 } //!output
 
