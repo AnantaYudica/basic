@@ -49,7 +49,7 @@ public:
         const Flag& flag) noexcept;
 public:
     constexpr Flag(const Flag& cpy) noexcept;
-    constexpr Flag(Flag&& mov) noexcept;
+    inline Flag(Flag&& mov) noexcept;
 public:
     Flag& operator=(const Flag& cpy) = delete;
     Flag& operator=(Flag&& mov) = delete;
@@ -176,13 +176,19 @@ constexpr Flag::Flag(const Flag& cpy) noexcept :
     m_system(cpy.m_system)
 {}
 
-constexpr Flag::Flag(Flag&& mov) noexcept :
+inline Flag::Flag(Flag&& mov) noexcept :
     m_default(mov.m_default),
     m_bad(mov.m_bad),
     m_standard(mov.m_standard),
     m_catch(mov.m_catch),
     m_system(mov.m_system)
-{}
+{
+    mov.m_default = Flag{}.m_default;
+    mov.m_bad = Flag{}.m_bad;
+    mov.m_standard = Flag{}.m_standard;
+    mov.m_catch = Flag{}.m_catch;
+    mov.m_system = Flag{}.m_system;
+}
 
 Flag& Flag::operator=(const flag::Catch& catch_) noexcept
 {
