@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/type/system/code/Value.h"
-#include "../../output/Operator.h"
+#include "../../defn/func/output/Operator.h"
 #include "../../system/Code.h"
 #include "../../system/Category.h"
 #include "../../../constant/error/Identification.h"

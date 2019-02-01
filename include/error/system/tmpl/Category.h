@@ -6,7 +6,7 @@
 #include "../Condition.defn.h"
 
 #include "imp/category/HasCodeEnum.h"
-#include "../../output/Operator.h"
+#include "../../defn/func/output/Operator.h"
 #include "category/defn/type/code/set/Value.h"
 #include "category/defn/type/condition/set/Value.h"
 #include "category/msg/tag/Code.h"
@@ -192,7 +192,8 @@ template<typename TCategoryTrait>
 const error::intf::Output & Category<TCategoryTrait>::
     operator>>(OutputType & out) const noexcept
 {
-    output::Operator(out, "category ", this->Name(), ":", this->Value());
+    defn::func::output::Operator(out, "category ", this->Name(), 
+        ":", this->Value());
     return *this;
 }
 

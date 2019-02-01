@@ -6,6 +6,7 @@
 #include "make/Category.h"
 #include "make/code/Value.h"
 #include "../defn/type/system/code/Value.h"
+#include "../defn/func/output/Operator.h"
 #include "code/has/Enum.h"
 
 #include <utility>
@@ -115,8 +116,8 @@ inline const typename Code::CharType * Code::Message() const noexcept
 inline const error::intf::Output & 
 Code::operator>>(OutputType & out) const noexcept
 {
-    error::output::Operator(out, "code ", this->m_value);
-    error::output::Operator(out, "msg ", this->Message());
+    error::defn::func::output::Operator(out, "code ", this->m_value);
+    error::defn::func::output::Operator(out, "msg ", this->Message());
     return *this;
 }
 

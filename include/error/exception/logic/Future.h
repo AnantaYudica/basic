@@ -8,7 +8,7 @@
 #include "../../id/Standard.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
-#include "../../output/Operator.h"
+#include "../../defn/func/output/Operator.h"
 #include "../../msg/String.h"
 #include "../../system/category/Future.h"
 #include "../../system/Category.h"

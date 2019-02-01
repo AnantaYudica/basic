@@ -4,7 +4,7 @@
 #include "Identification.h"
 #include "id/ToBytes.h"
 #include "intf/Output.h"
-#include "output/Operator.h"
+#include "defn/func/output/Operator.h"
 #include "defn/type/Output.h"
 
 #include <ostream>
@@ -116,10 +116,10 @@ inline const error::intf::Output & Information::
     if (!this->m_id.IsDefault())
     {
         if (!this->m_id.IsCatch())
-            output::Operator(out, "id ", this->m_id);
+            defn::func::output::Operator(out, "id ", this->m_id);
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
-        output::Operator(out, "file ", this->m_file);
-        output::Operator(out, "line ", this->m_file);
+        defn::func::output::Operator(out, "file ", this->m_file);
+        defn::func::output::Operator(out, "line ", this->m_file);
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
     }
     return *this;

@@ -8,7 +8,7 @@
 #include "id/Standard.h"
 #include "defn/type/Char.h"
 #include "defn/type/Output.h"
-#include "output/Operator.h"
+#include "defn/func/output/Operator.h"
 #include "../constant/error/Identification.h"
 
 #include <exception>
@@ -85,7 +85,7 @@ inline const typename Exception::CharType * Exception::Message() const noexcept
 inline const error::intf::Output & Exception::
     operator>>(OutputType & out) const noexcept
 {
-    output::Operator(out, this->Message(), " ");
+    defn::func::output::Operator(out, this->Message(), " ");
     TriggerType::operator>>(out);
     return *this;
 }

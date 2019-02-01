@@ -7,7 +7,7 @@
 #include "../id/Catch.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
-#include "../output/Operator.h"
+#include "../defn/func/output/Operator.h"
 
 #include <utility>
 
@@ -104,7 +104,7 @@ template<typename TTrigger>
 const error::intf::Output & Error<error::tag::Catch<TTrigger>>::
     operator>>(OutputType & out) const noexcept
 {
-    error::output::Operator(out, "in catch ");
+    error::defn::func::output::Operator(out, "in catch ");
     TriggerType::operator>>(out);
     return out;
 }
