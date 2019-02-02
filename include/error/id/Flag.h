@@ -23,15 +23,17 @@ struct System {};
 
 class Flag
 {
+public:
+    typedef std::uint8_t ValueType;
 private:
-    std::uint8_t m_default : 1;
-    std::uint8_t m_bad : 1;
-    std::uint8_t m_standard : 1;
-    std::uint8_t m_catch : 1;
-    std::uint8_t m_system : 1;
+    ValueType m_default : 1;
+    ValueType m_bad : 1;
+    ValueType m_standard : 1;
+    ValueType m_catch : 1;
+    ValueType m_system : 1;
 private:
-    static constexpr std::uint8_t IsBadFlag(const Flag& flag);
-    static constexpr std::uint8_t IsBadFlag(const flag::Catch&, 
+    static constexpr ValueType IsBadFlag(const Flag& flag);
+    static constexpr ValueType IsBadFlag(const flag::Catch&, 
         const Flag& flag);
 public:
     constexpr Flag() noexcept;
@@ -63,99 +65,99 @@ public:
     constexpr bool IsSystem() const noexcept;
 };
 
-constexpr std::uint8_t Flag::IsBadFlag(const Flag& flag)
+constexpr typename Flag::ValueType Flag::IsBadFlag(const Flag& flag)
 {
-    return flag.IsBad() ? std::uint8_t(1) : 
+    return flag.IsBad() ? ValueType(1) : 
         (flag.IsDefault() ? (flag.IsStandard() ||
-            flag.IsCatch() || flag.IsSystem() ? std::uint8_t(1) : 
-                std::uint8_t(0)) : std::uint8_t(0));
+            flag.IsCatch() || flag.IsSystem() ? ValueType(1) : 
+                ValueType(0)) : ValueType(0));
 }
 
-constexpr std::uint8_t Flag::IsBadFlag(const flag::Catch&, 
+constexpr typename Flag::ValueType Flag::IsBadFlag(const flag::Catch&, 
     const Flag& flag)
 {
-    return IsBadFlag(flag) == std::uint8_t(1) ? std::uint8_t(1) :
-        flag.IsDefault() ? std::uint8_t(1) : std::uint8_t(0);
+    return IsBadFlag(flag) == ValueType(1) ? ValueType(1) :
+        flag.IsDefault() ? ValueType(1) : ValueType(0);
 }
 
 constexpr Flag::Flag() noexcept :
-    m_default(std::uint8_t(1)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(0)),
-    m_catch(std::uint8_t(0)),
-    m_system(std::uint8_t(0))
+    m_default(ValueType(1)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(0)),
+    m_catch(ValueType(0)),
+    m_system(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Error&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(0)),
-    m_catch(std::uint8_t(0)),
-    m_system(std::uint8_t(0))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(0)),
+    m_catch(ValueType(0)),
+    m_system(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Error&, const flag::Standard&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(1)),
-    m_catch(std::uint8_t(0)),
-    m_system(std::uint8_t(0))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(1)),
+    m_catch(ValueType(0)),
+    m_system(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::System&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(0)),
-    m_catch(std::uint8_t(0)),
-    m_system(std::uint8_t(1))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(0)),
+    m_catch(ValueType(0)),
+    m_system(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::System&, const flag::Standard&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(1)),
-    m_catch(std::uint8_t(0)),
-    m_system(std::uint8_t(1))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(1)),
+    m_catch(ValueType(0)),
+    m_system(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(0)),
-    m_catch(std::uint8_t(1)),
-    m_system(std::uint8_t(0))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(0)),
+    m_catch(ValueType(1)),
+    m_system(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::Standard&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(1)),
-    m_catch(std::uint8_t(1)),
-    m_system(std::uint8_t(0))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(1)),
+    m_catch(ValueType(1)),
+    m_system(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::System&) noexcept :
-    m_default(std::uint8_t(0)),
-    m_bad(std::uint8_t(0)),
-    m_standard(std::uint8_t(0)),
-    m_catch(std::uint8_t(1)),
-    m_system(std::uint8_t(1))
+    m_default(ValueType(0)),
+    m_bad(ValueType(0)),
+    m_standard(ValueType(0)),
+    m_catch(ValueType(1)),
+    m_system(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::System&, 
     const flag::Standard&) noexcept  :
-        m_default(std::uint8_t(0)),
-        m_bad(std::uint8_t(0)),
-        m_standard(std::uint8_t(1)),
-        m_catch(std::uint8_t(1)),
-        m_system(std::uint8_t(1))
+        m_default(ValueType(0)),
+        m_bad(ValueType(0)),
+        m_standard(ValueType(1)),
+        m_catch(ValueType(1)),
+        m_system(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch& catch_, const Flag& flag) noexcept :
     m_default(flag.m_default),
     m_bad(IsBadFlag(catch_, flag)),
     m_standard(flag.m_standard),
-    m_catch(std::uint8_t(1)),
+    m_catch(ValueType(1)),
     m_system(flag.m_system)
 {}
 
@@ -163,8 +165,8 @@ constexpr Flag::Flag(const flag::Catch& catch_, const flag::Standard&,
     const Flag& flag) noexcept : 
         m_default(flag.m_default),
         m_bad(IsBadFlag(catch_, flag)),
-        m_standard(std::uint8_t(1)),
-        m_catch(std::uint8_t(1)),
+        m_standard(ValueType(1)),
+        m_catch(ValueType(1)),
         m_system(flag.m_system)
 {}
 
@@ -193,7 +195,7 @@ inline Flag::Flag(Flag&& mov) noexcept :
 inline Flag& Flag::operator=(const flag::Catch& catch_) noexcept
 {
     this->m_bad = IsBadFlag(catch_, *this);
-    this->m_catch = std::uint8_t(1);
+    this->m_catch = ValueType(1);
     return *this;
 }
 
