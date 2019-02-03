@@ -22,11 +22,12 @@ private:
     CategoryValueType m_categoryValue;
     CodeValueType m_codeValue;
 public:
-    ErrorSystem(const CategoryValueType & category_value) noexcept;
-    ErrorSystem(const CategoryValueType& category_value, 
+    constexpr ErrorSystem(const CategoryValueType & category_value) noexcept;
+    constexpr ErrorSystem(const CategoryValueType& category_value, 
         const CodeValueType& code_value) noexcept;
 public:
-    ErrorSystem(const ErrorSystem<TCategoryValue, TCodeValue>& cpy) noexcept;
+    constexpr ErrorSystem(const ErrorSystem<TCategoryValue, 
+        TCodeValue>& cpy) noexcept;
     ErrorSystem(ErrorSystem<TCategoryValue, TCodeValue>&& mov) noexcept;
 public:
     ErrorSystem<TCategoryValue, TCodeValue> & 
@@ -37,19 +38,19 @@ public:
     ErrorSystem<TCategoryValue, TCodeValue> & 
     operator=(const CodeValueType & code_value) noexcept;
 public:
-    const CategoryValueType& Category() const noexcept;
-    const CodeValueType& Code() const noexcept;
+    constexpr const CategoryValueType& Category() const noexcept;
+    constexpr const CodeValueType& Code() const noexcept;
 };
 
 template<typename TCategoryValue, typename TCodeValue>
-ErrorSystem<TCategoryValue, TCodeValue>::
+constexpr ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(const CategoryValueType & category_value) noexcept :
         m_categoryValue{category_value},
         m_codeValue{0}
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
-ErrorSystem<TCategoryValue, TCodeValue>::
+constexpr ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(const CategoryValueType& category_value, 
         const CodeValueType& code_value) noexcept :
             m_categoryValue{category_value},
@@ -57,7 +58,7 @@ ErrorSystem<TCategoryValue, TCodeValue>::
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
-ErrorSystem<TCategoryValue, TCodeValue>::
+constexpr ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(const ErrorSystem<TCategoryValue, TCodeValue>& cpy) noexcept :
         m_categoryValue{cpy.m_categoryValue},
         m_codeValue{cpy.m_codeValue}
@@ -105,14 +106,16 @@ ErrorSystem<TCategoryValue, TCodeValue>::
 }
 
 template<typename TCategoryValue, typename TCodeValue>
-const typename ErrorSystem<TCategoryValue, TCodeValue>::CategoryValueType& 
+constexpr const typename ErrorSystem<TCategoryValue, TCodeValue>::
+    CategoryValueType& 
 ErrorSystem<TCategoryValue, TCodeValue>::Category() const noexcept
 {
     return m_categoryValue;
 }
 
 template<typename TCategoryValue, typename TCodeValue>
-const typename ErrorSystem<TCategoryValue, TCodeValue>::CodeValueType& 
+constexpr const typename ErrorSystem<TCategoryValue, TCodeValue>::
+    CodeValueType& 
 ErrorSystem<TCategoryValue, TCodeValue>::Code() const noexcept
 {
     return m_codeValue;
