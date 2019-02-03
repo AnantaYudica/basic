@@ -46,39 +46,38 @@ union Code
 };
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
-constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::Code() noexcept :
-    Error{0}
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::Code() noexcept
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
 constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::
     Code(const TErrorCodeValue& val) noexcept :
-        Error{val}
+        Error(val)
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
 template<typename _TErrorSystemCodeValue, typename>
 constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::
     Code(const TErrorSystemCodeValue& val) noexcept :
-        ErrorSystem{val}
+        ErrorSystem(val)
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
 Code<TErrorCodeValue, TErrorSystemCodeValue>::
     Code(const Code<TErrorCodeValue, TErrorSystemCodeValue>& cpy) noexcept :
-        Error{cpy.Error}
+        Error(cpy.Error)
 {
-    this->ErrorSystem |= cpy.ErrorSystem;
+    ErrorSystem = cpy.ErrorSystem;
 }
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
 Code<TErrorCodeValue, TErrorSystemCodeValue>::
     Code(Code<TErrorCodeValue, TErrorSystemCodeValue>&& mov) noexcept :
-        Error{mov.Error}
+        Error(mov.Error)
 {
-    this->ErrorSystem |= mov.ErrorSystem;
+    ErrorSystem = mov.ErrorSystem;
     mov.Error = Code<TErrorCodeValue, TErrorSystemCodeValue>{}.Error;
-    mov.ErrorSystem |= Code<TErrorCodeValue, 
+    mov.ErrorSystem = Code<TErrorCodeValue, 
         TErrorSystemCodeValue>{}.ErrorSystem;
 }
 
@@ -89,7 +88,7 @@ Code<TErrorCodeValue, TErrorSystemCodeValue>::
         TErrorSystemCodeValue> & cpy) noexcept
 {
     this->Error = cpy.Error;
-    this->ErrorSystem |= cpy.ErrorSystem;
+    this->ErrorSystem = cpy.ErrorSystem;
     return *this;
 }
 
@@ -99,9 +98,9 @@ Code<TErrorCodeValue, TErrorSystemCodeValue>::operator=(Code<TErrorCodeValue,
     TErrorSystemCodeValue> && mov) noexcept
 {
     this->Error = mov.Error;
-    this->ErrorSystem |= mov.ErrorSystem;
+    this->ErrorSystem = mov.ErrorSystem;
     mov.Error = Code<TErrorCodeValue, TErrorSystemCodeValue>{}.Error;
-    mov.ErrorSystem |= Code<TErrorCodeValue, 
+    mov.ErrorSystem = Code<TErrorCodeValue, 
         TErrorSystemCodeValue>{}.ErrorSystem;
     return *this;
 }
