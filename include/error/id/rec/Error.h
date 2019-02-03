@@ -20,10 +20,10 @@ public:
 private:
     CodeValueType m_codeValue;
 public:
-    Error() noexcept;
-    Error(const CodeValueType& code_value) noexcept;
+    constexpr Error() noexcept;
+    constexpr Error(const CodeValueType& code_value) noexcept;
 public:
-    Error(const Error<TCodeValue>& cpy) noexcept;
+    constexpr Error(const Error<TCodeValue>& cpy) noexcept;
     Error(Error<TCodeValue>&& mov) noexcept;
 public:
     Error<TCodeValue> & operator=(const Error<TCodeValue> & cpy) noexcept;
@@ -31,21 +31,21 @@ public:
 public:
     Error<TCodeValue> & operator=(const CodeValueType & code_value) noexcept;
 public:
-    const CodeValueType& Code() const noexcept;
+    constexpr const CodeValueType & Code() const noexcept;
 };
 
 template<typename TCodeValue>
-Error<TCodeValue>::Error() noexcept :
+constexpr Error<TCodeValue>::Error() noexcept :
     m_codeValue{0}
 {}
 
 template<typename TCodeValue>
-Error<TCodeValue>::Error(const CodeValueType& code_value) noexcept :
+constexpr Error<TCodeValue>::Error(const CodeValueType& code_value) noexcept :
     m_codeValue{code_value}
 {}
 
 template<typename TCodeValue>
-Error<TCodeValue>::Error(const Error<TCodeValue>& cpy) noexcept :
+constexpr Error<TCodeValue>::Error(const Error<TCodeValue>& cpy) noexcept :
     m_codeValue(cpy.m_codeValue)
 {}
 
@@ -82,7 +82,7 @@ Error<TCodeValue> & Error<TCodeValue>::
 }
 
 template<typename TCodeValue>
-const typename Error<TCodeValue>::CodeValueType& 
+constexpr const typename Error<TCodeValue>::CodeValueType& 
 Error<TCodeValue>::Code() const noexcept
 {
     return m_codeValue;
