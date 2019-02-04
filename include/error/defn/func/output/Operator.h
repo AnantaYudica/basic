@@ -1,14 +1,18 @@
-#ifndef BASIC_ERROR_OUTPUT_OPERATOR_H_
-#define BASIC_ERROR_OUTPUT_OPERATOR_H_
+#ifndef BASIC_ERROR_DEFN_FUNC_OUTPUT_OPERATOR_H_
+#define BASIC_ERROR_DEFN_FUNC_OUTPUT_OPERATOR_H_
 
-#include "../defn/type/Output.h"
-#include "../Definition.h"
+#include "../../type/Output.h"
+#include "../../../Definition.h"
 
 #include <utility>
 
 namespace basic
 {
 namespace error
+{
+namespace defn
+{
+namespace func
 {
 namespace output
 {
@@ -30,8 +34,12 @@ defn::type::Output& Operator(defn::type::Output& out, TArg&& arg,
 
 } //!output
 
+} //!func
+
+} //!defn
+
 } //!error
 
 } //!basic
 
-#endif //!BASIC_ERROR_OUTPUT_OPERATOR_H_
+#endif //!BASIC_ERROR_DEFN_FUNC_OUTPUT_OPERATOR_H_

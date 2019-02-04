@@ -5,7 +5,7 @@
 
 #include "../Identification.h"
 #include "../Information.h"
-#include "../output/Operator.h"
+#include "../defn/func/output/Operator.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
 #include "../defn/type/code/Value.h"

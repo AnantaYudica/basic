@@ -6,6 +6,7 @@
 #include "make/Category.h"
 #include "make/condition/Value.h"
 #include "../defn/type/system/condition/Value.h"
+#include "../defn/func/output/Operator.h"
 #include "condition/has/Enum.h"
 
 #include <utility>
@@ -111,8 +112,8 @@ Condition::Message() const noexcept
 inline const error::intf::Output & 
 Condition::operator>>(OutputType & out) const noexcept
 {
-    error::output::Operator(out, "code ", this->m_value);
-    error::output::Operator(out, "msg ", this->Message());
+    error::defn::func::output::Operator(out, "code ", this->m_value);
+    error::defn::func::output::Operator(out, "msg ", this->Message());
     return *this;
 }
 
