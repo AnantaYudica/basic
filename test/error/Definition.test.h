@@ -18,7 +18,7 @@
 #include "error/defn/type/system/category/Value.h"
 #include "error/defn/type/system/code/Value.h"
 #include "error/defn/type/system/condition/Value.h"
-#include "error/output/Operator.h"
+#include "error/defn/func/output/Operator.h"
 
 #include <typeinfo>
 #include <utility>

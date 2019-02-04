@@ -219,15 +219,15 @@ bool Result3(std::stringstream & out)
 }
 
 T11Var1 t11_var1{"basic::error::output::Operator", 
-    basic::error::output::Operator, "Result1", Result1, 
+    basic::error::defn::func::output::Operator, "Result1", Result1, 
     strstream1, std::move(str1)};
 
 T11Var2 t11_var2{"basic::error::output::Operator", 
-    basic::error::output::Operator, "Result2", Result2, strstream2, 
+    basic::error::defn::func::output::Operator, "Result2", Result2, strstream2,
     std::move(str1), std::move(int1)};
 
 T11Var3 t11_var3{"basic::error::output::Operator", 
-    basic::error::output::Operator, "Result3", Result3, strstream3, 
+    basic::error::defn::func::output::Operator, "Result3", Result3, strstream3,
     std::move(str1), std::move(int1), std::move(float1)};
 
 REGISTER_TEST(t11, new TestDefinition<Case2, 
