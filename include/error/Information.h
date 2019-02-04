@@ -2,7 +2,6 @@
 #define BASIC_ERROR_INFORMATION_H_
 
 #include "Identification.h"
-#include "id/ToBytes.h"
 #include "intf/Output.h"
 #include "defn/func/output/Operator.h"
 #include "defn/type/Output.h"
