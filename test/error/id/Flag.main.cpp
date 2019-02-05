@@ -28,6 +28,8 @@ bool CompareFlag(basic::error::id::Flag * && a,
         reinterpret_cast<const unsigned char&>(*b);
 }
 
+typedef std::uint8_t FlagValueType;
+
 struct TestIsSameValue {};
 struct TestDefaultAValue {};
 struct TestBadAValue {};
@@ -35,8 +37,10 @@ struct TestStandardAValue {};
 struct TestCatchAValue {};
 struct TestSystemAValue {};
 struct TestAAssignFlagCatch {};
+struct TestAliasValueType {};
 
 using VariableTestIdFlag = basic::test::Variable<
+    basic::error::id::Flag,
     basic::test::Value<const char *>,
     basic::test::Value<basic::error::id::Flag *>,
     basic::test::Value<const char *>,
@@ -50,20 +54,23 @@ using VariableTestIdFlag = basic::test::Variable<
     basic::test::Value<bool>,
     basic::test::Value<bool>,
     basic::test::Value<bool>,
-    basic::test::type::Function<const char *(bool &&), &BoolToCstr>>;
+    basic::test::type::Function<const char *(bool &&), &BoolToCstr>,
+    FlagValueType>;
 
-constexpr std::size_t IAName = 0;
-constexpr std::size_t IAValue = 1;
-constexpr std::size_t IBName = 2;
-constexpr std::size_t IBValue = 3;
-constexpr std::size_t ICompareFlagFunc = 4;
-constexpr std::size_t IFlagToCstrFunc = 5;
-constexpr std::size_t IDefaultValue = 6;
-constexpr std::size_t IBadValue = 7;
-constexpr std::size_t IStandardValue = 8;
-constexpr std::size_t ICatchValue = 9;
-constexpr std::size_t ISystemValue = 10;
-constexpr std::size_t IBoolToCstrFunc = 11;
+constexpr std::size_t IFlagValueType = 0;
+constexpr std::size_t IAName = 1;
+constexpr std::size_t IAValue = 2;
+constexpr std::size_t IBName = 3;
+constexpr std::size_t IBValue = 4;
+constexpr std::size_t ICompareFlagFunc = 5;
+constexpr std::size_t IFlagToCstrFunc = 6;
+constexpr std::size_t IDefaultValue = 7;
+constexpr std::size_t IBadValue = 8;
+constexpr std::size_t IStandardValue = 9;
+constexpr std::size_t ICatchValue = 10;
+constexpr std::size_t ISystemValue = 11;
+constexpr std::size_t IBoolToCstrFunc = 12;
+constexpr std::size_t IAliasValueType = 13;
 
 typedef basic::test::msg::Argument<TestIsSameValue,
     basic::test::msg::arg::Value<IAName>,
@@ -139,6 +146,15 @@ typedef basic::test::msg::Base<TestAAssignFlagCatch, char,
     ArgTestAAssignFlagCatch, ArgTestAAssignFlagCatch, 
     ArgTestAAssignFlagCatch> MessageBaseTestAAssignFlagCatch;
 
+typedef basic::test::msg::Argument<TestAliasValueType,
+    basic::test::msg::arg::type::Name<IFlagValueType>,
+    basic::test::msg::arg::type::Name<IAliasValueType>> 
+        ArgTestAliasValueType;
+
+typedef basic::test::msg::Base<TestAliasValueType, char, 
+    ArgTestAliasValueType, ArgTestAliasValueType, 
+    ArgTestAliasValueType> MessageBaseTestAliasValueType;
+
 template<typename TCases, typename... TVariables>
 class TestIdFlagType :
     public MessageBaseTestIsSameValue,
@@ -148,6 +164,7 @@ class TestIdFlagType :
     public MessageBaseTestCatchAValue,
     public MessageBaseTestSystemAValue,
     public MessageBaseTestAAssignFlagCatch,
+    public MessageBaseTestAliasValueType,
     public basic::test::Message<BASIC_TEST, TestIdFlagType<TCases, 
         TVariables...>>,
     public basic::test::Case<TestIdFlagType<TCases, TVariables...>,
@@ -177,6 +194,9 @@ public:
     using MessageBaseTestAAssignFlagCatch::Format;
     using MessageBaseTestAAssignFlagCatch::SetFormat;
     using MessageBaseTestAAssignFlagCatch::Argument;
+    using MessageBaseTestAliasValueType::Format;
+    using MessageBaseTestAliasValueType::SetFormat;
+    using MessageBaseTestAliasValueType::Argument;
     using basic::test::Case<TestIdFlagType<TCases, TVariables...>,
         TCases>::Run;
     using basic::test::Base<TestIdFlagType<TCases, TVariables...>, 
@@ -249,6 +269,15 @@ public:
             "basic::error::id::flag::Catch{}\n");
         SetFormat(error, testAAssignFlagCatch, "Error value of "
             "%s is nullptr\n");
+        
+        TestAliasValueType testAliasValueType;
+        basic::test::msg::Format<char> formatAliasTypeCodeValue("Test "
+            "alias type %s::ValueType is same type with %s\n");
+        SetFormat(debug, testAliasValueType, formatAliasTypeCodeValue);
+        SetFormat(info, testAliasValueType, 
+            std::move(formatAliasTypeCodeValue));
+        SetFormat(error, testAliasValueType, "Error alias type "
+            "%s::ValueType is not same type with %s\n");
     }
 public:
     bool Result(const TestIsSameValue &, VariableTestIdFlag & var)
@@ -290,15 +319,23 @@ public:
         *a_value = basic::error::id::flag::Catch{};
         return true;
     }
+    bool Result(const TestAliasValueType &, VariableTestIdFlag & var)
+    {
+        return typeid(typename basic::error::id::Flag::ValueType).
+            hash_code() == typeid(FlagValueType).hash_code();
+    }
 };
 
 using Case1 = basic::test::type::Parameter<TestDefaultAValue, TestBadAValue,
-    TestStandardAValue, TestCatchAValue, TestSystemAValue>;
+    TestStandardAValue, TestCatchAValue, TestSystemAValue, TestAliasValueType>;
 using Case2 = basic::test::type::Parameter<TestIsSameValue, TestDefaultAValue, 
-    TestBadAValue, TestStandardAValue, TestCatchAValue, TestSystemAValue>;
+    TestBadAValue, TestStandardAValue, TestCatchAValue, TestSystemAValue,
+    TestAliasValueType>;
 using Case3 = basic::test::type::Parameter<TestAAssignFlagCatch, 
     TestIsSameValue, TestDefaultAValue, TestBadAValue, TestStandardAValue, 
-    TestCatchAValue, TestSystemAValue>;
+    TestCatchAValue, TestSystemAValue, TestAliasValueType>;
+
+BASIC_TEST_TYPE_NAME("unsigned char", unsigned char);
 
 basic::error::id::Flag obj_undefined;
 
