@@ -780,32 +780,32 @@ T1Var22 t6_var22{"obj6_22", &obj6_22, 0, obj2_22.Error, 0};
 T1Var23 t6_var23{"obj6_23", &obj6_23, 0, obj2_23.Error, 0};
 T1Var24 t6_var24{"obj6_24", &obj6_24, 0, obj2_24.Error, 0};
 
-T1Var1 t6_var25{"obj4_1", &obj4_1_c, 0, 0, 0};
-T1Var2 t6_var26{"obj4_2", &obj4_2_c, 0, 0, 0};
-T1Var3 t6_var27{"obj4_3", &obj4_3_c, 0, 0, 0};
-T1Var4 t6_var28{"obj4_4", &obj4_4_c, 0, 0, 0};
-T1Var5 t6_var29{"obj4_5", &obj4_5_c, 0, 0, 0};
-T1Var6 t6_var30{"obj4_6", &obj4_6_c, 0, 0, 0};
-T1Var7 t6_var31{"obj4_7", &obj4_7_c, 0, 0, 0};
-T1Var8 t6_var32{"obj4_8", &obj4_8_c, 0, 0, 0};
+T1Var1 t6_var25{"obj4_1_c", &obj4_1_c, 0, 0, 0};
+T1Var2 t6_var26{"obj4_2_c", &obj4_2_c, 0, 0, 0};
+T1Var3 t6_var27{"obj4_3_c", &obj4_3_c, 0, 0, 0};
+T1Var4 t6_var28{"obj4_4_c", &obj4_4_c, 0, 0, 0};
+T1Var5 t6_var29{"obj4_5_c", &obj4_5_c, 0, 0, 0};
+T1Var6 t6_var30{"obj4_6_c", &obj4_6_c, 0, 0, 0};
+T1Var7 t6_var31{"obj4_7_c", &obj4_7_c, 0, 0, 0};
+T1Var8 t6_var32{"obj4_8_c", &obj4_8_c, 0, 0, 0};
 
-T1Var9 t6_var33{"obj4_9", &obj4_9_c, 0, 0, 0};
-T1Var10 t6_var34{"obj4_10", &obj4_10_c, 0, 0, 0};
-T1Var11 t6_var35{"obj4_11", &obj4_11_c, 0, 0, 0};
-T1Var12 t6_var36{"obj4_12", &obj4_12_c, 0, 0, 0};
-T1Var13 t6_var37{"obj4_13", &obj4_13_c, 0, 0, 0};
-T1Var14 t6_var38{"obj4_14", &obj4_14_c, 0, 0, 0};
-T1Var15 t6_var39{"obj4_15", &obj4_15_c, 0, 0, 0};
-T1Var16 t6_var40{"obj4_16", &obj4_16_c, 0, 0, 0};
+T1Var9 t6_var33{"obj4_9_c", &obj4_9_c, 0, 0, 0};
+T1Var10 t6_var34{"obj4_10_c", &obj4_10_c, 0, 0, 0};
+T1Var11 t6_var35{"obj4_11_c", &obj4_11_c, 0, 0, 0};
+T1Var12 t6_var36{"obj4_12_c", &obj4_12_c, 0, 0, 0};
+T1Var13 t6_var37{"obj4_13_c", &obj4_13_c, 0, 0, 0};
+T1Var14 t6_var38{"obj4_14_c", &obj4_14_c, 0, 0, 0};
+T1Var15 t6_var39{"obj4_15_c", &obj4_15_c, 0, 0, 0};
+T1Var16 t6_var40{"obj4_16_c", &obj4_16_c, 0, 0, 0};
 
-T1Var17 t6_var41{"obj4_17", &obj4_17_c, 0, 0, 0};
-T1Var18 t6_var42{"obj4_18", &obj4_18_c, 0, 0, 0};
-T1Var19 t6_var43{"obj4_19", &obj4_19_c, 0, 0, 0};
-T1Var20 t6_var44{"obj4_20", &obj4_20_c, 0, 0, 0};
-T1Var21 t6_var45{"obj4_21", &obj4_21_c, 0, 0, 0};
-T1Var22 t6_var46{"obj4_22", &obj4_22_c, 0, 0, 0};
-T1Var23 t6_var47{"obj4_23", &obj4_23_c, 0, 0, 0};
-T1Var24 t6_var48{"obj4_24", &obj4_24_c, 0, 0, 0};
+T1Var17 t6_var41{"obj4_17_c", &obj4_17_c, 0, 0, 0};
+T1Var18 t6_var42{"obj4_18_c", &obj4_18_c, 0, 0, 0};
+T1Var19 t6_var43{"obj4_19_c", &obj4_19_c, 0, 0, 0};
+T1Var20 t6_var44{"obj4_20_c", &obj4_20_c, 0, 0, 0};
+T1Var21 t6_var45{"obj4_21_c", &obj4_21_c, 0, 0, 0};
+T1Var22 t6_var46{"obj4_22_c", &obj4_22_c, 0, 0, 0};
+T1Var23 t6_var47{"obj4_23_c", &obj4_23_c, 0, 0, 0};
+T1Var24 t6_var48{"obj4_24_c", &obj4_24_c, 0, 0, 0};
 
 REGISTER_TEST(t6, new TestIdRecCode<Case2, T1Var1, T1Var2, T1Var3, T1Var4, 
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
@@ -927,32 +927,32 @@ T1Var22 t7_var22{"obj7_22", &obj7_22, 0, 0, obj3_22.ErrorSystem};
 T1Var23 t7_var23{"obj7_23", &obj7_23, 0, 0, obj3_23.ErrorSystem};
 T1Var24 t7_var24{"obj7_24", &obj7_24, 0, 0, obj3_24.ErrorSystem};
 
-T1Var1 t7_var25{"obj5_1", &obj5_1_c, 0, 0, 0};
-T1Var2 t7_var26{"obj5_2", &obj5_2_c, 0, 0, 0};
-T1Var3 t7_var27{"obj5_3", &obj5_3_c, 0, 0, 0};
-T1Var4 t7_var28{"obj5_4", &obj5_4_c, 0, 0, 0};
-T1Var5 t7_var29{"obj5_5", &obj5_5_c, 0, 0, 0};
-T1Var6 t7_var30{"obj5_6", &obj5_6_c, 0, 0, 0};
-T1Var7 t7_var31{"obj5_7", &obj5_7_c, 0, 0, 0};
-T1Var8 t7_var32{"obj5_8", &obj5_8_c, 0, 0, 0};
+T1Var1 t7_var25{"obj5_1_c", &obj5_1_c, 0, 0, 0};
+T1Var2 t7_var26{"obj5_2_c", &obj5_2_c, 0, 0, 0};
+T1Var3 t7_var27{"obj5_3_c", &obj5_3_c, 0, 0, 0};
+T1Var4 t7_var28{"obj5_4_c", &obj5_4_c, 0, 0, 0};
+T1Var5 t7_var29{"obj5_5_c", &obj5_5_c, 0, 0, 0};
+T1Var6 t7_var30{"obj5_6_c", &obj5_6_c, 0, 0, 0};
+T1Var7 t7_var31{"obj5_7_c", &obj5_7_c, 0, 0, 0};
+T1Var8 t7_var32{"obj5_8_c", &obj5_8_c, 0, 0, 0};
 
-T1Var9 t7_var33{"obj5_9", &obj5_9_c, 0, 0, 0};
-T1Var10 t7_var34{"obj5_10", &obj5_10_c, 0, 0, 0};
-T1Var11 t7_var35{"obj5_11", &obj5_11_c, 0, 0, 0};
-T1Var12 t7_var36{"obj5_12", &obj5_12_c, 0, 0, 0};
-T1Var13 t7_var37{"obj5_13", &obj5_13_c, 0, 0, 0};
-T1Var14 t7_var38{"obj5_14", &obj5_14_c, 0, 0, 0};
-T1Var15 t7_var39{"obj5_15", &obj5_15_c, 0, 0, 0};
-T1Var16 t7_var40{"obj5_16", &obj5_16_c, 0, 0, 0};
+T1Var9 t7_var33{"obj5_9_c", &obj5_9_c, 0, 0, 0};
+T1Var10 t7_var34{"obj5_10_c", &obj5_10_c, 0, 0, 0};
+T1Var11 t7_var35{"obj5_11_c", &obj5_11_c, 0, 0, 0};
+T1Var12 t7_var36{"obj5_12_c", &obj5_12_c, 0, 0, 0};
+T1Var13 t7_var37{"obj5_13_c", &obj5_13_c, 0, 0, 0};
+T1Var14 t7_var38{"obj5_14_c", &obj5_14_c, 0, 0, 0};
+T1Var15 t7_var39{"obj5_15_c", &obj5_15_c, 0, 0, 0};
+T1Var16 t7_var40{"obj5_16_c", &obj5_16_c, 0, 0, 0};
 
-T1Var17 t7_var41{"obj5_17", &obj5_17_c, 0, 0, 0};
-T1Var18 t7_var42{"obj5_18", &obj5_18_c, 0, 0, 0};
-T1Var19 t7_var43{"obj5_19", &obj5_19_c, 0, 0, 0};
-T1Var20 t7_var44{"obj5_20", &obj5_20_c, 0, 0, 0};
-T1Var21 t7_var45{"obj5_21", &obj5_21_c, 0, 0, 0};
-T1Var22 t7_var46{"obj5_22", &obj5_22_c, 0, 0, 0};
-T1Var23 t7_var47{"obj5_23", &obj5_23_c, 0, 0, 0};
-T1Var24 t7_var48{"obj5_24", &obj5_24_c, 0, 0, 0};
+T1Var17 t7_var41{"obj5_17_c", &obj5_17_c, 0, 0, 0};
+T1Var18 t7_var42{"obj5_18_c", &obj5_18_c, 0, 0, 0};
+T1Var19 t7_var43{"obj5_19_c", &obj5_19_c, 0, 0, 0};
+T1Var20 t7_var44{"obj5_20_c", &obj5_20_c, 0, 0, 0};
+T1Var21 t7_var45{"obj5_21_c", &obj5_21_c, 0, 0, 0};
+T1Var22 t7_var46{"obj5_22_c", &obj5_22_c, 0, 0, 0};
+T1Var23 t7_var47{"obj5_23_c", &obj5_23_c, 0, 0, 0};
+T1Var24 t7_var48{"obj5_24_c", &obj5_24_c, 0, 0, 0};
 
 REGISTER_TEST(t7, new TestIdRecCode<Case3, T1Var1, T1Var2, T1Var3, T1Var4, 
     T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
@@ -1572,5 +1572,7 @@ REGISTER_TEST(t15, new TestIdRecCode<Case1, T1Var1, T1Var2, T1Var3, T1Var4,
 
 int main()
 {
+    BASIC_TEST::GetInstance().Output().DebugEnable(false);
+    BASIC_TEST::GetInstance().Output().InfoEnable(false);
     return RUN_TEST();
 }
