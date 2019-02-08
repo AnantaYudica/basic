@@ -53,6 +53,15 @@ public:
     Record(Record<TErrorCodeValue, TErrorSystemCategoryValue,
         TErrorSystemCodeValue> && mov) noexcept;
 public:
+    Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue> & 
+    operator=(const Record<TErrorCodeValue, TErrorSystemCategoryValue, 
+        TErrorSystemCodeValue> &) = delete;
+    Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue> & 
+    operator=(Record<TErrorCodeValue, TErrorSystemCategoryValue, 
+        TErrorSystemCodeValue> &&) = delete;
+public:
     constexpr const FlagType & Flag() const noexcept; 
     constexpr ErrorType Error() const noexcept;
     constexpr ErrorSystemType ErrorSystem() const noexcept;
