@@ -33,7 +33,7 @@ public:
 public:
     typedef rec::Code<TErrorCodeValue, TErrorSystemCodeValue> UnionCodeType;
 private:
-    const FlagType m_flag;
+    FlagType m_flag;
     ErrorSystemCategoryValueType m_category;
     UnionCodeType m_code;
 public:
@@ -52,6 +52,15 @@ public:
         TErrorSystemCodeValue> & cpy) noexcept;
     Record(Record<TErrorCodeValue, TErrorSystemCategoryValue,
         TErrorSystemCodeValue> && mov) noexcept;
+public:
+    Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue> & 
+    operator=(const Record<TErrorCodeValue, TErrorSystemCategoryValue, 
+        TErrorSystemCodeValue> &) = delete;
+    Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue> & 
+    operator=(Record<TErrorCodeValue, TErrorSystemCategoryValue, 
+        TErrorSystemCodeValue> &&) = delete;
 public:
     constexpr const FlagType & Flag() const noexcept; 
     constexpr ErrorType Error() const noexcept;
@@ -126,7 +135,12 @@ Record<TErrorCodeValue, TErrorSystemCategoryValue,
             m_flag(std::move(mov.m_flag)),
             m_category(std::move(mov.m_category)),
             m_code(std::move(mov.m_code))
-{}
+{
+    mov.m_category = Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue>{basic::error::id::Flag{}}.m_category;
+    mov.m_code = Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue>{basic::error::id::Flag{}}.m_code;
+}
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
     typename TErrorSystemCodeValue>

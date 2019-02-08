@@ -16,8 +16,8 @@ namespace id
 namespace rec
 {
 
-template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
-    typename TErrorSystemCodeValue>
+template<std::uint16_t ENDIAN_VALUE_TEST = 0x0001,  typename TErrorCodeValue, 
+    typename TErrorSystemCategoryValue, typename TErrorSystemCodeValue>
 inline std::size_t ToBytes(const id::Record<TErrorCodeValue, 
     TErrorSystemCategoryValue, TErrorSystemCodeValue> & record,
     std::uint8_t * block_ptr, const std::size_t & block_size) noexcept
@@ -45,7 +45,7 @@ inline std::size_t ToBytes(const id::Record<TErrorCodeValue,
     const uint8_t * system_error_code_block = 
         (const uint8_t *) &rec_error_system.Code();
 
-    const std::uint16_t one_uint16 = 1;
+    const std::uint16_t one_uint16 = ENDIAN_VALUE_TEST;
     const bool IsBigEndian = ((std::uint8_t *)(&one_uint16))[1] == 1;
 
     std::size_t i = 0;

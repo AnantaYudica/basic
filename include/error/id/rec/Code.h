@@ -46,7 +46,8 @@ union Code
 };
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
-constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::Code() noexcept
+constexpr Code<TErrorCodeValue, TErrorSystemCodeValue>::Code() noexcept :
+    Error{0}
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCodeValue>
