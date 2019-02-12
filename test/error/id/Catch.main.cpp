@@ -290,7 +290,7 @@ BASIC_TEST_TYPE_NAME("basic::error::Identification",
 typedef VariableTestIdCatch<basic::error::id::Catch> T1Var1;
 
 constexpr typename basic::error::id::Catch::CodeValueType code_value1 = 4;
-constexpr typename basic::error::id::Catch::CodeValueType 
+constexpr typename basic::error::id::Catch::SystemCategoryValueType
     category_value1 = 0xB;
 
 basic::error::id::Catch obj1_1;
