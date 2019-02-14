@@ -7,6 +7,8 @@
 
 #include "error/msg/str/Allocate.h"
 
+BASIC_TEST_CONSTRUCT;
+
 struct TestValueAllocate {};
 
 template<typename TStorage>
