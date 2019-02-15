@@ -43,8 +43,6 @@ template<std::size_t N>
 void Copy(defn::type::Char (&storage_ref)[N], 
     const std::size_t& size, const defn::type::Char *cstr) noexcept
 {
-    if (IsDefault(storage_ref))
-        return;
     std::size_t index = 0;
     const std::size_t max_size = (size < N ? size : N);
     const auto *it = cstr, *end = cstr + max_size;
@@ -56,8 +54,6 @@ template<std::size_t N>
 void Copy(defn::type::Char (&storage_ref)[N], 
     const std::size_t &size, const std::string &str) noexcept
 {
-    if (IsDefault(storage_ref))
-        return;
     std::size_t index = 0;
     const std::size_t max_size = (size < N ? size : N);
     auto it = str.begin();
