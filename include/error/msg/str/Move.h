@@ -19,7 +19,7 @@ namespace msg
 namespace str
 {
 
-void Move(defn::type::Char *(&storage_ref),
+inline void Move(defn::type::Char *(&storage_ref),
     defn::type::Char *(&&cstr)) noexcept
 {
     if (!IsDefault(storage_ref))
