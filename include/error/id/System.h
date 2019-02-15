@@ -28,8 +28,8 @@ public:
         const CategoryValueType& category_val,
         const CodeValueType& code_val) noexcept;
 public:
-    System(const System& cpy) noexcept;
-    System(System&& mov) noexcept;
+    constexpr System(const System& cpy) noexcept;
+    inline System(System&& mov) noexcept;
 public:
     System& operator=(const System&) = delete;
     System& operator=(System&&) = delete;
@@ -49,11 +49,11 @@ constexpr System::System(const flag::Standard& standard,
         Identification(flag::System(), standard, category_val, code_val)
 {}
 
-System::System(const System& cpy) noexcept :
+constexpr System::System(const System& cpy) noexcept :
     Identification(cpy)
 {}
 
-System::System(System&& mov) noexcept :
+inline System::System(System&& mov) noexcept :
     Identification(std::move(mov))
 {}
 
