@@ -12,7 +12,7 @@ namespace msg
 namespace str
 {
 
-bool IsDefault(const defn::type::Char *storage_ref) noexcept
+inline bool IsDefault(const defn::type::Char *storage_ref) noexcept
 {
     return storage_ref == nullptr;
 }
