@@ -14,13 +14,13 @@ namespace msg
 namespace str
 {
 
-defn::type::Char& At(defn::type::Char *(&storage_ref),
+inline defn::type::Char& At(defn::type::Char *(&storage_ref),
     const std::size_t& index) noexcept
 {
     return *(storage_ref + index);
 }
 
-const defn::type::Char& At(const defn::type::Char *(&storage_ref),
+inline const defn::type::Char& At(const defn::type::Char *(&storage_ref),
     const std::size_t& index) noexcept
 {
     return *(storage_ref + index);
