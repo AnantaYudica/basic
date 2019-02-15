@@ -15,7 +15,7 @@ namespace msg
 namespace str
 {
 
-void Deallocate(defn::type::Char *(&storage_ref)) noexcept
+inline void Deallocate(defn::type::Char *(&storage_ref)) noexcept
 {
     if (storage_ref == nullptr)
         return;
