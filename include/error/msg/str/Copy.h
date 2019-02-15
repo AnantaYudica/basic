@@ -17,7 +17,7 @@ namespace msg
 namespace str
 {
 
-void Copy(defn::type::Char * (&storage_ref), 
+inline void Copy(defn::type::Char * (&storage_ref), 
     const std::size_t& size, const defn::type::Char *cstr) noexcept
 {
     if (IsDefault(storage_ref))
@@ -28,7 +28,7 @@ void Copy(defn::type::Char * (&storage_ref),
         At(storage_ref, index++) = *(it++);
 }
 
-void Copy(defn::type::Char * (&storage_ref), 
+inline void Copy(defn::type::Char * (&storage_ref), 
     const std::size_t &size, const std::string &str) noexcept
 {
     if (IsDefault(storage_ref))
