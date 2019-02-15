@@ -12,7 +12,7 @@ namespace msg
 namespace str
 {
 
-bool IsDefault(const defn::type::Char *storage_ref) noexcept
+inline bool IsDefault(const defn::type::Char *storage_ref) noexcept
 {
     return storage_ref == nullptr;
 }
@@ -20,7 +20,7 @@ bool IsDefault(const defn::type::Char *storage_ref) noexcept
 template<std::size_t N>
 bool IsDefault(const defn::type::Char (&storage_ref)[N]) noexcept
 {
-    return false;
+    return storage_ref[0] == '\0';
 }
 
 } //!str

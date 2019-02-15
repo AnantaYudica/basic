@@ -36,8 +36,8 @@ public:
     constexpr Catch(const Identification& id) noexcept;
     constexpr Catch(const flag::Standard&, const Identification& id) noexcept;
 public:
-    Catch(const Catch& cpy) noexcept;
-    Catch(Catch&& mov) noexcept;
+    constexpr Catch(const Catch& cpy) noexcept;
+    inline Catch(Catch&& mov) noexcept;
 public:
     Catch& operator=(const Catch&) = delete;
     Catch& operator=(Catch&&) = delete;
@@ -80,11 +80,11 @@ constexpr Catch::Catch(const flag::Standard& standard,
         Identification(flag::Catch(), standard, id)
 {}
 
-Catch::Catch(const Catch& cpy) noexcept :
+constexpr Catch::Catch(const Catch& cpy) noexcept :
     Identification(cpy)
 {}
 
-Catch::Catch(Catch&& mov) noexcept :
+inline Catch::Catch(Catch&& mov) noexcept :
     Identification(std::move(mov))
 {}
 

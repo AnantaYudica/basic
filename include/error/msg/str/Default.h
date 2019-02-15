@@ -14,7 +14,7 @@ namespace msg
 namespace str
 {
 
-void Default(defn::type::Char *(&storage_ref)) noexcept
+inline void Default(defn::type::Char *(&storage_ref)) noexcept
 {
     storage_ref = nullptr;
 }

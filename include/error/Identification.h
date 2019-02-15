@@ -61,6 +61,9 @@ public:
     constexpr Identification(const Identification& cpy) noexcept;
     inline Identification(Identification&& mov) noexcept;
 public:
+    Identification & operator=(const Identification &) = delete;
+    Identification & operator=(Identification &&) = delete;
+public:
     constexpr bool IsDefault() const noexcept;
     constexpr bool IsBad() const noexcept;
     constexpr bool IsStandard() const noexcept;

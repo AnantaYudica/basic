@@ -22,8 +22,8 @@ public:
     constexpr Standard() noexcept;
     constexpr Standard(const CodeValueType& code_val) noexcept;
 public:
-    Standard(const Standard& cpy) noexcept;
-    Standard(Standard&& mov) noexcept;
+    constexpr Standard(const Standard& cpy) noexcept;
+    inline Standard(Standard&& mov) noexcept;
 public:
     Standard& operator=(const Standard&) = delete;
     Standard& operator=(Standard&&) = delete;
@@ -37,11 +37,11 @@ constexpr Standard::Standard(const CodeValueType& code_val) noexcept :
     Identification(flag::Standard(), code_val)
 {}
 
-Standard::Standard(const Standard& cpy) noexcept :
+constexpr Standard::Standard(const Standard& cpy) noexcept :
     Identification(cpy)
 {}
 
-Standard::Standard(Standard&& mov) noexcept :
+inline Standard::Standard(Standard&& mov) noexcept :
     Identification(std::move(mov))
 {}
 

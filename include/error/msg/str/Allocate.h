@@ -14,7 +14,7 @@ namespace msg
 namespace str
 {
 
-void Allocate(defn::type::Char *(&storage_ref), 
+inline void Allocate(defn::type::Char *(&storage_ref), 
     const std::size_t& size) noexcept
 {
     storage_ref = new defn::type::Char[size];
