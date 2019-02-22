@@ -15,7 +15,7 @@ namespace msg
 namespace str
 {
 
-std::size_t Size(const defn::type::Char *cstr) noexcept
+inline std::size_t Size(const defn::type::Char *cstr) noexcept
 {
     std::size_t index = 0;
     while(cstr[index] != '\0')
@@ -23,7 +23,7 @@ std::size_t Size(const defn::type::Char *cstr) noexcept
     return index;
 }
 
-std::size_t Size(const std::string &str) noexcept
+inline std::size_t Size(const std::string &str) noexcept
 {
     return str.size();
 }
