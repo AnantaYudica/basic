@@ -2,6 +2,7 @@
 #define BASIC_ERROR_MSG_STR_CAPACITY_H_
 
 #include "../../defn/type/Char.h"
+#include "IsDefault.h"
 
 #include <cstddef>
 
@@ -16,6 +17,7 @@ namespace str
 
 inline std::size_t Capacity(const defn::type::Char *cstr) noexcept
 {
+    if(IsDefault(cstr)) return 0;
     std::size_t index = 0;
     while(cstr[index] != '\0')
         ++index;
