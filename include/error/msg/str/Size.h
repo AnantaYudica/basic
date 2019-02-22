@@ -23,12 +23,6 @@ std::size_t Size(const defn::type::Char *cstr) noexcept
     return index;
 }
 
-template<std::size_t N>
-std::size_t Size(const defn::type::Char (&arr_str)[N]) noexcept
-{
-    return N;
-}
-
 std::size_t Size(const std::string &str) noexcept
 {
     return str.size();
