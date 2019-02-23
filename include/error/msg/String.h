@@ -6,10 +6,10 @@
 #include "../intf/Exit.h"
 #include "str/Default.h"
 #include "str/Allocate.h"
-#include "str/Size.h"
 #include "str/Copy.h"
 #include "str/Move.h"
 #include "str/Value.h"
+#include "str/Capacity.h"
 
 #include <cstddef>
 
@@ -31,24 +31,24 @@ private:
 public:
     constexpr String() noexcept;
     template<std::size_t N>
-    String(const CharType (& cstr)[N]) noexcept;
-    String(const CharType * cstr) noexcept;
+    inline String(const CharType (& cstr)[N]) noexcept;
+    inline String(const CharType * cstr) noexcept;
     template<typename TString>
-    String(const TString & str) noexcept;
+    inline String(const TString & str) noexcept;
 public:
-    String(const String & cpy) noexcept;
-    String(String && mov) noexcept;
+    inline String(const String & cpy) noexcept;
+    inline String(String && mov) noexcept;
 public:
-    ~String() noexcept;
+    inline ~String() noexcept;
 public:
-    String & operator=(const String & cpy) noexcept;
-    String & operator=(String && mov) noexcept;
+    inline String & operator=(const String & cpy) noexcept;
+    inline String & operator=(String && mov) noexcept;
 public:
-    const CharType * Value() const noexcept;
+    inline const CharType * Value() const noexcept;
 public:
-    operator bool() const noexcept;
+    inline operator bool() const noexcept;
 private:
-    void Cleanup(int sig) noexcept;
+    inline void Cleanup(int sig) noexcept;
 };
 
 constexpr String::String() noexcept :
@@ -56,7 +56,7 @@ constexpr String::String() noexcept :
 {}
 
 template<std::size_t N>
-String::String(const CharType (& cstr)[N]) noexcept :
+inline String::String(const CharType (& cstr)[N]) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
@@ -64,74 +64,74 @@ String::String(const CharType (& cstr)[N]) noexcept :
     msg::str::Copy(m_storage, N, cstr);
 }
 
-String::String(const CharType * cstr) noexcept :
+inline String::String(const CharType * cstr) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
-    const std::size_t size = msg::str::Size(cstr);
+    const std::size_t size = msg::str::Capacity(cstr);
     msg::str::Allocate(m_storage, size);
     msg::str::Copy(m_storage, size, cstr);
 }
 
 template<typename TString>
-String::String(const TString & str) noexcept :
+inline String::String(const TString & str) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
-    const std::size_t size = msg::str::Size(str);
+    const std::size_t size = msg::str::Capacity(str);
     msg::str::Allocate(m_storage, size);
     msg::str::Copy(m_storage, size, str);
 }
 
-String::String(const String & cpy) noexcept :
+inline String::String(const String & cpy) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
-    const std::size_t size = msg::str::Size(cpy.m_storage);
+    const std::size_t size = msg::str::Capacity(cpy.m_storage);
     msg::str::Allocate(m_storage, size);
     msg::str::Copy(m_storage, size, cpy.m_storage);
 
 }
 
-String::String(String && mov) noexcept :
+inline String::String(String && mov) noexcept :
     m_storage{0}
 {
     msg::str::Default(m_storage);
     msg::str::Move(m_storage, std::move(mov.m_storage));
 }
 
-String::~String() noexcept
+inline String::~String() noexcept
 {
     msg::str::Deallocate(m_storage);
 }
 
-String & String::operator=(const String & cpy) noexcept
+inline String & String::operator=(const String & cpy) noexcept
 {
     msg::str::Deallocate(m_storage);
-    const std::size_t size = msg::str::Size(cpy.m_storage);
+    const std::size_t size = msg::str::Capacity(cpy.m_storage);
     msg::str::Allocate(m_storage, size);
     msg::str::Copy(m_storage, size, cpy.m_storage);
     return *this;
 }
 
-String & String::operator=(String && mov) noexcept
+inline String & String::operator=(String && mov) noexcept
 {
     msg::str::Deallocate(m_storage);
     msg::str::Move(m_storage, std::move(mov.m_storage));
     return *this;
 }
 
-const typename String::CharType * String::Value() const noexcept
+inline const typename String::CharType * String::Value() const noexcept
 {
     return msg::str::Value(m_storage);
 }
 
-String::operator bool() const noexcept
+inline String::operator bool() const noexcept
 {
     return !msg::str::IsDefault(m_storage);
 }
 
-void String::Cleanup(int sig) noexcept
+inline void String::Cleanup(int sig) noexcept
 {
     msg::str::Deallocate(m_storage);
 }
