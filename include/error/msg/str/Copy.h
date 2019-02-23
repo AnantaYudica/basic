@@ -26,6 +26,8 @@ inline void Copy(defn::type::Char * (&storage_ref),
     const auto *it = cstr, *end = cstr + size;
     while(*it != '\0' && it != end && index < size)
         At(storage_ref, index++) = *(it++);
+    if (*it == '\0') At(storage_ref, index) = '\0';  
+    else At(storage_ref, index - 1) = '\0';  
 }
 
 inline void Copy(defn::type::Char * (&storage_ref), 
@@ -37,6 +39,8 @@ inline void Copy(defn::type::Char * (&storage_ref),
     auto it = str.begin();
     while(*it != '\0' && it != str.end() && index < size)
         At(storage_ref, index++) = *(it++);
+    if (*it == '\0') At(storage_ref, index) = '\0';  
+    else At(storage_ref, index - 1) = '\0';  
 }
 
 template<std::size_t N>
@@ -48,6 +52,8 @@ void Copy(defn::type::Char (&storage_ref)[N],
     const auto *it = cstr, *end = cstr + max_size;
     while(*it != '\0' && it != end && index < max_size)
         At(storage_ref, index++) = *(it++);
+    if (*it == '\0') At(storage_ref, index) = '\0';  
+    else At(storage_ref, index - 1) = '\0';  
 }
 
 template<std::size_t N>
@@ -59,6 +65,8 @@ void Copy(defn::type::Char (&storage_ref)[N],
     auto it = str.begin();
     while(*it != '\0' && it != str.end() && index < max_size)
         At(storage_ref, index++) = *(it++);
+    if (*it == '\0') At(storage_ref, index) = '\0';  
+    else At(storage_ref, index - 1) = '\0';  
 }
 
 } //!str
