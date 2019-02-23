@@ -13,7 +13,7 @@ namespace msg
 namespace str
 {
 
-const defn::type::Char * 
+inline const defn::type::Char * 
 Value(const defn::type::Char *cstr) noexcept
 {
     static defn::type::Char empty[1] = {'\0'};

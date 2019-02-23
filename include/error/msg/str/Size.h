@@ -2,6 +2,7 @@
 #define BASIC_ERROR_MSG_STR_SIZE_H_
 
 #include "../../defn/type/Char.h"
+#include "IsDefault.h"
 
 #include <string>
 #include <cstddef>
@@ -15,21 +16,16 @@ namespace msg
 namespace str
 {
 
-std::size_t Size(const defn::type::Char *cstr) noexcept
+inline std::size_t Size(const defn::type::Char *cstr) noexcept
 {
+    if(IsDefault(cstr)) return 0;
     std::size_t index = 0;
     while(cstr[index] != '\0')
         ++index;
     return index;
 }
 
-template<std::size_t N>
-std::size_t Size(const defn::type::Char (&arr_str)[N]) noexcept
-{
-    return N;
-}
-
-std::size_t Size(const std::string &str) noexcept
+inline std::size_t Size(const std::string &str) noexcept
 {
     return str.size();
 }
