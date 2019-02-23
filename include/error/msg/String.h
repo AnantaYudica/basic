@@ -69,8 +69,11 @@ inline String::String(const CharType * cstr) noexcept :
 {
     msg::str::Default(m_storage);
     const std::size_t size = msg::str::Capacity(cstr);
-    msg::str::Allocate(m_storage, size);
-    msg::str::Copy(m_storage, size, cstr);
+    if (size > 0)
+    {
+        msg::str::Allocate(m_storage, size);
+        msg::str::Copy(m_storage, size, cstr);
+    }
 }
 
 template<typename TString>
@@ -79,8 +82,11 @@ inline String::String(const TString & str) noexcept :
 {
     msg::str::Default(m_storage);
     const std::size_t size = msg::str::Capacity(str);
-    msg::str::Allocate(m_storage, size);
-    msg::str::Copy(m_storage, size, str);
+    if (size > 0)
+    {
+        msg::str::Allocate(m_storage, size);
+        msg::str::Copy(m_storage, size, str);
+    }
 }
 
 inline String::String(const String & cpy) noexcept :
@@ -88,8 +94,11 @@ inline String::String(const String & cpy) noexcept :
 {
     msg::str::Default(m_storage);
     const std::size_t size = msg::str::Capacity(cpy.m_storage);
-    msg::str::Allocate(m_storage, size);
-    msg::str::Copy(m_storage, size, cpy.m_storage);
+    if (size > 0)
+    {
+        msg::str::Allocate(m_storage, size);
+        msg::str::Copy(m_storage, size, cpy.m_storage);
+    }
 
 }
 
@@ -109,8 +118,11 @@ inline String & String::operator=(const String & cpy) noexcept
 {
     msg::str::Deallocate(m_storage);
     const std::size_t size = msg::str::Capacity(cpy.m_storage);
-    msg::str::Allocate(m_storage, size);
-    msg::str::Copy(m_storage, size, cpy.m_storage);
+    if (size > 0)
+    {
+        msg::str::Allocate(m_storage, size);
+        msg::str::Copy(m_storage, size, cpy.m_storage);
+    }
     return *this;
 }
 
