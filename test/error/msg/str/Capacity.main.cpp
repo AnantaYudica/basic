@@ -7,6 +7,8 @@
 
 #include "error/msg/str/Capacity.h"
 
+#include <string>
+
 BASIC_TEST_CONSTRUCT;
 
 struct TestValueCapacity {};
@@ -15,6 +17,11 @@ template<typename TStorage>
 const char * StorgeToString(TStorage * && storage)
 {
     return (*storage == nullptr ? "null" : *storage);
+}
+
+const char * StorgeToString(std::string * && storage)
+{
+    return storage->c_str();
 }
 
 template<typename TStorage>
@@ -87,6 +94,8 @@ public:
 
 BASIC_TEST_TYPE_NAME("const char *", const char *);
 BASIC_TEST_TYPE_NAME("char *", char *);
+BASIC_TEST_TYPE_NAME("const std::string", const std::string);
+BASIC_TEST_TYPE_NAME("std::string", std::string);
 BASIC_TEST_TYPE_NAME("char [11]", char [11]);
 BASIC_TEST_TYPE_NAME("char [4]", char [4]);
 
@@ -95,19 +104,23 @@ char * obj1_2 = new char[5];
 char * obj1_3 = nullptr;
 char obj1_4[11];
 char obj1_5[4];
+std::string obj1_6{"test"};
 
 typedef VariableTestStringCapacity<char *> T1Var1;
 typedef VariableTestStringCapacity<char [11]> T1Var2;
 typedef VariableTestStringCapacity<char [4]> T1Var3;
+typedef VariableTestStringCapacity<std::string> T1Var4;
 
 T1Var1 t1_var1{&obj1_1, 5};
 T1Var1 t1_var2{&obj1_2, 3};
 T1Var1 t1_var3{&obj1_3, 0};
 T1Var2 t1_var4{&obj1_4, 11};
 T1Var3 t1_var5{&obj1_5, 4};
+T1Var4 t1_var6{&obj1_6, obj1_6.capacity() + 1};
 
 REGISTER_TEST(t1, new TestStringCapacity<T1Var1, T1Var1, T1Var1, 
-    T1Var2, T1Var3>(t1_var1, t1_var2, t1_var3, t1_var4, t1_var5));
+    T1Var2, T1Var3, T1Var4>(t1_var1, t1_var2, t1_var3, t1_var4, t1_var5, 
+        t1_var6));
 
 int main()
 {
