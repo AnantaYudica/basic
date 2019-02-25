@@ -56,6 +56,11 @@ public:
     inline CategoryValueType Value() const noexcept;
 };
 
+inline Default Default::Instance() noexcept
+{
+    return {};
+}
+
 template<typename TCondition, typename TCode>
 inline TCondition Default::DefaultCondition(const TCode& code) const noexcept
 {
