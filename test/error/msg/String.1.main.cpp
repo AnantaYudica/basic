@@ -4,24 +4,6 @@
 #include <string>
 #include <utility>
 
-namespace basic
-{
-namespace error
-{
-namespace msg
-{
-namespace str
-{
-
-inline std::size_t Capacity(const std::string & str)
-{
-    return str.capacity();
-}
-}
-}
-}
-}
-
 #include "String.test.h"
 
 BASIC_TEST_CONSTRUCT;
