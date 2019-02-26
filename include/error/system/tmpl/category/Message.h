@@ -29,8 +29,18 @@ Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
 }
 
 template<typename TTag, typename TCategoryTrait, typename TValue>
+inline typename std::enable_if<has::mmbr::func::Message<TCategoryTrait,
+    error::msg::String, TValue>::Value, error::msg::String>::type  
+Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
+{
+    return std::move(category_trait.Message(value));
+}
+
+template<typename TTag, typename TCategoryTrait, typename TValue>
 inline typename std::enable_if<!has::mmbr::func::Message<TCategoryTrait,
-    error::msg::String, TTag, TValue>::Value, error::msg::String>::type  
+    error::msg::String, TTag, TValue>::Value && !has::mmbr::func::
+    Message<TCategoryTrait, error::msg::String, TValue>::Value, 
+    error::msg::String>::type  
 Message(const TCategoryTrait & category_trait, const TValue & value) noexcept
 {
     return std::move(error::msg::String{});
