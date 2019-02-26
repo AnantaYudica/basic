@@ -50,6 +50,8 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue& val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::errc & val) const noexcept; 
 public:
     inline const CharType * Name() const noexcept;
 public:
@@ -89,6 +91,18 @@ inline typename Default::StringType
 Default::Message(const TValue& val) const noexcept
 {
     return {std::system_category().message(val.Value())};
+}
+
+inline typename Default::StringType 
+Default::Message(const int & val) const noexcept
+{
+    return {std::system_category().message(val)};
+}
+
+inline typename Default::StringType 
+Default::Message(const std::errc & val) const noexcept
+{
+    return {std::system_category().message(static_cast<int>(val))};
 }
 
 inline const typename Default::CharType * Default::Name() const noexcept
