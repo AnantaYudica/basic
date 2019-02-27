@@ -20,8 +20,7 @@ namespace system
 namespace category
 {
 
-class Future :
-    public error::intf::Exit
+class Future
 {
 public:
     typedef std::future_errc CodeEnumType;
@@ -40,8 +39,6 @@ private:
 public:
     inline Future(const Future&) noexcept = default;
     inline Future(Future&&) noexcept = default;
-private:
-    inline void Cleanup(int sig) noexcept;
 public:
     template<typename TCondition>
     inline TCondition 
@@ -68,9 +65,6 @@ inline Future Future::Instance() noexcept
 {
     return {};
 }
-
-inline void Future::Cleanup(int sig) noexcept
-{}
 
 template<typename TCondition, typename TCode>
 inline TCondition Future::DefaultCondition(const TCode& code) const noexcept
