@@ -68,8 +68,8 @@ template<typename TCondition, typename TCode, typename TCategory>
 inline TCondition Default::DefaultCondition(const TCode& code,
         const TCategory & category) const noexcept
 {
-    return {std::system_category().
-        default_error_condition(code.Value()).value(), category};
+    return {static_cast<ConditionValueType>(std::system_category().
+        default_error_condition(code.Value()).value()), category};
 }
 
 template<typename TCode>
