@@ -38,8 +38,9 @@ public:
     inline Default(const Default &) noexcept = default;
     inline Default(Default &&) noexcept = default;
 public:
-    template<typename TCondition, typename TCode>
-    inline TCondition DefaultCondition(const TCode& code) const noexcept;
+    template<typename TCondition, typename TCode, typename TCategory>
+    inline TCondition DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept;
 public:
     template<typename TCode>
     inline bool Equivalent(const TCode& code, 
@@ -63,11 +64,12 @@ inline Default Default::Instance() noexcept
     return {};
 }
 
-template<typename TCondition, typename TCode>
-inline TCondition Default::DefaultCondition(const TCode& code) const noexcept
+template<typename TCondition, typename TCode, typename TCategory>
+inline TCondition Default::DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept
 {
     return {std::system_category().
-        default_error_condition(code.Value()).value()};
+        default_error_condition(code.Value()).value(), category};
 }
 
 template<typename TCode>
