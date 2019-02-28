@@ -50,6 +50,8 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue& val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::errc & val) const noexcept;
 public:
     inline const CharType * Name() const noexcept;
 public:
@@ -84,6 +86,18 @@ inline typename Generic::StringType
 Generic::Message(const TValue& val) const noexcept
 {
     return {std::generic_category().message(val.Value())};
+}
+
+inline typename Generic::StringType 
+Generic::Message(const int & val) const noexcept
+{
+    return {std::generic_category().message(val)};
+}
+
+inline typename Generic::StringType 
+Generic::Message(const std::errc & val) const noexcept
+{
+    return {std::generic_category().message(static_cast<int>(val))};
 }
 
 inline const typename Generic::CharType * Generic::Name() const noexcept
