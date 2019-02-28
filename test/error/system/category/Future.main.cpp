@@ -1,3 +1,4 @@
+#define USING_BASIC_TEST_MEMORY
 #include "Test.h"
 #include "test/Message.h"
 #include "test/Variable.h"
