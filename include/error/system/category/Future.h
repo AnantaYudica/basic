@@ -56,6 +56,8 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue & val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::future_errc & val) const noexcept; 
 public:
     inline const CharType * Name() const noexcept;
 public:
@@ -103,6 +105,18 @@ inline typename Future::StringType
 Future::Message(const TValue& val) const noexcept
 {
     return {std::future_category().message(val.Value())};
+}
+
+inline typename Future::StringType 
+Future::Message(const int & val) const noexcept
+{
+    return {std::future_category().message(val)};
+}
+
+inline typename Future::StringType 
+Future::Message(const std::future_errc & val) const noexcept
+{
+    return  {std::future_category().message(static_cast<int>(val))};
 }
 
 inline const typename Future::CharType * Future::Name() const noexcept
