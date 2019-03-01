@@ -30,7 +30,7 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    typedef Category CategoryType;
+    typedef intf::Category CategoryType;
 public:
     typedef Condition ConditionType;
 private:

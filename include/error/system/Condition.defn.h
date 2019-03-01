@@ -30,7 +30,7 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    typedef Category CategoryType;
+    typedef intf::Category CategoryType;
 private:
     ValueType m_value;
     CategoryType * m_category;
