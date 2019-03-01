@@ -32,14 +32,18 @@ public:
 public:
     typedef msg::String StringType;
 public:
-    static Generic Instance() noexcept;
+    static inline Generic Instance() noexcept;
 public:
     inline Generic() noexcept = default;
     inline Generic(const Generic &) noexcept = default;
     inline Generic(Generic &&) noexcept = default;
 public:
-    template<typename TCondition, typename TCode>
-    inline TCondition DefaultCondition(const TCode& code) const noexcept;
+    template<typename TCondition, typename TCategory>
+    inline TCondition DefaultCondition(const CodeValueType & code,
+        const TCategory & category) const noexcept;
+    template<typename TCondition, typename TCode, typename TCategory>
+    inline TCondition DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept;
 public:
     template<typename TCode>
     inline bool Equivalent(const TCode& code, 
@@ -50,17 +54,32 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue& val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::errc & val) const noexcept;
 public:
     inline const CharType * Name() const noexcept;
 public:
     inline CategoryValueType Value() const noexcept;
 };
 
-template<typename TCondition, typename TCode>
-inline TCondition Generic::DefaultCondition(const TCode& code) const noexcept
+inline Generic Generic::Instance() noexcept
 {
-    return {std::generic_category().
-        default_error_condition(code.Value()).value()};
+    return {};
+}
+
+template<typename TCondition, typename TCategory>
+inline TCondition Generic::DefaultCondition(const CodeValueType & code,
+    const TCategory & category) const noexcept
+{
+    return {code, category};
+}
+
+template<typename TCondition, typename TCode, typename TCategory>
+inline TCondition Generic::DefaultCondition(const TCode& code,
+    const TCategory & category) const noexcept
+{
+    return {static_cast<ConditionValueType>(std::generic_category().
+        default_error_condition(code.Value()).value()), category};
 }
 
 template<typename TCode>
@@ -84,6 +103,18 @@ inline typename Generic::StringType
 Generic::Message(const TValue& val) const noexcept
 {
     return {std::generic_category().message(val.Value())};
+}
+
+inline typename Generic::StringType 
+Generic::Message(const int & val) const noexcept
+{
+    return {std::generic_category().message(val)};
+}
+
+inline typename Generic::StringType 
+Generic::Message(const std::errc & val) const noexcept
+{
+    return {std::generic_category().message(static_cast<int>(val))};
 }
 
 inline const typename Generic::CharType * Generic::Name() const noexcept

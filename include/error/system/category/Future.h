@@ -20,8 +20,7 @@ namespace system
 namespace category
 {
 
-class Future :
-    public error::intf::Exit
+class Future
 {
 public:
     typedef std::future_errc CodeEnumType;
@@ -40,14 +39,13 @@ private:
 public:
     inline Future(const Future&) noexcept = default;
     inline Future(Future&&) noexcept = default;
-private:
-    inline void Cleanup(int sig) noexcept;
 public:
-    template<typename TCondition>
-    inline TCondition 
-        DefaultCondition(const CodeValueType& code) const noexcept = delete;
-    template<typename TCondition, typename TCode>
-    inline TCondition DefaultCondition(const TCode& code) const noexcept;
+    template<typename TCondition, typename TCategory>
+    inline TCondition DefaultCondition(const CodeValueType& code, 
+        const TCategory & category) const noexcept;
+    template<typename TCondition, typename TCode, typename TCategory>
+    inline TCondition DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept;
 public:
     template<typename TCode>
     inline bool Equivalent(const TCode& code, 
@@ -58,6 +56,8 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue & val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::future_errc & val) const noexcept; 
 public:
     inline const CharType * Name() const noexcept;
 public:
@@ -69,14 +69,19 @@ inline Future Future::Instance() noexcept
     return {};
 }
 
-inline void Future::Cleanup(int sig) noexcept
-{}
-
-template<typename TCondition, typename TCode>
-inline TCondition Future::DefaultCondition(const TCode& code) const noexcept
+template<typename TCondition, typename TCategory>
+inline TCondition Future::DefaultCondition(const CodeValueType& code, 
+    const TCategory & category) const noexcept
 {
-    return {std::future_category().
-        default_error_condition(code.Value()).value()};
+    return {code, category};
+}
+    
+template<typename TCondition, typename TCode, typename TCategory>
+inline TCondition Future::DefaultCondition(const TCode& code,
+    const TCategory & category) const noexcept
+{
+    return {static_cast<ConditionValueType>(std::future_category().
+        default_error_condition(code.Value()).value()), category};
 }
 
 template<typename TCode>
@@ -100,6 +105,18 @@ inline typename Future::StringType
 Future::Message(const TValue& val) const noexcept
 {
     return {std::future_category().message(val.Value())};
+}
+
+inline typename Future::StringType 
+Future::Message(const int & val) const noexcept
+{
+    return {std::future_category().message(val)};
+}
+
+inline typename Future::StringType 
+Future::Message(const std::future_errc & val) const noexcept
+{
+    return  {std::future_category().message(static_cast<int>(val))};
 }
 
 inline const typename Future::CharType * Future::Name() const noexcept

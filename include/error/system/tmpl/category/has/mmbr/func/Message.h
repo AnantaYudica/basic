@@ -61,11 +61,9 @@ namespace mmbr
 namespace func
 {
 
-template<typename TCategoryTrait, typename TString, typename TTag, 
-    typename TValue>
+template<typename TCategoryTrait, typename TString, typename... TArgs>
 using Message = _helper::_basic::_error::_system::_tmpl::_category::
-    _has::_mmbr::_func::_Message<TCategoryTrait, TString, const TTag &, 
-    const TValue &>;
+    _has::_mmbr::_func::_Message<TCategoryTrait, TString, const TArgs & ...>;
 
 } //!func
 

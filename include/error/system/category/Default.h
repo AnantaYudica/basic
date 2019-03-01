@@ -38,8 +38,12 @@ public:
     inline Default(const Default &) noexcept = default;
     inline Default(Default &&) noexcept = default;
 public:
-    template<typename TCondition, typename TCode>
-    inline TCondition DefaultCondition(const TCode& code) const noexcept;
+    template<typename TCondition, typename TCode, typename TCategory>
+    inline TCondition DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept;
+    template<typename TCondition, typename TCategory>
+    inline TCondition DefaultCondition(const CodeValueType & code,
+        const TCategory & category) const noexcept;
 public:
     template<typename TCode>
     inline bool Equivalent(const TCode& code, 
@@ -50,17 +54,32 @@ public:
 public:
     template<typename TValue>
     inline StringType Message(const TValue& val) const noexcept;
+    inline StringType Message(const int & val) const noexcept;
+    inline StringType Message(const std::errc & val) const noexcept; 
 public:
     inline const CharType * Name() const noexcept;
 public:
     inline CategoryValueType Value() const noexcept;
 };
 
-template<typename TCondition, typename TCode>
-inline TCondition Default::DefaultCondition(const TCode& code) const noexcept
+inline Default Default::Instance() noexcept
 {
-    return {std::system_category().
-        default_error_condition(code.Value()).value()};
+    return {};
+}
+
+template<typename TCondition, typename TCode, typename TCategory>
+inline TCondition Default::DefaultCondition(const TCode& code,
+        const TCategory & category) const noexcept
+{
+    return {static_cast<ConditionValueType>(std::system_category().
+        default_error_condition(code.Value()).value()), category};
+}
+
+template<typename TCondition, typename TCategory>
+inline TCondition Default::DefaultCondition(const CodeValueType & code,
+    const TCategory & category) const noexcept
+{
+    return {code, category};
 }
 
 template<typename TCode>
@@ -84,6 +103,18 @@ inline typename Default::StringType
 Default::Message(const TValue& val) const noexcept
 {
     return {std::system_category().message(val.Value())};
+}
+
+inline typename Default::StringType 
+Default::Message(const int & val) const noexcept
+{
+    return {std::system_category().message(val)};
+}
+
+inline typename Default::StringType 
+Default::Message(const std::errc & val) const noexcept
+{
+    return {std::system_category().message(static_cast<int>(val))};
 }
 
 inline const typename Default::CharType * Default::Name() const noexcept

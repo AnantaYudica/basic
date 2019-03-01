@@ -5,6 +5,7 @@
 #include "IsDefault.h"
 
 #include <cstddef>
+#include <string>
 
 namespace basic
 {
@@ -28,6 +29,11 @@ template<std::size_t N>
 std::size_t Capacity(const defn::type::Char (&arr_str)[N]) noexcept
 {
     return N;
+}
+
+inline std::size_t Capacity(const std::string & str) noexcept
+{
+    return str.capacity() + 1;
 }
 
 } //!str

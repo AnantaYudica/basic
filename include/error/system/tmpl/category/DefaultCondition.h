@@ -4,7 +4,7 @@
 #include "../Category.defn.h"
 
 #include "has/mmbr/func/DefaultCondition.h"
-#include "../../Condition.h"
+#include "../../Condition.defn.h"
 
 #include <type_traits>
 #include <utility>
