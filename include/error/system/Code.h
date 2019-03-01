@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYSTEM_CODE_H_
 #define BASIC_ERROR_SYSTEM_CODE_H_
 
-#include "code.defn.h"
+#include "Code.defn.h"
 
 #include "make/Category.h"
 #include "make/code/Value.h"
