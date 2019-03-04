@@ -987,11 +987,11 @@ REGISTER_TEST(t2, new TestRecord<Case2, T1Var1, T1Var2, T1Var3, T1Var4,
 basic::error::id::Flag flag3_1{basic::error::id::flag::System{},
     basic::error::id::flag::Standard{}};
 
-std::uint8_t category_uint8_t_1 = 114;
-std::uint64_t category_uint64_t_1 = 56249071708950721ull;
-std::uint16_t category_uint16_t_1 = 53535;
-std::uint32_t category_uint32_t_1 = 1234060096ul;
-std::int32_t category_int32_t_1 = -1234060096l;
+std::uint8_t categ_uint8_t_1 = 114;
+std::uint64_t categ_uint64_t_1 = 56249071708950721ull;
+std::uint16_t categ_uint16_t_1 = 53535;
+std::uint32_t categ_uint32_t_1 = 1234060096ul;
+std::int32_t categ_int32_t_1 = -1234060096l;
 
 Bytes t3_bytes1{0x14, 0x72, 0x10};
 Bytes t3_bytes2{0x14, 0x00, 0xC7, 0xD6, 0x3B, 0x92, 0x28, 0x50, 0xC1,
@@ -1004,31 +1004,31 @@ Bytes t3_bytes6{0x14, 0xB6, 0x71, 0xBC, 0xC0,
 Bytes t3_bytes7{0x14, 0xD1, 0x1F, 0xCC}; 
 Bytes t3_bytes8{0x14, 0xB6, 0x71, 0xBC, 0xC0, 0xAA, 0xAB};
 
-T1Obj1 Obj3_1{flag3_1, category_uint8_t_1, error_uint8_t_1};
-T1Obj2 Obj3_2{flag3_1, category_uint64_t_1, error_uint64_t_1};
-T1Obj3 Obj3_3{flag3_1, category_uint16_t_1, error_uint32_t_1};
-T1Obj4 Obj3_4{flag3_1, category_uint32_t_1, error_uint16_t_1};
-T1Obj5 Obj3_5{flag3_1, category_uint16_t_1, error_uint32_t_1};
-T1Obj6 Obj3_6{flag3_1, category_int32_t_1, error_uint64_t_1};
-T1Obj7 Obj3_7{flag3_1, category_uint16_t_1, error_int8_t_1};
-T1Obj8 Obj3_8{flag3_1, category_int32_t_1, error_int16_t_1};
+T1Obj1 Obj3_1{flag3_1, categ_uint8_t_1, error_uint8_t_1};
+T1Obj2 Obj3_2{flag3_1, categ_uint64_t_1, error_uint64_t_1};
+T1Obj3 Obj3_3{flag3_1, categ_uint16_t_1, error_uint32_t_1};
+T1Obj4 Obj3_4{flag3_1, categ_uint32_t_1, error_uint16_t_1};
+T1Obj5 Obj3_5{flag3_1, categ_uint16_t_1, error_uint32_t_1};
+T1Obj6 Obj3_6{flag3_1, categ_int32_t_1, error_uint64_t_1};
+T1Obj7 Obj3_7{flag3_1, categ_uint16_t_1, error_int8_t_1};
+T1Obj8 Obj3_8{flag3_1, categ_int32_t_1, error_int16_t_1};
 
 T1Var1 t3_var1{"Obj3_1", &Obj3_1, 0, 0, flag3_1, T1Err1{0}, 
-    T1ErrSys1{category_uint8_t_1, error_uint8_t_1}, t3_bytes1};
+    T1ErrSys1{categ_uint8_t_1, error_uint8_t_1}, t3_bytes1};
 T1Var2 t3_var2{"Obj3_2", &Obj3_2, 0, 0, flag3_1, T1Err2{0}, 
-    T1ErrSys2{category_uint64_t_1, error_uint64_t_1}, t3_bytes2};
+    T1ErrSys2{categ_uint64_t_1, error_uint64_t_1}, t3_bytes2};
 T1Var3 t3_var3{"Obj3_3", &Obj3_3, 0, 0, flag3_1, T1Err3{0}, 
-    T1ErrSys3{category_uint16_t_1, error_uint32_t_1}, t3_bytes3};
+    T1ErrSys3{categ_uint16_t_1, error_uint32_t_1}, t3_bytes3};
 T1Var4 t3_var4{"Obj3_4", &Obj3_4, 0, 0, flag3_1, T1Err4{0}, 
-    T1ErrSys4{category_uint32_t_1, error_uint16_t_1}, t3_bytes4};
+    T1ErrSys4{categ_uint32_t_1, error_uint16_t_1}, t3_bytes4};
 T1Var5 t3_var5{"Obj3_5", &Obj3_5, 0, 0, flag3_1, T1Err5{0}, 
-    T1ErrSys5{category_uint16_t_1, error_uint32_t_1}, t3_bytes5};
+    T1ErrSys5{categ_uint16_t_1, error_uint32_t_1}, t3_bytes5};
 T1Var6 t3_var6{"Obj3_6", &Obj3_6, 0, 0, flag3_1, T1Err6{0},
-    T1ErrSys6{category_int32_t_1, error_uint64_t_1}, t3_bytes6};
+    T1ErrSys6{categ_int32_t_1, error_uint64_t_1}, t3_bytes6};
 T1Var7 t3_var7{"Obj3_7", &Obj3_7, 0, 0, flag3_1, T1Err7{0}, 
-    T1ErrSys7{category_uint16_t_1, error_int8_t_1}, t3_bytes7};
+    T1ErrSys7{categ_uint16_t_1, error_int8_t_1}, t3_bytes7};
 T1Var8 t3_var8{"Obj3_8", &Obj3_8, 0, 0, flag3_1, T1Err8{0}, 
-    T1ErrSys8{category_int32_t_1, error_int16_t_1}, t3_bytes8};
+    T1ErrSys8{categ_int32_t_1, error_int16_t_1}, t3_bytes8};
 
 REGISTER_TEST(t3, new TestRecord<Case3, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8>(t3_var1, t3_var2, t3_var3, t3_var4,
@@ -1096,21 +1096,21 @@ T1Obj7 Obj5_7{flag5_1, Obj3_7};
 T1Obj8 Obj5_8{flag5_1, Obj3_8};
 
 T1Var1 t5_var1{"Obj5_1", &Obj5_1, 0, 0, flag5_1, T1Err1{0}, 
-    T1ErrSys1{category_uint8_t_1, error_uint8_t_1}, t5_bytes1};
+    T1ErrSys1{categ_uint8_t_1, error_uint8_t_1}, t5_bytes1};
 T1Var2 t5_var2{"Obj5_2", &Obj5_2, 0, 0, flag5_1, T1Err2{0}, 
-    T1ErrSys2{category_uint64_t_1, error_uint64_t_1}, t5_bytes2};
+    T1ErrSys2{categ_uint64_t_1, error_uint64_t_1}, t5_bytes2};
 T1Var3 t5_var3{"Obj5_3", &Obj5_3, 0, 0, flag5_1, T1Err3{0}, 
-    T1ErrSys3{category_uint16_t_1, error_uint32_t_1}, t5_bytes3};
+    T1ErrSys3{categ_uint16_t_1, error_uint32_t_1}, t5_bytes3};
 T1Var4 t5_var4{"Obj5_4", &Obj5_4, 0, 0, flag5_1, T1Err4{0}, 
-    T1ErrSys4{category_uint32_t_1, error_uint16_t_1}, t5_bytes4};
+    T1ErrSys4{categ_uint32_t_1, error_uint16_t_1}, t5_bytes4};
 T1Var5 t5_var5{"Obj5_5", &Obj5_5, 0, 0, flag5_1, T1Err5{0}, 
-    T1ErrSys5{category_uint16_t_1, error_uint32_t_1}, t5_bytes5};
+    T1ErrSys5{categ_uint16_t_1, error_uint32_t_1}, t5_bytes5};
 T1Var6 t5_var6{"Obj5_6", &Obj5_6, 0, 0, flag5_1, T1Err6{0},
-    T1ErrSys6{category_int32_t_1, error_uint64_t_1}, t5_bytes6};
+    T1ErrSys6{categ_int32_t_1, error_uint64_t_1}, t5_bytes6};
 T1Var7 t5_var7{"Obj5_7", &Obj5_7, 0, 0, flag5_1, T1Err7{0}, 
-    T1ErrSys7{category_uint16_t_1, error_int8_t_1}, t5_bytes7};
+    T1ErrSys7{categ_uint16_t_1, error_int8_t_1}, t5_bytes7};
 T1Var8 t5_var8{"Obj5_8", &Obj5_8, 0, 0, flag5_1, T1Err8{0}, 
-    T1ErrSys8{category_int32_t_1, error_int16_t_1}, t5_bytes8};
+    T1ErrSys8{categ_int32_t_1, error_int16_t_1}, t5_bytes8};
 
 REGISTER_TEST(t5, new TestRecord<Case3, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8>(t5_var1, t5_var2, t5_var3, t5_var4,
@@ -1156,21 +1156,21 @@ T1Obj7 Obj7_7{Obj3_7};
 T1Obj8 Obj7_8{Obj3_8};
 
 T1Var1 t7_var1{"Obj7_1", &Obj7_1, 0, 0, flag3_1, T1Err1{0}, 
-    T1ErrSys1{category_uint8_t_1, error_uint8_t_1}, t3_bytes1};
+    T1ErrSys1{categ_uint8_t_1, error_uint8_t_1}, t3_bytes1};
 T1Var2 t7_var2{"Obj7_2", &Obj7_2, 0, 0, flag3_1, T1Err2{0}, 
-    T1ErrSys2{category_uint64_t_1, error_uint64_t_1}, t3_bytes2};
+    T1ErrSys2{categ_uint64_t_1, error_uint64_t_1}, t3_bytes2};
 T1Var3 t7_var3{"Obj7_3", &Obj7_3, 0, 0, flag3_1, T1Err3{0}, 
-    T1ErrSys3{category_uint16_t_1, error_uint32_t_1}, t3_bytes3};
+    T1ErrSys3{categ_uint16_t_1, error_uint32_t_1}, t3_bytes3};
 T1Var4 t7_var4{"Obj7_4", &Obj7_4, 0, 0, flag3_1, T1Err4{0}, 
-    T1ErrSys4{category_uint32_t_1, error_uint16_t_1}, t3_bytes4};
+    T1ErrSys4{categ_uint32_t_1, error_uint16_t_1}, t3_bytes4};
 T1Var5 t7_var5{"Obj7_5", &Obj7_5, 0, 0, flag3_1, T1Err5{0}, 
-    T1ErrSys5{category_uint16_t_1, error_uint32_t_1}, t3_bytes5};
+    T1ErrSys5{categ_uint16_t_1, error_uint32_t_1}, t3_bytes5};
 T1Var6 t7_var6{"Obj7_6", &Obj7_6, 0, 0, flag3_1, T1Err6{0},
-    T1ErrSys6{category_int32_t_1, error_uint64_t_1}, t3_bytes6};
+    T1ErrSys6{categ_int32_t_1, error_uint64_t_1}, t3_bytes6};
 T1Var7 t7_var7{"Obj7_7", &Obj7_7, 0, 0, flag3_1, T1Err7{0}, 
-    T1ErrSys7{category_uint16_t_1, error_int8_t_1}, t3_bytes7};
+    T1ErrSys7{categ_uint16_t_1, error_int8_t_1}, t3_bytes7};
 T1Var8 t7_var8{"Obj7_8", &Obj7_8, 0, 0, flag3_1, T1Err8{0}, 
-    T1ErrSys8{category_int32_t_1, error_int16_t_1}, t3_bytes8};
+    T1ErrSys8{categ_int32_t_1, error_int16_t_1}, t3_bytes8};
 
 REGISTER_TEST(t7, new TestRecord<Case3, T1Var1, T1Var2, T1Var3, T1Var4,
     T1Var5, T1Var6, T1Var7, T1Var8>(t7_var1, t7_var2, t7_var3, t7_var4,

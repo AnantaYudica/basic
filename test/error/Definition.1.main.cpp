@@ -74,11 +74,11 @@ T7Var1 t7_var1{"basic::error::defn::type::output::CharTrait",
 REGISTER_TEST(t7, new TestDefinition<Case1,
     typename T7Var1::BaseType>(t7_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::category::Value,
-    BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE> T8Var1;
+typedef VariableIsSameType<basic::error::defn::type::system::categ::Value,
+    BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE> T8Var1;
 
-T8Var1 t8_var1{"basic::error::defn::type::system::category::Value", 
-    "BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE"};
+T8Var1 t8_var1{"basic::error::defn::type::system::categ::Value", 
+    "BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE"};
 
 REGISTER_TEST(t8, new TestDefinition<Case1,
     typename T8Var1::BaseType>(t8_var1));

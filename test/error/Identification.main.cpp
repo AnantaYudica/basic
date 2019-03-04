@@ -96,7 +96,7 @@ struct TestValueStream {};
 using VariableTestIdentification = basic::test::Variable<
     basic::error::id::Flag,
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::category::Value,
+    basic::error::defn::type::system::categ::Value,
     basic::error::defn::type::system::code::Value,
     basic::error::defn::type::id::Record,
     typename basic::error::defn::type::id::Record::ErrorType,
@@ -575,7 +575,7 @@ public:
     {
         return typeid(typename basic::error::
             Identification::SystemCategoryValueType).hash_code() == 
-            typeid(basic::error::defn::type::system::category::Value).
+            typeid(basic::error::defn::type::system::categ::Value).
             hash_code();
     }
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -800,10 +800,10 @@ basic::error::id::Flag flag1{};
 typename basic::error::Identification::ErrorType error1{};
 
 constexpr typename basic::error::Identification::SystemCategoryValueType
-    error_system_category_value1 = 0;
+    error_system_categ_value1 = 0;
 
 typename basic::error::Identification::ErrorSystemType 
-    error_system1{error_system_category_value1};
+    error_system1{error_system_categ_value1};
 typename basic::error::Identification::RecordType record1{flag1};
 
 basic::error::Identification obj1;
@@ -868,7 +868,7 @@ REGISTER_TEST(t2, new TestIdentification<Case2, T1Var1, T1Var1, T1Var1,
     t2_var5, t2_var6, t2_var7));
 
 constexpr typename basic::error::Identification::SystemCategoryValueType
-    error_category_value2 = 14;
+    error_categ_value2 = 14;
 constexpr typename basic::error::Identification::SystemCodeValueType
     error_code_value2 = 1040;
 
@@ -881,28 +881,28 @@ basic::error::id::Flag flag3_4{basic::error::id::flag::Catch{},
     basic::error::id::flag::System{}, basic::error::id::flag::Standard{}};
 
 typename basic::error::Identification::ErrorSystemType error_system2{
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 
 typename basic::error::Identification::RecordType record3_1{flag3_1,
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 typename basic::error::Identification::RecordType record3_2{flag3_2,
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 typename basic::error::Identification::RecordType record3_3{flag3_3,
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 typename basic::error::Identification::RecordType record3_4{flag3_4,
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 
 basic::error::Identification obj3_1{basic::error::id::flag::System{},
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 basic::error::Identification obj3_2{basic::error::id::flag::System{},
-    basic::error::id::flag::Standard{}, error_category_value2, 
+    basic::error::id::flag::Standard{}, error_categ_value2, 
     error_code_value2};
 basic::error::Identification obj3_3{basic::error::id::flag::Catch{},
-    basic::error::id::flag::System{}, error_category_value2, 
+    basic::error::id::flag::System{}, error_categ_value2, 
     error_code_value2};
 basic::error::Identification obj3_4{basic::error::id::flag::Catch{},
     basic::error::id::flag::System{}, basic::error::id::flag::Standard{}, 
-    error_category_value2, error_code_value2};
+    error_categ_value2, error_code_value2};
 basic::error::Identification obj3_5{basic::error::id::flag::Catch{}, obj3_1};
 basic::error::Identification obj3_6{basic::error::id::flag::Catch{}, obj3_2};
 basic::error::Identification obj3_7{basic::error::id::flag::Catch{}, 

@@ -51,7 +51,7 @@ struct TestCastToIdentification {};
 template<typename TObj>
 using VariableTestIdCatch = basic::test::Variable<
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::category::Value,
+    basic::error::defn::type::system::categ::Value,
     basic::error::defn::type::system::code::Value,
     basic::error::Identification,
     TObj,
@@ -228,7 +228,7 @@ public:
     {
         return typeid(typename basic::error::id::Catch::
             SystemCategoryValueType).hash_code() == typeid(basic::error::
-            defn::type::system::category::Value).hash_code();
+            defn::type::system::categ::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -291,16 +291,16 @@ typedef VariableTestIdCatch<basic::error::id::Catch> T1Var1;
 
 constexpr typename basic::error::id::Catch::CodeValueType code_value1 = 4;
 constexpr typename basic::error::id::Catch::SystemCategoryValueType
-    category_value1 = 0xB;
+    categ_value1 = 0xB;
 
 basic::error::id::Catch obj1_1;
 basic::error::id::Catch obj1_2{code_value1};
 basic::error::id::Catch obj1_3{basic::error::id::flag::Standard{}, 
     code_value1};
 basic::error::id::Catch obj1_4{basic::error::id::flag::System{},
-    category_value1, code_value1};
+    categ_value1, code_value1};
 basic::error::id::Catch obj1_5{basic::error::id::flag::System{},
-    basic::error::id::flag::Standard{}, category_value1, code_value1};
+    basic::error::id::flag::Standard{}, categ_value1, code_value1};
 
 basic::error::Identification id1_1;
 basic::error::Identification id1_2{basic::error::id::flag::Catch{},
@@ -308,10 +308,10 @@ basic::error::Identification id1_2{basic::error::id::flag::Catch{},
 basic::error::Identification id1_3{basic::error::id::flag::Catch{},
     basic::error::id::flag::Standard{}, code_value1};
 basic::error::Identification id1_4{basic::error::id::flag::Catch{},
-    basic::error::id::flag::System{}, category_value1, code_value1};
+    basic::error::id::flag::System{}, categ_value1, code_value1};
 basic::error::Identification id1_5{basic::error::id::flag::Catch{},
     basic::error::id::flag::System{}, basic::error::id::flag::Standard{}, 
-    category_value1, code_value1};
+    categ_value1, code_value1};
 
 T1Var1 t1_var1{"obj1_1", &obj1_1, &id1_1};
 T1Var1 t1_var2{"obj1_2", &obj1_2, &id1_2};
@@ -327,9 +327,9 @@ basic::error::Identification id2_2{code_value1};
 basic::error::Identification id2_3{basic::error::id::flag::Standard{}, 
     code_value1};
 basic::error::Identification id2_4{basic::error::id::flag::System{}, 
-    category_value1, code_value1};
+    categ_value1, code_value1};
 basic::error::Identification id2_5{basic::error::id::flag::System{}, 
-    basic::error::id::flag::Standard{}, category_value1, code_value1};
+    basic::error::id::flag::Standard{}, categ_value1, code_value1};
 
 basic::error::Identification id2_0{basic::error::id::flag::Catch{},
     basic::error::Identification{}};
@@ -352,7 +352,7 @@ REGISTER_TEST(t2, new TestIdCatch<Case1, T1Var1, T1Var1, T1Var1,
 basic::error::Identification id3_1;
 basic::error::Identification id3_2{code_value1};
 basic::error::Identification id3_3{basic::error::id::flag::System{}, 
-    category_value1, code_value1};
+    categ_value1, code_value1};
 
 basic::error::Identification id3_0{basic::error::id::flag::Catch{},
     basic::error::id::flag::Standard{}, basic::error::Identification{}};

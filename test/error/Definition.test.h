@@ -15,7 +15,7 @@
 #include "error/defn/type/msg/str/Storage.h"
 #include "error/defn/type/output/Char.h"
 #include "error/defn/type/output/CharTrait.h"
-#include "error/defn/type/system/category/Value.h"
+#include "error/defn/type/system/categ/Value.h"
 #include "error/defn/type/system/code/Value.h"
 #include "error/defn/type/system/condition/Value.h"
 #include "error/defn/func/output/Operator.h"

@@ -50,7 +50,7 @@ struct TestCastToIdentification {};
 template<typename TObj>
 using VariableTestIdSystem = basic::test::Variable<
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::category::Value,
+    basic::error::defn::type::system::categ::Value,
     basic::error::defn::type::system::code::Value,
     basic::error::Identification,
     TObj,
@@ -197,7 +197,7 @@ public:
     {
         return typeid(typename basic::error::id::System::
             SystemCategoryValueType).hash_code() == typeid(basic::error::
-            defn::type::system::category::Value).hash_code();
+            defn::type::system::categ::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -260,18 +260,18 @@ typedef VariableTestIdSystem<basic::error::id::System> T1Var1;
 
 constexpr typename basic::error::id::System::CodeValueType code_value1 = 4;
 constexpr typename basic::error::id::System::CategoryValueType 
-    category_value1 = 0xB;
+    categ_value1 = 0xB;
 
 basic::error::id::System obj1_1;
-basic::error::id::System obj1_2{category_value1, code_value1};
+basic::error::id::System obj1_2{categ_value1, code_value1};
 basic::error::id::System obj1_3{basic::error::id::flag::Standard{}, 
-    category_value1, code_value1};
+    categ_value1, code_value1};
 
 basic::error::Identification id1_1;
 basic::error::Identification id1_2{basic::error::id::flag::System{}, 
-    category_value1, code_value1};
+    categ_value1, code_value1};
 basic::error::Identification id1_3{basic::error::id::flag::System{},
-    basic::error::id::flag::Standard{}, category_value1, code_value1};
+    basic::error::id::flag::Standard{}, categ_value1, code_value1};
 
 T1Var1 t1_var1{"obj1_1", &obj1_1, &id1_1};
 T1Var1 t1_var2{"obj1_2", &obj1_2, &id1_2};

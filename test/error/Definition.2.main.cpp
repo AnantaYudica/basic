@@ -21,7 +21,7 @@ typedef std::uint32_t BasicErrorSystemConditionValueType;
 
 typedef std::uint16_t BasicErrorSystemCategoryValueType;
 
-#define BASIC_ERROR_SYSTEM_CATEGORY_VALUE_TYPE\
+#define BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE\
     BasicErrorSystemCategoryValueType
 
 typedef std::char_traits<std::int16_t> BasicErrorOutputChartraitType;
@@ -145,10 +145,10 @@ T7Var1 t7_var1{"basic::error::defn::type::output::CharTrait",
 REGISTER_TEST(t7, new TestDefinition<Case1,
     typename T7Var1::BaseType>(t7_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::category::Value,
+typedef VariableIsSameType<basic::error::defn::type::system::categ::Value,
     BasicErrorSystemCategoryValueType> T8Var1;
 
-T8Var1 t8_var1{"basic::error::defn::type::system::category::Value", 
+T8Var1 t8_var1{"basic::error::defn::type::system::categ::Value", 
     "BasicErrorSystemCategoryValueType"};
 
 REGISTER_TEST(t8, new TestDefinition<Case1,

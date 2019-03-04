@@ -364,60 +364,60 @@ typedef VariableTestIdRecErrorSystem<std::uint64_t, std::uint32_t> T1Var14;
 typedef VariableTestIdRecErrorSystem<std::uint64_t, std::int64_t> T1Var15;
 typedef VariableTestIdRecErrorSystem<std::uint64_t, std::uint64_t> T1Var16;
 
-std::int8_t category1_int8 = -117;
-std::uint64_t category1_uint64 = 4611686018427387903ull;
+std::int8_t categ1_int8 = -117;
+std::uint64_t categ1_uint64 = 4611686018427387903ull;
 
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int8_t> obj1_1{category1_int8};
+    std::int8_t> obj1_1{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint8_t> obj1_2{category1_int8};
+    std::uint8_t> obj1_2{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int16_t> obj1_3{category1_int8};
+    std::int16_t> obj1_3{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint16_t> obj1_4{category1_int8};
+    std::uint16_t> obj1_4{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int32_t> obj1_5{category1_int8};
+    std::int32_t> obj1_5{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint32_t> obj1_6{category1_int8};
+    std::uint32_t> obj1_6{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int64_t> obj1_7{category1_int8};
+    std::int64_t> obj1_7{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint64_t> obj1_8{category1_int8};
+    std::uint64_t> obj1_8{categ1_int8};
 
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int8_t> obj1_9{category1_uint64};
+    std::int8_t> obj1_9{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint8_t> obj1_10{category1_uint64};
+    std::uint8_t> obj1_10{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int16_t> obj1_11{category1_uint64};
+    std::int16_t> obj1_11{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint16_t> obj1_12{category1_uint64};
+    std::uint16_t> obj1_12{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int32_t> obj1_13{category1_uint64};
+    std::int32_t> obj1_13{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint32_t> obj1_14{category1_uint64};
+    std::uint32_t> obj1_14{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int64_t> obj1_15{category1_uint64};
+    std::int64_t> obj1_15{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint64_t> obj1_16{category1_uint64};
+    std::uint64_t> obj1_16{categ1_uint64};
 
-T1Var1 t1_var1{"obj1_1", &obj1_1, 0, category1_int8, 0};
-T1Var2 t1_var2{"obj1_2", &obj1_2, 0, category1_int8, 0};
-T1Var3 t1_var3{"obj1_3", &obj1_3, 0, category1_int8, 0};
-T1Var4 t1_var4{"obj1_4", &obj1_4, 0, category1_int8, 0};
-T1Var5 t1_var5{"obj1_5", &obj1_5, 0, category1_int8, 0};
-T1Var6 t1_var6{"obj1_6", &obj1_6, 0, category1_int8, 0};
-T1Var7 t1_var7{"obj1_7", &obj1_7, 0, category1_int8, 0};
-T1Var8 t1_var8{"obj1_8", &obj1_8, 0, category1_int8, 0};
+T1Var1 t1_var1{"obj1_1", &obj1_1, 0, categ1_int8, 0};
+T1Var2 t1_var2{"obj1_2", &obj1_2, 0, categ1_int8, 0};
+T1Var3 t1_var3{"obj1_3", &obj1_3, 0, categ1_int8, 0};
+T1Var4 t1_var4{"obj1_4", &obj1_4, 0, categ1_int8, 0};
+T1Var5 t1_var5{"obj1_5", &obj1_5, 0, categ1_int8, 0};
+T1Var6 t1_var6{"obj1_6", &obj1_6, 0, categ1_int8, 0};
+T1Var7 t1_var7{"obj1_7", &obj1_7, 0, categ1_int8, 0};
+T1Var8 t1_var8{"obj1_8", &obj1_8, 0, categ1_int8, 0};
 
-T1Var9 t1_var9{"obj1_9", &obj1_9, 0, category1_uint64, 0};
-T1Var10 t1_var10{"obj1_10", &obj1_10, 0, category1_uint64, 0};
-T1Var11 t1_var11{"obj1_11", &obj1_11, 0, category1_uint64, 0};
-T1Var12 t1_var12{"obj1_12", &obj1_12, 0, category1_uint64, 0};
-T1Var13 t1_var13{"obj1_13", &obj1_13, 0, category1_uint64, 0};
-T1Var14 t1_var14{"obj1_14", &obj1_14, 0, category1_uint64, 0};
-T1Var15 t1_var15{"obj1_15", &obj1_15, 0, category1_uint64, 0};
-T1Var16 t1_var16{"obj1_16", &obj1_16, 0, category1_uint64, 0};
+T1Var9 t1_var9{"obj1_9", &obj1_9, 0, categ1_uint64, 0};
+T1Var10 t1_var10{"obj1_10", &obj1_10, 0, categ1_uint64, 0};
+T1Var11 t1_var11{"obj1_11", &obj1_11, 0, categ1_uint64, 0};
+T1Var12 t1_var12{"obj1_12", &obj1_12, 0, categ1_uint64, 0};
+T1Var13 t1_var13{"obj1_13", &obj1_13, 0, categ1_uint64, 0};
+T1Var14 t1_var14{"obj1_14", &obj1_14, 0, categ1_uint64, 0};
+T1Var15 t1_var15{"obj1_15", &obj1_15, 0, categ1_uint64, 0};
+T1Var16 t1_var16{"obj1_16", &obj1_16, 0, categ1_uint64, 0};
 
 REGISTER_TEST(t1, new TestIdRecErrorSystem<Case1, T1Var1, T1Var2, T1Var3, 
     T1Var4, T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
@@ -435,58 +435,58 @@ std::int64_t errorSystem1_int64 = -9223372036854775807ll;
 std::uint64_t errorSystem1_uint64 = 18446744073709551615ull;
 
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int8_t> obj2_1{category1_int8, errorSystem1_int8};
+    std::int8_t> obj2_1{categ1_int8, errorSystem1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint8_t> obj2_2{category1_int8, errorSystem1_uint8};
+    std::uint8_t> obj2_2{categ1_int8, errorSystem1_uint8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int16_t> obj2_3{category1_int8, errorSystem1_int16};
+    std::int16_t> obj2_3{categ1_int8, errorSystem1_int16};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint16_t> obj2_4{category1_int8, errorSystem1_uint16};
+    std::uint16_t> obj2_4{categ1_int8, errorSystem1_uint16};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int32_t> obj2_5{category1_int8, errorSystem1_int32};
+    std::int32_t> obj2_5{categ1_int8, errorSystem1_int32};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint32_t> obj2_6{category1_int8, errorSystem1_uint32};
+    std::uint32_t> obj2_6{categ1_int8, errorSystem1_uint32};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int64_t> obj2_7{category1_int8, errorSystem1_int64};
+    std::int64_t> obj2_7{categ1_int8, errorSystem1_int64};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint64_t> obj2_8{category1_int8, errorSystem1_uint64};
+    std::uint64_t> obj2_8{categ1_int8, errorSystem1_uint64};
 
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int8_t> obj2_9{category1_uint64, errorSystem1_int8};
+    std::int8_t> obj2_9{categ1_uint64, errorSystem1_int8};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint8_t> obj2_10{category1_uint64, errorSystem1_uint8};
+    std::uint8_t> obj2_10{categ1_uint64, errorSystem1_uint8};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int16_t> obj2_11{category1_uint64, errorSystem1_int16};
+    std::int16_t> obj2_11{categ1_uint64, errorSystem1_int16};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint16_t> obj2_12{category1_uint64, errorSystem1_uint16};
+    std::uint16_t> obj2_12{categ1_uint64, errorSystem1_uint16};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int32_t> obj2_13{category1_uint64, errorSystem1_int32};
+    std::int32_t> obj2_13{categ1_uint64, errorSystem1_int32};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint32_t> obj2_14{category1_uint64, errorSystem1_uint32};
+    std::uint32_t> obj2_14{categ1_uint64, errorSystem1_uint32};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int64_t> obj2_15{category1_uint64, errorSystem1_int64};
+    std::int64_t> obj2_15{categ1_uint64, errorSystem1_int64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint64_t> obj2_16{category1_uint64, errorSystem1_uint64};
+    std::uint64_t> obj2_16{categ1_uint64, errorSystem1_uint64};
 
-T1Var1 t2_var1{"obj2_1", &obj2_1, 0, category1_int8, errorSystem1_int8};
-T1Var2 t2_var2{"obj2_2", &obj2_2, 0, category1_int8, errorSystem1_uint8};
-T1Var3 t2_var3{"obj2_3", &obj2_3, 0, category1_int8, errorSystem1_int16};
-T1Var4 t2_var4{"obj2_4", &obj2_4, 0, category1_int8, errorSystem1_uint16};
-T1Var5 t2_var5{"obj2_5", &obj2_5, 0, category1_int8, errorSystem1_int32};
-T1Var6 t2_var6{"obj2_6", &obj2_6, 0, category1_int8, errorSystem1_uint32};
-T1Var7 t2_var7{"obj2_7", &obj2_7, 0, category1_int8, errorSystem1_int64};
-T1Var8 t2_var8{"obj2_8", &obj2_8, 0, category1_int8, errorSystem1_uint64};
+T1Var1 t2_var1{"obj2_1", &obj2_1, 0, categ1_int8, errorSystem1_int8};
+T1Var2 t2_var2{"obj2_2", &obj2_2, 0, categ1_int8, errorSystem1_uint8};
+T1Var3 t2_var3{"obj2_3", &obj2_3, 0, categ1_int8, errorSystem1_int16};
+T1Var4 t2_var4{"obj2_4", &obj2_4, 0, categ1_int8, errorSystem1_uint16};
+T1Var5 t2_var5{"obj2_5", &obj2_5, 0, categ1_int8, errorSystem1_int32};
+T1Var6 t2_var6{"obj2_6", &obj2_6, 0, categ1_int8, errorSystem1_uint32};
+T1Var7 t2_var7{"obj2_7", &obj2_7, 0, categ1_int8, errorSystem1_int64};
+T1Var8 t2_var8{"obj2_8", &obj2_8, 0, categ1_int8, errorSystem1_uint64};
 
-T1Var9 t2_var9{"obj2_9", &obj2_9, 0, category1_uint64, errorSystem1_int8};
-T1Var10 t2_var10{"obj2_10", &obj2_10, 0, category1_uint64, errorSystem1_uint8};
-T1Var11 t2_var11{"obj2_11", &obj2_11, 0, category1_uint64, errorSystem1_int16};
-T1Var12 t2_var12{"obj2_12", &obj2_12, 0, category1_uint64, 
+T1Var9 t2_var9{"obj2_9", &obj2_9, 0, categ1_uint64, errorSystem1_int8};
+T1Var10 t2_var10{"obj2_10", &obj2_10, 0, categ1_uint64, errorSystem1_uint8};
+T1Var11 t2_var11{"obj2_11", &obj2_11, 0, categ1_uint64, errorSystem1_int16};
+T1Var12 t2_var12{"obj2_12", &obj2_12, 0, categ1_uint64, 
     errorSystem1_uint16};
-T1Var13 t2_var13{"obj2_13", &obj2_13, 0, category1_uint64, errorSystem1_int32};
-T1Var14 t2_var14{"obj2_14", &obj2_14, 0, category1_uint64, 
+T1Var13 t2_var13{"obj2_13", &obj2_13, 0, categ1_uint64, errorSystem1_int32};
+T1Var14 t2_var14{"obj2_14", &obj2_14, 0, categ1_uint64, 
     errorSystem1_uint32};
-T1Var15 t2_var15{"obj2_15", &obj2_15, 0, category1_uint64, errorSystem1_int64};
-T1Var16 t2_var16{"obj2_16", &obj2_16, 0, category1_uint64, 
+T1Var15 t2_var15{"obj2_15", &obj2_15, 0, categ1_uint64, errorSystem1_int64};
+T1Var16 t2_var16{"obj2_16", &obj2_16, 0, categ1_uint64, 
     errorSystem1_uint64};
 
 REGISTER_TEST(t2, new TestIdRecErrorSystem<Case1, T1Var1, T1Var2, T1Var3, 
@@ -520,25 +520,25 @@ basic::error::id::rec::ErrorSystem<std::uint64_t,
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
     std::uint64_t> obj3_16{obj2_16};
 
-T1Var1 t3_var1{"obj3_1", &obj3_1, 0, category1_int8, errorSystem1_int8};
-T1Var2 t3_var2{"obj3_2", &obj3_2, 0, category1_int8, errorSystem1_uint8};
-T1Var3 t3_var3{"obj3_3", &obj3_3, 0, category1_int8, errorSystem1_int16};
-T1Var4 t3_var4{"obj3_4", &obj3_4, 0, category1_int8, errorSystem1_uint16};
-T1Var5 t3_var5{"obj3_5", &obj3_5, 0, category1_int8, errorSystem1_int32};
-T1Var6 t3_var6{"obj3_6", &obj3_6, 0, category1_int8, errorSystem1_uint32};
-T1Var7 t3_var7{"obj3_7", &obj3_7, 0, category1_int8, errorSystem1_int64};
-T1Var8 t3_var8{"obj3_8", &obj3_8, 0, category1_int8, errorSystem1_uint64};
+T1Var1 t3_var1{"obj3_1", &obj3_1, 0, categ1_int8, errorSystem1_int8};
+T1Var2 t3_var2{"obj3_2", &obj3_2, 0, categ1_int8, errorSystem1_uint8};
+T1Var3 t3_var3{"obj3_3", &obj3_3, 0, categ1_int8, errorSystem1_int16};
+T1Var4 t3_var4{"obj3_4", &obj3_4, 0, categ1_int8, errorSystem1_uint16};
+T1Var5 t3_var5{"obj3_5", &obj3_5, 0, categ1_int8, errorSystem1_int32};
+T1Var6 t3_var6{"obj3_6", &obj3_6, 0, categ1_int8, errorSystem1_uint32};
+T1Var7 t3_var7{"obj3_7", &obj3_7, 0, categ1_int8, errorSystem1_int64};
+T1Var8 t3_var8{"obj3_8", &obj3_8, 0, categ1_int8, errorSystem1_uint64};
 
-T1Var9 t3_var9{"obj3_9", &obj3_9, 0, category1_uint64, errorSystem1_int8};
-T1Var10 t3_var10{"obj3_10", &obj3_10, 0, category1_uint64, errorSystem1_uint8};
-T1Var11 t3_var11{"obj3_11", &obj3_11, 0, category1_uint64, errorSystem1_int16};
-T1Var12 t3_var12{"obj3_12", &obj3_12, 0, category1_uint64, 
+T1Var9 t3_var9{"obj3_9", &obj3_9, 0, categ1_uint64, errorSystem1_int8};
+T1Var10 t3_var10{"obj3_10", &obj3_10, 0, categ1_uint64, errorSystem1_uint8};
+T1Var11 t3_var11{"obj3_11", &obj3_11, 0, categ1_uint64, errorSystem1_int16};
+T1Var12 t3_var12{"obj3_12", &obj3_12, 0, categ1_uint64, 
     errorSystem1_uint16};
-T1Var13 t3_var13{"obj3_13", &obj3_13, 0, category1_uint64, errorSystem1_int32};
-T1Var14 t3_var14{"obj3_14", &obj3_14, 0, category1_uint64, 
+T1Var13 t3_var13{"obj3_13", &obj3_13, 0, categ1_uint64, errorSystem1_int32};
+T1Var14 t3_var14{"obj3_14", &obj3_14, 0, categ1_uint64, 
     errorSystem1_uint32};
-T1Var15 t3_var15{"obj3_15", &obj3_15, 0, category1_uint64, errorSystem1_int64};
-T1Var16 t3_var16{"obj3_16", &obj3_16, 0, category1_uint64, 
+T1Var15 t3_var15{"obj3_15", &obj3_15, 0, categ1_uint64, errorSystem1_int64};
+T1Var16 t3_var16{"obj3_16", &obj3_16, 0, categ1_uint64, 
     errorSystem1_uint64};
 
 REGISTER_TEST(t3, new TestIdRecErrorSystem<Case1, T1Var1, T1Var2, T1Var3, 
@@ -615,44 +615,44 @@ basic::error::id::rec::ErrorSystem<std::uint64_t,
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
     std::uint64_t> obj4_16{std::move(obj3_16_c)};
 
-T1Var1 t4_var1{"obj4_1", &obj4_1, 0, category1_int8, errorSystem1_int8};
-T1Var2 t4_var2{"obj4_2", &obj4_2, 0, category1_int8, errorSystem1_uint8};
-T1Var3 t4_var3{"obj4_3", &obj4_3, 0, category1_int8, errorSystem1_int16};
-T1Var4 t4_var4{"obj4_4", &obj4_4, 0, category1_int8, errorSystem1_uint16};
-T1Var5 t4_var5{"obj4_5", &obj4_5, 0, category1_int8, errorSystem1_int32};
-T1Var6 t4_var6{"obj4_6", &obj4_6, 0, category1_int8, errorSystem1_uint32};
-T1Var7 t4_var7{"obj4_7", &obj4_7, 0, category1_int8, errorSystem1_int64};
-T1Var8 t4_var8{"obj4_8", &obj4_8, 0, category1_int8, errorSystem1_uint64};
+T1Var1 t4_var1{"obj4_1", &obj4_1, 0, categ1_int8, errorSystem1_int8};
+T1Var2 t4_var2{"obj4_2", &obj4_2, 0, categ1_int8, errorSystem1_uint8};
+T1Var3 t4_var3{"obj4_3", &obj4_3, 0, categ1_int8, errorSystem1_int16};
+T1Var4 t4_var4{"obj4_4", &obj4_4, 0, categ1_int8, errorSystem1_uint16};
+T1Var5 t4_var5{"obj4_5", &obj4_5, 0, categ1_int8, errorSystem1_int32};
+T1Var6 t4_var6{"obj4_6", &obj4_6, 0, categ1_int8, errorSystem1_uint32};
+T1Var7 t4_var7{"obj4_7", &obj4_7, 0, categ1_int8, errorSystem1_int64};
+T1Var8 t4_var8{"obj4_8", &obj4_8, 0, categ1_int8, errorSystem1_uint64};
 
-T1Var9 t4_var9{"obj4_9", &obj4_9, 0, category1_uint64, errorSystem1_int8};
-T1Var10 t4_var10{"obj4_10", &obj4_10, 0, category1_uint64, errorSystem1_uint8};
-T1Var11 t4_var11{"obj4_11", &obj4_11, 0, category1_uint64, errorSystem1_int16};
-T1Var12 t4_var12{"obj4_12", &obj4_12, 0, category1_uint64, 
+T1Var9 t4_var9{"obj4_9", &obj4_9, 0, categ1_uint64, errorSystem1_int8};
+T1Var10 t4_var10{"obj4_10", &obj4_10, 0, categ1_uint64, errorSystem1_uint8};
+T1Var11 t4_var11{"obj4_11", &obj4_11, 0, categ1_uint64, errorSystem1_int16};
+T1Var12 t4_var12{"obj4_12", &obj4_12, 0, categ1_uint64, 
     errorSystem1_uint16};
-T1Var13 t4_var13{"obj4_13", &obj4_13, 0, category1_uint64, errorSystem1_int32};
-T1Var14 t4_var14{"obj4_14", &obj4_14, 0, category1_uint64, 
+T1Var13 t4_var13{"obj4_13", &obj4_13, 0, categ1_uint64, errorSystem1_int32};
+T1Var14 t4_var14{"obj4_14", &obj4_14, 0, categ1_uint64, 
     errorSystem1_uint32};
-T1Var15 t4_var15{"obj4_15", &obj4_15, 0, category1_uint64, errorSystem1_int64};
-T1Var16 t4_var16{"obj4_16", &obj4_16, 0, category1_uint64, 
+T1Var15 t4_var15{"obj4_15", &obj4_15, 0, categ1_uint64, errorSystem1_int64};
+T1Var16 t4_var16{"obj4_16", &obj4_16, 0, categ1_uint64, 
     errorSystem1_uint64};
 
-T1Var1 t4_var17{"obj3_1", &obj3_1_c, 0, category1_int8, 0};
-T1Var2 t4_var18{"obj3_2", &obj3_2_c, 0, category1_int8, 0};
-T1Var3 t4_var19{"obj3_3", &obj3_3_c, 0, category1_int8, 0};
-T1Var4 t4_var20{"obj3_4", &obj3_4_c, 0, category1_int8, 0};
-T1Var5 t4_var21{"obj3_5", &obj3_5_c, 0, category1_int8, 0};
-T1Var6 t4_var22{"obj3_6", &obj3_6_c, 0, category1_int8, 0};
-T1Var7 t4_var23{"obj3_7", &obj3_7_c, 0, category1_int8, 0};
-T1Var8 t4_var24{"obj3_8", &obj3_8_c, 0, category1_int8, 0};
+T1Var1 t4_var17{"obj3_1", &obj3_1_c, 0, categ1_int8, 0};
+T1Var2 t4_var18{"obj3_2", &obj3_2_c, 0, categ1_int8, 0};
+T1Var3 t4_var19{"obj3_3", &obj3_3_c, 0, categ1_int8, 0};
+T1Var4 t4_var20{"obj3_4", &obj3_4_c, 0, categ1_int8, 0};
+T1Var5 t4_var21{"obj3_5", &obj3_5_c, 0, categ1_int8, 0};
+T1Var6 t4_var22{"obj3_6", &obj3_6_c, 0, categ1_int8, 0};
+T1Var7 t4_var23{"obj3_7", &obj3_7_c, 0, categ1_int8, 0};
+T1Var8 t4_var24{"obj3_8", &obj3_8_c, 0, categ1_int8, 0};
 
-T1Var9 t4_var25{"obj3_9", &obj3_9_c, 0, category1_uint64, 0};
-T1Var10 t4_var26{"obj3_10", &obj3_10_c, 0, category1_uint64, 0};
-T1Var11 t4_var27{"obj3_11", &obj3_11_c, 0, category1_uint64, 0};
-T1Var12 t4_var28{"obj3_12", &obj3_12_c, 0, category1_uint64, 0};
-T1Var13 t4_var29{"obj3_13", &obj3_13_c, 0, category1_uint64, 0};
-T1Var14 t4_var30{"obj3_14", &obj3_14_c, 0, category1_uint64, 0};
-T1Var15 t4_var31{"obj3_15", &obj3_15_c, 0, category1_uint64, 0};
-T1Var16 t4_var32{"obj3_16", &obj3_16_c, 0, category1_uint64, 0};
+T1Var9 t4_var25{"obj3_9", &obj3_9_c, 0, categ1_uint64, 0};
+T1Var10 t4_var26{"obj3_10", &obj3_10_c, 0, categ1_uint64, 0};
+T1Var11 t4_var27{"obj3_11", &obj3_11_c, 0, categ1_uint64, 0};
+T1Var12 t4_var28{"obj3_12", &obj3_12_c, 0, categ1_uint64, 0};
+T1Var13 t4_var29{"obj3_13", &obj3_13_c, 0, categ1_uint64, 0};
+T1Var14 t4_var30{"obj3_14", &obj3_14_c, 0, categ1_uint64, 0};
+T1Var15 t4_var31{"obj3_15", &obj3_15_c, 0, categ1_uint64, 0};
+T1Var16 t4_var32{"obj3_16", &obj3_16_c, 0, categ1_uint64, 0};
 
 REGISTER_TEST(t4, new TestIdRecErrorSystem<Case1, T1Var1, T1Var2, T1Var3, 
     T1Var4, T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
@@ -699,71 +699,71 @@ typedef VariableTestIdRecErrorSystem<std::uint64_t, std::uint64_t,
     std::uint64_t> T5Var16;
 
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int8_t> obj5_1{category1_int8};
+    std::int8_t> obj5_1{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint8_t> obj5_2{category1_int8};
+    std::uint8_t> obj5_2{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int16_t> obj5_3{category1_int8};
+    std::int16_t> obj5_3{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint16_t> obj5_4{category1_int8};
+    std::uint16_t> obj5_4{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int32_t> obj5_5{category1_int8};
+    std::int32_t> obj5_5{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint32_t> obj5_6{category1_int8};
+    std::uint32_t> obj5_6{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int64_t> obj5_7{category1_int8};
+    std::int64_t> obj5_7{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint64_t> obj5_8{category1_int8};
+    std::uint64_t> obj5_8{categ1_int8};
 
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int8_t> obj5_9{category1_uint64};
+    std::int8_t> obj5_9{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint8_t> obj5_10{category1_uint64};
+    std::uint8_t> obj5_10{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int16_t> obj5_11{category1_uint64};
+    std::int16_t> obj5_11{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint16_t> obj5_12{category1_uint64};
+    std::uint16_t> obj5_12{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int32_t> obj5_13{category1_uint64};
+    std::int32_t> obj5_13{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint32_t> obj5_14{category1_uint64};
+    std::uint32_t> obj5_14{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int64_t> obj5_15{category1_uint64};
+    std::int64_t> obj5_15{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint64_t> obj5_16{category1_uint64};
+    std::uint64_t> obj5_16{categ1_uint64};
 
-T5Var1 t5_var1{"obj5_1", &obj5_1, errorSystem1_int8, category1_int8, 
+T5Var1 t5_var1{"obj5_1", &obj5_1, errorSystem1_int8, categ1_int8, 
     errorSystem1_int8};
-T5Var2 t5_var2{"obj5_2", &obj5_2, errorSystem1_uint8, category1_int8, 
+T5Var2 t5_var2{"obj5_2", &obj5_2, errorSystem1_uint8, categ1_int8, 
     errorSystem1_uint8};
-T5Var3 t5_var3{"obj5_3", &obj5_3, errorSystem1_int16, category1_int8, 
+T5Var3 t5_var3{"obj5_3", &obj5_3, errorSystem1_int16, categ1_int8, 
     errorSystem1_int16};
-T5Var4 t5_var4{"obj5_4", &obj5_4, errorSystem1_uint16, category1_int8, 
+T5Var4 t5_var4{"obj5_4", &obj5_4, errorSystem1_uint16, categ1_int8, 
     errorSystem1_uint16};
-T5Var5 t5_var5{"obj5_5", &obj5_5, errorSystem1_int32, category1_int8, 
+T5Var5 t5_var5{"obj5_5", &obj5_5, errorSystem1_int32, categ1_int8, 
     errorSystem1_int32};
-T5Var6 t5_var6{"obj5_6", &obj5_6, errorSystem1_uint32, category1_int8, 
+T5Var6 t5_var6{"obj5_6", &obj5_6, errorSystem1_uint32, categ1_int8, 
     errorSystem1_uint32};
-T5Var7 t5_var7{"obj5_7", &obj5_7, errorSystem1_int64, category1_int8, 
+T5Var7 t5_var7{"obj5_7", &obj5_7, errorSystem1_int64, categ1_int8, 
     errorSystem1_int64};
-T5Var8 t5_var8{"obj5_8", &obj5_8, errorSystem1_uint64, category1_int8, 
+T5Var8 t5_var8{"obj5_8", &obj5_8, errorSystem1_uint64, categ1_int8, 
     errorSystem1_uint64};
 
-T5Var9 t5_var9{"obj5_9", &obj5_9, errorSystem1_int8, category1_uint64, 
+T5Var9 t5_var9{"obj5_9", &obj5_9, errorSystem1_int8, categ1_uint64, 
     errorSystem1_int8};
-T5Var10 t5_var10{"obj5_10", &obj5_10, errorSystem1_uint8, category1_uint64, 
+T5Var10 t5_var10{"obj5_10", &obj5_10, errorSystem1_uint8, categ1_uint64, 
     errorSystem1_uint8};
-T5Var11 t5_var11{"obj5_11", &obj5_11, errorSystem1_int16, category1_uint64, 
+T5Var11 t5_var11{"obj5_11", &obj5_11, errorSystem1_int16, categ1_uint64, 
     errorSystem1_int16};
-T5Var12 t5_var12{"obj5_12", &obj5_12, errorSystem1_uint16, category1_uint64, 
+T5Var12 t5_var12{"obj5_12", &obj5_12, errorSystem1_uint16, categ1_uint64, 
     errorSystem1_uint16};
-T5Var13 t5_var13{"obj5_13", &obj5_13, errorSystem1_int32, category1_uint64, 
+T5Var13 t5_var13{"obj5_13", &obj5_13, errorSystem1_int32, categ1_uint64, 
     errorSystem1_int32};
-T5Var14 t5_var14{"obj5_14", &obj5_14, errorSystem1_uint32, category1_uint64, 
+T5Var14 t5_var14{"obj5_14", &obj5_14, errorSystem1_uint32, categ1_uint64, 
     errorSystem1_uint32};
-T5Var15 t5_var15{"obj5_15", &obj5_15, errorSystem1_int64, category1_uint64, 
+T5Var15 t5_var15{"obj5_15", &obj5_15, errorSystem1_int64, categ1_uint64, 
     errorSystem1_int64};
-T5Var16 t5_var16{"obj5_16", &obj5_16, errorSystem1_uint64, category1_uint64, 
+T5Var16 t5_var16{"obj5_16", &obj5_16, errorSystem1_uint64, categ1_uint64, 
     errorSystem1_uint64};
 
 REGISTER_TEST(t5, new TestIdRecErrorSystem<Case2, T5Var1, T5Var2, T5Var3, 
@@ -810,71 +810,71 @@ typedef VariableTestIdRecErrorSystem<std::uint64_t, std::uint64_t,
     std::uint64_t> *> T6Var16;
 
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int8_t> obj6_1{category1_int8};
+    std::int8_t> obj6_1{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint8_t> obj6_2{category1_int8};
+    std::uint8_t> obj6_2{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int16_t> obj6_3{category1_int8};
+    std::int16_t> obj6_3{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint16_t> obj6_4{category1_int8};
+    std::uint16_t> obj6_4{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int32_t> obj6_5{category1_int8};
+    std::int32_t> obj6_5{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint32_t> obj6_6{category1_int8};
+    std::uint32_t> obj6_6{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int64_t> obj6_7{category1_int8};
+    std::int64_t> obj6_7{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint64_t> obj6_8{category1_int8};
+    std::uint64_t> obj6_8{categ1_int8};
 
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int8_t> obj6_9{category1_uint64};
+    std::int8_t> obj6_9{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint8_t> obj6_10{category1_uint64};
+    std::uint8_t> obj6_10{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int16_t> obj6_11{category1_uint64};
+    std::int16_t> obj6_11{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint16_t> obj6_12{category1_uint64};
+    std::uint16_t> obj6_12{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int32_t> obj6_13{category1_uint64};
+    std::int32_t> obj6_13{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint32_t> obj6_14{category1_uint64};
+    std::uint32_t> obj6_14{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int64_t> obj6_15{category1_uint64};
+    std::int64_t> obj6_15{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint64_t> obj6_16{category1_uint64};
+    std::uint64_t> obj6_16{categ1_uint64};
 
-T6Var1 t6_var1{"obj6_1", &obj6_1, &obj5_1, category1_int8, 
+T6Var1 t6_var1{"obj6_1", &obj6_1, &obj5_1, categ1_int8, 
     errorSystem1_int8};
-T6Var2 t6_var2{"obj6_2", &obj6_2, &obj5_2, category1_int8, 
+T6Var2 t6_var2{"obj6_2", &obj6_2, &obj5_2, categ1_int8, 
     errorSystem1_uint8};
-T6Var3 t6_var3{"obj6_3", &obj6_3, &obj5_3, category1_int8, 
+T6Var3 t6_var3{"obj6_3", &obj6_3, &obj5_3, categ1_int8, 
     errorSystem1_int16};
-T6Var4 t6_var4{"obj6_4", &obj6_4, &obj5_4, category1_int8, 
+T6Var4 t6_var4{"obj6_4", &obj6_4, &obj5_4, categ1_int8, 
     errorSystem1_uint16};
-T6Var5 t6_var5{"obj6_5", &obj6_5, &obj5_5, category1_int8, 
+T6Var5 t6_var5{"obj6_5", &obj6_5, &obj5_5, categ1_int8, 
     errorSystem1_int32};
-T6Var6 t6_var6{"obj6_6", &obj6_6, &obj5_6, category1_int8, 
+T6Var6 t6_var6{"obj6_6", &obj6_6, &obj5_6, categ1_int8, 
     errorSystem1_uint32};
-T6Var7 t6_var7{"obj6_7", &obj6_7, &obj5_7, category1_int8, 
+T6Var7 t6_var7{"obj6_7", &obj6_7, &obj5_7, categ1_int8, 
     errorSystem1_int64};
-T6Var8 t6_var8{"obj6_8", &obj6_8, &obj5_8, category1_int8, 
+T6Var8 t6_var8{"obj6_8", &obj6_8, &obj5_8, categ1_int8, 
     errorSystem1_uint64};
 
-T6Var9 t6_var9{"obj6_9", &obj6_9, &obj5_9, category1_uint64, 
+T6Var9 t6_var9{"obj6_9", &obj6_9, &obj5_9, categ1_uint64, 
     errorSystem1_int8};
-T6Var10 t6_var10{"obj6_10", &obj6_10, &obj5_10, category1_uint64, 
+T6Var10 t6_var10{"obj6_10", &obj6_10, &obj5_10, categ1_uint64, 
     errorSystem1_uint8};
-T6Var11 t6_var11{"obj6_11", &obj6_11, &obj5_11, category1_uint64, 
+T6Var11 t6_var11{"obj6_11", &obj6_11, &obj5_11, categ1_uint64, 
     errorSystem1_int16};
-T6Var12 t6_var12{"obj6_12", &obj6_12, &obj5_12, category1_uint64, 
+T6Var12 t6_var12{"obj6_12", &obj6_12, &obj5_12, categ1_uint64, 
     errorSystem1_uint16};
-T6Var13 t6_var13{"obj6_13", &obj6_13, &obj5_13, category1_uint64, 
+T6Var13 t6_var13{"obj6_13", &obj6_13, &obj5_13, categ1_uint64, 
     errorSystem1_int32};
-T6Var14 t6_var14{"obj6_14", &obj6_14, &obj5_14, category1_uint64, 
+T6Var14 t6_var14{"obj6_14", &obj6_14, &obj5_14, categ1_uint64, 
     errorSystem1_uint32};
-T6Var15 t6_var15{"obj6_15", &obj6_15, &obj5_15, category1_uint64, 
+T6Var15 t6_var15{"obj6_15", &obj6_15, &obj5_15, categ1_uint64, 
     errorSystem1_int64};
-T6Var16 t6_var16{"obj6_16", &obj6_16, &obj5_16, category1_uint64, 
+T6Var16 t6_var16{"obj6_16", &obj6_16, &obj5_16, categ1_uint64, 
     errorSystem1_uint64};
 
 REGISTER_TEST(t6, new TestIdRecErrorSystem<Case3, T6Var1, T6Var2, T6Var3, 
@@ -884,71 +884,71 @@ REGISTER_TEST(t6, new TestIdRecErrorSystem<Case3, T6Var1, T6Var2, T6Var3,
         t6_var11, t6_var12, t6_var13, t6_var14, t6_var15, t6_var16));
 
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int8_t> obj7_1{category1_int8};
+    std::int8_t> obj7_1{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint8_t> obj7_2{category1_int8};
+    std::uint8_t> obj7_2{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int16_t> obj7_3{category1_int8};
+    std::int16_t> obj7_3{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint16_t> obj7_4{category1_int8};
+    std::uint16_t> obj7_4{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int32_t> obj7_5{category1_int8};
+    std::int32_t> obj7_5{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint32_t> obj7_6{category1_int8};
+    std::uint32_t> obj7_6{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::int64_t> obj7_7{category1_int8};
+    std::int64_t> obj7_7{categ1_int8};
 basic::error::id::rec::ErrorSystem<std::int8_t, 
-    std::uint64_t> obj7_8{category1_int8};
+    std::uint64_t> obj7_8{categ1_int8};
 
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int8_t> obj7_9{category1_uint64};
+    std::int8_t> obj7_9{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint8_t> obj7_10{category1_uint64};
+    std::uint8_t> obj7_10{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int16_t> obj7_11{category1_uint64};
+    std::int16_t> obj7_11{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint16_t> obj7_12{category1_uint64};
+    std::uint16_t> obj7_12{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int32_t> obj7_13{category1_uint64};
+    std::int32_t> obj7_13{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint32_t> obj7_14{category1_uint64};
+    std::uint32_t> obj7_14{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::int64_t> obj7_15{category1_uint64};
+    std::int64_t> obj7_15{categ1_uint64};
 basic::error::id::rec::ErrorSystem<std::uint64_t, 
-    std::uint64_t> obj7_16{category1_uint64};
+    std::uint64_t> obj7_16{categ1_uint64};
 
-T6Var1 t7_var1{"obj7_1", &obj7_1, &obj6_1, category1_int8, 
+T6Var1 t7_var1{"obj7_1", &obj7_1, &obj6_1, categ1_int8, 
     errorSystem1_int8};
-T6Var2 t7_var2{"obj7_2", &obj7_2, &obj6_2, category1_int8, 
+T6Var2 t7_var2{"obj7_2", &obj7_2, &obj6_2, categ1_int8, 
     errorSystem1_uint8};
-T6Var3 t7_var3{"obj7_3", &obj7_3, &obj6_3, category1_int8, 
+T6Var3 t7_var3{"obj7_3", &obj7_3, &obj6_3, categ1_int8, 
     errorSystem1_int16};
-T6Var4 t7_var4{"obj7_4", &obj7_4, &obj6_4, category1_int8, 
+T6Var4 t7_var4{"obj7_4", &obj7_4, &obj6_4, categ1_int8, 
     errorSystem1_uint16};
-T6Var5 t7_var5{"obj7_5", &obj7_5, &obj6_5, category1_int8, 
+T6Var5 t7_var5{"obj7_5", &obj7_5, &obj6_5, categ1_int8, 
     errorSystem1_int32};
-T6Var6 t7_var6{"obj7_6", &obj7_6, &obj6_6, category1_int8, 
+T6Var6 t7_var6{"obj7_6", &obj7_6, &obj6_6, categ1_int8, 
     errorSystem1_uint32};
-T6Var7 t7_var7{"obj7_7", &obj7_7, &obj6_7, category1_int8, 
+T6Var7 t7_var7{"obj7_7", &obj7_7, &obj6_7, categ1_int8, 
     errorSystem1_int64};
-T6Var8 t7_var8{"obj7_8", &obj7_8, &obj6_8, category1_int8, 
+T6Var8 t7_var8{"obj7_8", &obj7_8, &obj6_8, categ1_int8, 
     errorSystem1_uint64};
 
-T6Var9 t7_var9{"obj7_9", &obj7_9, &obj6_9, category1_uint64, 
+T6Var9 t7_var9{"obj7_9", &obj7_9, &obj6_9, categ1_uint64, 
     errorSystem1_int8};
-T6Var10 t7_var10{"obj7_10", &obj7_10, &obj6_10, category1_uint64, 
+T6Var10 t7_var10{"obj7_10", &obj7_10, &obj6_10, categ1_uint64, 
     errorSystem1_uint8};
-T6Var11 t7_var11{"obj7_11", &obj7_11, &obj6_11, category1_uint64, 
+T6Var11 t7_var11{"obj7_11", &obj7_11, &obj6_11, categ1_uint64, 
     errorSystem1_int16};
-T6Var12 t7_var12{"obj7_12", &obj7_12, &obj6_12, category1_uint64, 
+T6Var12 t7_var12{"obj7_12", &obj7_12, &obj6_12, categ1_uint64, 
     errorSystem1_uint16};
-T6Var13 t7_var13{"obj7_13", &obj7_13, &obj6_13, category1_uint64, 
+T6Var13 t7_var13{"obj7_13", &obj7_13, &obj6_13, categ1_uint64, 
     errorSystem1_int32};
-T6Var14 t7_var14{"obj7_14", &obj7_14, &obj6_14, category1_uint64, 
+T6Var14 t7_var14{"obj7_14", &obj7_14, &obj6_14, categ1_uint64, 
     errorSystem1_uint32};
-T6Var15 t7_var15{"obj7_15", &obj7_15, &obj6_15, category1_uint64, 
+T6Var15 t7_var15{"obj7_15", &obj7_15, &obj6_15, categ1_uint64, 
     errorSystem1_int64};
-T6Var16 t7_var16{"obj7_16", &obj7_16, &obj6_16, category1_uint64, 
+T6Var16 t7_var16{"obj7_16", &obj7_16, &obj6_16, categ1_uint64, 
     errorSystem1_uint64};
 
 REGISTER_TEST(t7, new TestIdRecErrorSystem<Case4, T6Var1, T6Var2, T6Var3, 
@@ -957,23 +957,23 @@ REGISTER_TEST(t7, new TestIdRecErrorSystem<Case4, T6Var1, T6Var2, T6Var3,
         t7_var4, t7_var5, t7_var6, t7_var7, t7_var8, t7_var9, t7_var10,
         t7_var11, t7_var12, t7_var13, t7_var14, t7_var15, t7_var16));
 
-T1Var1 t8_var1{"obj6_1", &obj6_1, 0, category1_int8, 0};
-T1Var2 t8_var2{"obj6_2", &obj6_2, 0, category1_int8, 0};
-T1Var3 t8_var3{"obj6_3", &obj6_3, 0, category1_int8, 0};
-T1Var4 t8_var4{"obj6_4", &obj6_4, 0, category1_int8, 0};
-T1Var5 t8_var5{"obj6_5", &obj6_5, 0, category1_int8, 0};
-T1Var6 t8_var6{"obj6_6", &obj6_6, 0, category1_int8, 0};
-T1Var7 t8_var7{"obj6_7", &obj6_7, 0, category1_int8, 0};
-T1Var8 t8_var8{"obj6_8", &obj6_8, 0, category1_int8, 0};
+T1Var1 t8_var1{"obj6_1", &obj6_1, 0, categ1_int8, 0};
+T1Var2 t8_var2{"obj6_2", &obj6_2, 0, categ1_int8, 0};
+T1Var3 t8_var3{"obj6_3", &obj6_3, 0, categ1_int8, 0};
+T1Var4 t8_var4{"obj6_4", &obj6_4, 0, categ1_int8, 0};
+T1Var5 t8_var5{"obj6_5", &obj6_5, 0, categ1_int8, 0};
+T1Var6 t8_var6{"obj6_6", &obj6_6, 0, categ1_int8, 0};
+T1Var7 t8_var7{"obj6_7", &obj6_7, 0, categ1_int8, 0};
+T1Var8 t8_var8{"obj6_8", &obj6_8, 0, categ1_int8, 0};
 
-T1Var9 t8_var9{"obj6_9", &obj6_9, 0, category1_uint64, 0};
-T1Var10 t8_var10{"obj6_10", &obj6_10, 0, category1_uint64, 0};
-T1Var11 t8_var11{"obj6_11", &obj6_11, 0, category1_uint64, 0};
-T1Var12 t8_var12{"obj6_12", &obj6_12, 0, category1_uint64, 0};
-T1Var13 t8_var13{"obj6_13", &obj6_13, 0, category1_uint64, 0};
-T1Var14 t8_var14{"obj6_14", &obj6_14, 0, category1_uint64, 0};
-T1Var15 t8_var15{"obj6_15", &obj6_15, 0, category1_uint64, 0};
-T1Var16 t8_var16{"obj6_16", &obj6_16, 0, category1_uint64, 0};
+T1Var9 t8_var9{"obj6_9", &obj6_9, 0, categ1_uint64, 0};
+T1Var10 t8_var10{"obj6_10", &obj6_10, 0, categ1_uint64, 0};
+T1Var11 t8_var11{"obj6_11", &obj6_11, 0, categ1_uint64, 0};
+T1Var12 t8_var12{"obj6_12", &obj6_12, 0, categ1_uint64, 0};
+T1Var13 t8_var13{"obj6_13", &obj6_13, 0, categ1_uint64, 0};
+T1Var14 t8_var14{"obj6_14", &obj6_14, 0, categ1_uint64, 0};
+T1Var15 t8_var15{"obj6_15", &obj6_15, 0, categ1_uint64, 0};
+T1Var16 t8_var16{"obj6_16", &obj6_16, 0, categ1_uint64, 0};
 
 REGISTER_TEST(t8, new TestIdRecErrorSystem<Case1, T1Var1, T1Var2, T1Var3, 
     T1Var4, T1Var5, T1Var6, T1Var7, T1Var8, T1Var9, T1Var10, T1Var11, T1Var12,
