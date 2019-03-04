@@ -19,11 +19,11 @@ public:
     typedef TCategoryValue CategoryValueType;
     typedef TCodeValue CodeValueType;
 private:
-    CategoryValueType m_categoryValue;
+    CategoryValueType m_categValue;
     CodeValueType m_codeValue;
 public:
-    constexpr ErrorSystem(const CategoryValueType & category_value) noexcept;
-    constexpr ErrorSystem(const CategoryValueType& category_value, 
+    constexpr ErrorSystem(const CategoryValueType & categ_value) noexcept;
+    constexpr ErrorSystem(const CategoryValueType& categ_value, 
         const CodeValueType& code_value) noexcept;
 public:
     constexpr ErrorSystem(const ErrorSystem<TCategoryValue, 
@@ -44,34 +44,34 @@ public:
 
 template<typename TCategoryValue, typename TCodeValue>
 constexpr ErrorSystem<TCategoryValue, TCodeValue>::
-    ErrorSystem(const CategoryValueType & category_value) noexcept :
-        m_categoryValue{category_value},
+    ErrorSystem(const CategoryValueType & categ_value) noexcept :
+        m_categValue{categ_value},
         m_codeValue{0}
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
 constexpr ErrorSystem<TCategoryValue, TCodeValue>::
-    ErrorSystem(const CategoryValueType& category_value, 
+    ErrorSystem(const CategoryValueType& categ_value, 
         const CodeValueType& code_value) noexcept :
-            m_categoryValue{category_value},
+            m_categValue{categ_value},
             m_codeValue{code_value}
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
 constexpr ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(const ErrorSystem<TCategoryValue, TCodeValue>& cpy) noexcept :
-        m_categoryValue{cpy.m_categoryValue},
+        m_categValue{cpy.m_categValue},
         m_codeValue{cpy.m_codeValue}
 {}
 
 template<typename TCategoryValue, typename TCodeValue>
 ErrorSystem<TCategoryValue, TCodeValue>::
     ErrorSystem(ErrorSystem<TCategoryValue, TCodeValue>&& mov) noexcept :
-        m_categoryValue{std::move(mov.m_categoryValue)},
+        m_categValue{std::move(mov.m_categValue)},
         m_codeValue{std::move(mov.m_codeValue)}
 {
     mov.m_codeValue = ErrorSystem<TCategoryValue, 
-        TCodeValue>{mov.m_categoryValue}.m_codeValue;
+        TCodeValue>{mov.m_categValue}.m_codeValue;
 }
 
 template<typename TCategoryValue, typename TCodeValue>
@@ -79,7 +79,7 @@ ErrorSystem<TCategoryValue, TCodeValue> &
 ErrorSystem<TCategoryValue, TCodeValue>::
     operator=(const ErrorSystem<TCategoryValue, TCodeValue> & cpy) noexcept
 {
-    this->m_categoryValue = cpy.m_categoryValue;
+    this->m_categValue = cpy.m_categValue;
     this->m_codeValue = cpy.m_codeValue;
     return *this;
 }
@@ -89,10 +89,10 @@ ErrorSystem<TCategoryValue, TCodeValue> &
 ErrorSystem<TCategoryValue, TCodeValue>::
     operator=(ErrorSystem<TCategoryValue, TCodeValue> && mov) noexcept
 {
-    this->m_categoryValue = std::move(mov.m_categoryValue);
+    this->m_categValue = std::move(mov.m_categValue);
     this->m_codeValue = std::move(mov.m_codeValue);
     mov.m_codeValue = ErrorSystem<TCategoryValue, 
-        TCodeValue>{mov.m_categoryValue}.m_codeValue;
+        TCodeValue>{mov.m_categValue}.m_codeValue;
     return *this;
 }
 
@@ -110,7 +110,7 @@ constexpr const typename ErrorSystem<TCategoryValue, TCodeValue>::
     CategoryValueType& 
 ErrorSystem<TCategoryValue, TCodeValue>::Category() const noexcept
 {
-    return m_categoryValue;
+    return m_categValue;
 }
 
 template<typename TCategoryValue, typename TCodeValue>

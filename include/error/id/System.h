@@ -2,7 +2,7 @@
 #define BASIC_ERROR_ID_SYSTEM_H_
 
 #include "../Identification.h"
-#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/categ/Value.h"
 #include "../defn/type/system/code/Value.h"
 #include "Flag.h"
 
@@ -18,14 +18,14 @@ namespace id
 class System : public Identification
 {
 public:
-    typedef defn::type::system::category::Value CategoryValueType;
+    typedef defn::type::system::categ::Value CategoryValueType;
     typedef defn::type::system::code::Value CodeValueType;
 public:
     constexpr System() noexcept;
-    constexpr System(const CategoryValueType& category_val,
+    constexpr System(const CategoryValueType& categ_val,
         const CodeValueType& code_val) noexcept;
     constexpr System(const flag::Standard&, 
-        const CategoryValueType& category_val,
+        const CategoryValueType& categ_val,
         const CodeValueType& code_val) noexcept;
 public:
     constexpr System(const System& cpy) noexcept;
@@ -38,15 +38,15 @@ public:
 constexpr System::System() noexcept
 {}
 
-constexpr System::System(const CategoryValueType& category_val,
+constexpr System::System(const CategoryValueType& categ_val,
     const CodeValueType& code_val) noexcept :
-        Identification(flag::System(), category_val, code_val)
+        Identification(flag::System(), categ_val, code_val)
 {}
 
 constexpr System::System(const flag::Standard& standard, 
-    const CategoryValueType& category_val, const 
+    const CategoryValueType& categ_val, const 
     CodeValueType& code_val) noexcept :
-        Identification(flag::System(), standard, category_val, code_val)
+        Identification(flag::System(), standard, categ_val, code_val)
 {}
 
 constexpr System::System(const System& cpy) noexcept :

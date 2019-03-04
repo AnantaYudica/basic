@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYSTEM_TMPL_IMP_EXIT_H_
 
 #include "../../../intf/Exit.h"
-#include "../category/Base.h"
+#include "../categ/Base.h"
 
 #include <type_traits>
 
@@ -20,7 +20,7 @@ namespace imp
 template<typename TCategoryTrait, bool HasCleanup = 
     std::is_base_of<error::intf::Exit, TCategoryTrait>::value>
 class Exit : 
-    virtual public tmpl::category::Base<TCategoryTrait>,
+    virtual public tmpl::categ::Base<TCategoryTrait>,
     public error::intf::Exit
 {
 protected:
@@ -41,14 +41,14 @@ private:
 
 template<typename TCategoryTrait, bool HasCleanup>
 Exit<TCategoryTrait, HasCleanup>::Exit() noexcept :
-    tmpl::category::Base<TCategoryTrait>(),
+    tmpl::categ::Base<TCategoryTrait>(),
     error::intf::Exit()
 {}
 
 template<typename TCategoryTrait, bool HasCleanup>
 Exit<TCategoryTrait, HasCleanup>::
     Exit(Exit<TCategoryTrait, HasCleanup> && mov) noexcept :
-        tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+        tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
         error::intf::Exit(std::move(mov))
 {}
 

@@ -1,7 +1,7 @@
 #ifndef BASIC_CONSTANT_ERROR_SYSTEM_CATEGORY_H_
 #define BASIC_CONSTANT_ERROR_SYSTEM_CATEGORY_H_
 
-#include "../../../error/defn/type/system/category/Value.h"
+#include "../../../error/defn/type/system/categ/Value.h"
 
 namespace basic
 {
@@ -12,7 +12,7 @@ namespace error
 namespace system
 {
     
-enum : basic::error::defn::type::system::category::Value
+enum : basic::error::defn::type::system::categ::Value
 {
     generic_category = 1,
     system_category = 2,

@@ -8,7 +8,7 @@
 #include "../../intf/Output.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
-#include "../../defn/type/system/category/Value.h"
+#include "../../defn/type/system/categ/Value.h"
 #include "../../defn/type/system/code/Value.h"
 #include "../../defn/type/system/condition/Value.h"
 #include "../../msg/String.h"
@@ -29,7 +29,7 @@ class Category : public error::intf::Output
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
-    typedef defn::type::system::category::Value ValueType;
+    typedef defn::type::system::categ::Value ValueType;
     typedef defn::type::system::code::Value CodeValueType;
     typedef defn::type::system::condition::Value ConditionValueType;
 public:

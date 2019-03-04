@@ -8,7 +8,7 @@
 #include "../system/Category.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
-#include "../defn/type/system/category/Value.h"
+#include "../defn/type/system/categ/Value.h"
 #include "../defn/type/system/code/Value.h"
 
 #include <utility>
@@ -32,7 +32,7 @@ class Error<error::tag::System> : public error::Information
 public:
     typedef error::defn::type::Char CharType;
     typedef error::defn::type::Output OutputType;
-    typedef error::defn::type::system::category::Value 
+    typedef error::defn::type::system::categ::Value 
         CategoryValueType;
     typedef error::defn::type::system::code::Value 
         CodeValueType;

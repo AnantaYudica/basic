@@ -27,12 +27,12 @@ inline std::size_t ToBytes(const id::Record<TErrorCodeValue,
     constexpr std::size_t flag_size = sizeof(id::Flag::ValueType);
     constexpr std::size_t error_code_size = sizeof(TErrorCodeValue);
     constexpr std::size_t error_size = flag_size + error_code_size;
-    constexpr std::size_t system_error_category_size = 
+    constexpr std::size_t system_error_categ_size = 
         sizeof(TErrorSystemCategoryValue);
     constexpr std::size_t system_error_code_size = 
         sizeof(TErrorSystemCodeValue);
     constexpr std::size_t system_error_size = flag_size +
-        system_error_category_size + system_error_code_size;
+        system_error_categ_size + system_error_code_size;
 
     const auto & rec_flag = record.Flag();
     const auto & rec_error = record.Error();
@@ -40,7 +40,7 @@ inline std::size_t ToBytes(const id::Record<TErrorCodeValue,
     
     const uint8_t * flag_block = (const uint8_t *) &rec_flag;
     const uint8_t * error_code_block = (const uint8_t *) &rec_error.Code();
-    const uint8_t * system_error_category_block = 
+    const uint8_t * system_error_categ_block = 
         (const uint8_t *) &rec_error_system.Category();
     const uint8_t * system_error_code_block = 
         (const uint8_t *) &rec_error_system.Code();
@@ -61,11 +61,11 @@ inline std::size_t ToBytes(const id::Record<TErrorCodeValue,
     {
         if (block_size < system_error_size) return flag_size;
         if (IsBigEndian)
-            for (std::size_t j = 0; j < system_error_category_size; ++j, ++i)
-                block_ptr[i] = system_error_category_block[j];
+            for (std::size_t j = 0; j < system_error_categ_size; ++j, ++i)
+                block_ptr[i] = system_error_categ_block[j];
         else
-            for (std::size_t j = system_error_category_size; j > 0; --j, ++i)
-                block_ptr[i] = system_error_category_block[j - 1];
+            for (std::size_t j = system_error_categ_size; j > 0; --j, ++i)
+                block_ptr[i] = system_error_categ_block[j - 1];
         if (IsBigEndian)
             for (std::size_t j = 0; j < system_error_code_size; ++j, ++i)
                 block_ptr[i] = system_error_code_block[j];

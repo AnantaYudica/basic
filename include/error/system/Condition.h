@@ -22,26 +22,26 @@ namespace system
 template<typename TConditionEnum>
 inline Condition::Condition(const TConditionEnum & cond) noexcept :
     m_value(system::make::condition::Value(cond)),
-    m_category(const_cast<CategoryType *>(&system::make::Category(cond))),
-    m_message(m_category->Message(*this))
+    m_categ(const_cast<CategoryType *>(&system::make::Category(cond))),
+    m_message(m_categ->Message(*this))
 {}
 
 inline Condition::Condition(const ValueType & val, 
-    const CategoryType & category) noexcept :
+    const CategoryType & categ) noexcept :
         m_value(val),
-        m_category(const_cast<CategoryType *>(&category)),
-        m_message(m_category->Message(*this))
+        m_categ(const_cast<CategoryType *>(&categ)),
+        m_message(m_categ->Message(*this))
 {}
 
 inline Condition::Condition(const Condition & cpy) noexcept :
     m_value(cpy.m_value),
-    m_category(cpy.m_category),
+    m_categ(cpy.m_categ),
     m_message(cpy.m_message)
 {}
 
 inline Condition::Condition(Condition && mov) noexcept :
     m_value(std::move(mov.m_value)),
-    m_category(std::move(mov.m_category)),
+    m_categ(std::move(mov.m_categ)),
     m_message(std::move(mov.m_message))
 {
     this->Clear();
@@ -53,7 +53,7 @@ inline Condition::~Condition() noexcept
 inline Condition & Condition::operator=(const Condition & cpy) noexcept
 {
     this->m_value = cpy.m_value;
-    this->m_category = cpy.m_category;
+    this->m_categ = cpy.m_categ;
     this->m_message = cpy.m_message;
     return *this;
 }
@@ -61,7 +61,7 @@ inline Condition & Condition::operator=(const Condition & cpy) noexcept
 inline Condition & Condition::operator=(Condition && mov) noexcept
 {
     this->m_value = std::move(mov.m_value);
-    this->m_category = std::move(mov.m_category);
+    this->m_categ = std::move(mov.m_categ);
     this->m_message = std::move(mov.m_message);
     mov.Clear();
     return *this;
@@ -71,24 +71,24 @@ template<typename TConditionEnum>
 inline Condition & Condition::operator=(const TConditionEnum & cond) noexcept
 {
     this->m_value = system::make::condition::Value(cond);
-    this->m_category = const_cast<CategoryType *>(&system::make::
+    this->m_categ = const_cast<CategoryType *>(&system::make::
         Category(cond));
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_message = std::move(m_categ->Message(*this));
     return *this;
 }
 
 inline void Condition::Assign(const ValueType & cond, 
-    const CategoryType & category) noexcept
+    const CategoryType & categ) noexcept
 {
     this->m_value = cond;
-    this->m_category = const_cast<CategoryType *>(&category);
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_categ = const_cast<CategoryType *>(&categ);
+    this->m_message = std::move(m_categ->Message(*this));
 }
 
 inline void Condition::Clear() noexcept
 {
-    this->m_value = this->m_category->DefaultCondition().Value();
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_value = this->m_categ->DefaultCondition().Value();
+    this->m_message = std::move(m_categ->Message(*this));
 }
 
 inline typename Condition::ValueType 
@@ -100,7 +100,7 @@ Condition::Value() const noexcept
 inline const typename Condition::CategoryType & 
 Condition::Category() const noexcept
 {
-    return *this->m_category;
+    return *this->m_categ;
 }
 
 inline const typename Condition::CharType * 

@@ -22,14 +22,14 @@ namespace imp
 
 template<typename TCategoryTrait, bool HasCodeEnum>
 Category<TCategoryTrait, HasCodeEnum>::Category() noexcept :
-    tmpl::category::Base<TCategoryTrait>(),
+    tmpl::categ::Base<TCategoryTrait>(),
     intf::Category()
 {}
 
 template<typename TCategoryTrait, bool HasCodeEnum>
 Category<TCategoryTrait, HasCodeEnum>::
     Category(Category<TCategoryTrait, HasCodeEnum> && mov) noexcept :
-        tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+        tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
         intf::Category(std::move(mov))
 {}
 

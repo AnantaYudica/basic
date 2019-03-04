@@ -35,13 +35,13 @@ public:
     typedef Condition ConditionType;
 private:
     ValueType m_value;
-    CategoryType * m_category;
+    CategoryType * m_categ;
     StringType m_message;
 public:
     template<typename TCodeEnum>
     inline Code(const TCodeEnum & code) noexcept;
     inline Code(const ValueType & code, 
-        const CategoryType & category) noexcept;
+        const CategoryType & categ) noexcept;
 public:
     inline Code(const Code & cpy) noexcept;
     inline Code(Code && mov) noexcept;
@@ -56,7 +56,7 @@ public:
     inline Code & operator=(const CategoryType & code) noexcept;
 public:
     inline void Assign(const ValueType& code,
-        const CategoryType & category) noexcept;
+        const CategoryType & categ) noexcept;
 public:
     inline void Clear() noexcept;
 public:

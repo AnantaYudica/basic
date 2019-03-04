@@ -52,17 +52,17 @@ protected:
     inline System(const CodeType & code) noexcept;
     inline System(const CodeType & code, const CharType * message) noexcept;
     inline System(const CodeValueType & code, 
-        const CategoryType & category) noexcept;
-    inline System(const CodeValueType & code, const CategoryType & category,
+        const CategoryType & categ) noexcept;
+    inline System(const CodeValueType & code, const CategoryType & categ,
         const CharType * message) noexcept;
 public:
     inline System(const CodeType & code, const char * file, 
         const std::size_t & line) noexcept;
     inline System(const CodeType & code, const CharType * message, 
         const char * file, const std::size_t & line) noexcept;
-    inline System(const CodeValueType & code, const CategoryType & category,
+    inline System(const CodeValueType & code, const CategoryType & categ,
         const char * file, const std::size_t & line) noexcept;
-    inline System(const CodeValueType & code, const CategoryType & category,
+    inline System(const CodeValueType & code, const CategoryType & categ,
         const CharType * message, const char * file, 
         const std::size_t & line) noexcept;
 #else
@@ -71,8 +71,8 @@ public:
     inline System(const CodeType & code) noexcept;
     inline System(const CodeType & code, const CharType * message) noexcept;
     inline System(const CodeValueType & code, 
-        const CategoryType & category) noexcept;
-    inline System(const CodeValueType & code, const CategoryType & category,
+        const CategoryType & categ) noexcept;
+    inline System(const CodeValueType & code, const CategoryType & categ,
         const CharType * message) noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
@@ -115,19 +115,19 @@ inline System::System(const CodeType & code,
 {}
 
 inline System::System(const CodeValueType & code, 
-    const CategoryType & category) noexcept :
+    const CategoryType & categ) noexcept :
         TriggerType(constant::error::runtime_system_id),
         exception::Runtime("System Runtime Exception"),
-        m_code(code, category),
+        m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()})
 {}
 
 inline System::System(const CodeValueType & code, 
-    const CategoryType & category, const CharType * message) noexcept :
+    const CategoryType & categ, const CharType * message) noexcept :
         TriggerType(constant::error::runtime_system_id),
         exception::Runtime(message),
-        m_code(code, category),
+        m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()})
 {}
@@ -152,21 +152,21 @@ inline System::System(const CodeType & code, const CharType * message,
             m_code.Value()}, file, line)
 {}
 
-inline System::System(const CodeValueType & code, const CategoryType & category,
+inline System::System(const CodeValueType & code, const CategoryType & categ,
     const char * file, const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_system_id, file, line),
         exception::Runtime("System Runtime Exception"),
-        m_code(code, category),
+        m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()}, file, line)
 {}
 
-inline System::System(const CodeValueType & code, const CategoryType & category,
+inline System::System(const CodeValueType & code, const CategoryType & categ,
     const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_system_id, file, line),
         exception::Runtime(message),
-        m_code(code, category),
+        m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()}, file, line)
 {}

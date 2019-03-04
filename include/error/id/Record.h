@@ -34,7 +34,7 @@ public:
     typedef rec::Code<TErrorCodeValue, TErrorSystemCodeValue> UnionCodeType;
 private:
     FlagType m_flag;
-    ErrorSystemCategoryValueType m_category;
+    ErrorSystemCategoryValueType m_categ;
     UnionCodeType m_code;
 public:
     static constexpr std::size_t MaximumAllocation() noexcept;
@@ -43,7 +43,7 @@ public:
     constexpr Record(const FlagType & flag, 
         const ErrorCodeValueType& error_code_val) noexcept;
     constexpr Record(const FlagType & flag,
-        const ErrorSystemCategoryValueType& error_system_category_val, 
+        const ErrorSystemCategoryValueType& error_system_categ_val, 
         const ErrorSystemCodeValueType& error_system_code_val) noexcept;
     constexpr Record(const FlagType & flag, const Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue> & record) noexcept;
@@ -81,7 +81,7 @@ template<typename TErrorCodeValue, typename TErrorSystemCategoryValue,
 constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const FlagType & flag) noexcept :
         m_flag(flag),
-        m_category(0),
+        m_categ(0),
         m_code(0)
 {}
 
@@ -91,7 +91,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const FlagType & flag, 
         const ErrorCodeValueType& error_code_val) noexcept :
             m_flag(flag),
-            m_category(0),
+            m_categ(0),
             m_code(error_code_val)
 {}
 
@@ -99,10 +99,10 @@ template<typename TErrorCodeValue, typename TErrorSystemCategoryValue,
     typename TErrorSystemCodeValue>
 constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const FlagType & flag,
-        const ErrorSystemCategoryValueType& error_system_category_val, 
+        const ErrorSystemCategoryValueType& error_system_categ_val, 
         const ErrorSystemCodeValueType& error_system_code_val) noexcept :
             m_flag(flag),
-            m_category(error_system_category_val),
+            m_categ(error_system_categ_val),
             m_code(error_system_code_val)
 {}
 
@@ -113,7 +113,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
         const Record<TErrorCodeValue, TErrorSystemCategoryValue, 
         TErrorSystemCodeValue> & record) noexcept :
             m_flag(flag),
-            m_category(record.m_category),
+            m_categ(record.m_categ),
             m_code(record.m_code)
 {}
 
@@ -123,7 +123,7 @@ constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue> & cpy) noexcept :
             m_flag(cpy.m_flag),
-            m_category(cpy.m_category),
+            m_categ(cpy.m_categ),
             m_code(cpy.m_code)
 {}
 
@@ -133,11 +133,11 @@ Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue>&& mov) noexcept :
             m_flag(std::move(mov.m_flag)),
-            m_category(std::move(mov.m_category)),
+            m_categ(std::move(mov.m_categ)),
             m_code(std::move(mov.m_code))
 {
-    mov.m_category = Record<TErrorCodeValue, TErrorSystemCategoryValue,
-        TErrorSystemCodeValue>{basic::error::id::Flag{}}.m_category;
+    mov.m_categ = Record<TErrorCodeValue, TErrorSystemCategoryValue,
+        TErrorSystemCodeValue>{basic::error::id::Flag{}}.m_categ;
     mov.m_code = Record<TErrorCodeValue, TErrorSystemCategoryValue,
         TErrorSystemCodeValue>{basic::error::id::Flag{}}.m_code;
 }
@@ -169,7 +169,7 @@ constexpr typename Record<TErrorCodeValue, TErrorSystemCategoryValue,
 Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::ErrorSystem() const noexcept
 {
-    return ErrorSystemType{m_category, m_code.ErrorSystem};
+    return ErrorSystemType{m_categ, m_code.ErrorSystem};
 }
 
 } //!id

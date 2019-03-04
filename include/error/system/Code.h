@@ -22,26 +22,26 @@ namespace system
 template<typename TCodeEnum>
 inline Code::Code(const TCodeEnum & code) noexcept :
     m_value(system::make::code::Value(code)),
-    m_category(const_cast<CategoryType *>(&system::make::Category(code))),
-    m_message(std::move(m_category->Message(*this)))
+    m_categ(const_cast<CategoryType *>(&system::make::Category(code))),
+    m_message(std::move(m_categ->Message(*this)))
 {}
 
 inline Code::Code(const ValueType & code, 
-    const CategoryType & category) noexcept :
+    const CategoryType & categ) noexcept :
         m_value(code),
-        m_category(const_cast<CategoryType *>(&category)),
-        m_message(std::move(m_category->Message(*this)))
+        m_categ(const_cast<CategoryType *>(&categ)),
+        m_message(std::move(m_categ->Message(*this)))
 {}
 
 inline Code::Code(const Code & cpy) noexcept :
     m_value(cpy.m_value),
-    m_category(cpy.m_category),
+    m_categ(cpy.m_categ),
     m_message(cpy.m_message)
 {}
 
 inline Code::Code(Code && mov) noexcept :
     m_value(std::move(mov.m_value)),
-    m_category(std::move(mov.m_category)),
+    m_categ(std::move(mov.m_categ)),
     m_message(std::move(mov.m_message))
 {
     mov.Clear();
@@ -53,7 +53,7 @@ inline Code::~Code() noexcept
 inline Code & Code::operator=(const Code & cpy) noexcept
 {
     this->m_value = cpy.m_value;
-    this->m_category = cpy.m_category;
+    this->m_categ = cpy.m_categ;
     this->m_message = cpy.m_message;
     return *this;
 }
@@ -61,7 +61,7 @@ inline Code & Code::operator=(const Code & cpy) noexcept
 inline Code & Code::operator=(Code && mov) noexcept
 {
     this->m_value = std::move(mov.m_value);
-    this->m_category = std::move(mov.m_category);
+    this->m_categ = std::move(mov.m_categ);
     this->m_message = std::move(mov.m_message);
     mov.Clear();
     return *this;
@@ -71,24 +71,24 @@ template<typename TCodeEnum>
 inline Code & Code::operator=(const TCodeEnum & code) noexcept
 {
     this->m_value = system::make::code::Value(code);
-    this->m_category = const_cast<CategoryType *>(&system::make::
+    this->m_categ = const_cast<CategoryType *>(&system::make::
         Category(code));
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_message = std::move(m_categ->Message(*this));
     return *this;
 }
 
 inline void Code::Assign(const ValueType & code,
-    const CategoryType & category) noexcept
+    const CategoryType & categ) noexcept
 {
     this->m_value = code;
-    this->m_category = const_cast<CategoryType *>(&category);
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_categ = const_cast<CategoryType *>(&categ);
+    this->m_message = std::move(m_categ->Message(*this));
 }
 
 inline void Code::Clear() noexcept
 {
-    this->m_value = this->m_category->DefaultCode().Value();
-    this->m_message = std::move(m_category->Message(*this));
+    this->m_value = this->m_categ->DefaultCode().Value();
+    this->m_message = std::move(m_categ->Message(*this));
 }
 
 inline typename Code::ValueType Code::Value() const noexcept
@@ -99,13 +99,13 @@ inline typename Code::ValueType Code::Value() const noexcept
 inline const typename Code::CategoryType & 
 Code::Category() const noexcept
 {
-    return *this->m_category;
+    return *this->m_categ;
 }
 
 inline typename Code::ConditionType 
 Code::DefaultCondition() const noexcept
 {
-    return this->m_category->DefaultCondition(*this);
+    return this->m_categ->DefaultCondition(*this);
 }
 
 inline const typename Code::CharType * Code::Message() const noexcept

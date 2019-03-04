@@ -5,22 +5,22 @@
 #include "../Code.defn.h"
 #include "../Condition.defn.h"
 
-#include "imp/category/HasCodeEnum.h"
+#include "imp/categ/HasCodeEnum.h"
 #include "../../defn/func/output/Operator.h"
-#include "category/defn/type/code/set/Value.h"
-#include "category/defn/type/condition/set/Value.h"
-#include "category/msg/tag/Code.h"
-#include "category/msg/tag/Condition.h"
-#include "category/DefaultCode.h"
-#include "category/DefaultCodeValue.h"
-#include "category/DefaultCondition.h"
-#include "category/DefaultConditionValue.h"
-#include "category/Equivalent.h"
-#include "category/Message.h"
-#include "category/Name.h"
-#include "category/Value.h"
-#include "category/ToCodeValue.h"
-#include "category/ToConditionValue.h"
+#include "categ/defn/type/code/set/Value.h"
+#include "categ/defn/type/condition/set/Value.h"
+#include "categ/msg/tag/Code.h"
+#include "categ/msg/tag/Condition.h"
+#include "categ/DefaultCode.h"
+#include "categ/DefaultCodeValue.h"
+#include "categ/DefaultCondition.h"
+#include "categ/DefaultConditionValue.h"
+#include "categ/Equivalent.h"
+#include "categ/Message.h"
+#include "categ/Name.h"
+#include "categ/Value.h"
+#include "categ/ToCodeValue.h"
+#include "categ/ToConditionValue.h"
 
 #include <cstdint>
 #include <utility>
@@ -60,14 +60,14 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
-    tmpl::category::Base<TCategoryTrait>(),
+    tmpl::categ::Base<TCategoryTrait>(),
     tmpl::imp::Category<TCategoryTrait>(),
     tmpl::imp::Exit<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
-    tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+    tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
     tmpl::imp::Category<TCategoryTrait>(std::move(mov)),
     tmpl::imp::Exit<TCategoryTrait>(std::move(mov))
 {}
@@ -80,41 +80,41 @@ template<typename TCategoryTrait>
 const TCategoryTrait & Category<TCategoryTrait>::
     GetCategoryTrait() const noexcept
 {
-    return tmpl::category::Base<TCategoryTrait>::GetCategoryTrait();
+    return tmpl::categ::Base<TCategoryTrait>::GetCategoryTrait();
 }
 
 template<typename TCategoryTrait>
 TCategoryTrait & Category<TCategoryTrait>::GetCategoryTrait() noexcept
 {
-    return tmpl::category::Base<TCategoryTrait>::GetCategoryTrait();
+    return tmpl::categ::Base<TCategoryTrait>::GetCategoryTrait();
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ValueType 
 Category<TCategoryTrait>::Value() const noexcept
 {
-    return category::Value(this->GetCategoryTrait());
+    return categ::Value(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 const typename Category<TCategoryTrait>::CharType * 
 Category<TCategoryTrait>::Name() const noexcept
 {
-    return category::Name(this->GetCategoryTrait());
+    return categ::Name(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::CodeValueType 
 Category<TCategoryTrait>::DefaultCodeValue() const noexcept
 {
-    return category::DefaultCodeValue(this->GetCategoryTrait());
+    return categ::DefaultCodeValue(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::CodeType 
 Category<TCategoryTrait>::DefaultCode() const noexcept
 {
-    return category::DefaultCode(this->GetCategoryTrait(),
+    return categ::DefaultCode(this->GetCategoryTrait(),
         *this);
 }
 
@@ -122,15 +122,15 @@ template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionValueType 
 Category<TCategoryTrait>::DefaultConditionValue() const noexcept
 {
-    return category::DefaultConditionValue(this->GetCategoryTrait());
+    return categ::DefaultConditionValue(this->GetCategoryTrait());
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionType 
 Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
-    return category::DefaultCondition(this->GetCategoryTrait(),
-        category::DefaultCodeValue(this->GetCategoryTrait()), *this);
+    return categ::DefaultCondition(this->GetCategoryTrait(),
+        categ::DefaultCodeValue(this->GetCategoryTrait()), *this);
 }
 
 template<typename TCategoryTrait>
@@ -138,7 +138,7 @@ typename Category<TCategoryTrait>::ConditionType
 Category<TCategoryTrait>::
     DefaultCondition(const CodeType & code) const noexcept
 {
-    return category::DefaultCondition(this->GetCategoryTrait(), code.Value(),
+    return categ::DefaultCondition(this->GetCategoryTrait(), code.Value(),
         *this);
 }
 
@@ -147,7 +147,7 @@ typename Category<TCategoryTrait>::CodeValueType
 Category<TCategoryTrait>::
     ToCodeValue(const CodeSetValueType & code) const noexcept
 {
-    return category::ToCodeValue(this->GetCategoryTrait(), code);
+    return categ::ToCodeValue(this->GetCategoryTrait(), code);
 }
 
 template<typename TCategoryTrait>
@@ -162,21 +162,21 @@ template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeValueType & code, 
     const ConditionType & cond) const noexcept
 {
-    return category::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeType & code,
     const ConditionValueType & cond) const noexcept
 {
-    return category::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
 }
 
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::StringType 
 Category<TCategoryTrait>::Message(const CodeType & code) const noexcept
 {
-    return category::Message<category::msg::tag::
+    return categ::Message<categ::msg::tag::
         Code>(this->GetCategoryTrait(), code);
 }
 
@@ -184,7 +184,7 @@ template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::StringType 
 Category<TCategoryTrait>::Message(const ConditionType & cond) const noexcept
 {
-    return category::Message<category::msg::tag::
+    return categ::Message<categ::msg::tag::
         Condition>(this->GetCategoryTrait(), cond);
 }
 
@@ -207,34 +207,34 @@ const error::intf::Output & Category<TCategoryTrait>::
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
 bool operator==(const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_b) noexcept
+    Category<TCategoryTraitA>& categ_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& categ_b) noexcept
 {
-    return category_a.Value() == category_b.Value();
+    return categ_a.Value() == categ_b.Value();
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
 bool operator!=(const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_b) noexcept
+    Category<TCategoryTraitA>& categ_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& categ_b) noexcept
 {
-    return !(category_a == category_b);
+    return !(categ_a == categ_b);
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
 bool operator<(const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_b) noexcept
+    Category<TCategoryTraitA>& categ_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& categ_b) noexcept
 {
-    return category_a.Value() < category_b.Value();
+    return categ_a.Value() < categ_b.Value();
 }
 
 template<typename TCategoryTraitA, typename TCategoryTraitB>
 bool operator>(const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_a, const basic::error::system::tmpl::
-    Category<TCategoryTraitA>& category_b) noexcept
+    Category<TCategoryTraitA>& categ_a, const basic::error::system::tmpl::
+    Category<TCategoryTraitA>& categ_b) noexcept
 {
-    return category_b < category_a;
+    return categ_b < categ_a;
 }
 
 #endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_H_

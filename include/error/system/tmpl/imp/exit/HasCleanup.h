@@ -1,9 +1,9 @@
-#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEGORY_IMP_EXIT_HASCLEANUP_H_
-#define BASIC_ERROR_SYSTEM_TMPL_CATEGORY_IMP_EXIT_HASCLEANUP_H_
+#ifndef BASIC_ERROR_SYSTEM_TMPL_CATEG_IMP_EXIT_HASCLEANUP_H_
+#define BASIC_ERROR_SYSTEM_TMPL_CATEG_IMP_EXIT_HASCLEANUP_H_
 
 #include "../Exit.h"
 #include "../../../../intf/Exit.h"
-#include "../../category/Base.h"
+#include "../../categ/Base.h"
 
 #include <type_traits>
 
@@ -20,7 +20,7 @@ namespace imp
 
 template<typename TCategoryTrait>
 class Exit<TCategoryTrait, true> : 
-    virtual public tmpl::category::Base<TCategoryTrait>,
+    virtual public tmpl::categ::Base<TCategoryTrait>,
     public error::intf::Exit
 {
 protected:
@@ -41,13 +41,13 @@ private:
 
 template<typename TCategoryTrait>
 Exit<TCategoryTrait, true>::Exit() noexcept :
-    tmpl::category::Base<TCategoryTrait>(),
+    tmpl::categ::Base<TCategoryTrait>(),
     error::intf::Exit()
 {}
 
 template<typename TCategoryTrait>
 Exit<TCategoryTrait, true>::Exit(Exit<TCategoryTrait, true> && mov) noexcept :
-        tmpl::category::Base<TCategoryTrait>(std::move(mov)),
+        tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
         error::intf::Exit(std::move(mov))
 {}
 
@@ -67,4 +67,4 @@ void Exit<TCategoryTrait, true>::Cleanup(int sig) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEGORY_IMP_EXIT_HASCLEANUP_H_
+#endif //!BASIC_ERROR_SYSTEM_TMPL_CATEG_IMP_EXIT_HASCLEANUP_H_

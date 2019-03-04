@@ -3,9 +3,9 @@
 
 #include "../Category.h"
 #include "../tmpl/Category.h"
-#include "../category/Default.h"
-#include "../category/Generic.h"
-#include "../category/Future.h"
+#include "../categ/Default.h"
+#include "../categ/Generic.h"
+#include "../categ/Future.h"
 
 namespace basic
 {
@@ -19,17 +19,17 @@ namespace make
 template<typename TCodeEnum>
 inline const system::Category & Category(const TCodeEnum &) noexcept
 {
-    return tmpl::Category<system::category::Default>::GetInstance();
+    return tmpl::Category<system::categ::Default>::GetInstance();
 }
 
 inline const system::Category & Category(const std::future_errc &) noexcept
 {
-    return tmpl::Category<system::category::Future>::GetInstance();
+    return tmpl::Category<system::categ::Future>::GetInstance();
 }
 
 inline const system::Category & Category(const std::errc &) noexcept
 {
-    return tmpl::Category<system::category::Generic>::GetInstance();
+    return tmpl::Category<system::categ::Generic>::GetInstance();
 }
 
 } //!make

@@ -33,13 +33,13 @@ public:
     typedef intf::Category CategoryType;
 private:
     ValueType m_value;
-    CategoryType * m_category;
+    CategoryType * m_categ;
     StringType m_message;
 public:
     template<typename TConditionEnum>
     inline Condition(const TConditionEnum & cond) noexcept;
     inline Condition(const ValueType & val, 
-        const CategoryType & category) noexcept;
+        const CategoryType & categ) noexcept;
 public:
     inline Condition(const Condition & cpy) noexcept;
     inline Condition(Condition && mov) noexcept;
@@ -53,7 +53,7 @@ public:
     inline Condition & operator=(const TConditionEnum & cond) noexcept;
 public:
     inline void Assign(const ValueType & cond, 
-        const CategoryType & category) noexcept;
+        const CategoryType & categ) noexcept;
 public:
     inline void Clear() noexcept;
 public:

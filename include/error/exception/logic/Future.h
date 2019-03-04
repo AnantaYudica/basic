@@ -10,7 +10,7 @@
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
 #include "../../msg/String.h"
-#include "../../system/category/Future.h"
+#include "../../system/categ/Future.h"
 #include "../../system/Category.h"
 #include "../../system/tmpl/Category.h"
 #include "../../system/Code.h"
@@ -41,7 +41,7 @@ public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
 public:
-    typedef system::tmpl::Category<system::category::Future> 
+    typedef system::tmpl::Category<system::categ::Future> 
         FutureCategoryType;
     typedef system::Code CodeType;
     typedef typename FutureCategoryType::CodeSetValueType CodeSetValueType;

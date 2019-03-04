@@ -2,7 +2,7 @@
 #define BASIC_ERROR_IDENTIFICATION_H_
 
 #include "defn/type/code/Value.h"
-#include "defn/type/system/category/Value.h"
+#include "defn/type/system/categ/Value.h"
 #include "defn/type/system/code/Value.h"
 #include "defn/type/id/Record.h"
 #include "id/Flag.h"
@@ -23,7 +23,7 @@ public:
     typedef id::Flag FlagType;
 public:
     typedef defn::type::code::Value CodeValueType;
-    typedef defn::type::system::category::Value SystemCategoryValueType;
+    typedef defn::type::system::categ::Value SystemCategoryValueType;
     typedef defn::type::system::code::Value SystemCodeValueType;
 public:
     typedef defn::type::id::Record RecordType;
@@ -37,21 +37,21 @@ public:
     constexpr Identification(const id::flag::Standard&, 
         const CodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::System&, 
-        const SystemCategoryValueType& category_val, 
+        const SystemCategoryValueType& categ_val, 
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::System&, 
-        const id::flag::Standard&, const SystemCategoryValueType& category_val,
+        const id::flag::Standard&, const SystemCategoryValueType& categ_val,
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const CodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const id::flag::Standard&, const CodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, const id::flag::System&, 
-        const SystemCategoryValueType& category_val,
+        const SystemCategoryValueType& categ_val,
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, const id::flag::System&, 
         const id::flag::Standard&,
-        const SystemCategoryValueType& category_val,
+        const SystemCategoryValueType& categ_val,
         const SystemCodeValueType& code_val) noexcept;
     constexpr Identification(const id::flag::Catch&, 
         const Identification& id) noexcept;
@@ -92,30 +92,30 @@ constexpr Identification::Identification(const id::flag::Standard& standard,
 {}
 
 constexpr Identification::Identification(const id::flag::System& system, 
-    const SystemCategoryValueType& category_val, 
+    const SystemCategoryValueType& categ_val, 
     const SystemCodeValueType& code_val) noexcept :
-        m_record(FlagType{system}, category_val, code_val)
+        m_record(FlagType{system}, categ_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::System& system, 
     const id::flag::Standard& standard, 
-    const SystemCategoryValueType& category_val, 
+    const SystemCategoryValueType& categ_val, 
     const SystemCodeValueType& code_val) noexcept :
-        m_record(FlagType{system, standard}, category_val, code_val)
+        m_record(FlagType{system, standard}, categ_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
     const id::flag::System& system, 
-    const SystemCategoryValueType& category_val,
+    const SystemCategoryValueType& categ_val,
     const SystemCodeValueType& code_val) noexcept :
-        m_record(FlagType{catch_, system}, category_val, code_val)
+        m_record(FlagType{catch_, system}, categ_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 
     const id::flag::System& system, const id::flag::Standard& standard,
-    const SystemCategoryValueType& category_val,
+    const SystemCategoryValueType& categ_val,
     const SystemCodeValueType& code_val) noexcept :
-        m_record(FlagType{catch_, system, standard}, category_val, code_val)
+        m_record(FlagType{catch_, system, standard}, categ_val, code_val)
 {}
 
 constexpr Identification::Identification(const id::flag::Catch& catch_, 

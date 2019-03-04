@@ -5,15 +5,15 @@
 #include "../../Condition.decl.h"
 
 #include "../../intf/Category.h"
-#include "../category/Base.h"
+#include "../categ/Base.h"
 #include "../../../intf/Output.h"
 #include "../../../defn/type/Char.h"
 #include "../../../defn/type/Output.h"
-#include "../../../defn/type/system/category/Value.h"
+#include "../../../defn/type/system/categ/Value.h"
 #include "../../../defn/type/system/code/Value.h"
 #include "../../../defn/type/system/condition/Value.h"
 #include "../../../msg/String.h"
-#include "../category/has/mmbr/defn/type/CodeEnum.h"
+#include "../categ/has/mmbr/defn/type/CodeEnum.h"
 
 namespace basic
 {
@@ -27,16 +27,16 @@ namespace imp
 {
 
 template<typename TCategoryTrait, 
-    bool HasCodeEnum = tmpl::category::has::mmbr::defn::type::
+    bool HasCodeEnum = tmpl::categ::has::mmbr::defn::type::
         CodeEnum<TCategoryTrait>::Value>
 class Category :
-    virtual public tmpl::category::Base<TCategoryTrait>,
+    virtual public tmpl::categ::Base<TCategoryTrait>,
     public intf::Category
 {
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
-    typedef defn::type::system::category::Value ValueType;
+    typedef defn::type::system::categ::Value ValueType;
     typedef defn::type::system::code::Value CodeValueType;
     typedef defn::type::system::condition::Value ConditionValueType;
 public:

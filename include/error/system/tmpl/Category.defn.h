@@ -4,16 +4,16 @@
 #include "Category.decl.h"
 #include "../Code.decl.h"
 #include "../Condition.decl.h"
-#include "imp/category/HasCodeEnum.defn.h"
+#include "imp/categ/HasCodeEnum.defn.h"
 
-#include "category/Base.h"
-#include "category/defn/type/code/set/Value.h"
-#include "category/defn/type/condition/set/Value.h"
-#include "category/has/mmbr/defn/type/CodeEnum.h"
+#include "categ/Base.h"
+#include "categ/defn/type/code/set/Value.h"
+#include "categ/defn/type/condition/set/Value.h"
+#include "categ/has/mmbr/defn/type/CodeEnum.h"
 #include "imp/exit/HasCleanup.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
-#include "../../defn/type/system/category/Value.h"
+#include "../../defn/type/system/categ/Value.h"
 #include "../../defn/type/system/code/Value.h"
 #include "../../defn/type/system/condition/Value.h"
 #include "../../msg/String.h"
@@ -31,7 +31,7 @@ namespace tmpl
 
 template<typename TCategoryTrait>
 class Category : 
-    virtual public tmpl::category::Base<TCategoryTrait>,
+    virtual public tmpl::categ::Base<TCategoryTrait>,
     public tmpl::imp::Category<TCategoryTrait>,
     public tmpl::imp::Exit<TCategoryTrait>
 {
@@ -40,15 +40,15 @@ public:
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
-    typedef defn::type::system::category::Value ValueType;
+    typedef defn::type::system::categ::Value ValueType;
     typedef defn::type::system::code::Value CodeValueType;
     typedef defn::type::system::condition::Value ConditionValueType;
 public:
     typedef msg::String StringType;
 public:
-    typedef category::defn::type::code::set::
+    typedef categ::defn::type::code::set::
         Value<TCategoryTrait> CodeSetValueType;
-    typedef category::defn::type::condition::set::
+    typedef categ::defn::type::condition::set::
         Value<TCategoryTrait> ConditionSetValueType;
 public:
     typedef system::Code CodeType;
