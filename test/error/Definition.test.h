@@ -17,7 +17,7 @@
 #include "error/defn/type/output/CharTrait.h"
 #include "error/defn/type/sys/categ/Value.h"
 #include "error/defn/type/sys/code/Value.h"
-#include "error/defn/type/sys/condition/Value.h"
+#include "error/defn/type/sys/cond/Value.h"
 #include "error/defn/func/output/Operator.h"
 
 #include <typeinfo>

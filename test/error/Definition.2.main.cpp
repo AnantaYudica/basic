@@ -16,7 +16,7 @@ typedef std::uint32_t BasicErrorSystemCodeValueType;
 
 typedef std::uint32_t BasicErrorSystemConditionValueType;
 
-#define BASIC_ERROR_SYS_CONDITION_VALUE_TYPE\
+#define BASIC_ERROR_SYS_COND_VALUE_TYPE\
     BasicErrorSystemConditionValueType
 
 typedef std::uint16_t BasicErrorSystemCategoryValueType;
@@ -163,10 +163,10 @@ T9Var1 t9_var1{"basic::error::defn::type::sys::code::Value",
 REGISTER_TEST(t9, new TestDefinition<Case1,
     typename T9Var1::BaseType>(t9_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::sys::condition::Value,
+typedef VariableIsSameType<basic::error::defn::type::sys::cond::Value,
     BasicErrorSystemCodeValueType> T10Var1;
 
-T10Var1 t10_var1{"basic::error::defn::type::sys::condition::Value", 
+T10Var1 t10_var1{"basic::error::defn::type::sys::cond::Value", 
     "BasicErrorSystemCodeValueType"};
 
 REGISTER_TEST(t10, new TestDefinition<Case1,

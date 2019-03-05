@@ -92,11 +92,11 @@ T9Var1 t9_var1{"basic::error::defn::type::sys::code::Value",
 REGISTER_TEST(t9, new TestDefinition<Case1,
     typename T9Var1::BaseType>(t9_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::sys::condition::Value,
-    BASIC_ERROR_SYS_CONDITION_VALUE_TYPE> T10Var1;
+typedef VariableIsSameType<basic::error::defn::type::sys::cond::Value,
+    BASIC_ERROR_SYS_COND_VALUE_TYPE> T10Var1;
 
-T10Var1 t10_var1{"basic::error::defn::type::sys::condition::Value", 
-    "BASIC_ERROR_SYS_CONDITION_VALUE_TYPE"};
+T10Var1 t10_var1{"basic::error::defn::type::sys::cond::Value", 
+    "BASIC_ERROR_SYS_COND_VALUE_TYPE"};
 
 REGISTER_TEST(t10, new TestDefinition<Case1,
     typename T10Var1::BaseType>(t10_var1));

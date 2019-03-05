@@ -16,7 +16,7 @@
 #include "error/sys/tmpl/Category.h"
 
 #include "error/sys/tmpl/categ/defn/type/code/set/Value.h"
-#include "error/sys/tmpl/categ/defn/type/condition/set/Value.h"
+#include "error/sys/tmpl/categ/defn/type/cond/set/Value.h"
 
 #include "error/sys/tmpl/categ/has/mmbr/defn/type/CodeEnum.h"
 #include "error/sys/tmpl/categ/has/mmbr/defn/type/ConditionEnum.h"
@@ -65,7 +65,7 @@ char DefnCodeTypeString_1[] = "basic::error::sys::tmpl::"
     "categ::defn::type::code::set::Value<basic::error::sys::categ::"
     "Future>";
 char DefnConditionTypeString_1[] = "basic::error::sys::tmpl::"
-    "categ::defn::type::condition::set::Value<basic::error::sys::"
+    "categ::defn::type::cond::set::Value<basic::error::sys::"
     "categ::Future>";
 
 struct TestAliasCodeEnumType {};
@@ -104,7 +104,7 @@ typedef std::future_errc ConditionEnumType;
 typedef basic::error::defn::type::Char CharType;
 typedef basic::error::defn::type::sys::categ::Value CategoryValueType;
 typedef basic::error::defn::type::sys::code::Value CodeValueType;
-typedef basic::error::defn::type::sys::condition::Value ConditionValueType;
+typedef basic::error::defn::type::sys::cond::Value ConditionValueType;
 typedef basic::error::msg::String MessageStringType;
 typedef basic::error::sys::Condition ConditionType;
 typedef basic::error::sys::Code CodeType;
@@ -1050,7 +1050,7 @@ public:
     {
         return typeid(typename CategoryTraitType::ConditionValueType).
             hash_code() == typeid(basic::error::defn::type::sys::
-            condition::Value).hash_code();
+            cond::Value).hash_code();
     }
     bool Result(const TestAliasStringType &, 
         VariableTestCategoryFuture & var)
@@ -1064,12 +1064,12 @@ public:
     {
         auto & in_code = *basic::test::var::
             At<IDefaultConditionParamValue>(var).Get().template At<I>();
-        auto & in_condition = *basic::test::var::
+        auto & in_cond = *basic::test::var::
             At<IDefaultConditionResultParamValue>(var).Get().template At<I>();
-        auto condition = CategoryTraitType::Instance().
+        auto cond = CategoryTraitType::Instance().
             template DefaultCondition<basic::error::sys::Condition>(in_code,
             TmplCategoryType::GetInstance());
-        return in_condition.Value() == condition.Value();
+        return in_cond.Value() == cond.Value();
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<TestValueEquivalent, I> &, 
@@ -1129,7 +1129,7 @@ public:
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         return typeid(typename basic::error::sys::tmpl::categ::defn::
-            type::condition::set::Value<CategoryTraitType>).hash_code() ==
+            type::cond::set::Value<CategoryTraitType>).hash_code() ==
             typeid(ResultType).hash_code();
     }
     template<std::size_t I>
@@ -1747,19 +1747,19 @@ struct Void1{};
 
 template<>
 struct basic::test::out::Argument<typename std::conditional<
-    std::is_same<basic::error::defn::type::sys::condition::Value,
+    std::is_same<basic::error::defn::type::sys::cond::Value,
         basic::error::defn::type::sys::code::Value>::value, 
-    Void1, basic::error::defn::type::sys::condition::Value *>::type>
+    Void1, basic::error::defn::type::sys::cond::Value *>::type>
 {
     static basic::test::CString<char> ms_cstr;
-    static const char * Value(basic::error::defn::type::sys::condition::
+    static const char * Value(basic::error::defn::type::sys::cond::
         Value * & cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "%d", *cond));
         return *ms_cstr;
     }
-    static const char * Value(basic::error::defn::type::sys::condition::
+    static const char * Value(basic::error::defn::type::sys::cond::
         Value * && cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
@@ -1770,9 +1770,9 @@ struct basic::test::out::Argument<typename std::conditional<
 
 basic::test::CString<char> basic::test::out::Argument<
     typename std::conditional<std::is_same<basic::error::defn::
-        type::sys::condition::Value, basic::error::defn::type::sys::
+        type::sys::cond::Value, basic::error::defn::type::sys::
         code::Value>::value, 
-    Void1, basic::error::defn::type::sys::condition::Value *>::type>::
+    Void1, basic::error::defn::type::sys::cond::Value *>::type>::
         ms_cstr;
 
 struct Void2{};
