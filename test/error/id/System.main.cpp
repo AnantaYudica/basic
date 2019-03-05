@@ -50,8 +50,8 @@ struct TestCastToIdentification {};
 template<typename TObj>
 using VariableTestIdSystem = basic::test::Variable<
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::categ::Value,
-    basic::error::defn::type::system::code::Value,
+    basic::error::defn::type::sys::categ::Value,
+    basic::error::defn::type::sys::code::Value,
     basic::error::Identification,
     TObj,
     basic::test::Value<const char *>,
@@ -197,7 +197,7 @@ public:
     {
         return typeid(typename basic::error::id::System::
             SystemCategoryValueType).hash_code() == typeid(basic::error::
-            defn::type::system::categ::Value).hash_code();
+            defn::type::sys::categ::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -205,7 +205,7 @@ public:
     {
         return typeid(typename basic::error::id::System::
             SystemCodeValueType).hash_code() == typeid(basic::error::
-            defn::type::system::code::Value).hash_code();
+            defn::type::sys::code::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestBaseOfIdentification &, 
@@ -217,22 +217,22 @@ public:
     bool Result(const TestCastToIdentification &, 
         VariableTestIdSystem<TObj> & var)
     {
-        const auto & id_system = *basic::test::var::At<IObjValue>(var).
+        const auto & id_sys = *basic::test::var::At<IObjValue>(var).
             Get().Get();
         const auto & id = *basic::test::var::At<IIdentificationValue>(var).
             Get().Get();
-        const bool check_error = id_system.IsSystem() ? true :
-            (id_system.Error().Code() == id.Error().Code());
-        const bool check_error_system = !id_system.IsSystem() ? true :
-            (id_system.ErrorSystem().Code() == id.ErrorSystem().Code() &&
-                id_system.ErrorSystem().Category() == 
+        const bool check_error = id_sys.IsSystem() ? true :
+            (id_sys.Error().Code() == id.Error().Code());
+        const bool check_error_sys = !id_sys.IsSystem() ? true :
+            (id_sys.ErrorSystem().Code() == id.ErrorSystem().Code() &&
+                id_sys.ErrorSystem().Category() == 
                     id.ErrorSystem().Category());
-        return id_system.IsDefault() == id.IsDefault() &&
-            id_system.IsBad() == id.IsBad() &&
-            id_system.IsStandard() == id.IsStandard() &&
-            id_system.IsCatch() == id.IsCatch() &&
-            id_system.IsSystem() == id.IsSystem() &&
-            check_error && check_error_system;
+        return id_sys.IsDefault() == id.IsDefault() &&
+            id_sys.IsBad() == id.IsBad() &&
+            id_sys.IsStandard() == id.IsStandard() &&
+            id_sys.IsCatch() == id.IsCatch() &&
+            id_sys.IsSystem() == id.IsSystem() &&
+            check_error && check_error_sys;
     }
 };
 

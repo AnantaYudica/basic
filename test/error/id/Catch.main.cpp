@@ -51,8 +51,8 @@ struct TestCastToIdentification {};
 template<typename TObj>
 using VariableTestIdCatch = basic::test::Variable<
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::categ::Value,
-    basic::error::defn::type::system::code::Value,
+    basic::error::defn::type::sys::categ::Value,
+    basic::error::defn::type::sys::code::Value,
     basic::error::Identification,
     TObj,
     basic::test::Value<const char *>,
@@ -228,7 +228,7 @@ public:
     {
         return typeid(typename basic::error::id::Catch::
             SystemCategoryValueType).hash_code() == typeid(basic::error::
-            defn::type::system::categ::Value).hash_code();
+            defn::type::sys::categ::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -236,7 +236,7 @@ public:
     {
         return typeid(typename basic::error::id::Catch::
             SystemCodeValueType).hash_code() == typeid(basic::error::
-            defn::type::system::code::Value).hash_code();
+            defn::type::sys::code::Value).hash_code();
     }
     template<typename TObj>
     bool Result(const TestBaseOfIdentification &, 
@@ -254,7 +254,7 @@ public:
             Get().Get();
         const bool check_error = id_catch.IsSystem() ? true :
             (id_catch.Error().Code() == id.Error().Code());
-        const bool check_error_system = !id_catch.IsSystem() ? true :
+        const bool check_error_sys = !id_catch.IsSystem() ? true :
             (id_catch.ErrorSystem().Code() == id.ErrorSystem().Code() &&
                 id_catch.ErrorSystem().Category() == 
                     id.ErrorSystem().Category());
@@ -263,7 +263,7 @@ public:
             id_catch.IsStandard() == id.IsStandard() &&
             id_catch.IsCatch() == id.IsCatch() &&
             id_catch.IsSystem() == id.IsSystem() &&
-            check_error && check_error_system;
+            check_error && check_error_sys;
     }
 };
 

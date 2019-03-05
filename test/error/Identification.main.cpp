@@ -96,8 +96,8 @@ struct TestValueStream {};
 using VariableTestIdentification = basic::test::Variable<
     basic::error::id::Flag,
     basic::error::defn::type::code::Value,
-    basic::error::defn::type::system::categ::Value,
-    basic::error::defn::type::system::code::Value,
+    basic::error::defn::type::sys::categ::Value,
+    basic::error::defn::type::sys::code::Value,
     basic::error::defn::type::id::Record,
     typename basic::error::defn::type::id::Record::ErrorType,
     typename basic::error::defn::type::id::Record::ErrorSystemType,
@@ -575,7 +575,7 @@ public:
     {
         return typeid(typename basic::error::
             Identification::SystemCategoryValueType).hash_code() == 
-            typeid(basic::error::defn::type::system::categ::Value).
+            typeid(basic::error::defn::type::sys::categ::Value).
             hash_code();
     }
     bool Result(const TestAliasSystemCodeValueType &, 
@@ -583,7 +583,7 @@ public:
     {
         return typeid(typename basic::error::
             Identification::SystemCodeValueType).hash_code() == 
-            typeid(basic::error::defn::type::system::code::Value).hash_code();
+            typeid(basic::error::defn::type::sys::code::Value).hash_code();
     }
     bool Result(const TestAliasRecordType &, VariableTestIdentification & var)
     {
@@ -800,10 +800,10 @@ basic::error::id::Flag flag1{};
 typename basic::error::Identification::ErrorType error1{};
 
 constexpr typename basic::error::Identification::SystemCategoryValueType
-    error_system_categ_value1 = 0;
+    error_sys_categ_value1 = 0;
 
 typename basic::error::Identification::ErrorSystemType 
-    error_system1{error_system_categ_value1};
+    error_sys1{error_sys_categ_value1};
 typename basic::error::Identification::RecordType record1{flag1};
 
 basic::error::Identification obj1;
@@ -811,7 +811,7 @@ basic::error::Identification obj1;
 typedef VariableTestIdentification T1Var1;
 
 T1Var1 t1_var1{"obj1", &obj1, true, false, false, false, false, &flag1, 
-    &error1, &error_system1, &record1, "0x01"};
+    &error1, &error_sys1, &record1, "0x01"};
 
 REGISTER_TEST(t1, new TestIdentification<Case1, T1Var1>(t1_var1));
 
@@ -880,7 +880,7 @@ basic::error::id::Flag flag3_3{basic::error::id::flag::Catch{},
 basic::error::id::Flag flag3_4{basic::error::id::flag::Catch{},
     basic::error::id::flag::System{}, basic::error::id::flag::Standard{}};
 
-typename basic::error::Identification::ErrorSystemType error_system2{
+typename basic::error::Identification::ErrorSystemType error_sys2{
     error_categ_value2, error_code_value2};
 
 typename basic::error::Identification::RecordType record3_1{flag3_1,
@@ -909,19 +909,19 @@ basic::error::Identification obj3_7{basic::error::id::flag::Catch{},
     basic::error::id::flag::Standard{}, obj3_1};
 
 T1Var1 t3_var1{"obj3_1", &obj3_1, false, false, false, false, true, &flag3_1, 
-    nullptr, &error_system2, &record3_1, "0x100E0410"};
+    nullptr, &error_sys2, &record3_1, "0x100E0410"};
 T1Var1 t3_var2{"obj3_2", &obj3_2, false, false, true, false, true, &flag3_2, 
-    nullptr, &error_system2, &record3_2, "0x140E0410"};
+    nullptr, &error_sys2, &record3_2, "0x140E0410"};
 T1Var1 t3_var3{"obj3_3", &obj3_3, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t3_var4{"obj3_4", &obj3_4, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t3_var5{"obj3_5", &obj3_5, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t3_var6{"obj3_6", &obj3_6, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t3_var7{"obj3_7", &obj3_7, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 
 REGISTER_TEST(t3, new TestIdentification<Case3, T1Var1, T1Var1, T1Var1,
     T1Var1, T1Var1, T1Var1, T1Var1>(t3_var1, t3_var2, t3_var3, t3_var4, 
@@ -963,19 +963,19 @@ basic::error::Identification obj5_6{obj3_6};
 basic::error::Identification obj5_7{obj3_7};
 
 T1Var1 t5_var1{"obj5_1", &obj5_1, false, false, false, false, true, &flag3_1, 
-    nullptr, &error_system2, &record3_1, "0x100E0410"};
+    nullptr, &error_sys2, &record3_1, "0x100E0410"};
 T1Var1 t5_var2{"obj5_2", &obj5_2, false, false, true, false, true, &flag3_2, 
-    nullptr, &error_system2, &record3_2, "0x140E0410"};
+    nullptr, &error_sys2, &record3_2, "0x140E0410"};
 T1Var1 t5_var3{"obj5_3", &obj5_3, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t5_var4{"obj5_4", &obj5_4, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t5_var5{"obj5_5", &obj5_5, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t5_var6{"obj5_6", &obj5_6, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t5_var7{"obj5_7", &obj5_7, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 
 REGISTER_TEST(t5, new TestIdentification<Case3, T1Var1, T1Var1, T1Var1,
     T1Var1, T1Var1, T1Var1, T1Var1>(t5_var1, t5_var2, t5_var3, t5_var4, 
@@ -1050,34 +1050,34 @@ basic::error::Identification obj7_6{std::move(obj5_6_c)};
 basic::error::Identification obj7_7{std::move(obj5_7_c)};
 
 T1Var1 t7_var1{"obj7_1", &obj7_1, false, false, false, false, true, &flag3_1, 
-    nullptr, &error_system2, &record3_1, "0x100E0410"};
+    nullptr, &error_sys2, &record3_1, "0x100E0410"};
 T1Var1 t7_var2{"obj7_2", &obj7_2, false, false, true, false, true, &flag3_2, 
-    nullptr, &error_system2, &record3_2, "0x140E0410"};
+    nullptr, &error_sys2, &record3_2, "0x140E0410"};
 T1Var1 t7_var3{"obj7_3", &obj7_3, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t7_var4{"obj7_4", &obj7_4, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t7_var5{"obj7_5", &obj7_5, false, false, false, true, true, &flag3_3, 
-    nullptr, &error_system2, &record3_3, "0x180E0410"};
+    nullptr, &error_sys2, &record3_3, "0x180E0410"};
 T1Var1 t7_var6{"obj7_6", &obj7_6, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 T1Var1 t7_var7{"obj7_7", &obj7_7, false, false, true, true, true, &flag3_4, 
-    nullptr, &error_system2, &record3_4, "0x1C0E0410"};
+    nullptr, &error_sys2, &record3_4, "0x1C0E0410"};
 
 T1Var1 t7_var8{"obj5_1_c", &obj5_1_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var9{"obj5_2_c", &obj5_2_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var10{"obj5_3_c", &obj5_3_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var11{"obj5_4_c", &obj5_4_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var12{"obj5_5_c", &obj5_5_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var13{"obj5_6_c", &obj5_6_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 T1Var1 t7_var14{"obj5_7_c", &obj5_7_c, true, false, false, false, false, 
-    &flag1, nullptr, &error_system1, &record1, "0x01"};
+    &flag1, nullptr, &error_sys1, &record1, "0x01"};
 
 REGISTER_TEST(t7, new TestIdentification<Case3, T1Var1, T1Var1, T1Var1,
     T1Var1, T1Var1, T1Var1, T1Var1, T1Var1, T1Var1, T1Var1, T1Var1, T1Var1, 

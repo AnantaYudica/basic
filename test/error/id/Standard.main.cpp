@@ -186,7 +186,7 @@ public:
             Get().Get();
         const bool check_error = id_standard.IsSystem() ? true :
             (id_standard.Error().Code() == id.Error().Code());
-        const bool check_error_system = !id_standard.IsSystem() ? true :
+        const bool check_error_sys = !id_standard.IsSystem() ? true :
             (id_standard.ErrorSystem().Code() == id.ErrorSystem().Code() &&
                 id_standard.ErrorSystem().Category() == 
                     id.ErrorSystem().Category());
@@ -195,7 +195,7 @@ public:
             id_standard.IsStandard() == id.IsStandard() &&
             id_standard.IsCatch() == id.IsCatch() &&
             id_standard.IsSystem() == id.IsSystem() &&
-            check_error && check_error_system;
+            check_error && check_error_sys;
     }
 };
 

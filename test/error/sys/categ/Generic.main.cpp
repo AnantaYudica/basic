@@ -6,32 +6,32 @@
 #include "test/var/At.h"
 #include "test/out/Argument.h"
 
-#include "error/system/categ/Default.h"
+#include "error/sys/categ/Generic.h"
 
-#include "constant/error/system/Category.h"
+#include "constant/error/sys/Category.h"
 
-#include "error/system/Code.h"
-#include "error/system/Condition.h"
+#include "error/sys/Code.h"
+#include "error/sys/Condition.h"
 
-#include "error/system/tmpl/Category.h"
+#include "error/sys/tmpl/Category.h"
 
-#include "error/system/tmpl/categ/defn/type/code/set/Value.h"
-#include "error/system/tmpl/categ/defn/type/condition/set/Value.h"
+#include "error/sys/tmpl/categ/defn/type/code/set/Value.h"
+#include "error/sys/tmpl/categ/defn/type/condition/set/Value.h"
 
-#include "error/system/tmpl/categ/has/mmbr/defn/type/CodeEnum.h"
-#include "error/system/tmpl/categ/has/mmbr/defn/type/ConditionEnum.h"
-#include "error/system/tmpl/categ/has/mmbr/func/DefaultCode.h"
-#include "error/system/tmpl/categ/has/mmbr/func/DefaultCodeValue.h"
-#include "error/system/tmpl/categ/has/mmbr/func/DefaultCondition.h"
-#include "error/system/tmpl/categ/has/mmbr/func/DefaultConditionValue.h"
-#include "error/system/tmpl/categ/has/mmbr/func/Equivalent.h"
-#include "error/system/tmpl/categ/has/mmbr/func/Message.h"
-#include "error/system/tmpl/categ/has/mmbr/func/Name.h"
-#include "error/system/tmpl/categ/has/mmbr/func/ToCodeValue.h"
-#include "error/system/tmpl/categ/has/mmbr/func/ToConditionValue.h"
-#include "error/system/tmpl/categ/has/mmbr/func/Value.h"
+#include "error/sys/tmpl/categ/has/mmbr/defn/type/CodeEnum.h"
+#include "error/sys/tmpl/categ/has/mmbr/defn/type/ConditionEnum.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/DefaultCode.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/DefaultCodeValue.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/DefaultCondition.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/DefaultConditionValue.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/Equivalent.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/Message.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/Name.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/ToCodeValue.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/ToConditionValue.h"
+#include "error/sys/tmpl/categ/has/mmbr/func/Value.h"
 
-#include "error/system/tmpl/categ/has/st/mmbr/func/Instance.h"
+#include "error/sys/tmpl/categ/has/st/mmbr/func/Instance.h"
 
 #include <system_error>
 #include <type_traits>
@@ -42,14 +42,14 @@ BASIC_TEST_CONSTRUCT;
 
 #define BUFFER_FORMAT_CSTRING 256
 
-basic::test::CString<char> ConditionToString(basic::error::system::
+basic::test::CString<char> ConditionToString(basic::error::sys::
     Condition * && cond)
 {
     return basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
         "m_value : %d", cond->Value());
 }
 
-basic::test::CString<char> CodeToString(basic::error::system::
+basic::test::CString<char> CodeToString(basic::error::sys::
     Code * && code)
 {
     return basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
@@ -61,12 +61,12 @@ const char * BoolToString(bool && b)
     return (b ? "true" : "false");
 }
 
-char DefnCodeTypeString_1[] = "basic::error::system::tmpl::"
-    "categ::defn::type::code::set::Value<basic::error::system::categ::"
-    "Default>";
-char DefnConditionTypeString_1[] = "basic::error::system::tmpl::"
-    "categ::defn::type::condition::set::Value<basic::error::system::"
-    "categ::Default>";
+char DefnCodeTypeString_1[] = "basic::error::sys::tmpl::"
+    "categ::defn::type::code::set::Value<basic::error::sys::categ::"
+    "Generic>";
+char DefnConditionTypeString_1[] = "basic::error::sys::tmpl::"
+    "categ::defn::type::condition::set::Value<basic::error::sys::"
+    "categ::Generic>";
 
 struct TestAliasCodeEnumType {};
 struct TestAliasConditionEnumType {};
@@ -96,18 +96,18 @@ struct TestValueHasMmbrFuncToConditionValue {};
 struct TestValueHasMmbrFuncValue {};
 struct TestValueHasStMmbrFuncInstance {};
 
-typedef basic::error::system::categ::Default CategoryTraitType;
-typedef basic::error::system::tmpl::Category<CategoryTraitType>
+typedef basic::error::sys::categ::Generic CategoryTraitType;
+typedef basic::error::sys::tmpl::Category<CategoryTraitType>
     TmplCategoryType;
 typedef std::errc CodeEnumType;
 typedef std::errc ConditionEnumType;
 typedef basic::error::defn::type::Char CharType;
-typedef basic::error::defn::type::system::categ::Value CategoryValueType;
-typedef basic::error::defn::type::system::code::Value CodeValueType;
-typedef basic::error::defn::type::system::condition::Value ConditionValueType;
+typedef basic::error::defn::type::sys::categ::Value CategoryValueType;
+typedef basic::error::defn::type::sys::code::Value CodeValueType;
+typedef basic::error::defn::type::sys::condition::Value ConditionValueType;
 typedef basic::error::msg::String MessageStringType;
-typedef basic::error::system::Condition ConditionType;
-typedef basic::error::system::Code CodeType;
+typedef basic::error::sys::Condition ConditionType;
+typedef basic::error::sys::Code CodeType;
 typedef basic::test::type::Parameter<
     CodeType,
     CodeValueType> DefaultConditionParamTypeType;
@@ -153,88 +153,89 @@ typedef basic::test::type::val::Sequence<const char *,
 typedef basic::test::type::Parameter<std::errc> 
     DefnConditionTypeParamTypeType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::defn::type::CodeEnum<
+    basic::error::sys::tmpl::categ::has::mmbr::defn::type::CodeEnum<
         CategoryTraitType>>
             HasMmbrDefnCodeEnumParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrDefnCodeEnumSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::defn::type::
+    basic::error::sys::tmpl::categ::has::mmbr::defn::type::
         ConditionEnum<CategoryTraitType>>
             HasMmbrDefnConditionEnumParamTypeType;
 typedef basic::test::val::Sequence<bool, 1>
     HasMmbrDefnConditionEnumSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::DefaultCode<
+    basic::error::sys::tmpl::categ::has::mmbr::func::DefaultCode<
         CategoryTraitType, CodeType, TmplCategoryType>>
             HasMmbrFuncDefaultCodeParamTypeType;
 typedef basic::test::val::Sequence<bool, 1>
     HasMmbrFuncDefaultCodeSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::
+    basic::error::sys::tmpl::categ::has::mmbr::func::
         DefaultCodeValue<CategoryTraitType>>
             HasMmbrFuncDefaultCodeValueParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncDefaultCodeValueSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::
+    basic::error::sys::tmpl::categ::has::mmbr::func::
         DefaultCondition<CategoryTraitType, ConditionType, CodeType, 
         TmplCategoryType>>HasMmbrFuncDefaultConditionParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncDefaultConditionSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::
+    basic::error::sys::tmpl::categ::has::mmbr::func::
         DefaultConditionValue<CategoryTraitType>>
             HasMmbrFuncDefaultConditionValueParamTypeType;
 typedef basic::test::val::Sequence<bool, 1>
     HasMmbrFuncDefaultConditionValueSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::Equivalent<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Equivalent<
         CategoryTraitType, CodeType, ConditionValueType>,
-    basic::error::system::tmpl::categ::has::mmbr::func::Equivalent<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Equivalent<
         CategoryTraitType, CodeValueType, ConditionType>>
             HasMmbrFuncEquivalentParamTypeType;
 typedef basic::test::val::Sequence<bool, 2> 
     HasMmbrFuncEquivalentSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::Message<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Message<
         CategoryTraitType, MessageStringType, CodeType>,
-    basic::error::system::tmpl::categ::has::mmbr::func::Message<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Message<
         CategoryTraitType, MessageStringType, ConditionType>,
-    basic::error::system::tmpl::categ::has::mmbr::func::Message<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Message<
         CategoryTraitType, MessageStringType, int>,
-    basic::error::system::tmpl::categ::has::mmbr::func::Message<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Message<
         CategoryTraitType, MessageStringType, std::errc>>
             HasMmbrFuncMessageParamTypeType;
 typedef basic::test::val::Sequence<bool, 4> 
     HasMmbrFuncMessageSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::Name<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Name<
         CategoryTraitType>> HasMmbrFuncNameParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncNameSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::ToCodeValue<
-        CategoryTraitType, std::errc>> HasMmbrFuncToCodeValueParamTypeType;
+    basic::error::sys::tmpl::categ::has::mmbr::func::ToCodeValue<
+        CategoryTraitType, std::errc>> 
+            HasMmbrFuncToCodeValueParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncToCodeValueSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::
+    basic::error::sys::tmpl::categ::has::mmbr::func::
         ToConditionValue<CategoryTraitType, std::errc>>
             HasMmbrFuncToConditionValueParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncToConditionValueSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::mmbr::func::Value<
+    basic::error::sys::tmpl::categ::has::mmbr::func::Value<
         CategoryTraitType, CategoryValueType>> HasMmbrFuncValueParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> 
     HasMmbrFuncValueSeqValueType;
 typedef basic::test::type::Parameter<
-    basic::error::system::tmpl::categ::has::st::mmbr::func::Instance<
+    basic::error::sys::tmpl::categ::has::st::mmbr::func::Instance<
         CategoryTraitType>> HasStMmbrFuncInstanceParamTypeType;
 typedef basic::test::val::Sequence<bool, 1> HasStMmbrFuncInstanceSeqValueType;
 
-using VariableTestCategoryDefault = basic::test::Variable<
+using VariableTestCategoryGeneric = basic::test::Variable<
     CategoryTraitType,
     CodeEnumType,
     ConditionEnumType,
@@ -294,7 +295,7 @@ using VariableTestCategoryDefault = basic::test::Variable<
         CodeType * &&), &CodeToString>,
     basic::test::type::Function<const char * (bool && b), &BoolToString>>;
 
-constexpr std::size_t IDefaultType = 0;
+constexpr std::size_t IGenericType = 0;
 constexpr std::size_t ICodeEnumType = 1;
 constexpr std::size_t IConditionEnumType = 2;
 constexpr std::size_t ICharType = 3;
@@ -367,7 +368,7 @@ template<std::size_t I, std::size_t J>
 using ArgTypeValSeqAt = basic::test::msg::arg::type::val::seq::At<I, J>;
 
 typedef basic::test::msg::Argument<TestAliasCodeEnumType,
-    ArgTypeName<IDefaultType>, ArgTypeName<ICodeEnumType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<ICodeEnumType>> 
         ArgTestAliasCodeEnumType;
 
 typedef basic::test::msg::Base<TestAliasCodeEnumType, char, 
@@ -375,7 +376,7 @@ typedef basic::test::msg::Base<TestAliasCodeEnumType, char,
     ArgTestAliasCodeEnumType> MessageBaseTestAliasCodeEnumType;
 
 typedef basic::test::msg::Argument<TestAliasConditionEnumType,
-    ArgTypeName<IDefaultType>, ArgTypeName<IConditionEnumType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<IConditionEnumType>> 
         ArgTestAliasConditionEnumType;
 
 typedef basic::test::msg::Base<TestAliasConditionEnumType, char, 
@@ -383,7 +384,7 @@ typedef basic::test::msg::Base<TestAliasConditionEnumType, char,
     ArgTestAliasConditionEnumType> MessageBaseTestAliasConditionEnumType;
 
 typedef basic::test::msg::Argument<TestAliasCharType,
-    ArgTypeName<IDefaultType>, ArgTypeName<ICharType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<ICharType>> 
         ArgTestAliasCharType;
 
 typedef basic::test::msg::Base<TestAliasCharType, char, 
@@ -391,7 +392,7 @@ typedef basic::test::msg::Base<TestAliasCharType, char,
     ArgTestAliasCharType> MessageBaseTestAliasCharType;
 
 typedef basic::test::msg::Argument<TestAliasCategoryValueType,
-    ArgTypeName<IDefaultType>, ArgTypeName<ICategoryValueType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<ICategoryValueType>> 
         ArgTestAliasCategoryValueType;
 
 typedef basic::test::msg::Base<TestAliasCategoryValueType, char, 
@@ -399,7 +400,7 @@ typedef basic::test::msg::Base<TestAliasCategoryValueType, char,
     ArgTestAliasCategoryValueType> MessageBaseTestAliasCategoryValueType;
 
 typedef basic::test::msg::Argument<TestAliasCodeValueType,
-    ArgTypeName<IDefaultType>, ArgTypeName<ICategoryValueType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<ICategoryValueType>> 
         ArgTestAliasCodeValueType;
 
 typedef basic::test::msg::Base<TestAliasCodeValueType, char, 
@@ -407,7 +408,7 @@ typedef basic::test::msg::Base<TestAliasCodeValueType, char,
     ArgTestAliasCodeValueType> MessageBaseTestAliasCodeValueType;
 
 typedef basic::test::msg::Argument<TestAliasConditionValueType,
-    ArgTypeName<IDefaultType>, ArgTypeName<ICategoryValueType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<ICategoryValueType>> 
         ArgTestAliasConditionValueType;
 
 typedef basic::test::msg::Base<TestAliasConditionValueType, char, 
@@ -415,7 +416,7 @@ typedef basic::test::msg::Base<TestAliasConditionValueType, char,
     ArgTestAliasConditionValueType> MessageBaseTestAliasConditionValueType;
 
 typedef basic::test::msg::Argument<TestAliasStringType,
-    ArgTypeName<IDefaultType>, ArgTypeName<IStringType>> 
+    ArgTypeName<IGenericType>, ArgTypeName<IStringType>> 
         ArgTestAliasStringType;
 
 typedef basic::test::msg::Base<TestAliasStringType, char, 
@@ -423,7 +424,7 @@ typedef basic::test::msg::Base<TestAliasStringType, char,
     ArgTestAliasStringType> MessageBaseTestAliasStringType;
  
 typedef basic::test::msg::Argument<TestValueDefaultCondition,
-    ArgTypeName<IDefaultType>, 
+    ArgTypeName<IGenericType>, 
     ArgTypeIndex<IDefaultConditionParamType, ArgTypeParamNameAt>,
     ArgTypeIndex<IDefaultConditionParamValue, ArgValParamAt>,
     ArgTypeName<IConditionType>,
@@ -436,7 +437,7 @@ typedef basic::test::msg::Base<TestValueDefaultCondition, char,
     ArgTestValueDefaultCondition> MessageBaseTestValueDefaultCondition;
 
 typedef basic::test::msg::Argument<TestValueEquivalent,
-    ArgTypeName<IDefaultType>,
+    ArgTypeName<IGenericType>,
     ArgTypeIndex<IEquivalentCodeParamType, ArgTypeParamNameAt>,
     ArgTypeIndex<IEquivalentCodeParamValue,
         ArgValParamAt>,
@@ -452,7 +453,7 @@ typedef basic::test::msg::Base<TestValueEquivalent, char,
     ArgTestValueEquivalent> MessageBaseTestValueEquivalent;
 
 typedef basic::test::msg::Argument<TestValueMessage,
-    ArgTypeName<IDefaultType>,
+    ArgTypeName<IGenericType>,
     ArgTypeIndex<IMessageParamType, ArgTypeParamNameAt>,
     ArgTypeIndex<IMessageParamValue, ArgValParamAt>,
     ArgTypeIndex<IMessageResultSeqValue, ArgValSeqAt>> ArgTestValueMessage;
@@ -462,7 +463,7 @@ typedef basic::test::msg::Base<TestValueMessage, char,
     ArgTestValueMessage> MessageBaseTestValueMessage;
 
 typedef basic::test::msg::Argument<TestValueName,
-    ArgTypeName<IDefaultType>,
+    ArgTypeName<IGenericType>,
     basic::test::msg::arg::Value<INameValue>> 
         ArgTestValueName;
 
@@ -471,7 +472,7 @@ typedef basic::test::msg::Base<TestValueName, char,
     ArgTestValueName> MessageBaseTestValueName;
 
 typedef basic::test::msg::Argument<TestValueValue,
-    ArgTypeName<IDefaultType>,
+    ArgTypeName<IGenericType>,
     basic::test::msg::arg::Value<IValueValue>> 
         ArgTestValueValue;
 
@@ -657,12 +658,12 @@ typedef basic::test::msg::Base<TestValueHasStMmbrFuncInstance, char,
         MessageBaseTestValueHasStMmbrFuncInstance;
 
 template<typename TCases, typename... TVariables>
-struct TestCategoryDefault :
-    public basic::test::Message<BASIC_TEST, TestCategoryDefault<TCases, 
+struct TestCategoryGeneric :
+    public basic::test::Message<BASIC_TEST, TestCategoryGeneric<TCases, 
         TVariables...>>,
-    public basic::test::Case<TestCategoryDefault<TCases, TVariables...>,
+    public basic::test::Case<TestCategoryGeneric<TCases, TVariables...>,
         TCases>,
-    public basic::test::Base<TestCategoryDefault<TCases, TVariables...>, 
+    public basic::test::Base<TestCategoryGeneric<TCases, TVariables...>, 
         TVariables...>,
     public MessageBaseTestAliasCodeEnumType,
     public MessageBaseTestAliasConditionEnumType,
@@ -693,9 +694,9 @@ struct TestCategoryDefault :
     public MessageBaseTestValueHasStMmbrFuncInstance
 {
 public:
-    using basic::test::Case<TestCategoryDefault<TCases, TVariables...>,
+    using basic::test::Case<TestCategoryGeneric<TCases, TVariables...>,
         TCases>::Run;
-    using basic::test::Base<TestCategoryDefault<TCases, TVariables...>, 
+    using basic::test::Base<TestCategoryGeneric<TCases, TVariables...>, 
         TVariables...>::Run;
     using MessageBaseTestAliasCodeEnumType::Format;
     using MessageBaseTestAliasCodeEnumType::SetFormat;
@@ -779,12 +780,12 @@ public:
     using MessageBaseTestValueHasStMmbrFuncInstance::SetFormat;
     using MessageBaseTestValueHasStMmbrFuncInstance::Argument;
 public:
-    TestCategoryDefault(TVariables & ... var) :
-        basic::test::Message<BASIC_TEST, TestCategoryDefault<TCases, 
+    TestCategoryGeneric(TVariables & ... var) :
+        basic::test::Message<BASIC_TEST, TestCategoryGeneric<TCases, 
             TVariables...>>(*this),
-        basic::test::Case<TestCategoryDefault<TCases, TVariables...>,
+        basic::test::Case<TestCategoryGeneric<TCases, TVariables...>,
             TCases>(*this),
-        basic::test::Base<TestCategoryDefault<TCases, TVariables...>, 
+        basic::test::Base<TestCategoryGeneric<TCases, TVariables...>, 
             TVariables...>(*this, var...)
     {
         basic::test::msg::base::Info info;
@@ -1015,64 +1016,64 @@ public:
             "%s::Value is not same with %s\n");
     }
     bool Result(const TestAliasCodeEnumType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::CodeEnumType).hash_code() == 
             typeid(CodeEnumType).hash_code();
     }
     bool Result(const TestAliasConditionEnumType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::ConditionEnumType).
             hash_code() == typeid(ConditionEnumType).hash_code();
     }
-    bool Result(const TestAliasCharType &, VariableTestCategoryDefault & var)
+    bool Result(const TestAliasCharType &, VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::CharType).hash_code() == 
             typeid(basic::error::defn::type::Char).hash_code();
     }
     bool Result(const TestAliasCategoryValueType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::CategoryValueType).
-            hash_code() == typeid(basic::error::defn::type::system::
+            hash_code() == typeid(basic::error::defn::type::sys::
             categ::Value).hash_code();
     }
     bool Result(const TestAliasCodeValueType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::CodeValueType).hash_code() ==
-            typeid(basic::error::defn::type::system::code::Value).hash_code();
+            typeid(basic::error::defn::type::sys::code::Value).hash_code();
     }
     bool Result(const TestAliasConditionValueType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::ConditionValueType).
-            hash_code() == typeid(basic::error::defn::type::system::
+            hash_code() == typeid(basic::error::defn::type::sys::
             condition::Value).hash_code();
     }
     bool Result(const TestAliasStringType &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         return typeid(typename CategoryTraitType::StringType).hash_code() == 
             typeid(basic::error::msg::String).hash_code();
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<TestValueDefaultCondition, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         auto & in_code = *basic::test::var::
             At<IDefaultConditionParamValue>(var).Get().template At<I>();
         auto & in_condition = *basic::test::var::
             At<IDefaultConditionResultParamValue>(var).Get().template At<I>();
         auto condition = CategoryTraitType::Instance().
-            template DefaultCondition<basic::error::system::Condition>(in_code,
+            template DefaultCondition<basic::error::sys::Condition>(in_code,
             TmplCategoryType::GetInstance());
         return in_condition.Value() == condition.Value();
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<TestValueEquivalent, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         auto & code = *basic::test::var::
             At<IEquivalentCodeParamValue>(var).Get().template At<I>();
@@ -1084,7 +1085,7 @@ public:
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<TestValueMessage, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         auto & value = *basic::test::var::
             At<IMessageParamValue>(var).Get().template At<I>();
@@ -1093,12 +1094,12 @@ public:
         return strcmp(CategoryTraitType::Instance().Message(value).Value(), 
             result) == 0;
     }
-    bool Result(const TestValueName &, VariableTestCategoryDefault & var)
+    bool Result(const TestValueName &, VariableTestCategoryGeneric & var)
     {
         auto & result = basic::test::var::At<INameValue>(var).Get().Get();
         return strcmp(CategoryTraitType::Instance().Name(), result) == 0;
     }
-    bool Result(const TestValueValue &, VariableTestCategoryDefault & var)
+    bool Result(const TestValueValue &, VariableTestCategoryGeneric & var)
     {
         auto & result = basic::test::var::At<IValueValue>(var).Get().Get();
         return CategoryTraitType::Instance().Value() == result;
@@ -1106,39 +1107,39 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestAliasDefnTypeCodeSetValueType, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IDefnCodeTypeParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
-        return typeid(typename basic::error::system::tmpl::categ::defn::
+        return typeid(typename basic::error::sys::tmpl::categ::defn::
             type::code::set::Value<CategoryTraitType>).
             hash_code() == typeid(ResultType).hash_code();
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestAliasDefnTypeConditionSetValueType, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IDefnConditionTypeParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
-        return typeid(typename basic::error::system::tmpl::categ::defn::
+        return typeid(typename basic::error::sys::tmpl::categ::defn::
             type::condition::set::Value<CategoryTraitType>).hash_code() ==
             typeid(ResultType).hash_code();
     }
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrDefnTypeCodeEnum, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrDefnCodeEnumParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1149,11 +1150,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrDefnTypeConditionEnum, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrDefnConditionEnumParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1164,11 +1165,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncDefaultCode, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncDefaultCodeParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1179,11 +1180,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncDefaultCodeValue, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncDefaultCodeValueParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1194,11 +1195,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncDefaultCondition, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncDefaultConditionParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1209,11 +1210,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncDefaultConditionValue, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncDefaultConditionValueParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1224,11 +1225,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncEquivalent, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncEquivalentParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1238,11 +1239,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncMessage, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncMessageParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1252,11 +1253,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncName, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncNameParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1266,11 +1267,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncToCodeValue, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncToCodeValueParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1280,11 +1281,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncToConditionValue, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncToConditionValueParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1294,11 +1295,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasMmbrFuncValue, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasMmbrFuncValueParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1308,11 +1309,11 @@ public:
     template<std::size_t I>
     bool Result(const basic::test::type::Index<
         TestValueHasStMmbrFuncInstance, I> &, 
-        VariableTestCategoryDefault & var)
+        VariableTestCategoryGeneric & var)
     {
         typedef typename basic::test::var::Element<
             IHasStMmbrFuncInstanceParamType, 
-            VariableTestCategoryDefault>::Type ParamType;
+            VariableTestCategoryGeneric>::Type ParamType;
         typedef typename basic::test::type::param::Element<I, 
             ParamType>::Type ResultType;
         auto & result = basic::test::var::At<
@@ -1321,7 +1322,7 @@ public:
     }
 };
 
-typedef VariableTestCategoryDefault T1Var1;
+typedef VariableTestCategoryGeneric T1Var1;
 
 typedef basic::test::type::Parameter<
     TestAliasCodeEnumType,
@@ -1376,8 +1377,9 @@ CodeType code1_3{1, TmplCategoryType::GetInstance()};
 ConditionType cond1_3{1, TmplCategoryType::GetInstance()};
 int err_code1 = 1;
 std::errc err_enum1 = std::errc::operation_not_permitted;
+std::string err_msg1 = std::generic_category().message(1);
 
-CategoryValueType categ_val{basic::constant::error::system::system_category};
+CategoryValueType categ_val{basic::constant::error::sys::generic_category};
 
 T1Var1 t1_var1{
     &code1_1, &code_val1_1,
@@ -1386,8 +1388,8 @@ T1Var1 t1_var1{
     &cond_val1_2, &cond1_2, 
     true, true, 
     &code1_3, &cond1_3, &err_code1, &err_enum1,
-    std::strerror(1), std::strerror(1), std::strerror(1), std::strerror(1),
-    std::system_category().name(), categ_val, 
+    err_msg1.c_str(), err_msg1.c_str(), err_msg1.c_str(), err_msg1.c_str(),
+    std::generic_category().name(), categ_val, 
     true, true, 
     false, 
     false, 
@@ -1401,7 +1403,7 @@ T1Var1 t1_var1{
     true,
     true};
 
-REGISTER_TEST(t1, new TestCategoryDefault<Case1, T1Var1>(t1_var1));
+REGISTER_TEST(t1, new TestCategoryGeneric<Case1, T1Var1>(t1_var1));
 
 int main()
 {
@@ -1423,20 +1425,20 @@ BASIC_TEST_TYPE_NAME("unsigned long long", unsigned long long);
 BASIC_TEST_TYPE_NAME("std::errc", std::errc);
 BASIC_TEST_TYPE_NAME("basic::error::msg::String", 
     basic::error::msg::String);
-BASIC_TEST_TYPE_NAME("basic::error::system::categ::Default",
-    basic::error::system::categ::Default);
-BASIC_TEST_TYPE_NAME("basic::error::system::Code", 
-    basic::error::system::Code);
-BASIC_TEST_TYPE_NAME("basic::error::system::Condition", 
-    basic::error::system::Condition);
+BASIC_TEST_TYPE_NAME("basic::error::sys::categ::Generic",
+    basic::error::sys::categ::Generic);
+BASIC_TEST_TYPE_NAME("basic::error::sys::Code", 
+    basic::error::sys::Code);
+BASIC_TEST_TYPE_NAME("basic::error::sys::Condition", 
+    basic::error::sys::Condition);
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::defn::type::CodeEnum<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::defn::type::CodeEnum<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1446,12 +1448,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::defn::type::ConditionEnum<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::defn::type::ConditionEnum<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1462,11 +1464,11 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 
 template<typename TArg>
 struct basic::test::type::Name<
-    basic::error::system::tmpl::Category<TArg>>
+    basic::error::sys::tmpl::Category<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::Category<%s>";
+        static char _format[] = "basic::error::sys::tmpl::Category<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
         return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
@@ -1476,12 +1478,12 @@ struct basic::test::type::Name<
 
 template<typename TArg1, typename TArg2, typename TArg3>
 struct basic::test::type::Name<
-    basic::error::system::tmpl::categ::has::mmbr::func::DefaultCode<TArg1,
+    basic::error::sys::tmpl::categ::has::mmbr::func::DefaultCode<TArg1,
         TArg2, TArg3>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::DefaultCode<%s, %s, %s>";
         basic::test::CString<char> tArg1CStr = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1496,12 +1498,12 @@ struct basic::test::type::Name<
 };
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::DefaultCodeValue<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::DefaultCodeValue<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1512,12 +1514,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 
 template<typename TArg1, typename TArg2, typename TArg3, typename TArg4>
 struct basic::test::type::Name<
-    basic::error::system::tmpl::categ::has::mmbr::func::
+    basic::error::sys::tmpl::categ::has::mmbr::func::
         DefaultCondition<TArg1, TArg2, TArg3, TArg4>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "asic::error::system::tmpl::categ::has::"
+        static char _format[] = "asic::error::sys::tmpl::categ::has::"
             "mmbr::func::DefaultCondition<%s, %s, %s, %s>";
         basic::test::CString<char> tArg1CStr = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1535,12 +1537,12 @@ struct basic::test::type::Name<
 };
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::DefaultConditionValue<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::DefaultConditionValue<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1551,12 +1553,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 
 template<typename TArg1, typename TArg2, typename TArg3>
 struct basic::test::type::Name<
-    basic::error::system::tmpl::categ::has::mmbr::func::Equivalent<TArg1,
+    basic::error::sys::tmpl::categ::has::mmbr::func::Equivalent<TArg1,
         TArg2, TArg3>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::Equivalent<%s, %s, %s>";
         basic::test::CString<char> tArg1CStr = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1572,12 +1574,12 @@ struct basic::test::type::Name<
 
 template<typename TArg1, typename TArg2, typename TArg3>
 struct basic::test::type::Name<
-    basic::error::system::tmpl::categ::has::mmbr::func::Message<TArg1,
+    basic::error::sys::tmpl::categ::has::mmbr::func::Message<TArg1,
         TArg2, TArg3>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::Message<%s, %s, %s>";
         basic::test::CString<char> tArg1CStr = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1592,12 +1594,12 @@ struct basic::test::type::Name<
 };
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::Name<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::Name<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1607,12 +1609,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<typename TArg1, typename TArg2>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::ToCodeValue<TArg1, TArg2>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::ToCodeValue<%s, %s>";
         basic::test::CString<char> tArgCStr1 = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1625,12 +1627,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<typename TArg1, typename TArg2>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::ToConditionValue<TArg1, TArg2>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::ToConditionValue<%s, %s>";
         basic::test::CString<char> tArgCStr1 = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1643,12 +1645,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<typename TArg1, typename TArg2>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     mmbr::func::Value<TArg1, TArg2>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "mmbr::func::Value<%s, %s>";
         basic::test::CString<char> tArgCStr1 = 
             std::move(basic::test::type::Name<TArg1>::CStr());
@@ -1661,12 +1663,12 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<typename TArg>
-struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
+struct basic::test::type::Name<basic::error::sys::tmpl::categ::has::
     st::mmbr::func::Instance<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format[] = "basic::error::system::tmpl::categ::has::"
+        static char _format[] = "basic::error::sys::tmpl::categ::has::"
             "st::mmbr::func::Instance<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
@@ -1676,16 +1678,16 @@ struct basic::test::type::Name<basic::error::system::tmpl::categ::has::
 };
 
 template<>
-struct basic::test::out::Argument<basic::error::system::Code *>
+struct basic::test::out::Argument<basic::error::sys::Code *>
 {
     static basic::test::CString<char> ms_cstr;
-    static const char * Value(basic::error::system::Code * & code)
+    static const char * Value(basic::error::sys::Code * & code)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "m_value : %d", code->Value()));
         return *ms_cstr;
     }
-    static const char * Value(basic::error::system::Code * && code)
+    static const char * Value(basic::error::sys::Code * && code)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "m_value : %d", code->Value()));
@@ -1694,21 +1696,21 @@ struct basic::test::out::Argument<basic::error::system::Code *>
 };
 
 basic::test::CString<char> basic::test::out::
-    Argument<basic::error::system::Code *>::ms_cstr;
+    Argument<basic::error::sys::Code *>::ms_cstr;
 
 template<>
-struct basic::test::out::Argument<basic::error::defn::type::system::code::
+struct basic::test::out::Argument<basic::error::defn::type::sys::code::
     Value *>
 {
     static basic::test::CString<char> ms_cstr;
-    static const char * Value(basic::error::defn::type::system::code::
+    static const char * Value(basic::error::defn::type::sys::code::
         Value * & code)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "%d", *code));
         return *ms_cstr;
     }
-    static const char * Value(basic::error::defn::type::system::code::
+    static const char * Value(basic::error::defn::type::sys::code::
         Value * && code)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
@@ -1718,19 +1720,19 @@ struct basic::test::out::Argument<basic::error::defn::type::system::code::
 };
 
 basic::test::CString<char> basic::test::out::Argument<basic::error::defn::
-    type::system::code::Value *>::ms_cstr;
+    type::sys::code::Value *>::ms_cstr;
 
 template<>
-struct basic::test::out::Argument<basic::error::system::Condition *>
+struct basic::test::out::Argument<basic::error::sys::Condition *>
 {
     static basic::test::CString<char> ms_cstr;
-    static const char * Value(basic::error::system::Condition * & cond)
+    static const char * Value(basic::error::sys::Condition * & cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "m_value : %d", cond->Value()));
         return *ms_cstr;
     }
-    static const char * Value(basic::error::system::Condition * && cond)
+    static const char * Value(basic::error::sys::Condition * && cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "m_value : %d", cond->Value()));
@@ -1739,25 +1741,25 @@ struct basic::test::out::Argument<basic::error::system::Condition *>
 };
 
 basic::test::CString<char> basic::test::out::
-    Argument<basic::error::system::Condition *>::ms_cstr;
+    Argument<basic::error::sys::Condition *>::ms_cstr;
 
 struct Void1{};
 
 template<>
 struct basic::test::out::Argument<typename std::conditional<
-    std::is_same<basic::error::defn::type::system::condition::Value,
-        basic::error::defn::type::system::code::Value>::value, 
-    Void1, basic::error::defn::type::system::condition::Value *>::type>
+    std::is_same<basic::error::defn::type::sys::condition::Value,
+        basic::error::defn::type::sys::code::Value>::value, 
+    Void1, basic::error::defn::type::sys::condition::Value *>::type>
 {
     static basic::test::CString<char> ms_cstr;
-    static const char * Value(basic::error::defn::type::system::condition::
+    static const char * Value(basic::error::defn::type::sys::condition::
         Value * & cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
             "%d", *cond));
         return *ms_cstr;
     }
-    static const char * Value(basic::error::defn::type::system::condition::
+    static const char * Value(basic::error::defn::type::sys::condition::
         Value * && cond)
     {
         ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
@@ -1768,17 +1770,17 @@ struct basic::test::out::Argument<typename std::conditional<
 
 basic::test::CString<char> basic::test::out::Argument<
     typename std::conditional<std::is_same<basic::error::defn::
-        type::system::condition::Value, basic::error::defn::type::system::
+        type::sys::condition::Value, basic::error::defn::type::sys::
         code::Value>::value, 
-    Void1, basic::error::defn::type::system::condition::Value *>::type>::
+    Void1, basic::error::defn::type::sys::condition::Value *>::type>::
         ms_cstr;
 
 struct Void2{};
 
 template<>
 struct basic::test::out::Argument<typename std::conditional<
-    std::is_same<int, basic::error::defn::type::system::code::Value>::value ||
-    std::is_same<int, basic::error::defn::type::system::code::Value>::value, 
+    std::is_same<int, basic::error::defn::type::sys::code::Value>::value ||
+    std::is_same<int, basic::error::defn::type::sys::code::Value>::value, 
     Void2, int *>::type>
 {
     static basic::test::CString<char> ms_cstr;
@@ -1798,8 +1800,8 @@ struct basic::test::out::Argument<typename std::conditional<
 
 basic::test::CString<char> basic::test::out::Argument<
     typename std::conditional<std::is_same<int, basic::error::defn::
-        type::system::code::Value>::value || std::is_same<int, basic::error::
-        defn::type::system::code::Value>::value, Void2, int *>::type>::
+        type::sys::code::Value>::value || std::is_same<int, basic::error::
+        defn::type::sys::code::Value>::value, Void2, int *>::type>::
             ms_cstr;
 
 template<>

@@ -12,16 +12,16 @@ typedef std::uint32_t BasicErrorCodeValueType;
 
 typedef std::uint32_t BasicErrorSystemCodeValueType;
 
-#define BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE BasicErrorSystemCodeValueType
+#define BASIC_ERROR_SYS_CODE_VALUE_TYPE BasicErrorSystemCodeValueType
 
 typedef std::uint32_t BasicErrorSystemConditionValueType;
 
-#define BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE\
+#define BASIC_ERROR_SYS_CONDITION_VALUE_TYPE\
     BasicErrorSystemConditionValueType
 
 typedef std::uint16_t BasicErrorSystemCategoryValueType;
 
-#define BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE\
+#define BASIC_ERROR_SYS_CATEG_VALUE_TYPE\
     BasicErrorSystemCategoryValueType
 
 typedef std::char_traits<std::int16_t> BasicErrorOutputChartraitType;
@@ -145,28 +145,28 @@ T7Var1 t7_var1{"basic::error::defn::type::output::CharTrait",
 REGISTER_TEST(t7, new TestDefinition<Case1,
     typename T7Var1::BaseType>(t7_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::categ::Value,
+typedef VariableIsSameType<basic::error::defn::type::sys::categ::Value,
     BasicErrorSystemCategoryValueType> T8Var1;
 
-T8Var1 t8_var1{"basic::error::defn::type::system::categ::Value", 
+T8Var1 t8_var1{"basic::error::defn::type::sys::categ::Value", 
     "BasicErrorSystemCategoryValueType"};
 
 REGISTER_TEST(t8, new TestDefinition<Case1,
     typename T8Var1::BaseType>(t8_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::code::Value,
+typedef VariableIsSameType<basic::error::defn::type::sys::code::Value,
     BasicErrorSystemCodeValueType> T9Var1;
 
-T9Var1 t9_var1{"basic::error::defn::type::system::code::Value", 
+T9Var1 t9_var1{"basic::error::defn::type::sys::code::Value", 
     "BasicErrorSystemCodeValueType"};
 
 REGISTER_TEST(t9, new TestDefinition<Case1,
     typename T9Var1::BaseType>(t9_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::condition::Value,
+typedef VariableIsSameType<basic::error::defn::type::sys::condition::Value,
     BasicErrorSystemCodeValueType> T10Var1;
 
-T10Var1 t10_var1{"basic::error::defn::type::system::condition::Value", 
+T10Var1 t10_var1{"basic::error::defn::type::sys::condition::Value", 
     "BasicErrorSystemCodeValueType"};
 
 REGISTER_TEST(t10, new TestDefinition<Case1,

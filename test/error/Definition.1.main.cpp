@@ -74,29 +74,29 @@ T7Var1 t7_var1{"basic::error::defn::type::output::CharTrait",
 REGISTER_TEST(t7, new TestDefinition<Case1,
     typename T7Var1::BaseType>(t7_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::categ::Value,
-    BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE> T8Var1;
+typedef VariableIsSameType<basic::error::defn::type::sys::categ::Value,
+    BASIC_ERROR_SYS_CATEG_VALUE_TYPE> T8Var1;
 
-T8Var1 t8_var1{"basic::error::defn::type::system::categ::Value", 
-    "BASIC_ERROR_SYSTEM_CATEG_VALUE_TYPE"};
+T8Var1 t8_var1{"basic::error::defn::type::sys::categ::Value", 
+    "BASIC_ERROR_SYS_CATEG_VALUE_TYPE"};
 
 REGISTER_TEST(t8, new TestDefinition<Case1,
     typename T8Var1::BaseType>(t8_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::code::Value,
-    BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE> T9Var1;
+typedef VariableIsSameType<basic::error::defn::type::sys::code::Value,
+    BASIC_ERROR_SYS_CODE_VALUE_TYPE> T9Var1;
 
-T9Var1 t9_var1{"basic::error::defn::type::system::code::Value", 
-    "BASIC_ERROR_SYSTEM_CODE_VALUE_TYPE"};
+T9Var1 t9_var1{"basic::error::defn::type::sys::code::Value", 
+    "BASIC_ERROR_SYS_CODE_VALUE_TYPE"};
 
 REGISTER_TEST(t9, new TestDefinition<Case1,
     typename T9Var1::BaseType>(t9_var1));
 
-typedef VariableIsSameType<basic::error::defn::type::system::condition::Value,
-    BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE> T10Var1;
+typedef VariableIsSameType<basic::error::defn::type::sys::condition::Value,
+    BASIC_ERROR_SYS_CONDITION_VALUE_TYPE> T10Var1;
 
-T10Var1 t10_var1{"basic::error::defn::type::system::condition::Value", 
-    "BASIC_ERROR_SYSTEM_CONDITION_VALUE_TYPE"};
+T10Var1 t10_var1{"basic::error::defn::type::sys::condition::Value", 
+    "BASIC_ERROR_SYS_CONDITION_VALUE_TYPE"};
 
 REGISTER_TEST(t10, new TestDefinition<Case1,
     typename T10Var1::BaseType>(t10_var1));

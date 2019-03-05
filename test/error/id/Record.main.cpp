@@ -634,10 +634,10 @@ public:
     {
         const auto & rec_error = basic::test::var::
             At<IObjValue>(var).Get().Get()->ErrorSystem();
-        const auto & error_system = basic::test::var::
+        const auto & error_sys = basic::test::var::
             At<IErrorSystemValue>(var).Get().Get();
-        return rec_error.Category() == error_system.Category() &&
-            rec_error.Code() == error_system.Code();
+        return rec_error.Category() == error_sys.Category() &&
+            rec_error.Code() == error_sys.Code();
     }
     template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
         typename TErrorSystemCodeValue, typename TAssignment = int>
