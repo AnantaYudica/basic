@@ -5,11 +5,11 @@
 
 #include "../Information.h"
 #include "../id/System.h"
-#include "../system/Category.h"
+#include "../sys/Category.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
-#include "../defn/type/system/categ/Value.h"
-#include "../defn/type/system/code/Value.h"
+#include "../defn/type/sys/categ/Value.h"
+#include "../defn/type/sys/code/Value.h"
 
 #include <utility>
 
@@ -32,9 +32,9 @@ class Error<error::tag::System> : public error::Information
 public:
     typedef error::defn::type::Char CharType;
     typedef error::defn::type::Output OutputType;
-    typedef error::defn::type::system::categ::Value 
+    typedef error::defn::type::sys::categ::Value 
         CategoryValueType;
-    typedef error::defn::type::system::code::Value 
+    typedef error::defn::type::sys::code::Value 
         CodeValueType;
 public:
     typedef error::Identification IdType;

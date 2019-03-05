@@ -10,12 +10,12 @@
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
 #include "../../msg/String.h"
-#include "../../system/categ/Future.h"
-#include "../../system/Category.h"
-#include "../../system/tmpl/Category.h"
-#include "../../system/Code.h"
+#include "../../sys/categ/Future.h"
+#include "../../sys/Category.h"
+#include "../../sys/tmpl/Category.h"
+#include "../../sys/Code.h"
 #include "../../../constant/error/Identification.h"
-#include "../../../constant/error/system/Category.h"
+#include "../../../constant/error/sys/Category.h"
 
 #include <future>
 #include <utility>
@@ -41,9 +41,9 @@ public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
 public:
-    typedef system::tmpl::Category<system::categ::Future> 
+    typedef sys::tmpl::Category<sys::categ::Future> 
         FutureCategoryType;
-    typedef system::Code CodeType;
+    typedef sys::Code CodeType;
     typedef typename FutureCategoryType::CodeSetValueType CodeSetValueType;
 private:
     CodeType m_code;
@@ -160,7 +160,7 @@ inline typename enable_if::tag::System<TTagError>::Type
 Get(const std::future_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
-        constant::error::system::future_category, e.code().value());
+        constant::error::sys::future_category, e.code().value());
 }
 
 #endif //!USING_EXCEPTION

@@ -2,8 +2,8 @@
 #define BASIC_ERROR_ID_CATCH_H_
 
 #include "../defn/type/code/Value.h"
-#include "../defn/type/system/categ/Value.h"
-#include "../defn/type/system/code/Value.h"
+#include "../defn/type/sys/categ/Value.h"
+#include "../defn/type/sys/code/Value.h"
 #include "../Identification.h"
 #include "../id/Flag.h"
 
@@ -20,19 +20,19 @@ class Catch : public Identification
 {
 public:
     typedef defn::type::code::Value CodeValueType;
-    typedef defn::type::system::categ::Value SystemCategoryValueType;
-    typedef defn::type::system::code::Value SystemCodeValueType;
+    typedef defn::type::sys::categ::Value SystemCategoryValueType;
+    typedef defn::type::sys::code::Value SystemCodeValueType;
 public:
     constexpr Catch() noexcept;
     constexpr Catch(const CodeValueType& code_val) noexcept;
     constexpr Catch(const flag::Standard&, 
         const CodeValueType& code_val) noexcept;
     constexpr Catch(const flag::System&, 
-        const SystemCategoryValueType& system_categ_val,
-        const SystemCodeValueType& system_code_val) noexcept;
+        const SystemCategoryValueType& sys_categ_val,
+        const SystemCodeValueType& sys_code_val) noexcept;
     constexpr Catch(const flag::System&, const flag::Standard&, 
-        const SystemCategoryValueType& system_categ_val,
-        const SystemCodeValueType& system_code_val) noexcept;
+        const SystemCategoryValueType& sys_categ_val,
+        const SystemCodeValueType& sys_code_val) noexcept;
     constexpr Catch(const Identification& id) noexcept;
     constexpr Catch(const flag::Standard&, const Identification& id) noexcept;
 public:
@@ -56,19 +56,19 @@ constexpr Catch::Catch(const flag::Standard& standard,
         Identification(flag::Catch(), standard, code_val)
 {}
 
-constexpr Catch::Catch(const flag::System& system, 
-    const SystemCategoryValueType& system_categ_val,
-    const SystemCodeValueType& system_code_val) noexcept :
-        Identification(flag::Catch(), system, system_categ_val, 
-            system_code_val)
+constexpr Catch::Catch(const flag::System& sys, 
+    const SystemCategoryValueType& sys_categ_val,
+    const SystemCodeValueType& sys_code_val) noexcept :
+        Identification(flag::Catch(), sys, sys_categ_val, 
+            sys_code_val)
 {}
 
-constexpr Catch::Catch(const flag::System& system, 
+constexpr Catch::Catch(const flag::System& sys, 
     const flag::Standard& standard, 
-    const SystemCategoryValueType& system_categ_val,
-    const SystemCodeValueType& system_code_val) noexcept :
-        Identification(flag::Catch(), system, standard,  
-            system_categ_val, system_code_val)
+    const SystemCategoryValueType& sys_categ_val,
+    const SystemCodeValueType& sys_code_val) noexcept :
+        Identification(flag::Catch(), sys, standard,  
+            sys_categ_val, sys_code_val)
 {}
 
 constexpr Catch::Catch(const Identification& id) noexcept :

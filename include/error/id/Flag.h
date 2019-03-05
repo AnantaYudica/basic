@@ -30,7 +30,7 @@ private:
     ValueType m_bad : 1;
     ValueType m_standard : 1;
     ValueType m_catch : 1;
-    ValueType m_system : 1;
+    ValueType m_sys : 1;
 private:
     static constexpr ValueType IsBadFlag(const Flag& flag);
     static constexpr ValueType IsBadFlag(const flag::Catch&, 
@@ -85,7 +85,7 @@ constexpr Flag::Flag() noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(0)),
     m_catch(ValueType(0)),
-    m_system(ValueType(0))
+    m_sys(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Error&) noexcept :
@@ -93,7 +93,7 @@ constexpr Flag::Flag(const flag::Error&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(0)),
     m_catch(ValueType(0)),
-    m_system(ValueType(0))
+    m_sys(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Error&, const flag::Standard&) noexcept :
@@ -101,7 +101,7 @@ constexpr Flag::Flag(const flag::Error&, const flag::Standard&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(1)),
     m_catch(ValueType(0)),
-    m_system(ValueType(0))
+    m_sys(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::System&) noexcept :
@@ -109,7 +109,7 @@ constexpr Flag::Flag(const flag::System&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(0)),
     m_catch(ValueType(0)),
-    m_system(ValueType(1))
+    m_sys(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::System&, const flag::Standard&) noexcept :
@@ -117,7 +117,7 @@ constexpr Flag::Flag(const flag::System&, const flag::Standard&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(1)),
     m_catch(ValueType(0)),
-    m_system(ValueType(1))
+    m_sys(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch&) noexcept :
@@ -125,7 +125,7 @@ constexpr Flag::Flag(const flag::Catch&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(0)),
     m_catch(ValueType(1)),
-    m_system(ValueType(0))
+    m_sys(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::Standard&) noexcept :
@@ -133,7 +133,7 @@ constexpr Flag::Flag(const flag::Catch&, const flag::Standard&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(1)),
     m_catch(ValueType(1)),
-    m_system(ValueType(0))
+    m_sys(ValueType(0))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::System&) noexcept :
@@ -141,7 +141,7 @@ constexpr Flag::Flag(const flag::Catch&, const flag::System&) noexcept :
     m_bad(ValueType(0)),
     m_standard(ValueType(0)),
     m_catch(ValueType(1)),
-    m_system(ValueType(1))
+    m_sys(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch&, const flag::System&, 
@@ -150,7 +150,7 @@ constexpr Flag::Flag(const flag::Catch&, const flag::System&,
         m_bad(ValueType(0)),
         m_standard(ValueType(1)),
         m_catch(ValueType(1)),
-        m_system(ValueType(1))
+        m_sys(ValueType(1))
 {}
 
 constexpr Flag::Flag(const flag::Catch& catch_, const Flag& flag) noexcept :
@@ -158,7 +158,7 @@ constexpr Flag::Flag(const flag::Catch& catch_, const Flag& flag) noexcept :
     m_bad(IsBadFlag(catch_, flag)),
     m_standard(flag.m_standard),
     m_catch(ValueType(1)),
-    m_system(flag.m_system)
+    m_sys(flag.m_sys)
 {}
 
 constexpr Flag::Flag(const flag::Catch& catch_, const flag::Standard&,
@@ -167,7 +167,7 @@ constexpr Flag::Flag(const flag::Catch& catch_, const flag::Standard&,
         m_bad(IsBadFlag(catch_, flag)),
         m_standard(ValueType(1)),
         m_catch(ValueType(1)),
-        m_system(flag.m_system)
+        m_sys(flag.m_sys)
 {}
 
 constexpr Flag::Flag(const Flag& cpy) noexcept :
@@ -175,7 +175,7 @@ constexpr Flag::Flag(const Flag& cpy) noexcept :
     m_bad(cpy.m_bad),
     m_standard(cpy.m_standard),
     m_catch(cpy.m_catch),
-    m_system(cpy.m_system)
+    m_sys(cpy.m_sys)
 {}
 
 inline Flag::Flag(Flag&& mov) noexcept :
@@ -183,13 +183,13 @@ inline Flag::Flag(Flag&& mov) noexcept :
     m_bad(mov.m_bad),
     m_standard(mov.m_standard),
     m_catch(mov.m_catch),
-    m_system(mov.m_system)
+    m_sys(mov.m_sys)
 {
     mov.m_default = Flag{}.m_default;
     mov.m_bad = Flag{}.m_bad;
     mov.m_standard = Flag{}.m_standard;
     mov.m_catch = Flag{}.m_catch;
-    mov.m_system = Flag{}.m_system;
+    mov.m_sys = Flag{}.m_sys;
 }
 
 inline Flag& Flag::operator=(const flag::Catch& catch_) noexcept
@@ -221,7 +221,7 @@ constexpr bool Flag::IsCatch() const noexcept
 
 constexpr bool Flag::IsSystem() const noexcept
 {
-    return m_system;
+    return m_sys;
 }
 
 } //!id

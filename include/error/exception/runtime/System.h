@@ -7,12 +7,12 @@
 #include "../../id/Standard.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
-#include "../../defn/type/system/code/Value.h"
+#include "../../defn/type/sys/code/Value.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../system/Code.h"
-#include "../../system/Category.h"
+#include "../../sys/Code.h"
+#include "../../sys/Category.h"
 #include "../../../constant/error/Identification.h"
-#include "../../../constant/error/system/Category.h"
+#include "../../../constant/error/sys/Category.h"
 
 #include <stdexcept>
 #include <utility>
@@ -37,10 +37,10 @@ public:
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
-    typedef defn::type::system::code::Value CodeValueType;
+    typedef defn::type::sys::code::Value CodeValueType;
 public:
-    typedef system::Code CodeType;
-    typedef system::Category CategoryType;
+    typedef sys::Code CodeType;
+    typedef sys::Category CategoryType;
 private:
     CodeType m_code;
 protected:
@@ -229,7 +229,7 @@ inline typename enable_if::tag::System<TTagError>::Type
 Get(const std::system_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
-        constant::error::system::system_category, e.code().value());
+        constant::error::sys::system_category, e.code().value());
 }
 
 } //!id

@@ -43,8 +43,8 @@ public:
     constexpr Record(const FlagType & flag, 
         const ErrorCodeValueType& error_code_val) noexcept;
     constexpr Record(const FlagType & flag,
-        const ErrorSystemCategoryValueType& error_system_categ_val, 
-        const ErrorSystemCodeValueType& error_system_code_val) noexcept;
+        const ErrorSystemCategoryValueType& error_sys_categ_val, 
+        const ErrorSystemCodeValueType& error_sys_code_val) noexcept;
     constexpr Record(const FlagType & flag, const Record<TErrorCodeValue, 
         TErrorSystemCategoryValue, TErrorSystemCodeValue> & record) noexcept;
 public:
@@ -99,11 +99,11 @@ template<typename TErrorCodeValue, typename TErrorSystemCategoryValue,
     typename TErrorSystemCodeValue>
 constexpr Record<TErrorCodeValue, TErrorSystemCategoryValue,
     TErrorSystemCodeValue>::Record(const FlagType & flag,
-        const ErrorSystemCategoryValueType& error_system_categ_val, 
-        const ErrorSystemCodeValueType& error_system_code_val) noexcept :
+        const ErrorSystemCategoryValueType& error_sys_categ_val, 
+        const ErrorSystemCodeValueType& error_sys_code_val) noexcept :
             m_flag(flag),
-            m_categ(error_system_categ_val),
-            m_code(error_system_code_val)
+            m_categ(error_sys_categ_val),
+            m_code(error_sys_code_val)
 {}
 
 template<typename TErrorCodeValue, typename TErrorSystemCategoryValue, 
