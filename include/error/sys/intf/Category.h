@@ -10,7 +10,7 @@
 #include "../../defn/type/Output.h"
 #include "../../defn/type/sys/categ/Value.h"
 #include "../../defn/type/sys/code/Value.h"
-#include "../../defn/type/sys/condition/Value.h"
+#include "../../defn/type/sys/cond/Value.h"
 #include "../../msg/String.h"
 
 #include <ostream>
@@ -31,7 +31,7 @@ public:
     typedef defn::type::Output OutputType;
     typedef defn::type::sys::categ::Value ValueType;
     typedef defn::type::sys::code::Value CodeValueType;
-    typedef defn::type::sys::condition::Value ConditionValueType;
+    typedef defn::type::sys::cond::Value ConditionValueType;
 public:
     typedef msg::String StringType;
 public:

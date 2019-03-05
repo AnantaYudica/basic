@@ -1,7 +1,7 @@
-#ifndef BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_CONDITION_SET_VALUE_H_
-#define BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_CONDITION_SET_VALUE_H_
+#ifndef BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_COND_SET_VALUE_H_
+#define BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_COND_SET_VALUE_H_
 
-#include "../../../../../../../defn/type/sys/condition/Value.h"
+#include "../../../../../../../defn/type/sys/cond/Value.h"
 
 #include "../../../../has/mmbr/defn/type/ConditionEnum.h"
 
@@ -21,7 +21,7 @@ namespace _defn
 {
 namespace _type
 {
-namespace _condition
+namespace _cond
 {
 namespace _set
 {
@@ -30,7 +30,7 @@ template<typename TCategoryTrait, bool = basic::error::sys::tmpl::categ::
     has::mmbr::defn::type::ConditionEnum<TCategoryTrait>::Value>
 struct _Value
 {
-    typedef basic::error::defn::type::sys::condition::Value Type;
+    typedef basic::error::defn::type::sys::cond::Value Type;
 };
 
 template<typename TCategoryTrait>
@@ -41,7 +41,7 @@ struct _Value<TCategoryTrait, true>
 
 } //!_set
 
-} //!_condition
+} //!_cond
 
 } //!_type
 
@@ -73,18 +73,18 @@ namespace defn
 {
 namespace type
 {
-namespace condition
+namespace cond
 {
 namespace set
 {
 
 template<typename TCategoryTrait>
 using Value = typename _helper::_basic::_error::_sys::_tmpl::_categ::
-    _defn::_type::_condition::_set::_Value<TCategoryTrait>::Type;
+    _defn::_type::_cond::_set::_Value<TCategoryTrait>::Type;
 
 } //!set
 
-} //!condition
+} //!cond
 
 } //!type
 
@@ -100,4 +100,4 @@ using Value = typename _helper::_basic::_error::_sys::_tmpl::_categ::
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_CONDITION_SET_VALUE_H_
+#endif //!BASIC_ERROR_SYS_TMPL_CATEG_DEFN_TYPE_COND_SET_VALUE_H_

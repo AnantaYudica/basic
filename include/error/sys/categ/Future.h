@@ -6,7 +6,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/sys/categ/Value.h"
 #include "../../defn/type/sys/code/Value.h"
-#include "../../defn/type/sys/condition/Value.h"
+#include "../../defn/type/sys/cond/Value.h"
 #include "../../msg/String.h"
 
 #include <future>
@@ -29,7 +29,7 @@ public:
     typedef error::defn::type::Char CharType;
     typedef error::defn::type::sys::categ::Value CategoryValueType;
     typedef error::defn::type::sys::code::Value CodeValueType;
-    typedef error::defn::type::sys::condition::Value ConditionValueType;
+    typedef error::defn::type::sys::cond::Value ConditionValueType;
 public:
     typedef msg::String StringType;
 public:

@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_SYS_CONDITION_HAS_ENUM_H_
-#define BASIC_ERROR_SYS_CONDITION_HAS_ENUM_H_
+#ifndef BASIC_ERROR_SYS_COND_HAS_ENUM_H_
+#define BASIC_ERROR_SYS_COND_HAS_ENUM_H_
 
 namespace basic
 {
@@ -7,7 +7,7 @@ namespace error
 {
 namespace sys
 {
-namespace condition
+namespace cond
 {
 namespace has
 {
@@ -20,7 +20,7 @@ struct Enum
 
 } //!has
 
-} //!condition
+} //!cond
 
 } //!sys
 
@@ -28,4 +28,4 @@ struct Enum
 
 } //!basic
 
-#endif //!BASIC_ERROR_SYS_CONDITION_HAS_ENUM_H_
+#endif //!BASIC_ERROR_SYS_COND_HAS_ENUM_H_

@@ -8,14 +8,14 @@
 
 #include "categ/Base.h"
 #include "categ/defn/type/code/set/Value.h"
-#include "categ/defn/type/condition/set/Value.h"
+#include "categ/defn/type/cond/set/Value.h"
 #include "categ/has/mmbr/defn/type/CodeEnum.h"
 #include "imp/exit/HasCleanup.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/type/sys/categ/Value.h"
 #include "../../defn/type/sys/code/Value.h"
-#include "../../defn/type/sys/condition/Value.h"
+#include "../../defn/type/sys/cond/Value.h"
 #include "../../msg/String.h"
 
 #include <type_traits>
@@ -42,13 +42,13 @@ public:
     typedef defn::type::Output OutputType;
     typedef defn::type::sys::categ::Value ValueType;
     typedef defn::type::sys::code::Value CodeValueType;
-    typedef defn::type::sys::condition::Value ConditionValueType;
+    typedef defn::type::sys::cond::Value ConditionValueType;
 public:
     typedef msg::String StringType;
 public:
     typedef categ::defn::type::code::set::
         Value<TCategoryTrait> CodeSetValueType;
-    typedef categ::defn::type::condition::set::
+    typedef categ::defn::type::cond::set::
         Value<TCategoryTrait> ConditionSetValueType;
 public:
     typedef sys::Code CodeType;

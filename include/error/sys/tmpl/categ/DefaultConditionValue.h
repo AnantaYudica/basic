@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYS_TMPL_CATEG_DEFAULTCONDITIONVALUE_H_
 
 #include "has/mmbr/func/DefaultConditionValue.h"
-#include "../../../defn/type/sys/condition/Value.h"
+#include "../../../defn/type/sys/cond/Value.h"
 
 #include <type_traits>
 
@@ -20,7 +20,7 @@ namespace categ
 template<typename TCategoryTrait>
 inline typename std::enable_if<has::mmbr::func::
     DefaultConditionValue<TCategoryTrait>::Value, error::defn::type::sys::
-    condition::Value>::type 
+    cond::Value>::type 
 DefaultConditionValue(const TCategoryTrait & categ_trait) noexcept
 {
     return categ_trait.DefaultConditionValue();
@@ -29,7 +29,7 @@ DefaultConditionValue(const TCategoryTrait & categ_trait) noexcept
 template<typename TCategoryTrait>
 inline typename std::enable_if<!has::mmbr::func::
     DefaultConditionValue<TCategoryTrait>::Value, error::defn::type::sys::
-    condition::Value>::type 
+    cond::Value>::type 
 DefaultConditionValue(const TCategoryTrait & categ_trait) noexcept
 {
     return 0;

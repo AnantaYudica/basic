@@ -20,16 +20,16 @@ template<typename TCategoryTrait, typename TCode, typename TCondition>
 typename std::enable_if<has::mmbr::func::Equivalent<TCategoryTrait,
     TCode, TCondition>::Value, bool>::type  
 Equivalent(const TCategoryTrait& categ_trait, const TCode& code,
-    const TCondition& condition) noexcept
+    const TCondition& cond) noexcept
 {
-    return categ_trait.Equivalent(code, condition);
+    return categ_trait.Equivalent(code, cond);
 }
 
 template<typename TCategoryTrait, typename TCode, typename TCondition>
 typename std::enable_if<!has::mmbr::func::Equivalent<TCategoryTrait,
     TCode, TCondition>::Value, bool>::type   
 Equivalent(const TCategoryTrait& categ_trait, const TCode& code,
-    const TCondition& condition) noexcept
+    const TCondition& cond) noexcept
 {
     return false;
 }

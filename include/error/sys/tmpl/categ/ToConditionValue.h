@@ -2,7 +2,7 @@
 #define BASIC_ERROR_SYS_TMPL_CATEG_TOCONDITIONVALUE_H_
 
 #include "has/mmbr/func/ToConditionValue.h"
-#include "../../../defn/type/sys/condition/Value.h"
+#include "../../../defn/type/sys/cond/Value.h"
 
 #include <type_traits>
 
@@ -20,7 +20,7 @@ namespace categ
 template<typename TCategoryTrait, typename TConditionEnum>
 inline typename std::enable_if<has::mmbr::func::
     ToConditionValue<TCategoryTrait, TConditionEnum>::Value, 
-    error::defn::type::sys::condition::Value>::type 
+    error::defn::type::sys::cond::Value>::type 
 ToConditionValue(const TCategoryTrait & categ_trait, 
     const TConditionEnum & cond) noexcept
 {
@@ -30,11 +30,11 @@ ToConditionValue(const TCategoryTrait & categ_trait,
 template<typename TCategoryTrait, typename TConditionEnum>
 inline typename std::enable_if<!has::mmbr::func::
     ToConditionValue<TCategoryTrait, TConditionEnum>::Value, 
-    error::defn::type::sys::condition::Value>::type 
+    error::defn::type::sys::cond::Value>::type 
 ToConditionValue(const TCategoryTrait & categ_trait, 
     const TConditionEnum & cond) noexcept
 {
-    return static_cast<error::defn::type::sys::condition::Value>(cond);
+    return static_cast<error::defn::type::sys::cond::Value>(cond);
 }
 
 } //!categ

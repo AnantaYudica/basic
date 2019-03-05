@@ -9,7 +9,7 @@
 #include "../intf/Exit.h"
 #include "../defn/type/Char.h"
 #include "../defn/type/Output.h"
-#include "../defn/type/sys/condition/Value.h"
+#include "../defn/type/sys/cond/Value.h"
 #include "../msg/String.h"
 
 namespace basic
@@ -26,7 +26,7 @@ class Condition :
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
-    typedef defn::type::sys::condition::Value ValueType;
+    typedef defn::type::sys::cond::Value ValueType;
 public:
     typedef msg::String StringType;
 public:

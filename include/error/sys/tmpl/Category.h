@@ -8,7 +8,7 @@
 #include "imp/categ/HasCodeEnum.h"
 #include "../../defn/func/output/Operator.h"
 #include "categ/defn/type/code/set/Value.h"
-#include "categ/defn/type/condition/set/Value.h"
+#include "categ/defn/type/cond/set/Value.h"
 #include "categ/msg/tag/Code.h"
 #include "categ/msg/tag/Condition.h"
 #include "categ/DefaultCode.h"
