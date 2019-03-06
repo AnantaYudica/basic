@@ -1,4 +1,4 @@
-#include "type/conditional/Switch.h"
+#include "type/condl/Switch.h"
 #define USING_BASIC_TEST_MEMORY
 #include "Test.h"
 BASIC_TEST_CONSTRUCT;
@@ -253,11 +253,11 @@ BASIC_TEST_TYPE_NAME("B", B);
 BASIC_TEST_TYPE_NAME("C", C);
 
 template<typename... TArgs>
-struct basic::test::type::Name<basic::type::conditional::Switch<TArgs...>>
+struct basic::test::type::Name<basic::type::condl::Switch<TArgs...>>
 {
     static basic::test::CString<char> CStr()
     {
-        static char _format_cstr[] = "basic::type::conditional::Switch<%s>";
+        static char _format_cstr[] = "basic::type::condl::Switch<%s>";
         const auto& param_cstr = basic::test::type::param::Name<
             basic::test::type::Parameter<TArgs...>>::CStr();
         return basic::test::cstr::Format(sizeof(_format_cstr) +
@@ -265,10 +265,10 @@ struct basic::test::type::Name<basic::type::conditional::Switch<TArgs...>>
     }
 };
 
-using TDefaultSwitch0_0 = basic::type::conditional::Switch<std::false_type>;
+using TDefaultSwitch0_0 = basic::type::condl::Switch<std::false_type>;
 
-BASIC_TEST_TYPE_NAME("basic::type::conditional::Switch<std::false_type>",
-    basic::type::conditional::Switch<std::false_type>);
+BASIC_TEST_TYPE_NAME("basic::type::condl::Switch<std::false_type>",
+    basic::type::condl::Switch<std::false_type>);
 
 typedef VariableTestSwitch<TDefaultSwitch0_0, std::false_type,
     std::size_t, std::size_t> T1Var1;
@@ -277,9 +277,9 @@ T1Var1 t1_var1(0, 0);
     
 REGISTER_TEST(t1, new TestSwitch<Cases, T1Var1>(t1_var1));
 
-using TDefaultSwitch1_0 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch1_0 = basic::type::condl::Switch<std::false_type, 
     std::true_type>;
-using TDefaultSwitch1_1 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch1_1 = basic::type::condl::Switch<std::false_type, 
     std::false_type>;
 
 typedef VariableTestSwitch<TDefaultSwitch1_0, std::true_type,
@@ -292,11 +292,11 @@ T2Var2 t2_var2(1, 1);
 
 REGISTER_TEST(t2, new TestSwitch<Cases, T2Var1, T2Var2>(t2_var1, t2_var2));
 
-using TDefaultSwitch2_0 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch2_0 = basic::type::condl::Switch<std::false_type, 
     std::true_type, std::false_type>;
-using TDefaultSwitch2_1 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch2_1 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::true_type>;  
-using TDefaultSwitch2_2 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch2_2 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::false_type>;
 
 typedef VariableTestSwitch<TDefaultSwitch2_0, std::true_type,
@@ -313,15 +313,15 @@ T3Var3 t3_var3(2, 2);
 REGISTER_TEST(t3, new TestSwitch<Cases, T3Var1, T3Var2, T3Var3>(t3_var1,
     t3_var2, t3_var3));
 
-using TDefaultSwitch4_0 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch4_0 = basic::type::condl::Switch<std::false_type, 
     std::true_type, std::false_type, std::false_type, std::false_type>;
-using TDefaultSwitch4_1 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch4_1 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::true_type, std::false_type, std::false_type>;  
-using TDefaultSwitch4_2 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch4_2 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::false_type, std::true_type, std::false_type>; 
-using TDefaultSwitch4_3 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch4_3 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::false_type, std::false_type, std::true_type>; 
-using TDefaultSwitch4_4 = basic::type::conditional::Switch<std::false_type, 
+using TDefaultSwitch4_4 = basic::type::condl::Switch<std::false_type, 
     std::false_type, std::false_type, std::false_type, std::false_type>;    
 
 typedef VariableTestSwitch<TDefaultSwitch4_0, std::true_type,
@@ -344,15 +344,15 @@ T4Var5 t4_var5(4, 4);
 REGISTER_TEST(t4, new TestSwitch<Cases, T4Var1, T4Var2, T4Var3, T4Var4, 
     T4Var5>(t4_var1, t4_var2, t4_var3, t4_var4, t4_var5));
 
-using TASwitch3_1 = basic::type::conditional::Switch<A, A, B, C>;
-using TBSwitch3_2 = basic::type::conditional::Switch<B, A, B, C>;
-using TCSwitch3_3 = basic::type::conditional::Switch<C, A, B, C>;
-using TASwitch3_4 = basic::type::conditional::Switch<A, B, C, A>;
-using TBSwitch3_5 = basic::type::conditional::Switch<B, B, C, A>;
-using TCSwitch3_6 = basic::type::conditional::Switch<C, B, C, A>;
-using TASwitch3_7 = basic::type::conditional::Switch<A, C, A, B>;
-using TBSwitch3_8 = basic::type::conditional::Switch<B, C, A, B>;
-using TCSwitch3_9 = basic::type::conditional::Switch<C, C, A, B>;
+using TASwitch3_1 = basic::type::condl::Switch<A, A, B, C>;
+using TBSwitch3_2 = basic::type::condl::Switch<B, A, B, C>;
+using TCSwitch3_3 = basic::type::condl::Switch<C, A, B, C>;
+using TASwitch3_4 = basic::type::condl::Switch<A, B, C, A>;
+using TBSwitch3_5 = basic::type::condl::Switch<B, B, C, A>;
+using TCSwitch3_6 = basic::type::condl::Switch<C, B, C, A>;
+using TASwitch3_7 = basic::type::condl::Switch<A, C, A, B>;
+using TBSwitch3_8 = basic::type::condl::Switch<B, C, A, B>;
+using TCSwitch3_9 = basic::type::condl::Switch<C, C, A, B>;
 
 typedef VariableTestSwitch<TASwitch3_1, B,std::size_t, std::size_t> T5Var1;
 typedef VariableTestSwitch<TBSwitch3_2, A,std::size_t, std::size_t> T5Var2;
