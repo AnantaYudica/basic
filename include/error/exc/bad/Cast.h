@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_TYPEID_H_
-#define BASIC_ERROR_EXCEPTION_BAD_TYPEID_H_
+#ifndef BASIC_ERROR_EXC_BAD_CAST_H_
+#define BASIC_ERROR_EXC_BAD_CAST_H_
 
 #include "../Bad.h"
 #include "../../Identification.h"
@@ -17,14 +17,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Typeid : public error::exception::Bad
+class Cast : public error::exc::Bad
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -35,23 +35,23 @@ public:
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    inline Typeid() noexcept;
+    inline Cast() noexcept;
 public:
-    inline Typeid(const char * file, const std::size_t & line) noexcept;
+    inline Cast(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    inline Typeid() noexcept;
+    inline Cast() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    inline Typeid(const Typeid & cpy) noexcept;
-    inline Typeid(Typeid && mov) noexcept;
+    inline Cast(const Cast & cpy) noexcept;
+    inline Cast(Cast && mov) noexcept;
 public:
-    inline Typeid & operator=(const Typeid &) = delete;
-    inline Typeid & operator=(Typeid &&) = delete;
+    inline Cast & operator=(const Cast &) = delete;
+    inline Cast & operator=(Cast &&) = delete;
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
@@ -59,37 +59,37 @@ protected:
         operator>>(OutputType & out) const noexcept;
 };
 
-inline Typeid::Typeid() noexcept :
-    TriggerType(constant::error::bad_typeid_id)
+inline Cast::Cast() noexcept :
+    TriggerType(constant::error::bad_cast_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Typeid::Typeid(const char * file, 
+inline Cast::Cast(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_typeid_id, file, line)
+        TriggerType(constant::error::bad_cast_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Typeid::Typeid(const Typeid & cpy) noexcept :
+inline Cast::Cast(const Cast & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-inline Typeid::Typeid(Typeid && mov) noexcept :
+inline Cast::Cast(Cast && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-inline const typename Typeid::CharType * 
-Typeid::Message() const noexcept
+inline const typename Cast::CharType * 
+Cast::Message() const noexcept
 {
-    return "Bad Typeid Exception";
+    return "Bad Cast Exception";
 }
 
-inline const error::intf::Output & Typeid::
+inline const error::intf::Output & Cast::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::Bad::operator>>(out);
+    error::exc::Bad::operator>>(out);
     return *this;
 }
 
@@ -97,13 +97,13 @@ inline const error::intf::Output & Typeid::
 
 #ifdef USING_STANDARD_EXCEPTION
 
-using Typeid = std::bad_typeid;
+using Cast = std::bad_cast;
 
 #endif //!USING_STANDARD_EXCEPTION
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -112,9 +112,9 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_typeid & e) noexcept
+Get(const std::bad_cast & e) noexcept
 {
-    return Standard(constant::error::bad_typeid_id);
+    return Standard(constant::error::bad_cast_id);
 }
 
 #endif //!USING_EXCEPTION
@@ -125,4 +125,4 @@ Get(const std::bad_typeid & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_TYPEID_H_
+#endif //!BASIC_ERROR_EXC_BAD_CAST_H_

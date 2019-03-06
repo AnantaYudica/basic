@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_CAST_H_
-#define BASIC_ERROR_EXCEPTION_BAD_CAST_H_
+#ifndef BASIC_ERROR_EXC_BAD_FUNCTION_H_
+#define BASIC_ERROR_EXC_BAD_FUNCTION_H_
 
 #include "../Bad.h"
 #include "../../Identification.h"
@@ -10,21 +10,20 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../../constant/error/Identification.h"
 
-#include <typeinfo>
 #include <utility>
 
 namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Cast : public error::exception::Bad
+class Function : public error::exc::Bad
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -35,23 +34,23 @@ public:
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    inline Cast() noexcept;
+    inline Function() noexcept;
 public:
-    inline Cast(const char * file, const std::size_t & line) noexcept;
+    inline Function(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    inline Cast() noexcept;
+    inline Function() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    inline Cast(const Cast & cpy) noexcept;
-    inline Cast(Cast && mov) noexcept;
+    inline Function(const Function & cpy) noexcept;
+    inline Function(Function && mov) noexcept;
 public:
-    inline Cast & operator=(const Cast &) = delete;
-    inline Cast & operator=(Cast &&) = delete;
+    inline Function & operator=(const Function &) = delete;
+    inline Function & operator=(Function &&) = delete;
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
@@ -59,37 +58,37 @@ protected:
         operator>>(OutputType & out) const noexcept;
 };
 
-inline Cast::Cast() noexcept :
-    TriggerType(constant::error::bad_cast_id)
+inline Function::Function() noexcept :
+    TriggerType(constant::error::bad_function_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Cast::Cast(const char * file, 
+inline Function::Function(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_cast_id, file, line)
+        TriggerType(constant::error::bad_function_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Cast::Cast(const Cast & cpy) noexcept :
+inline Function::Function(const Function & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-inline Cast::Cast(Cast && mov) noexcept :
+inline Function::Function(Function && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-inline const typename Cast::CharType * 
-Cast::Message() const noexcept
+inline const typename Function::CharType * 
+Function::Message() const noexcept
 {
-    return "Bad Cast Exception";
+    return "Bad Function Exception";
 }
 
-inline const error::intf::Output & Cast::
+inline const error::intf::Output & Function::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::Bad::operator>>(out);
+    error::exc::Bad::operator>>(out);
     return *this;
 }
 
@@ -97,25 +96,32 @@ inline const error::intf::Output & Cast::
 
 #ifdef USING_STANDARD_EXCEPTION
 
-using Cast = std::bad_cast;
+class Function : public error::exc::Bad
+{
+
+};
 
 #endif //!USING_STANDARD_EXCEPTION
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
 
 #ifdef USING_EXCEPTION
 
+#ifdef USING_STANDARD_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_cast & e) noexcept
+Get(const error::exc::bad::Function & e) noexcept
 {
-    return Standard(constant::error::bad_cast_id);
+    return Standard(constant::error::bad_function_id);
 }
+
+#endif //!USING_STANDARD_EXCEPTION
 
 #endif //!USING_EXCEPTION
 
@@ -125,4 +131,4 @@ Get(const std::bad_cast & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_CAST_H_
+#endif //!BASIC_ERROR_EXC_BAD_FUNCTION_H_

@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_INVALID_ARGUMENT_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_INVALID_ARGUMENT_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_INVALID_ARGUMENT_H_
+#define BASIC_ERROR_EXC_LOGIC_INVALID_ARGUMENT_H_
 
 #include "../Invalid.h"
 #include "../../../Identification.h"
@@ -17,7 +17,7 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace logic
 {
@@ -26,7 +26,7 @@ namespace invalid
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Argument : public exception::logic::Invalid
+class Argument : public exc::logic::Invalid
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
@@ -66,12 +66,12 @@ protected:
 
 inline Argument::Argument() noexcept :
     TriggerType(constant::error::logic_invalid_argument_id),
-    exception::logic::Invalid("Domain Logic Invalid Argument Exception")
+    exc::logic::Invalid("Domain Logic Invalid Argument Exception")
 {}
 
 inline Argument::Argument(const CharType * message) noexcept :
     TriggerType(constant::error::logic_invalid_argument_id),
-    exception::logic::Invalid(message)
+    exc::logic::Invalid(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -79,14 +79,14 @@ inline Argument::Argument(const CharType * message) noexcept :
 inline Argument::Argument(const CharType * message, const char* file, 
     const std::size_t& line) noexcept:
         TriggerType(constant::error::logic_invalid_argument_id, file, line),
-        exception::logic::Invalid(message)
+        exc::logic::Invalid(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Argument::Argument(const Argument & cpy) noexcept :
     TriggerType(cpy),
-    exception::logic::Invalid(cpy)
+    exc::logic::Invalid(cpy)
 {}
 
 inline Argument::Argument(Argument && mov) noexcept :
@@ -96,13 +96,13 @@ inline Argument::Argument(Argument && mov) noexcept :
 
 inline const typename Argument::CharType * Argument::Message() const noexcept
 {
-    return exception::logic::Invalid::Message();
+    return exc::logic::Invalid::Message();
 }
 
 inline const error::intf::Output & 
 Argument::operator>>(OutputType & out) const noexcept
 {
-    exception::logic::Invalid::operator>>(out);
+    exc::logic::Invalid::operator>>(out);
     return *this;
 }
 
@@ -116,7 +116,7 @@ typedef std::invalid_argument Invalid;
 
 } //!logic
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -134,4 +134,4 @@ Get(const std::invalid_argument& e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_INVALID_ARGUMENT_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_INVALID_ARGUMENT_H_

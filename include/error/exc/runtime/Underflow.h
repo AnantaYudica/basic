@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_RUNTIME_UNDERFLOW_H_
-#define BASIC_ERROR_EXCEPTION_RUNTIME_UNDERFLOW_H_
+#ifndef BASIC_ERROR_EXC_RUNTIME_UNDERFLOW_H_
+#define BASIC_ERROR_EXC_RUNTIME_UNDERFLOW_H_
 
 #include "../Runtime.h"
 #include "../../Identification.h"
@@ -17,14 +17,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace runtime
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Underflow : public exception::Runtime
+class Underflow : public exc::Runtime
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
@@ -64,12 +64,12 @@ protected:
 
 inline Underflow::Underflow() noexcept :
     TriggerType(constant::error::runtime_underflow_id),
-    exception::Runtime("Underflow Runtime Exception")
+    exc::Runtime("Underflow Runtime Exception")
 {}
 
 inline Underflow::Underflow(const CharType * message) noexcept :
     TriggerType(constant::error::runtime_underflow_id),
-    exception::Runtime(message)
+    exc::Runtime(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -77,30 +77,30 @@ inline Underflow::Underflow(const CharType * message) noexcept :
 inline Underflow::Underflow(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_underflow_id, file, line),
-        exception::Runtime(message)
+        exc::Runtime(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Underflow::Underflow(const Underflow & cpy) noexcept :
     TriggerType(cpy),
-    exception::Runtime(cpy)
+    exc::Runtime(cpy)
 {}
 
 inline Underflow::Underflow(Underflow && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Runtime(std::move(mov))
+    exc::Runtime(std::move(mov))
 {}
 
 inline const typename Underflow::CharType * Underflow::Message() const noexcept
 {
-    return exception::Runtime::Message();
+    return exc::Runtime::Message();
 }
 
 inline const error::intf::Output & 
 Underflow::operator>>(OutputType & out) const noexcept
 {
-    exception::Runtime::operator>>(out);
+    exc::Runtime::operator>>(out);
     return *this;
 }
 
@@ -114,7 +114,7 @@ typedef std::underflow_error Underflow;
 
 } //!runtime
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -132,4 +132,4 @@ Get(const std::underflow_error & e)
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_RUNTIME_UNDERFLOW_H_
+#endif //!BASIC_ERROR_EXC_RUNTIME_UNDERFLOW_H_

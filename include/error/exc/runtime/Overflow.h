@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_RUNTIME_OVERFLOW_H_
-#define BASIC_ERROR_EXCEPTION_RUNTIME_OVERFLOW_H_
+#ifndef BASIC_ERROR_EXC_RUNTIME_OVERFLOW_H_
+#define BASIC_ERROR_EXC_RUNTIME_OVERFLOW_H_
 
 #include "../Runtime.h"
 #include "../../Identification.h"
@@ -17,14 +17,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace runtime
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Overflow : public exception::Runtime
+class Overflow : public exc::Runtime
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
@@ -64,12 +64,12 @@ protected:
 
 inline Overflow::Overflow() noexcept :
     TriggerType(constant::error::runtime_overflow_id),
-    exception::Runtime("Overflow Runtime Exception")
+    exc::Runtime("Overflow Runtime Exception")
 {}
 
 inline Overflow::Overflow(const CharType * message) noexcept :
     TriggerType(constant::error::runtime_overflow_id),
-    exception::Runtime(message)
+    exc::Runtime(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -77,30 +77,30 @@ inline Overflow::Overflow(const CharType * message) noexcept :
 inline Overflow::Overflow(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_overflow_id, file, line),
-        exception::Runtime(message)
+        exc::Runtime(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Overflow::Overflow(const Overflow & cpy) noexcept :
     TriggerType(cpy),
-    exception::Runtime(cpy)
+    exc::Runtime(cpy)
 {}
 
 inline Overflow::Overflow(Overflow && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Runtime(std::move(mov))
+    exc::Runtime(std::move(mov))
 {}
 
 inline const typename Overflow::CharType * Overflow::Message() const noexcept
 {
-    return exception::Runtime::Message();
+    return exc::Runtime::Message();
 }
 
 inline const error::intf::Output & 
 Overflow::operator>>(OutputType & out) const noexcept
 {
-    exception::Runtime::operator>>(out);
+    exc::Runtime::operator>>(out);
     return *this;
 }
 
@@ -114,7 +114,7 @@ typedef std::overflow_error Overflow;
 
 } //!runtime
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -132,4 +132,4 @@ Get(const std::overflow_error & e)
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_RUNTIME_OVERFLOW_H_
+#endif //!BASIC_ERROR_EXC_RUNTIME_OVERFLOW_H_

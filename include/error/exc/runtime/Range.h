@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_RUNTIME_RANGE_H_
-#define BASIC_ERROR_EXCEPTION_RUNTIME_RANGE_H_
+#ifndef BASIC_ERROR_EXC_RUNTIME_RANGE_H_
+#define BASIC_ERROR_EXC_RUNTIME_RANGE_H_
 
 #include "../Runtime.h"
 #include "../../Identification.h"
@@ -17,14 +17,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace runtime
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Range : public exception::Runtime
+class Range : public exc::Runtime
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
@@ -64,12 +64,12 @@ protected:
 
 inline Range::Range() noexcept : 
     TriggerType(constant::error::runtime_range_id),
-    exception::Runtime("Range Runtime Exception")
+    exc::Runtime("Range Runtime Exception")
 {}
 
 inline Range::Range(const CharType * message) noexcept : 
     TriggerType(constant::error::runtime_range_id),
-    exception::Runtime(message)
+    exc::Runtime(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -77,30 +77,30 @@ inline Range::Range(const CharType * message) noexcept :
 inline Range::Range(const CharType * message, const char* file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::runtime_range_id, file, line),
-        exception::Runtime(message)
+        exc::Runtime(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Range::Range(const Range & cpy) noexcept :
     TriggerType(cpy),
-    exception::Runtime(cpy)
+    exc::Runtime(cpy)
 {}
 
 inline Range::Range(Range && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Runtime(std::move(mov))
+    exc::Runtime(std::move(mov))
 {}
 
 inline const typename Range::CharType * Range::Message() const noexcept
 {
-    return exception::Runtime::Message();
+    return exc::Runtime::Message();
 }
 
 inline const error::intf::Output & 
 Range::operator>>(OutputType & out) const noexcept
 {
-    exception::Runtime::operator>>(out);
+    exc::Runtime::operator>>(out);
     return *this;
 }
 
@@ -114,7 +114,7 @@ typedef std::range_error Range;
 
 } //!runtime
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -132,4 +132,4 @@ Get(const std::range_error & e)
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_RUNTIME_RANGE_H_
+#endif //!BASIC_ERROR_EXC_RUNTIME_RANGE_H_

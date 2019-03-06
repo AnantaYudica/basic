@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_H_
+#define BASIC_ERROR_EXC_LOGIC_H_
 
 #include "../Exception.h"
 #include "../Identification.h"
@@ -18,7 +18,7 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
@@ -126,7 +126,7 @@ using Logic = std::logic_error;
 
 #endif //!USING_STANDARD_EXCEPTION
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -148,4 +148,4 @@ Get(const std::logic_error & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_H_

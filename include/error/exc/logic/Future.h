@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_FUTURE_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_FUTURE_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_FUTURE_H_
+#define BASIC_ERROR_EXC_LOGIC_FUTURE_H_
 
 #include "../Logic.h"
 #include "../../tag/System.h"
@@ -24,14 +24,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace logic
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Future : public exception::Logic,
+class Future : public exc::Logic,
     virtual public basic::Error<basic::error::tag::System>
 {
 public:
@@ -80,7 +80,7 @@ protected:
 
 inline Future::Future(const CodeSetValueType & code) noexcept :
     TriggerType(constant::error::logic_future_id),
-    exception::Logic("Future Logic Exception"),
+    exc::Logic("Future Logic Exception"),
     m_code(code),
     ErrorSystemType(error::id::System{m_code.Category().Value(), 
         m_code.Value()})
@@ -91,7 +91,7 @@ inline Future::Future(const CodeSetValueType & code) noexcept :
 inline Future::Future(const CodeSetValueType & code, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::logic_future_id, file, line),
-        exception::Logic("Future Logic Exception"),
+        exc::Logic("Future Logic Exception"),
         m_code(code),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
             m_code.Value()}, file, line)
@@ -103,19 +103,19 @@ inline Future::Future(const Future & cpy) noexcept :
     TriggerType(cpy),
     ErrorSystemType(cpy),
     m_code(cpy.m_code),
-    exception::Logic(cpy)
+    __ExceptionPtrCopyException::Logic(cpy)
 {}
 
 inline Future::Future(Future && mov) noexcept :
     TriggerType(std::move(mov)),
     ErrorSystemType(std::move(mov)),
     m_code(std::move(mov.m_code)),
-    exception::Logic(std::move(mov))
+    exc::Logic(std::move(mov))
 {}
 
 inline const typename Future::CharType * Future::Message() const noexcept
 {
-    return exception::Logic::Message();
+    return exc::Logic::Message();
 }
 
 inline const typename Future::CodeType & Future::Code() const noexcept
@@ -126,8 +126,8 @@ inline const typename Future::CodeType & Future::Code() const noexcept
 inline const error::intf::Output & 
 Future::operator>>(OutputType & out) const noexcept
 {
-    exception::Logic::operator>>(out);
-    return static_cast<const exception::Logic &>(*this);
+    exc::Logic::operator>>(out);
+    return static_cast<const exc::Logic &>(*this);
 }
 
 
@@ -141,7 +141,7 @@ using Future = std::future_error;
 
 } //!logic
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -171,4 +171,4 @@ Get(const std::future_error & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_FUTURE_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_FUTURE_H_

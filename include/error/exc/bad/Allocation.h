@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_WEAKPTR_H_
-#define BASIC_ERROR_EXCEPTION_BAD_WEAKPTR_H_
+#ifndef BASIC_ERROR_EXC_BAD_ALLOCATION_H_
+#define BASIC_ERROR_EXC_BAD_ALLOCATION_H_
 
 #include "../Bad.h"
 #include "../../Identification.h"
@@ -10,21 +10,21 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../../constant/error/Identification.h"
 
-#include <memory>
+#include <new>
 #include <utility>
 
 namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class WeakPtr : public error::exception::Bad
+class Allocation : public error::exc::Bad
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -35,23 +35,23 @@ public:
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    inline WeakPtr() noexcept;
+    inline Allocation() noexcept;
 public:
-    inline WeakPtr(const char * file, const std::size_t & line) noexcept;
+    inline Allocation(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    inline WeakPtr() noexcept;
+    inline Allocation() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    inline WeakPtr(const WeakPtr & cpy) noexcept;
-    inline WeakPtr(WeakPtr && mov) noexcept;
+    inline Allocation(const Allocation & cpy) noexcept;
+    inline Allocation(Allocation && mov) noexcept;
 public:
-    inline WeakPtr & operator=(const WeakPtr &) = delete;
-    inline WeakPtr & operator=(WeakPtr &&) = delete;
+    inline Allocation & operator=(const Allocation &) = delete;
+    inline Allocation & operator=(Allocation &&) = delete;
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
@@ -59,37 +59,37 @@ protected:
         operator>>(OutputType & out) const noexcept;
 };
 
-inline WeakPtr::WeakPtr() noexcept :
-    TriggerType(constant::error::bad_weakptr_id)
+inline Allocation::Allocation() noexcept :
+    TriggerType(constant::error::bad_allocation_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-inline WeakPtr::WeakPtr(const char * file, 
+inline Allocation::Allocation(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_weakptr_id, file, line)
+        TriggerType(constant::error::bad_allocation_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-inline WeakPtr::WeakPtr(const WeakPtr & cpy) noexcept :
+inline Allocation::Allocation(const Allocation & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-inline WeakPtr::WeakPtr(WeakPtr && mov) noexcept :
+inline Allocation::Allocation(Allocation && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-inline const typename WeakPtr::CharType * 
-WeakPtr::Message() const noexcept
+inline const typename Allocation::CharType * 
+Allocation::Message() const noexcept
 {
-    return "Bad WeakPtr Exception";
+    return "Bad Allocation Exception";
 }
 
-inline const error::intf::Output & WeakPtr::
+inline const error::intf::Output & Allocation::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::Bad::operator>>(out);
+    error::exc::Bad::operator>>(out);
     return *this;
 }
 
@@ -97,13 +97,13 @@ inline const error::intf::Output & WeakPtr::
 
 #ifdef USING_STANDARD_EXCEPTION
 
-using WeakPtr = std::bad_weak_ptr;
+using Allocation = std::bad_alloc;
 
 #endif //!USING_STANDARD_EXCEPTION
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -112,9 +112,9 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_weak_ptr & e) noexcept
+Get(const std::bad_alloc & e) noexcept
 {
-    return Standard(constant::error::bad_weakptr_id);
+    return Standard(constant::error::bad_allocation_id);
 }
 
 #endif //!USING_EXCEPTION
@@ -125,4 +125,4 @@ Get(const std::bad_weak_ptr & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_WEAKPTR_H_
+#endif //!BASIC_ERROR_EXC_BAD_ALLOCATION_H_

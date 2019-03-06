@@ -1,7 +1,7 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_FUNC_CALL_H_
-#define BASIC_ERROR_EXCEPTION_BAD_FUNC_CALL_H_
+#ifndef BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_H_
+#define BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_H_
 
-#include "../Function.h"
+#include "../Allocation.h"
 #include "../../../Identification.h"
 #include "../../../id/Get.h"
 #include "../../../id/Standard.h"
@@ -10,23 +10,22 @@
 #include "../../../defn/func/output/Operator.h"
 #include "../../../../constant/error/Identification.h"
 
-#include <functional>
 #include <utility>
 
 namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
-namespace func
+namespace alloc
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Call : public error::exception::bad::Function
+class Array : public error::exc::bad::Allocation
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -37,23 +36,23 @@ public:
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    inline Call() noexcept;
+    inline Array() noexcept;
 public:
-    inline Call(const char * file, const std::size_t & line) noexcept;
+    inline Array(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    inline Call() noexcept;
+    inline Array() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    inline Call(const Call & cpy) noexcept;
-    inline Call(Call && mov) noexcept;
+    inline Array(const Array & cpy) noexcept;
+    inline Array(Array && mov) noexcept;
 public:
-    inline Call & operator=(const Call &) = delete;
-    inline Call & operator=(Call &&) = delete;
+    inline Array & operator=(const Array &) = delete;
+    inline Array & operator=(Array &&) = delete;
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
@@ -61,37 +60,37 @@ protected:
         operator>>(OutputType & out) const noexcept;
 };
 
-inline Call::Call() noexcept :
-    TriggerType(constant::error::bad_function_call_id)
+inline Array::Array() noexcept :
+    TriggerType(constant::error::bad_allocation_array_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Call::Call(const char * file, 
+inline Array::Array(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_function_call_id, file, line)
+        TriggerType(constant::error::bad_allocation_array_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Call::Call(const Call & cpy) noexcept :
+inline Array::Array(const Array & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-inline Call::Call(Call && mov) noexcept :
+inline Array::Array(Array && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-inline const typename Call::CharType * 
-Call::Message() const noexcept
+inline const typename Array::CharType * 
+Array::Message() const noexcept
 {
-    return "Bad Function Call Exception";
+    return "Bad Allocation Array Exception";
 }
 
-inline const error::intf::Output & Call::
+inline const error::intf::Output & Array::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::bad::Function::operator>>(out);
+    error::exc::bad::Allocation::operator>>(out);
     return *this;
 }
 
@@ -99,27 +98,34 @@ inline const error::intf::Output & Call::
 
 #ifdef USING_STANDARD_EXCEPTION
 
-using Call = std::bad_function_call;
+class Array : public error::exc::bad::Allocation
+{
+
+};
 
 #endif //!USING_STANDARD_EXCEPTION
 
-} //!func
+} //!alloc
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
 
 #ifdef USING_EXCEPTION
 
+#ifdef USING_STANDARD_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_function_call & e) noexcept
+Get(const error::exc::bad::alloc::Array & e) noexcept
 {
-    return Standard(constant::error::bad_function_call_id);
+    return Standard(constant::error::bad_allocation_array_id);
 }
+
+#endif //!USING_STANDARD_EXCEPTION
 
 #endif //!USING_EXCEPTION
 
@@ -129,4 +135,4 @@ Get(const std::bad_function_call & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_FUNC_CALL_H_
+#endif //!BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_H_

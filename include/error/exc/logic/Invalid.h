@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_INVALID_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_INVALID_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_INVALID_H_
+#define BASIC_ERROR_EXC_LOGIC_INVALID_H_
 
 #include "../Logic.h"
 #include "../../Identification.h"
@@ -16,14 +16,14 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace logic
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Invalid : public exception::Logic
+class Invalid : public exc::Logic
 {
 public:
     typedef typename error::Exception::TriggerType TriggerType;
@@ -63,12 +63,12 @@ protected:
 
 inline Invalid::Invalid() noexcept :
     TriggerType(constant::error::logic_invalid_id),
-    exception::Logic("Domain Logic Invalid")
+    exc::Logic("Domain Logic Invalid")
 {}
 
 inline Invalid::Invalid(const CharType * message) noexcept :
     TriggerType(constant::error::logic_invalid_id),
-    exception::Logic(message)
+    exc::Logic(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -76,30 +76,30 @@ inline Invalid::Invalid(const CharType * message) noexcept :
 inline Invalid::Invalid(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         TriggerType(constant::error::logic_invalid_id, file, line),
-        exception::Logic(message)
+        exc::Logic(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Invalid::Invalid(const Invalid & cpy) noexcept :
     TriggerType(cpy),
-    exception::Logic(cpy)
+    exc::Logic(cpy)
 {}
 
 inline Invalid::Invalid(Invalid && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Logic(std::move(mov))
+    exc::Logic(std::move(mov))
 {}
 
 inline const typename Invalid::CharType * Invalid::Message() const noexcept
 {
-    return exception::Logic::Message();
+    return exc::Logic::Message();
 }
 
 inline const error::intf::Output & 
 Invalid::operator>>(OutputType & out) const noexcept
 {
-    exception::Logic::operator>>(out);
+    exc::Logic::operator>>(out);
     return *this;
 }
 
@@ -116,7 +116,7 @@ class Invalid : public std::logic_error
 
 } //!logic
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -127,7 +127,7 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
-Get(const exception::logic::Invalid& e) noexcept
+Get(const exc::logic::Invalid& e) noexcept
 {
     return Standard(constant::error::logic_invalid_id);
 }
@@ -142,4 +142,4 @@ Get(const exception::logic::Invalid& e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_INVALID_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_INVALID_H_

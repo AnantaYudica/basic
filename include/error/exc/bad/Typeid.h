@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_ALLOCATION_H_
-#define BASIC_ERROR_EXCEPTION_BAD_ALLOCATION_H_
+#ifndef BASIC_ERROR_EXC_BAD_TYPEID_H_
+#define BASIC_ERROR_EXC_BAD_TYPEID_H_
 
 #include "../Bad.h"
 #include "../../Identification.h"
@@ -10,21 +10,21 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../../constant/error/Identification.h"
 
-#include <new>
+#include <typeinfo>
 #include <utility>
 
 namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Allocation : public error::exception::Bad
+class Typeid : public error::exc::Bad
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -35,23 +35,23 @@ public:
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 protected:
-    inline Allocation() noexcept;
+    inline Typeid() noexcept;
 public:
-    inline Allocation(const char * file, const std::size_t & line) noexcept;
+    inline Typeid(const char * file, const std::size_t & line) noexcept;
 
 #else
 
 public:
-    inline Allocation() noexcept;
+    inline Typeid() noexcept;
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 public:
-    inline Allocation(const Allocation & cpy) noexcept;
-    inline Allocation(Allocation && mov) noexcept;
+    inline Typeid(const Typeid & cpy) noexcept;
+    inline Typeid(Typeid && mov) noexcept;
 public:
-    inline Allocation & operator=(const Allocation &) = delete;
-    inline Allocation & operator=(Allocation &&) = delete;
+    inline Typeid & operator=(const Typeid &) = delete;
+    inline Typeid & operator=(Typeid &&) = delete;
 public:
     virtual inline const CharType * Message() const noexcept;
 protected:
@@ -59,37 +59,37 @@ protected:
         operator>>(OutputType & out) const noexcept;
 };
 
-inline Allocation::Allocation() noexcept :
-    TriggerType(constant::error::bad_allocation_id)
+inline Typeid::Typeid() noexcept :
+    TriggerType(constant::error::bad_typeid_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Allocation::Allocation(const char * file, 
+inline Typeid::Typeid(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_allocation_id, file, line)
+        TriggerType(constant::error::bad_typeid_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
-inline Allocation::Allocation(const Allocation & cpy) noexcept :
+inline Typeid::Typeid(const Typeid & cpy) noexcept :
     TriggerType(cpy)
 {}
 
-inline Allocation::Allocation(Allocation && mov) noexcept :
+inline Typeid::Typeid(Typeid && mov) noexcept :
     TriggerType(std::move(mov))
 {}
 
-inline const typename Allocation::CharType * 
-Allocation::Message() const noexcept
+inline const typename Typeid::CharType * 
+Typeid::Message() const noexcept
 {
-    return "Bad Allocation Exception";
+    return "Bad Typeid Exception";
 }
 
-inline const error::intf::Output & Allocation::
+inline const error::intf::Output & Typeid::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::Bad::operator>>(out);
+    error::exc::Bad::operator>>(out);
     return *this;
 }
 
@@ -97,13 +97,13 @@ inline const error::intf::Output & Allocation::
 
 #ifdef USING_STANDARD_EXCEPTION
 
-using Allocation = std::bad_alloc;
+using Typeid = std::bad_typeid;
 
 #endif //!USING_STANDARD_EXCEPTION
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -112,9 +112,9 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_alloc & e) noexcept
+Get(const std::bad_typeid & e) noexcept
 {
-    return Standard(constant::error::bad_allocation_id);
+    return Standard(constant::error::bad_typeid_id);
 }
 
 #endif //!USING_EXCEPTION
@@ -125,4 +125,4 @@ Get(const std::bad_alloc & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_ALLOCATION_H_
+#endif //!BASIC_ERROR_EXC_BAD_TYPEID_H_

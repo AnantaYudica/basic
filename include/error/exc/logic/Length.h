@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_LENGTH_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_LENGTH_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_LENGTH_H_
+#define BASIC_ERROR_EXC_LOGIC_LENGTH_H_
 
 #include "../Logic.h"
 #include "../../Identification.h"
@@ -17,17 +17,17 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace logic
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Length : public exception::Logic
+class Length : public exc::Logic
 {
 public:
-    typedef typename exception::Logic::TriggerType TriggerType;
+    typedef typename exc::Logic::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputType;
@@ -64,12 +64,12 @@ protected:
 
 inline Length::Length() noexcept :
     TriggerType(constant::error::logic_length_id),
-    exception::Logic("Domain Logic Length")
+    exc::Logic("Domain Logic Length")
 {}
 
 inline Length::Length(const CharType * message) noexcept :
     TriggerType(constant::error::logic_length_id),
-    exception::Logic(message)
+    exc::Logic(message)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -77,30 +77,30 @@ inline Length::Length(const CharType * message) noexcept :
 inline Length::Length(const CharType * message, const char* file, 
     const std::size_t& line) noexcept :
         TriggerType(constant::error::logic_length_id, file, line),
-        exception::Logic(message)
+        exc::Logic(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Length::Length(const Length & cpy) noexcept :
     TriggerType(cpy),
-    exception::Logic(cpy)
+    exc::Logic(cpy)
 {}
 
 inline Length::Length(Length && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Logic(std::move(mov))
+    exc::Logic(std::move(mov))
 {}
 
 inline const typename Length::CharType * Length::Message() const noexcept
 {
-    return exception::Logic::Message();
+    return exc::Logic::Message();
 }
 
 inline const error::intf::Output & 
 Length::operator>>(OutputType & out) const noexcept
 {
-    exception::Logic::operator>>(out);
+    exc::Logic::operator>>(out);
     return *this;
 }
 
@@ -114,7 +114,7 @@ using Length = std::length_error;
 
 } //!logic
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -136,4 +136,4 @@ Get(const std::length_error& e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_LENGTH_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_LENGTH_H_

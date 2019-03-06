@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_LOGIC_OUTOFRANGE_H_
-#define BASIC_ERROR_EXCEPTION_LOGIC_OUTOFRANGE_H_
+#ifndef BASIC_ERROR_EXC_LOGIC_OUTOFRANGE_H_
+#define BASIC_ERROR_EXC_LOGIC_OUTOFRANGE_H_
 
 #include "../Logic.h"
 #include "../../Identification.h"
@@ -17,17 +17,17 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace logic
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class OutOfRange : public exception::Logic
+class OutOfRange : public exc::Logic
 {
 public:
-    typedef typename exception::Logic::TriggerType TriggerType;
+    typedef typename exc::Logic::TriggerType TriggerType;
 public:
     typedef defn::type::Char CharType;
     typedef defn::type::Output OutputValueType;
@@ -64,7 +64,7 @@ protected:
 
 inline OutOfRange::OutOfRange() noexcept :
     TriggerType(constant::error::logic_outofrange_id),
-    exception::Logic("Domain Logic Out of Range")
+    exc::Logic("Domain Logic Out of Range")
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
@@ -72,31 +72,31 @@ inline OutOfRange::OutOfRange() noexcept :
 inline OutOfRange::OutOfRange(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
         ErrorType(constant::error::logic_outofrange_id, file, line),
-        exception::Logic(message)
+        exc::Logic(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline OutOfRange::OutOfRange(const OutOfRange & cpy) noexcept :
     TriggerType(cpy),
-    exception::Logic(cpy)
+    exc::Logic(cpy)
 {}
 
 inline OutOfRange::OutOfRange(OutOfRange && mov) noexcept :
     TriggerType(std::move(mov)),
-    exception::Logic(std::move(mov))
+    exc::Logic(std::move(mov))
 {}
 
 inline const typename OutOfRange::CharType * 
 OutOfRange::Message() const noexcept
 {
-    return exception::Logic::Message();
+    return exc::Logic::Message();
 }
 
 inline const error::intf::Output & 
 OutOfRange::operator>>(OutputType & out) const noexcept
 {
-    exception::Logic::operator>>(out);
+    exc::Logic::operator>>(out);
     return *this;
 }
 
@@ -110,7 +110,7 @@ typedef std::out_of_range OutOfRange;
 
 } //!logic
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -132,4 +132,4 @@ Get(const std::out_of_range & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_LOGIC_OUTOFRANGE_H_
+#endif //!BASIC_ERROR_EXC_LOGIC_OUTOFRANGE_H_

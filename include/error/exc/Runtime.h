@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_RUNTIME_H_
-#define BASIC_ERROR_EXCEPTION_RUNTIME_H_
+#ifndef BASIC_ERROR_EXC_RUNTIME_H_
+#define BASIC_ERROR_EXC_RUNTIME_H_
 
 #include "../Exception.h"
 #include "../Identification.h"
@@ -18,7 +18,7 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
@@ -124,7 +124,7 @@ typedef std::runtime_error Runtime;
 
 #endif
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -146,4 +146,4 @@ Get(const std::runtime_error & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_RUNTIME_H_
+#endif //!BASIC_ERROR_EXC_RUNTIME_H_

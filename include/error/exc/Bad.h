@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_H_
-#define BASIC_ERROR_EXCEPTION_BAD_H_
+#ifndef BASIC_ERROR_EXC_BAD_H_
+#define BASIC_ERROR_EXC_BAD_H_
 
 #include "../../Error.h"
 #include "../tag/Trigger.h"
@@ -18,7 +18,7 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
@@ -102,7 +102,7 @@ class Bad : public std::exception
 
 #endif //!USING_STANDARD_EXCEPTION
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -113,7 +113,7 @@ namespace id
 
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const exception::Bad & e) noexcept
+Get(const exc::Bad & e) noexcept
 {
     return Standard(constant::error::bad_id);
 }
@@ -128,4 +128,4 @@ Get(const exception::Bad & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_H_
+#endif //!BASIC_ERROR_EXC_BAD_H_

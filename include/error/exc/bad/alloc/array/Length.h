@@ -1,5 +1,5 @@
-#ifndef BASIC_ERROR_EXCEPTION_BAD_ALLOC_ARRAY_LENGTH_H_
-#define BASIC_ERROR_EXCEPTION_BAD_ALLOC_ARRAY_LENGTH_H_
+#ifndef BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_LENGTH_H_
+#define BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_LENGTH_H_
 
 #include "../Array.h"
 #include "../../../../Identification.h"
@@ -17,7 +17,7 @@ namespace basic
 {
 namespace error
 {
-namespace exception
+namespace exc
 {
 namespace bad
 {
@@ -28,7 +28,7 @@ namespace array
 
 #ifdef USING_BASIC_ERROR_EXCEPTION
 
-class Length : public error::exception::bad::alloc::Array
+class Length : public error::exc::bad::alloc::Array
 {
 public:
     typedef Error<tag::Trigger> TriggerType;
@@ -94,7 +94,7 @@ Length::Message() const noexcept
 inline const error::intf::Output & Length::
     operator>>(OutputType & out) const noexcept
 {
-    error::exception::bad::alloc::Array::operator>>(out);
+    error::exc::bad::alloc::Array::operator>>(out);
     return *this;
 }
 
@@ -112,7 +112,7 @@ using Length = std::bad_array_new_length;
 
 } //!bad
 
-} //!exception
+} //!exc
 
 namespace id
 {
@@ -134,4 +134,4 @@ Get(const std::bad_array_new_length & e) noexcept
 
 } //!basic
 
-#endif //!BASIC_ERROR_EXCEPTION_BAD_ALLOC_ARRAY_LENGTH_H_
+#endif //!BASIC_ERROR_EXC_BAD_ALLOC_ARRAY_LENGTH_H_
