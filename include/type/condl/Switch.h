@@ -1,5 +1,5 @@
-#ifndef BASIC_TYPE_CONDITIONAL_SWITCH_H_
-#define BASIC_TYPE_CONDITIONAL_SWITCH_H_
+#ifndef BASIC_TYPE_CONDL_SWITCH_H_
+#define BASIC_TYPE_CONDL_SWITCH_H_
 
 #include <type_traits>
 
@@ -9,7 +9,7 @@ namespace _basic
 {
 namespace _type
 {
-namespace _conditional
+namespace _condl
 {
 
 template<bool, typename Td, typename Tr, 
@@ -43,7 +43,7 @@ struct _Switch<true, Td, Td, Idx, Targ, Targs...> :
         Td, Targ, Idx + 1, Targs...>::Type Type;
 };
 
-} //!_conditional;
+} //!_condl;
 
 } //!_type
 
@@ -55,27 +55,27 @@ namespace basic
 {
 namespace type
 {
-namespace conditional
+namespace condl
 {
 
 template<typename Td, typename... Targs>
 struct Switch
 {
-    typedef typename _helper::_basic::_type::_conditional::
+    typedef typename _helper::_basic::_type::_condl::
         template _Switch<true, Td, Td, 0, Targs...>::Type Type;
     typedef typename Switch<Td, Targs...>::Type type;
     static constexpr std::size_t Index =
-        _helper::_basic::_type::_conditional::_Switch<true, Td,
+        _helper::_basic::_type::_condl::_Switch<true, Td,
             Td, 0, Targs...>::Index;
     static constexpr std::size_t index = Switch<Td, Targs...>::Index;
     static constexpr std::size_t Size = sizeof...(Targs);
     static constexpr std::size_t size = Switch<Td, Targs...>::Size;
 };
 
-} //!conditional
+} //!condl
 
 } //!type
 
 } //!basic
 
-#endif //!BASIC_TYPE_CONDITIONAL_SWITCH_H_
+#endif //!BASIC_TYPE_CONDL_SWITCH_H_
