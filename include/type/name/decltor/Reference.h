@@ -1,5 +1,5 @@
-#ifndef BASIC_TYPE_NAME_DECLARATOR_REFERENCE_H_
-#define BASIC_TYPE_NAME_DECLARATOR_REFERENCE_H_
+#ifndef BASIC_TYPE_NAME_DECLTOR_REFERENCE_H_
+#define BASIC_TYPE_NAME_DECLTOR_REFERENCE_H_
 
 #include <string>
 #include <ostream>
@@ -134,4 +134,4 @@ std::basic_ostream<CharT, Traits>&
 
 } //!basic
 
-#endif //!BASIC_TYPE_NAME_DECLARATOR_REFERENCE_H_
+#endif //!BASIC_TYPE_NAME_DECLTOR_REFERENCE_H_

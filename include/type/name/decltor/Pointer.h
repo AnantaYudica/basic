@@ -1,5 +1,5 @@
-#ifndef BASIC_TYPE_NAME_DECLARATOR_POINTER_H_
-#define BASIC_TYPE_NAME_DECLARATOR_POINTER_H_
+#ifndef BASIC_TYPE_NAME_DECLTOR_POINTER_H_
+#define BASIC_TYPE_NAME_DECLTOR_POINTER_H_
 
 #include <string>
 #include <ostream>
@@ -475,4 +475,4 @@ std::basic_ostream<CharT, Traits>& Declarator<T To::*const volatile>::
 
 } //!basic
 
-#endif //!BASIC_TYPE_NAME_DECLARATOR_POINTER_H_
+#endif //!BASIC_TYPE_NAME_DECLTOR_POINTER_H_

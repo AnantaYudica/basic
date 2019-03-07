@@ -1,5 +1,5 @@
-#ifndef BASIC_TYPE_NAME_DECLARATOR_FUNCTION_H_
-#define BASIC_TYPE_NAME_DECLARATOR_FUNCTION_H_
+#ifndef BASIC_TYPE_NAME_DECLTOR_FUNCTION_H_
+#define BASIC_TYPE_NAME_DECLTOR_FUNCTION_H_
 
 #include <string>
 #include <ostream>
@@ -804,4 +804,4 @@ std::basic_ostream<CharT, Traits>& Declarator<T(Targs...) const volatile &&>::
 
 } //!basic
 
-#endif //!BASIC_TYPE_NAME_DECLARATOR_FUNCTION_H_
+#endif //!BASIC_TYPE_NAME_DECLTOR_FUNCTION_H_
