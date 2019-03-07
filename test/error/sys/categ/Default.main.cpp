@@ -8,7 +8,7 @@
 
 #include "error/sys/categ/Default.h"
 
-#include "constant/error/sys/Category.h"
+#include "defn/error/sys/Category.h"
 
 #include "error/sys/Code.h"
 #include "error/sys/Condition.h"
@@ -1377,7 +1377,7 @@ ConditionType cond1_3{1, TmplCategoryType::GetInstance()};
 int err_code1 = 1;
 std::errc err_enum1 = std::errc::operation_not_permitted;
 
-CategoryValueType categ_val{basic::constant::error::sys::system_category};
+CategoryValueType categ_val{basic::defn::error::sys::system_category};
 
 T1Var1 t1_var1{
     &code1_1, &code_val1_1,

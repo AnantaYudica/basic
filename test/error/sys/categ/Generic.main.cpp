@@ -8,7 +8,7 @@
 
 #include "error/sys/categ/Generic.h"
 
-#include "constant/error/sys/Category.h"
+#include "defn/error/sys/Category.h"
 
 #include "error/sys/Code.h"
 #include "error/sys/Condition.h"
@@ -1379,7 +1379,7 @@ int err_code1 = 1;
 std::errc err_enum1 = std::errc::operation_not_permitted;
 std::string err_msg1 = std::generic_category().message(1);
 
-CategoryValueType categ_val{basic::constant::error::sys::generic_category};
+CategoryValueType categ_val{basic::defn::error::sys::generic_category};
 
 T1Var1 t1_var1{
     &code1_1, &code_val1_1,

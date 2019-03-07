@@ -8,7 +8,7 @@
 
 #include "error/sys/categ/Future.h"
 
-#include "constant/error/sys/Category.h"
+#include "defn/error/sys/Category.h"
 
 #include "error/sys/Code.h"
 #include "error/sys/Condition.h"
@@ -1379,7 +1379,7 @@ int err_code1 = 1;
 std::future_errc err_enum1 = std::future_errc::future_already_retrieved;
 std::string err_msg1 = std::future_category().message(1);
 
-CategoryValueType categ_val{basic::constant::error::sys::future_category};
+CategoryValueType categ_val{basic::defn::error::sys::future_category};
 
 T1Var1 t1_var1{
     &code1_1, &code_val1_1,
