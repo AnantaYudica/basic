@@ -9,7 +9,7 @@
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
 #include "../../msg/String.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -64,12 +64,12 @@ protected:
 };
 
 inline Domain::Domain() noexcept :
-    TriggerType(constant::error::logic_domain_id),
+    TriggerType(basic::defn::error::logic_domain_id),
     exc::Logic("Domain Logic Exception")
 {}
 
 inline Domain::Domain(const CharType * message) noexcept :
-    TriggerType(constant::error::logic_domain_id),
+    TriggerType(basic::defn::error::logic_domain_id),
     exc::Logic(message)
 {}
 
@@ -77,7 +77,7 @@ inline Domain::Domain(const CharType * message) noexcept :
 
 inline Domain::Domain(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::logic_domain_id, file, line),
+        TriggerType(basic::defn::error::logic_domain_id, file, line),
         exc::Logic(message)
 {}
 
@@ -126,7 +126,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const std::domain_error & e) noexcept
 {
-    return Standard(constant::error::logic_domain_id);
+    return Standard(basic::defn::error::logic_domain_id);
 }
 
 #endif //!USING_EXCEPTION

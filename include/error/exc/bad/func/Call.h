@@ -8,7 +8,7 @@
 #include "../../../defn/type/Char.h"
 #include "../../../defn/type/Output.h"
 #include "../../../defn/func/output/Operator.h"
-#include "../../../../constant/error/Identification.h"
+#include "../../../../defn/error/Identification.h"
 
 #include <functional>
 #include <utility>
@@ -62,14 +62,14 @@ protected:
 };
 
 inline Call::Call() noexcept :
-    TriggerType(constant::error::bad_function_call_id)
+    TriggerType(basic::defn::error::bad_function_call_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Call::Call(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_function_call_id, file, line)
+        TriggerType(basic::defn::error::bad_function_call_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
@@ -118,7 +118,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::bad_function_call & e) noexcept
 {
-    return Standard(constant::error::bad_function_call_id);
+    return Standard(basic::defn::error::bad_function_call_id);
 }
 
 #endif //!USING_EXCEPTION

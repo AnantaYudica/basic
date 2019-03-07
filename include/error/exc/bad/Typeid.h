@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <typeinfo>
 #include <utility>
@@ -60,14 +60,14 @@ protected:
 };
 
 inline Typeid::Typeid() noexcept :
-    TriggerType(constant::error::bad_typeid_id)
+    TriggerType(basic::defn::error::bad_typeid_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Typeid::Typeid(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_typeid_id, file, line)
+        TriggerType(basic::defn::error::bad_typeid_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
@@ -114,7 +114,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::bad_typeid & e) noexcept
 {
-    return Standard(constant::error::bad_typeid_id);
+    return Standard(basic::defn::error::bad_typeid_id);
 }
 
 #endif //!USING_EXCEPTION

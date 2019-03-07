@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -63,12 +63,12 @@ protected:
 };
 
 inline Length::Length() noexcept :
-    TriggerType(constant::error::logic_length_id),
+    TriggerType(basic::defn::error::logic_length_id),
     exc::Logic("Domain Logic Length")
 {}
 
 inline Length::Length(const CharType * message) noexcept :
-    TriggerType(constant::error::logic_length_id),
+    TriggerType(basic::defn::error::logic_length_id),
     exc::Logic(message)
 {}
 
@@ -76,7 +76,7 @@ inline Length::Length(const CharType * message) noexcept :
 
 inline Length::Length(const CharType * message, const char* file, 
     const std::size_t& line) noexcept :
-        TriggerType(constant::error::logic_length_id, file, line),
+        TriggerType(basic::defn::error::logic_length_id, file, line),
         exc::Logic(message)
 {}
 
@@ -125,7 +125,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::length_error& e) noexcept
 {
-    return Standard(constant::error::logic_length_id);
+    return Standard(basic::defn::error::logic_length_id);
 }
 
 #endif //!USING_EXCEPTION

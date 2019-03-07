@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -63,12 +63,12 @@ protected:
 };
 
 inline Overflow::Overflow() noexcept :
-    TriggerType(constant::error::runtime_overflow_id),
+    TriggerType(basic::defn::error::runtime_overflow_id),
     exc::Runtime("Overflow Runtime Exception")
 {}
 
 inline Overflow::Overflow(const CharType * message) noexcept :
-    TriggerType(constant::error::runtime_overflow_id),
+    TriggerType(basic::defn::error::runtime_overflow_id),
     exc::Runtime(message)
 {}
 
@@ -76,7 +76,7 @@ inline Overflow::Overflow(const CharType * message) noexcept :
 
 inline Overflow::Overflow(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::runtime_overflow_id, file, line),
+        TriggerType(basic::defn::error::runtime_overflow_id, file, line),
         exc::Runtime(message)
 {}
 
@@ -123,7 +123,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::overflow_error & e)
 {
-    return Standard(constant::error::runtime_overflow_id);
+    return Standard(basic::defn::error::runtime_overflow_id);
 }
 
 } //!id

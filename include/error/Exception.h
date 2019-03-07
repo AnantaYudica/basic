@@ -9,7 +9,7 @@
 #include "defn/type/Char.h"
 #include "defn/type/Output.h"
 #include "defn/func/output/Operator.h"
-#include "../constant/error/Identification.h"
+#include "../defn/error/Identification.h"
 
 #include <exception>
 #include <utility>
@@ -57,14 +57,14 @@ protected:
 };
 
 inline Exception::Exception() noexcept :
-    TriggerType(constant::error::exception_id)
+    TriggerType(basic::defn::error::exception_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Exception::Exception(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::exception_id, file, line)
+        TriggerType(basic::defn::error::exception_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
@@ -107,7 +107,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::exception & e) noexcept
 {
-    return Standard(constant::error::exception_id);
+    return Standard(basic::defn::error::exception_id);
 }
 
 #endif //!USING_EXCEPTION

@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <utility>
 
@@ -62,12 +62,12 @@ protected:
 };
 
 inline Invalid::Invalid() noexcept :
-    TriggerType(constant::error::logic_invalid_id),
+    TriggerType(basic::defn::error::logic_invalid_id),
     exc::Logic("Domain Logic Invalid")
 {}
 
 inline Invalid::Invalid(const CharType * message) noexcept :
-    TriggerType(constant::error::logic_invalid_id),
+    TriggerType(basic::defn::error::logic_invalid_id),
     exc::Logic(message)
 {}
 
@@ -75,7 +75,7 @@ inline Invalid::Invalid(const CharType * message) noexcept :
 
 inline Invalid::Invalid(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::logic_invalid_id, file, line),
+        TriggerType(basic::defn::error::logic_invalid_id, file, line),
         exc::Logic(message)
 {}
 
@@ -129,7 +129,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const exc::logic::Invalid& e) noexcept
 {
-    return Standard(constant::error::logic_invalid_id);
+    return Standard(basic::defn::error::logic_invalid_id);
 }
 
 #endif //!USING_STANDARD_EXCEPTION

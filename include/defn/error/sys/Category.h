@@ -1,11 +1,11 @@
-#ifndef BASIC_CONSTANT_ERROR_SYS_CATEGORY_H_
-#define BASIC_CONSTANT_ERROR_SYS_CATEGORY_H_
+#ifndef BASIC_DEFN_ERROR_SYS_CATEGORY_H_
+#define BASIC_DEFN_ERROR_SYS_CATEGORY_H_
 
 #include "../../../error/defn/type/sys/categ/Value.h"
 
 namespace basic
 {
-namespace constant
+namespace defn
 {
 namespace error
 {
@@ -24,8 +24,8 @@ enum : basic::error::defn::type::sys::categ::Value
 
 } //!error
 
-} //!constant
+} //!defn
 
 } //!basic
 
-#endif //!BASIC_CONSTANT_ERROR_SYS_CATEGORY_H_
+#endif //!BASIC_DEFN_ERROR_SYS_CATEGORY_H_

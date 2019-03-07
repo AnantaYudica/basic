@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYS_CATEG_FUTURE_H_
 #define BASIC_ERROR_SYS_CATEG_FUTURE_H_
 
-#include "../../../constant/error/sys/Category.h"
+#include "../../../defn/error/sys/Category.h"
 #include "../../intf/Exit.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/sys/categ/Value.h"
@@ -126,7 +126,7 @@ inline const typename Future::CharType * Future::Name() const noexcept
 
 inline typename Future::CategoryValueType Future::Value() const noexcept
 {
-    return constant::error::sys::future_category;
+    return basic::defn::error::sys::future_category;
 }
 
 } //!categ

@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYS_CATEG_DEFAULT_H_
 #define BASIC_ERROR_SYS_CATEG_DEFAULT_H_
 
-#include "../../../constant/error/sys/Category.h"
+#include "../../../defn/error/sys/Category.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/sys/categ/Value.h"
 #include "../../defn/type/sys/code/Value.h"
@@ -124,7 +124,7 @@ inline const typename Default::CharType * Default::Name() const noexcept
 
 inline typename Default::CategoryValueType Default::Value() const noexcept
 {
-    return constant::error::sys::system_category; 
+    return basic::defn::error::sys::system_category; 
 }
 
 } //!categ

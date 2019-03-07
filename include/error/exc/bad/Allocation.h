@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <new>
 #include <utility>
@@ -60,14 +60,14 @@ protected:
 };
 
 inline Allocation::Allocation() noexcept :
-    TriggerType(constant::error::bad_allocation_id)
+    TriggerType(basic::defn::error::bad_allocation_id)
 {}
 
 #ifdef USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Allocation::Allocation(const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::bad_allocation_id, file, line)
+        TriggerType(basic::defn::error::bad_allocation_id, file, line)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
@@ -114,7 +114,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::bad_alloc & e) noexcept
 {
-    return Standard(constant::error::bad_allocation_id);
+    return Standard(basic::defn::error::bad_allocation_id);
 }
 
 #endif //!USING_EXCEPTION

@@ -14,8 +14,8 @@
 #include "../../sys/Category.h"
 #include "../../sys/tmpl/Category.h"
 #include "../../sys/Code.h"
-#include "../../../constant/error/Identification.h"
-#include "../../../constant/error/sys/Category.h"
+#include "../../../defn/error/Identification.h"
+#include "../../../defn/error/sys/Category.h"
 
 #include <future>
 #include <utility>
@@ -79,7 +79,7 @@ protected:
 };
 
 inline Future::Future(const CodeSetValueType & code) noexcept :
-    TriggerType(constant::error::logic_future_id),
+    TriggerType(basic::defn::error::logic_future_id),
     exc::Logic("Future Logic Exception"),
     m_code(code),
     ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -90,7 +90,7 @@ inline Future::Future(const CodeSetValueType & code) noexcept :
 
 inline Future::Future(const CodeSetValueType & code, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::logic_future_id, file, line),
+        TriggerType(basic::defn::error::logic_future_id, file, line),
         exc::Logic("Future Logic Exception"),
         m_code(code),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -152,7 +152,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::future_error & e) noexcept
 {
-    return Standard(constant::error::logic_future_id);
+    return Standard(basic::defn::error::logic_future_id);
 }
 
 template<typename TTagError = tag::Trigger>
@@ -160,7 +160,7 @@ inline typename enable_if::tag::System<TTagError>::Type
 Get(const std::future_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
-        constant::error::sys::future_category, e.code().value());
+        basic::defn::error::sys::future_category, e.code().value());
 }
 
 #endif //!USING_EXCEPTION

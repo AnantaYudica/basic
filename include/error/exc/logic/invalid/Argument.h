@@ -8,7 +8,7 @@
 #include "../../../defn/type/Char.h"
 #include "../../../defn/type/Output.h"
 #include "../../../defn/func/output/Operator.h"
-#include "../../../../constant/error/Identification.h"
+#include "../../../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -65,12 +65,12 @@ protected:
 };
 
 inline Argument::Argument() noexcept :
-    TriggerType(constant::error::logic_invalid_argument_id),
+    TriggerType(basic::defn::error::logic_invalid_argument_id),
     exc::logic::Invalid("Domain Logic Invalid Argument Exception")
 {}
 
 inline Argument::Argument(const CharType * message) noexcept :
-    TriggerType(constant::error::logic_invalid_argument_id),
+    TriggerType(basic::defn::error::logic_invalid_argument_id),
     exc::logic::Invalid(message)
 {}
 
@@ -78,7 +78,7 @@ inline Argument::Argument(const CharType * message) noexcept :
 
 inline Argument::Argument(const CharType * message, const char* file, 
     const std::size_t& line) noexcept:
-        TriggerType(constant::error::logic_invalid_argument_id, file, line),
+        TriggerType(basic::defn::error::logic_invalid_argument_id, file, line),
         exc::logic::Invalid(message)
 {}
 
@@ -125,7 +125,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const std::invalid_argument& e) noexcept
 {
-    return Standard(constant::error::logic_invalid_argument_id);
+    return Standard(basic::defn::error::logic_invalid_argument_id);
 }
 
 } //!id

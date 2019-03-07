@@ -9,7 +9,7 @@
 #include "../defn/type/Output.h"
 #include "../defn/func/output/Operator.h"
 #include "../msg/String.h"
-#include "../../constant/error/Identification.h"
+#include "../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -68,12 +68,12 @@ protected:
 };
 
 inline Logic::Logic() noexcept :
-    TriggerType(constant::error::logic_id),
+    TriggerType(basic::defn::error::logic_id),
     m_message("Logic Exception")
 {}
 
 inline Logic::Logic(const CharType * message) noexcept :
-    TriggerType(constant::error::logic_id),
+    TriggerType(basic::defn::error::logic_id),
     m_message(message)
 {}
 
@@ -81,14 +81,14 @@ inline Logic::Logic(const CharType * message) noexcept :
 
 inline Logic::Logic(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::logic_id, file, line),
+        TriggerType(basic::defn::error::logic_id, file, line),
         m_message(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Logic::Logic(StringType && message) noexcept :
-    TriggerType(constant::error::logic_id),
+    TriggerType(basic::defn::error::logic_id),
     m_message(std::move(message))
 {}
 
@@ -137,7 +137,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::logic_error & e) noexcept
 {
-    return Standard(constant::error::logic_id);
+    return Standard(basic::defn::error::logic_id);
 }
 
 #endif //!USING_EXCEPTION

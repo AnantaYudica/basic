@@ -8,7 +8,7 @@
 #include "../../defn/type/Char.h"
 #include "../../defn/type/Output.h"
 #include "../../defn/func/output/Operator.h"
-#include "../../../constant/error/Identification.h"
+#include "../../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -63,7 +63,7 @@ protected:
 };
 
 inline OutOfRange::OutOfRange() noexcept :
-    TriggerType(constant::error::logic_outofrange_id),
+    TriggerType(basic::defn::error::logic_outofrange_id),
     exc::Logic("Domain Logic Out of Range")
 {}
 
@@ -71,7 +71,7 @@ inline OutOfRange::OutOfRange() noexcept :
 
 inline OutOfRange::OutOfRange(const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        ErrorType(constant::error::logic_outofrange_id, file, line),
+        ErrorType(basic::defn::error::logic_outofrange_id, file, line),
         exc::Logic(message)
 {}
 
@@ -121,7 +121,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::out_of_range & e) noexcept
 {
-    return Standard(constant::error::logic_outofrange_id);
+    return Standard(basic::defn::error::logic_outofrange_id);
 }
 
 #endif //!USING_EXCEPTION

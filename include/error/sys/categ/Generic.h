@@ -1,7 +1,7 @@
 #ifndef BASIC_ERROR_SYS_CATEG_GENERIC_H_
 #define BASIC_ERROR_SYS_CATEG_GENERIC_H_
 
-#include "../../../constant/error/sys/Category.h"
+#include "../../../defn/error/sys/Category.h"
 #include "../../defn/type/Char.h"
 #include "../../defn/type/sys/categ/Value.h"
 #include "../../defn/type/sys/code/Value.h"
@@ -124,7 +124,7 @@ inline const typename Generic::CharType * Generic::Name() const noexcept
 
 inline typename Generic::CategoryValueType Generic::Value() const noexcept
 {
-    return constant::error::sys::generic_category; 
+    return basic::defn::error::sys::generic_category; 
 }
 
 } //!categ

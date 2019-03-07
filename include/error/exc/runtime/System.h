@@ -11,8 +11,8 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../sys/Code.h"
 #include "../../sys/Category.h"
-#include "../../../constant/error/Identification.h"
-#include "../../../constant/error/sys/Category.h"
+#include "../../../defn/error/Identification.h"
+#include "../../../defn/error/sys/Category.h"
 
 #include <stdexcept>
 #include <utility>
@@ -93,12 +93,12 @@ protected:
 };
 
 inline System::System() noexcept : 
-    TriggerType(constant::error::runtime_system_id),
+    TriggerType(basic::defn::error::runtime_system_id),
     exc::Runtime("System Runtime Exception"),
 {}
 
 inline System::System(const CodeType & code) noexcept :
-    TriggerType(constant::error::runtime_system_id),
+    TriggerType(basic::defn::error::runtime_system_id),
     exc::Runtime("System Runtime Exception"),
     m_code(code),
     ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -107,7 +107,7 @@ inline System::System(const CodeType & code) noexcept :
 
 inline System::System(const CodeType & code, 
     const CharType * message) noexcept :
-        TriggerType(constant::error::runtime_system_id),
+        TriggerType(basic::defn::error::runtime_system_id),
         exc::Runtime(message),
         m_code(code),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -116,7 +116,7 @@ inline System::System(const CodeType & code,
 
 inline System::System(const CodeValueType & code, 
     const CategoryType & categ) noexcept :
-        TriggerType(constant::error::runtime_system_id),
+        TriggerType(basic::defn::error::runtime_system_id),
         __ExceptionPtrCurrentException::Runtime("System Runtime Exception"),
         m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -125,7 +125,7 @@ inline System::System(const CodeValueType & code,
 
 inline System::System(const CodeValueType & code, 
     const CategoryType & categ, const CharType * message) noexcept :
-        TriggerType(constant::error::runtime_system_id),
+        TriggerType(basic::defn::error::runtime_system_id),
         exc::Runtime(message),
         m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -136,7 +136,7 @@ inline System::System(const CodeValueType & code,
 
 inline System::System(const CodeType & code, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::runtime_system_id, file, line),
+        TriggerType(basic::defn::error::runtime_system_id, file, line),
         exc::Runtime("System Runtime Exception"),
         m_code(code),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -145,7 +145,7 @@ inline System::System(const CodeType & code, const char * file,
 
 inline System::System(const CodeType & code, const CharType * message, 
     const char * file, const std::size_t & line) noexcept :
-        TriggerType(constant::error::runtime_system_id, file, line),
+        TriggerType(basic::defn::error::runtime_system_id, file, line),
         exc::Runtime(message),
         m_code(code),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -154,7 +154,7 @@ inline System::System(const CodeType & code, const CharType * message,
 
 inline System::System(const CodeValueType & code, const CategoryType & categ,
     const char * file, const std::size_t & line) noexcept :
-        TriggerType(constant::error::runtime_system_id, file, line),
+        TriggerType(basic::defn::error::runtime_system_id, file, line),
         __ExceptionPtrDestroy::Runtime("System Runtime Exception"),
         m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -164,7 +164,7 @@ inline System::System(const CodeValueType & code, const CategoryType & categ,
 inline System::System(const CodeValueType & code, const CategoryType & categ,
     const CharType * message, const char * file, 
     const std::size_t & line) noexcept :
-        TriggerType(constant::error::runtime_system_id, file, line),
+        TriggerType(basic::defn::error::runtime_system_id, file, line),
         exc::Runtime(message),
         m_code(code, categ),
         ErrorSystemType(error::id::System{m_code.Category().Value(), 
@@ -221,7 +221,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::system_error & e)
 {
-    return Standard(constant::error::runtime_system_id);
+    return Standard(basic::defn::error::runtime_system_id);
 }
 
 template<typename TTagError = tag::Trigger>
@@ -229,7 +229,7 @@ inline typename enable_if::tag::System<TTagError>::Type
 Get(const std::system_error & e) noexcept
 {
     return System(id::flag::Standard{}, 
-        constant::error::sys::system_category, e.code().value());
+        basic::defn::error::sys::system_category, e.code().value());
 }
 
 } //!id

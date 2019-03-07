@@ -9,7 +9,7 @@
 #include "../defn/type/Output.h"
 #include "../defn/func/output/Operator.h"
 #include "../msg/String.h"
-#include "../../constant/error/Identification.h"
+#include "../../defn/error/Identification.h"
 
 #include <stdexcept>
 #include <utility>
@@ -68,12 +68,12 @@ protected:
 };
 
 inline Runtime::Runtime() noexcept :
-    TriggerType(constant::error::runtime_id),
+    TriggerType(basic::defn::error::runtime_id),
     m_message("Runtime Exception")
 {}
 
 inline Runtime::Runtime(const CharType * message) noexcept :
-    TriggerType(constant::error::runtime_id),
+    TriggerType(basic::defn::error::runtime_id),
     m_message(message)
 {}
 
@@ -81,14 +81,14 @@ inline Runtime::Runtime(const CharType * message) noexcept :
 
 inline Runtime::Runtime(const CharType * message, const char* file, 
     const std::size_t& line) noexcept :
-        TriggerType(constant::error::runtime_id, file, line),
+        TriggerType(basic::defn::error::runtime_id, file, line),
         m_message(message)
 {}
 
 #endif //!USING_BASIC_ERROR_FILE_AND_LINE
 
 inline Runtime::Runtime(StringType && message) noexcept :
-    TriggerType(constant::error::runtime_id),
+    TriggerType(basic::defn::error::runtime_id),
     m_message(std::move(message))
 {}
 
@@ -135,7 +135,7 @@ template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::runtime_error & e) noexcept
 {
-    return Standard(constant::error::runtime_id);
+    return Standard(basic::defn::error::runtime_id);
 }
 
 #endif //!USING_EXCEPTION

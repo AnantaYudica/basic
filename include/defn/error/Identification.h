@@ -1,12 +1,12 @@
-#ifndef BASIC_CONSTANT_ERROR_IDENTIFICATION_H_
-#define BASIC_CONSTANT_ERROR_IDENTIFICATION_H_
+#ifndef BASIC_DEFN_ERROR_IDENTIFICATION_H_
+#define BASIC_DEFN_ERROR_IDENTIFICATION_H_
 
 #include "../../error/defn/type/code/Value.h"
 #include "../../error/Identification.h"
 
 namespace basic
 {
-namespace constant
+namespace defn
 {
 namespace error
 {
@@ -42,8 +42,8 @@ enum : basic::error::defn::type::code::Value
 
 } //!error
 
-} //!constant
+} //!defn
 
 } //!basic
 
-#endif //!BASIC_CONSTANT_ERROR_IDENTIFICATION_H_
+#endif //!BASIC_DEFN_ERROR_IDENTIFICATION_H_
