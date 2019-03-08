@@ -14,7 +14,7 @@ namespace type
 namespace id
 {
 
-using Record = BASIC_ERR_IDENTIFICATION_RECORD_TYPE;
+using Record = BASIC_ERR_ID_RECORD_TYPE;
 
 } //!id
 
