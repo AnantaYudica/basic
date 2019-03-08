@@ -17,7 +17,7 @@ typedef basic::test::Output<Status> Output;
 #define EMPTY_CSTR ""
 #define DEBUG_CSTR "debug"
 #define INFO_CSTR "info"
-#define ERROR_CSTR "error"
+#define ERR_CSTR "error"
 
 void OpenFile(FILE*& rd_tmp_file, const char* file_tmp_name)
 {
@@ -65,7 +65,7 @@ int main()
         Output out1(status, file_tmp_name);
         out1.Debug(DEBUG_CSTR "\n");
         out1.Info(INFO_CSTR "\n");
-        out1.Error(ERROR_CSTR);
+        out1.Error(ERR_CSTR);
     }
 
     OpenFile(rd_tmp_file, file_tmp_name);
@@ -81,7 +81,7 @@ int main()
 
     ReadString(rd_tmp_file, buffer);
     printf("output : \"%s\"\n", buffer);
-    assert(strcmp(buffer, ERROR_CSTR) == 0);
+    assert(strcmp(buffer, ERR_CSTR) == 0);
     assert(feof(rd_tmp_file));
 
     fclose(rd_tmp_file);
@@ -91,7 +91,7 @@ int main()
         out1.DebugEnable(false);
         out1.Debug(DEBUG_CSTR "\n");
         out1.Info(INFO_CSTR "\n");
-        out1.Error(ERROR_CSTR);
+        out1.Error(ERR_CSTR);
     }
 
     OpenFile(rd_tmp_file, file_tmp_name);
@@ -103,7 +103,7 @@ int main()
 
     ReadString(rd_tmp_file, buffer);
     printf("output : \"%s\"\n", buffer);
-    assert(strcmp(buffer, ERROR_CSTR) == 0);
+    assert(strcmp(buffer, ERR_CSTR) == 0);
     assert(feof(rd_tmp_file));
 
     fclose(rd_tmp_file);
@@ -113,7 +113,7 @@ int main()
         out1.InfoEnable(false);
         out1.Debug(DEBUG_CSTR "\n");
         out1.Info(INFO_CSTR "\n");
-        out1.Error(ERROR_CSTR);
+        out1.Error(ERR_CSTR);
     }
 
     OpenFile(rd_tmp_file, file_tmp_name);
@@ -125,7 +125,7 @@ int main()
 
     ReadString(rd_tmp_file, buffer);
     printf("output : \"%s\"\n", buffer);
-    assert(strcmp(buffer, ERROR_CSTR) == 0);
+    assert(strcmp(buffer, ERR_CSTR) == 0);
     assert(feof(rd_tmp_file));
 
     fclose(rd_tmp_file);
@@ -135,7 +135,7 @@ int main()
         out1.Enable(false);
         out1.Debug(DEBUG_CSTR "\n");
         out1.Info(INFO_CSTR "\n");
-        out1.Error(ERROR_CSTR);
+        out1.Error(ERR_CSTR);
     }
 
     OpenFile(rd_tmp_file, file_tmp_name);

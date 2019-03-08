@@ -73,14 +73,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseATTa case_alias_type_and_target;
         SetFormat(info, case_alias_type_and_target, 
             "test compare between %s::type and %s\n");
         SetFormat(debug, case_alias_type_and_target,
             "test compare between %s::type and %s\n");
-        SetFormat(error, case_alias_type_and_target,
+        SetFormat(err, case_alias_type_and_target,
             "error %s::type is not same with %s\n");
             
         CaseAT case_alias_type;
@@ -88,7 +88,7 @@ public:
             "test compare between %s::type and %s::Type\n");
         SetFormat(debug, case_alias_type,
             "test compare between %s::type and %s::Type\n");
-        SetFormat(error, case_alias_type,
+        SetFormat(err, case_alias_type,
             "error %s::type is not same with %s::Type\n");
     }
 

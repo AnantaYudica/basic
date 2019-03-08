@@ -232,7 +232,7 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseHasCI case_has_ConstructInstance;
         SetFormat(info, case_has_ConstructInstance, 
@@ -241,7 +241,7 @@ public:
         SetFormat(debug, case_has_ConstructInstance,
             "test compare between decltype("
             "HasConstructInstance<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_ConstructInstance,
+        SetFormat(err, case_has_ConstructInstance,
             "error decltype(HasConstructInstance<%s>(0))::value "
             "is not same with %s\n");
 
@@ -252,7 +252,7 @@ public:
         SetFormat(debug, case_has_DestroyInstance,
             "test compare between decltype("
             "HasDestroyInstance<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_DestroyInstance,
+        SetFormat(err, case_has_DestroyInstance,
             "error decltype(HasDestroyInstance<%s>(0))::value "
             "is not same with %s\n");
 
@@ -263,7 +263,7 @@ public:
         SetFormat(debug, case_has_HasInstance,
             "test compare between decltype("
             "HasHasInstance<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_HasInstance,
+        SetFormat(err, case_has_HasInstance,
             "error decltype(HasHasInstance<%s>(0))::value "
             "is not same with %s\n");
 
@@ -274,7 +274,7 @@ public:
         SetFormat(debug, case_has_GetInstance,
             "test compare between decltype("
             "HasGetInstance<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_GetInstance,
+        SetFormat(err, case_has_GetInstance,
             "error decltype(HasGetInstance<%s>(0))::value "
             "is not same with %s\n");
 
@@ -283,7 +283,7 @@ public:
             "test compare between %s::HasInstance() and %s\n");
         SetFormat(debug, case_HasInstance_and_target, 
             "test compare between %s::HasInstance() and %s\n");
-        SetFormat(error, case_HasInstance_and_target,
+        SetFormat(err, case_HasInstance_and_target,
             "error %s::HasInstance() is not same with %s\n");
 
         CaseGITa case_GetInstance_and_target;
@@ -293,7 +293,7 @@ public:
         SetFormat(debug, case_GetInstance_and_target, 
             "test compare between pointer of %s::GetInstance() "
             "== %p and %s\n");
-        SetFormat(error, case_GetInstance_and_target,
+        SetFormat(err, case_GetInstance_and_target,
             "error pointer of %s::GetInstance() == %p is not same with %s\n");
             
         CaseCI case_ConstructInstance;
@@ -301,7 +301,7 @@ public:
             "Test ConstructInstance of %s\n");
         SetFormat(debug, case_ConstructInstance, 
             "Test ConstructInstance of %s\n");
-        SetFormat(error, case_ConstructInstance,  
+        SetFormat(err, case_ConstructInstance,  
             "error ConstructInstance of %s\n");
         
         CaseDI case_DestroyInstance;
@@ -309,7 +309,7 @@ public:
             "Test DestroyInstance of %s\n");
         SetFormat(debug, case_DestroyInstance, 
             "Test DestroyInstance of %s\n");
-        SetFormat(error, case_DestroyInstance, 
+        SetFormat(err, case_DestroyInstance, 
             "error ConstructInstance of %s\n");
     }
 

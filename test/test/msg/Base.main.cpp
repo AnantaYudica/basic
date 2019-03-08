@@ -42,8 +42,8 @@ char case4_cstr[] = CASE4_CSTR;
 #define INFO_CSTR "4"
 #define DEBUG_INT 14
 #define DEBUG_CSTR "14"
-#define ERROR_INT 44
-#define ERROR_CSTR "44"
+#define ERR_INT 44
+#define ERR_CSTR "44"
 
 typedef basic::test::msg::Argument<Case1,
     basic::test::msg::arg::Value<0>> InfoArgCase1;
@@ -118,7 +118,7 @@ int main()
 
     basic::test::msg::base::Info info;
     basic::test::msg::base::Debug debug;
-    basic::test::msg::base::Error error;
+    basic::test::msg::base::Error err;
 
     Case1 case1;
     Case2 case2;
@@ -137,10 +137,10 @@ int main()
     assert(strcmp(*testa1.Format(debug, case1), CASE1_CSTR SPACE_CSTR 
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
-    testa1.SetFormat(error, case1, CASE1_CSTR SPACE_CSTR COLOM_CSTR
+    testa1.SetFormat(err, case1, CASE1_CSTR SPACE_CSTR COLOM_CSTR
         SPACE_CSTR FORMAT_INT_CSTR);
-    printf("format : \"%s\"\n", *testa1.Format(error, case1));
-    assert(strcmp(*testa1.Format(error, case1), CASE1_CSTR SPACE_CSTR 
+    printf("format : \"%s\"\n", *testa1.Format(err, case1));
+    assert(strcmp(*testa1.Format(err, case1), CASE1_CSTR SPACE_CSTR 
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
     basic::test::msg::Format<char> case2_format(CASE2_CSTR SPACE_CSTR 
@@ -158,10 +158,10 @@ int main()
     assert(strcmp(*testa1.Format(info, case2), CASE2_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
-    testa1.SetFormat(error, case2, { case2_format,
+    testa1.SetFormat(err, case2, { case2_format,
         case2_format.Size() + sizeof(case2_arg_format), case2_arg_format });
-    printf("format : \"%s\"\n", *testa1.Format(error, case2));
-    assert(strcmp(*testa1.Format(error, case2), CASE2_CSTR SPACE_CSTR 
+    printf("format : \"%s\"\n", *testa1.Format(err, case2));
+    assert(strcmp(*testa1.Format(err, case2), CASE2_CSTR SPACE_CSTR 
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
     basic::test::msg::Format<char> case3_info_format(CASE3_CSTR SPACE_CSTR
@@ -178,11 +178,11 @@ int main()
     assert(strcmp(*testa1.Format(info, case3), CASE3_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
-    basic::test::msg::Format<char> case3_error_format(CASE3_CSTR SPACE_CSTR
+    basic::test::msg::Format<char> case3_err_format(CASE3_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR);
-    testa1.SetFormat(error, case3, std::move(case3_error_format));
-    printf("format : \"%s\"\n", *testa1.Format(error, case3));
-    assert(strcmp(*testa1.Format(error, case3), CASE3_CSTR SPACE_CSTR
+    testa1.SetFormat(err, case3, std::move(case3_err_format));
+    printf("format : \"%s\"\n", *testa1.Format(err, case3));
+    assert(strcmp(*testa1.Format(err, case3), CASE3_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
     basic::test::msg::Format<char> case4_format(CASE4_CSTR SPACE_CSTR
@@ -197,15 +197,15 @@ int main()
     assert(strcmp(*testa1.Format(info, case4), CASE4_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
-    testa1.SetFormat(error, case4, case4_format);
-    printf("format : \"%s\"\n", *testa1.Format(error, case4));
-    assert(strcmp(*testa1.Format(error, case4), CASE4_CSTR SPACE_CSTR
+    testa1.SetFormat(err, case4, case4_format);
+    printf("format : \"%s\"\n", *testa1.Format(err, case4));
+    assert(strcmp(*testa1.Format(err, case4), CASE4_CSTR SPACE_CSTR
         COLOM_CSTR SPACE_CSTR FORMAT_INT_CSTR) == 0);
 
     basic::test::Variable<
         basic::test::Value<int>,
         basic::test::Value<int>,
-        basic::test::Value<int>> var1(INFO_INT, DEBUG_INT, ERROR_INT);
+        basic::test::Value<int>> var1(INFO_INT, DEBUG_INT, ERR_INT);
 
     testa1.Argument(info, case1).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer), 
@@ -225,14 +225,14 @@ int main()
     assert(strcmp(buffer, CASE1_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
         DEBUG_CSTR) == 0);
 
-    testa1.Argument(error, case1).Call<void>(&TestA::Print, testa1, var1,
+    testa1.Argument(err, case1).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case1&>(case1));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE1_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
     testa1.Argument(info, case2).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
@@ -252,14 +252,14 @@ int main()
     assert(strcmp(buffer, CASE2_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
         DEBUG_CSTR) == 0);
 
-    testa1.Argument(error, case2).Call<void>(&TestA::Print, testa1, var1,
+    testa1.Argument(err, case2).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case2&>(case2));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE2_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
     testa1.Argument(info, case2).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
@@ -279,14 +279,14 @@ int main()
     assert(strcmp(buffer, CASE2_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
         DEBUG_CSTR) == 0);
 
-    testa1.Argument(error, case2).Call<void>(&TestA::Print, testa1, var1,
+    testa1.Argument(err, case2).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case2&>(case2));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE2_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
     testa1.Argument(info, case3).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
@@ -306,14 +306,14 @@ int main()
     assert(strcmp(buffer, CASE3_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
         DEBUG_CSTR) == 0);
 
-    testa1.Argument(error, case3).Call<void>(&TestA::Print, testa1, var1,
+    testa1.Argument(err, case3).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case3&>(case3));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE3_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
     testa1.Argument(info, case3).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
@@ -333,19 +333,19 @@ int main()
     assert(strcmp(buffer, CASE3_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
         DEBUG_CSTR) == 0);
 
-    testa1.Argument(error, case3).Call<void>(&TestA::Print, testa1, var1,
+    testa1.Argument(err, case3).Call<void>(&TestA::Print, testa1, var1,
         std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case3&>(case3));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE3_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
 
     basic::test::Variable<
         basic::test::type::val::Sequence<int, INFO_INT, DEBUG_INT, 
-            ERROR_INT>> var2;
+            ERR_INT>> var2;
 
     basic::test::type::Index<Case4, 0> case4_at0;
     testa1.Argument(info, case4).Call<void>(case4_at0, &TestA::Print, testa1,
@@ -368,14 +368,14 @@ int main()
         DEBUG_CSTR) == 0);
 
     basic::test::type::Index<Case4, 2> case4_at2;
-    testa1.Argument(error, case4).Call<void>(case4_at2, &TestA::Print, testa1,
+    testa1.Argument(err, case4).Call<void>(case4_at2, &TestA::Print, testa1,
         var2, std::forward<char*>(buffer),
         std::forward<const std::size_t&>(buff_size),
-        static_cast<const basic::test::msg::base::Error&>(error),
+        static_cast<const basic::test::msg::base::Error&>(err),
         static_cast<const Case4&>(case4));
     printf("output : \"%s\"\n", buffer);
     assert(strcmp(buffer, CASE4_CSTR SPACE_CSTR COLOM_CSTR SPACE_CSTR
-        ERROR_CSTR) == 0);
+        ERR_CSTR) == 0);
 
     delete[] buffer;
 }

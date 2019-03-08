@@ -116,14 +116,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseAVTTa case_alias_value_type_and_target;
         SetFormat(info, case_alias_value_type_and_target,
             "Test compare between %s::value_type and %s\n");
         SetFormat(debug, case_alias_value_type_and_target,
             "Test compare between %s::value_type and %s\n");
-        SetFormat(error, case_alias_value_type_and_target,
+        SetFormat(err, case_alias_value_type_and_target,
             "error %s::value_type is not same with %s\n");
             
         CaseAVT case_alias_value_type;
@@ -133,7 +133,7 @@ public:
         SetFormat(debug, case_alias_value_type,
             "Test compare between %s::value_type and "
             "%s::ValueType\n");
-        SetFormat(error, case_alias_value_type,
+        SetFormat(err, case_alias_value_type,
             "error %s::value_type is not same with "
             "%s::ValueType\n");
 
@@ -142,7 +142,7 @@ public:
             "Test compare between %s::value and %s\n");
         SetFormat(debug, case_value_and_target,
             "Test compare between %s::value and %s\n");
-        SetFormat(error, case_value_and_target,
+        SetFormat(err, case_value_and_target,
             "error %s::value is not same with %s\n");
 
         CaseV case_value;
@@ -152,7 +152,7 @@ public:
         SetFormat(debug, case_value,
             "Test compare between %s::value and "
             "%s::Value\n");
-        SetFormat(error, case_value,
+        SetFormat(err, case_value,
             "error %s::value is not same with "
             "%s::Value\n");
     }

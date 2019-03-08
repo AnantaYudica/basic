@@ -18,7 +18,7 @@ enum message
     m_undefined,
     m_info,
     m_debug,
-    m_error
+    m_err
 };
 
 template<typename TCase>
@@ -92,7 +92,7 @@ struct TestA :
     void Error(const TCaseId&, TVar& var)
     {
         basic::test::var::At<1>(var).Get().
-            template At<CaseIndex<TCaseId>::Value>() = message::m_error;
+            template At<CaseIndex<TCaseId>::Value>() = message::m_err;
     } 
 };
 
@@ -123,7 +123,7 @@ int main()
         template At<CaseIndex<Case1>::Value>() == message::m_debug);
     assert(var2.Get().template At<1>() == true);
     assert(basic::test::var::At<1>(var2).Get().
-        template At<CaseIndex<Case2>::Value>() == message::m_error);
+        template At<CaseIndex<Case2>::Value>() == message::m_err);
     assert(var2.Get().template At<2>() == false);
     assert(basic::test::var::At<1>(var2).Get().
         template At<CaseIndex<Case3>::Value>() == message::m_undefined);
@@ -137,7 +137,7 @@ int main()
         template At<CaseIndex<Case1>::Value>() == message::m_debug);
     assert(var3.Get().template At<1>() == true);
     assert(basic::test::var::At<1>(var3).Get().
-        template At<CaseIndex<Case2>::Value>() == message::m_error);
+        template At<CaseIndex<Case2>::Value>() == message::m_err);
     assert(var3.Get().template At<2>() == true);
     assert(basic::test::var::At<1>(var3).Get().template 
         At<CaseIndex<Case3>::Value>() == message::m_debug);

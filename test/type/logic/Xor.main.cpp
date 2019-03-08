@@ -84,14 +84,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseVTa case_value_and_target;
         SetFormat(info, case_value_and_target, 
             "test compare between %s::value and %s\n");
         SetFormat(debug, case_value_and_target,
             "test compare between %s::value and %s\n");
-        SetFormat(error, case_value_and_target,
+        SetFormat(err, case_value_and_target,
             "error %s::value is not same with %s\n");
 
         CaseV case_value;
@@ -99,7 +99,7 @@ public:
             "test compare between %s::value and %s::Value\n");
         SetFormat(debug, case_value,
             "test compare between %s::value and %s::Value\n");
-        SetFormat(error, case_value,
+        SetFormat(err, case_value,
             "error %s::value is not same with %s::Value\n");
     }
 

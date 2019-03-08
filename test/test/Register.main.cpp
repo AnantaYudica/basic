@@ -12,13 +12,13 @@ BASIC_TEST_CONSTRUCT;
 
 struct StatusError
 {
-    int& m_error;
-    StatusError(int& error) :
-        m_error(error)
+    int& m_err;
+    StatusError(int& err) :
+        m_err(err)
     {}
     int Get()
     {
-        return m_error;
+        return m_err;
     }
 };
 
@@ -26,12 +26,12 @@ struct Test
 {
     static Test ms_instance;
     std::vector<basic::test::reg::Base*> m_lists;
-    int m_error;
+    int m_err;
     StatusError m_status;
     Test() :
         m_lists(),
-        m_error(),
-        m_status(m_error)
+        m_err(),
+        m_status(m_err)
     {}
     static Test& GetInstance()
     {
@@ -43,7 +43,7 @@ struct Test
     }
     static void Error(const char* msg)
     {
-        ms_instance.m_error += 1;
+        ms_instance.m_err += 1;
     }
     static StatusError& Status()
     {

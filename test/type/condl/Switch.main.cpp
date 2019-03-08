@@ -134,14 +134,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseATTa case_alias_type_and_target;
         SetFormat(info, case_alias_type_and_target, 
             "test compare between %s::type and %s\n");
         SetFormat(debug, case_alias_type_and_target,
             "test compare between %s::type and %s\n");
-        SetFormat(error, case_alias_type_and_target,
+        SetFormat(err, case_alias_type_and_target,
             "error %s::type is not same with %s\n");
             
         CaseAT case_alias_type;
@@ -149,7 +149,7 @@ public:
             "test compare between %s::type and %s::Type\n");
         SetFormat(debug, case_alias_type,
             "test compare between %s::type and %s::Type\n");
-        SetFormat(error, case_alias_type,
+        SetFormat(err, case_alias_type,
             "error %s::type is not same with %s::Type\n");
 
         CaseITa case_index_and_target;
@@ -157,7 +157,7 @@ public:
             "test compare between %s::index and %d\n");
         SetFormat(debug, case_index_and_target,
             "test compare between %s::index and %d\n");
-        SetFormat(error, case_index_and_target,
+        SetFormat(err, case_index_and_target,
             "error %s::index is not same with %d\n");
 
         CaseI case_index;
@@ -165,7 +165,7 @@ public:
             "test compare between %s::index and %s::Index\n");
         SetFormat(debug, case_index,
             "test compare between %s::index and %s::Index\n");
-        SetFormat(error, case_index,
+        SetFormat(err, case_index,
             "error %s::index is not same with %s::Index\n");
 
         CaseSTa case_size_and_target;
@@ -173,7 +173,7 @@ public:
             "test compare between %s::size and %d\n");
         SetFormat(debug, case_size_and_target,
             "test compare between %s::size and %d\n");
-        SetFormat(error, case_size_and_target,
+        SetFormat(err, case_size_and_target,
             "error %s::size is not same with %d\n");
 
         CaseS case_size;
@@ -181,7 +181,7 @@ public:
             "test compare between %s::size and %s::Size\n");
         SetFormat(debug, case_size,
             "test compare between %s::size and %s::Size\n");
-        SetFormat(error, case_size,
+        SetFormat(err, case_size,
             "error %s::size is not same with %s::Size\n");
     }
  

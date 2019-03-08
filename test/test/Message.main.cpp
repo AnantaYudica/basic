@@ -49,15 +49,15 @@ struct Output
 #endif
     }
     template<typename... Targs>
-    static void Error(const char* error_msg_cstr, Targs&&... args)
+    static void Error(const char* err_msg_cstr, Targs&&... args)
     {
         assert(ms_output.m_bufferStr != NULL);
 #if ((defined(_WIN32) || defined(_WIN64)) && !defined(_CRT_SECURE_NO_WARNINGS))
         sprintf_s(ms_output.m_bufferStr + ms_output.m_offset,
-            OUTPUT_BUFFER_SIZE, error_msg_cstr, std::forward<Targs>(args)...);
+            OUTPUT_BUFFER_SIZE, err_msg_cstr, std::forward<Targs>(args)...);
 #else
         sprintf(ms_output.m_bufferStr + ms_output.m_offset, 
-            error_msg_cstr, std::forward<Targs>(args)...);
+            err_msg_cstr, std::forward<Targs>(args)...);
 #endif
     }
 };
@@ -83,7 +83,7 @@ char case4_cstr[] = CASE4_CSTR;
 
 constexpr int info_int = 4;
 constexpr int debug_int = 14;
-constexpr int error_int = 44;
+constexpr int err_int = 44;
 
 typedef basic::test::msg::Argument<Case1,
     basic::test::msg::arg::Value<0>> InfoArgCase1;
@@ -145,7 +145,7 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         Case1 case1;
         Case2 case2;
         Case3 case3;
@@ -153,7 +153,7 @@ public:
 
         SetFormat(debug, case1, CASE1_CSTR " : %d\n");
         SetFormat(info, case1, CASE1_CSTR " : %d\n");
-        SetFormat(error, case1, CASE1_CSTR " : %d\n");
+        SetFormat(err, case1, CASE1_CSTR " : %d\n");
 
         basic::test::msg::Format<char> formatCase2(CASE2_CSTR " : %s\n");
         char argFormatCase2[] = "%d";
@@ -161,7 +161,7 @@ public:
             formatCase2.Size() + sizeof(argFormatCase2), argFormatCase2});
         SetFormat(info, case2, { formatCase2,
             formatCase2.Size() + sizeof(argFormatCase2), argFormatCase2 });
-        SetFormat(error, case2, { formatCase2,
+        SetFormat(err, case2, { formatCase2,
             formatCase2.Size() + sizeof(argFormatCase2), argFormatCase2 });
 
         basic::test::msg::Format<char> InfoFormatCase3(CASE3_CSTR " : %d\n");
@@ -169,12 +169,12 @@ public:
         basic::test::msg::Format<char> ErrorFormatCase3(CASE3_CSTR " : %d\n");
         SetFormat(debug, case3, std::move(InfoFormatCase3));
         SetFormat(info, case3, std::move(DebugFormatCase3));
-        SetFormat(error, case3, std::move(ErrorFormatCase3));
+        SetFormat(err, case3, std::move(ErrorFormatCase3));
         
         basic::test::msg::Format<char> formatCase4(CASE4_CSTR " : %d\n");
         SetFormat(debug, case4, formatCase4);
         SetFormat(info, case4, formatCase4);
-        SetFormat(error, case4, formatCase4);
+        SetFormat(err, case4, formatCase4);
     }
 };
 
@@ -185,7 +185,7 @@ int main()
     basic::test::Variable<
         basic::test::Value<int>, 
         basic::test::Value<int>,
-        basic::test::Value<int>> var1(info_int, debug_int, error_int);
+        basic::test::Value<int>> var1(info_int, debug_int, err_int);
     char * cstr = new char[MAX_CASE_CSTR];
     int value = 0;
 
@@ -220,7 +220,7 @@ int main()
 #endif
     printf("%s : %d\n", cstr, value);
     assert(strcmp(cstr, case1_cstr) == 0);
-    assert(value == error_int);
+    assert(value == err_int);
     
     a.Info(Case2{}, var1);
 #if ((defined(_WIN32) || defined(_WIN64)) && !defined(_CRT_SECURE_NO_WARNINGS))
@@ -253,7 +253,7 @@ int main()
 #endif
     printf("%s : %d\n", cstr, value);
     assert(strcmp(cstr, case2_cstr) == 0);
-    assert(value == error_int);
+    assert(value == err_int);
 
     
     a.Info(Case3{}, var1);
@@ -287,11 +287,11 @@ int main()
 #endif
     printf("%s : %d\n", cstr, value);
     assert(strcmp(cstr, case3_cstr) == 0);
-    assert(value == error_int);
+    assert(value == err_int);
     
     basic::test::Variable<
         basic::test::type::val::Sequence<int, info_int,
-        debug_int, error_int>> var2;
+        debug_int, err_int>> var2;
 
     a.Info(basic::test::type::Index<Case4, 0>{}, var2);
 #if ((defined(_WIN32) || defined(_WIN64)) && !defined(_CRT_SECURE_NO_WARNINGS))
@@ -324,7 +324,7 @@ int main()
 #endif
     printf("%s : %d\n", cstr, value);
     assert(strcmp(cstr, case4_cstr) == 0);
-    assert(value == error_int);
+    assert(value == err_int);
 
     delete[] cstr;
 }

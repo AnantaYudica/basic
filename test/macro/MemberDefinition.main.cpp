@@ -105,14 +105,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
 
         CaseATTa case_alias_type_and_target;
         SetFormat(info, case_alias_type_and_target, 
             "test compare between %s::type and %s\n");
         SetFormat(debug, case_alias_type_and_target,
             "test compare between %s::type and %s\n");
-        SetFormat(error, case_alias_type_and_target,
+        SetFormat(err, case_alias_type_and_target,
             "error %s::type is not same with %s\n");
 
         CaseATTTa case_alias_type_tmpl_and_target;
@@ -120,7 +120,7 @@ public:
             "test compare between %s::template type<%s> and %s\n");
         SetFormat(debug, case_alias_type_tmpl_and_target,
             "test compare between %s::template type<%s> and %s\n");
-        SetFormat(error, case_alias_type_tmpl_and_target,
+        SetFormat(err, case_alias_type_tmpl_and_target,
             "error %s::template type<%s> is not same with %s\n");
 
         CaseAT case_alias_type;
@@ -128,7 +128,7 @@ public:
             "test compare between %s::type and %s::Type\n");
         SetFormat(debug, case_alias_type,
             "test compare between %s::type and %s::Type\n");
-        SetFormat(error, case_alias_type,
+        SetFormat(err, case_alias_type,
             "error %s::type is not same with %s::Type\n");
 
         CaseATT case_alias_tmpl_type;
@@ -138,7 +138,7 @@ public:
         SetFormat(debug, case_alias_tmpl_type,
             "test compare between %s::template type<%s> "
             "and %s::template type<%s>\n");
-        SetFormat(error, case_alias_tmpl_type,
+        SetFormat(err, case_alias_tmpl_type,
             "error %s::template type<%s> is not same "
             "with %s::template type<%s>\n");
     }
