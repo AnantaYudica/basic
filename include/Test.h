@@ -73,8 +73,8 @@ public:
     template<typename... Targs>
     static void Debug(const char* debug_msg_cstr, Targs&&... args);
     template<typename... Targs>
-    static void Error(const char* error_msg_cstr, Targs&&... args);
-    static bool Assert(bool test, const char* error_msg_cstr, 
+    static void Error(const char* err_msg_cstr, Targs&&... args);
+    static bool Assert(bool test, const char* err_msg_cstr, 
         const char* file, const int& line);
 public:
     static Test<Ts, To, Tmem>& CreateInstance();
@@ -168,10 +168,10 @@ void Test<Ts, To, Tmem>::Debug(const char* debug_msg_cstr,
 template<typename Ts, template<typename> class To,
     template<typename> class Tmem>
 template<typename... Targs>
-void Test<Ts, To, Tmem>::Error(const char* error_msg_cstr, 
+void Test<Ts, To, Tmem>::Error(const char* err_msg_cstr, 
     Targs&&... args)
 {
-    GetInstance().Output().Error(error_msg_cstr,
+    GetInstance().Output().Error(err_msg_cstr,
         std::forward<Targs>(args)...);
     auto trace = GetInstance().GetTrace();
     while (!trace.empty())
@@ -184,11 +184,11 @@ void Test<Ts, To, Tmem>::Error(const char* error_msg_cstr,
 
 template<typename Ts, template<typename> class To,
     template<typename> class Tmem>
-bool Test<Ts, To, Tmem>::Assert(bool test, const char* error_msg_cstr,
+bool Test<Ts, To, Tmem>::Assert(bool test, const char* err_msg_cstr,
     const char* file, const int& line)
 {
     if (!test)
-        Error("error %s file %s line %i\n", error_msg_cstr, file, line);
+        Error("error %s file %s line %i\n", err_msg_cstr, file, line);
     return test;
 }
 
@@ -425,9 +425,9 @@ void operator delete[]( void* p, const std::nothrow_t& tag )
 #endif //!INFO
 
 #ifndef ASSERT
-#define ASSERT(__ERROR_MESSAGE__, __TEST_BOOL__, ...)\
+#define ASSERT(__ERR_MESSAGE__, __TEST_BOOL__, ...)\
     BASIC_TEST::Assert(__TEST_BOOL__,##__VA_ARGS__,\
-        __ERROR_MESSAGE__, __FILE__, __LINE__)
+        __ERR_MESSAGE__, __FILE__, __LINE__)
 #endif //!ASSERT
 
 #ifndef REGISTER_TEST

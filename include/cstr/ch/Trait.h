@@ -6,7 +6,7 @@
 
 #include "../../macro/HasMemberDefinition.h"
 #include "../../macro/HasStaticMemberFunction.h"
-#include "../../type/conditional/Switch.h"
+#include "../../type/condl/Switch.h"
 
 namespace _helper
 {
@@ -121,101 +121,101 @@ __DEFINE_HAS_STATIC_MMBR_FUNC_(_HasNotEndOfFile, __HasNotEndOfFile, TCharTrait,
     NotEndOfFile);
 
 template<typename TCharTrait>
-using _SwDefnChar = basic::type::conditional::Switch<std::false_type, 
+using _SwDefnChar = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdCharType<TCharTrait>::Value>,
     std::integral_constant<bool, _HasCharType<TCharTrait>::Value>>;
 
 template<typename TCharTrait>
-using _SWDefnInt = basic::type::conditional::Switch<std::false_type, 
+using _SWDefnInt = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdIntType<TCharTrait>::Value>,
     std::integral_constant<bool, _HasIntType<TCharTrait>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncAssign = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncAssign = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdAssign<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasAssign<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncMove = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncMove = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdMove<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasMove<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncCopy = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncCopy = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdCopy<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasCopy<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncEqual = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncEqual = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdEqual<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasEqual<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncLessThan = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncLessThan = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdLessThan<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasLessThan<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncCompare = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncCompare = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdCompare<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasCompare<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncLength = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncLength = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdLength<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasLength<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncFind = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncFind = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdFind<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasFind<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncToCharType = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncToCharType = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdToCharType<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasToCharType<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncToIntType = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncToIntType = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdToIntType<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasToIntType<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncEqualIntType = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncEqualIntType = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdEqualIntType<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasEqualIntType<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncEndOfFile = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncEndOfFile = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdEndOfFile<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasEndOfFile<TCharTrait, 
         TRet, TArgs...>::Value>>;
 
 template<typename TCharTrait, typename TRet, typename... TArgs>
-using _SwFuncNotEndOfFile = basic::type::conditional::Switch<std::false_type, 
+using _SwFuncNotEndOfFile = basic::type::condl::Switch<std::false_type, 
     std::integral_constant<bool, _HasStdNotEndOfFile<TCharTrait, 
         TRet, TArgs...>::Value>,
     std::integral_constant<bool, _HasNotEndOfFile<TCharTrait, 

@@ -79,9 +79,9 @@ template<typename TCaseId, typename... TVarArgs>
 void Message<TTest, TDerived>::Error(const TCaseId& case_id,
     test::Variable<TVarArgs...>& var)
 {
-    msg::base::Error error;
-    m_derived.Argument(error, case_id).template Call<void, 
-        const char*>(&TTest::Error, var, std::move(*m_derived.Format(error,
+    msg::base::Error err;
+    m_derived.Argument(err, case_id).template Call<void, 
+        const char*>(&TTest::Error, var, std::move(*m_derived.Format(err,
             case_id)));
 }
 
@@ -111,10 +111,10 @@ template<typename TCaseId, std::size_t ICaseId,  typename... TVarArgs>
 void Message<TTest, TDerived>::Error(const test::type::Index<TCaseId, 
     ICaseId>& case_id, test::Variable<TVarArgs...>& var)
 {
-    msg::base::Error error;
-    m_derived.Argument(error, TCaseId{}).template Call<void, 
+    msg::base::Error err;
+    m_derived.Argument(err, TCaseId{}).template Call<void, 
         const char*>(case_id, &TTest::Error, var, 
-            std::move(*m_derived.Format(error, TCaseId{})));
+            std::move(*m_derived.Format(err, TCaseId{})));
 }
 
 } //!test
