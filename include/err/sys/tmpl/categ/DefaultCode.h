@@ -6,7 +6,7 @@
 #include "has/mmbr/func/DefaultCode.h"
 #include "DefaultCodeValue.h"
 
-#include "../../Code.h"
+#include "../../Code.defn.h"
 
 #include <type_traits>
 #include <utility>

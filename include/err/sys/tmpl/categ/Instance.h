@@ -2,7 +2,7 @@
 #define BASIC_ERR_SYS_TMPL_CATEG_INSTANCE_H_
 
 #include "has/st/mmbr/func/Instance.h"
-#include "../Category.h"
+#include "../Category.defn.h"
 
 #include <type_traits>
 
