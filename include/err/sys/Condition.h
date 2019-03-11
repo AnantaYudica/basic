@@ -87,7 +87,7 @@ inline void Condition::Assign(const ValueType & cond,
 
 inline void Condition::Clear() noexcept
 {
-    this->m_value = this->m_categ->DefaultCondition().Value();
+    this->m_value = this->m_categ->DefaultConditionValue();
     this->m_message = std::move(m_categ->Message(*this));
 }
 
