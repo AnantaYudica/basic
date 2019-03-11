@@ -87,7 +87,7 @@ inline void Code::Assign(const ValueType & code,
 
 inline void Code::Clear() noexcept
 {
-    this->m_value = this->m_categ->DefaultCode().Value();
+    this->m_value = this->m_categ->DefaultCodeValue();
     this->m_message = std::move(m_categ->Message(*this));
 }
 
