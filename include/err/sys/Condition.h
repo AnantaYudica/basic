@@ -44,7 +44,7 @@ inline Condition::Condition(Condition && mov) noexcept :
     m_categ(std::move(mov.m_categ)),
     m_message(std::move(mov.m_message))
 {
-    this->Clear();
+    mov.Clear();
 }
 
 inline Condition::~Condition() noexcept
