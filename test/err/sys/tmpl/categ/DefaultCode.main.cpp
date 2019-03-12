@@ -111,11 +111,11 @@ public:
         basic::test::msg::base::Error err;
 
         TestValueDefaultCode testValueDefaultCode;
-        SetFormat(info, testValueDefaultCode, "Test alias type "
+        SetFormat(info, testValueDefaultCode, "Test value of "
             "%s::DefaultCode<%s>(%s(), %s {%s}) is same with %s {%s}\n");
-        SetFormat(debug, testValueDefaultCode, "Test alias type "
+        SetFormat(debug, testValueDefaultCode, "Test value of "
             "%s::DefaultCode<%s>(%s(), %s {%s}) is same with %s {%s}\n");
-        SetFormat(err, testValueDefaultCode, "Error alias type "
+        SetFormat(err, testValueDefaultCode, "Error value of "
             "%s::DefaultCode<%s>(%s(), %s {%s}) is not same with %s {%s}\n");
 
     }
