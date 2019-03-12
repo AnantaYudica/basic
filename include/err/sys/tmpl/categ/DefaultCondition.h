@@ -5,6 +5,7 @@
 
 #include "has/mmbr/func/DefaultCondition.h"
 #include "../../Condition.defn.h"
+#include "../../Code.defn.h"
 
 #include <type_traits>
 #include <utility>
@@ -29,6 +30,16 @@ DefaultCondition(const TCategoryTrait & categ_trait, const TCode & code,
 {
     return std::move(categ_trait.template 
         DefaultCondition<sys::Condition>(code, categ_instance));
+}
+
+template<typename TCategoryTrait>
+typename std::enable_if<!has::mmbr::func::DefaultCondition<TCategoryTrait,
+    sys::Condition, sys::Code, tmpl::Category<TCategoryTrait>>::Value, 
+    sys::Condition>::type  
+DefaultCondition(const TCategoryTrait & categ_trait, const sys::Code & code,
+    const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
+{
+    return {code.Value(), categ_instance};
 }
 
 template<typename TCategoryTrait, typename TCode>
