@@ -44,7 +44,7 @@ inline Condition::Condition(Condition && mov) noexcept :
     m_categ(std::move(mov.m_categ)),
     m_message(std::move(mov.m_message))
 {
-    this->Clear();
+    mov.Clear();
 }
 
 inline Condition::~Condition() noexcept
@@ -87,7 +87,7 @@ inline void Condition::Assign(const ValueType & cond,
 
 inline void Condition::Clear() noexcept
 {
-    this->m_value = this->m_categ->DefaultCondition().Value();
+    this->m_value = this->m_categ->DefaultConditionValue();
     this->m_message = std::move(m_categ->Message(*this));
 }
 

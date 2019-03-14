@@ -52,6 +52,10 @@ public:
 public:
     virtual const CharType * Name() const noexcept = 0;
 public:
+    virtual CodeValueType DefaultCodeValue() const noexcept = 0;
+public:
+    virtual ConditionValueType DefaultConditionValue() const noexcept = 0;
+public:
     virtual CodeType DefaultCode() const noexcept = 0;
     virtual CodeType DefaultCode(const CodeValueType &) const noexcept = 0;
 public:
