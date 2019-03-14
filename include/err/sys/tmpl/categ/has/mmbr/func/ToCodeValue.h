@@ -65,7 +65,7 @@ namespace func
 template<typename TCategoryTrait, typename TCodeEnum>
 using ToCodeValue = _helper::_basic::_err::_sys::_tmpl::_categ::
     _has::_mmbr::_func::_ToCodeValue<TCategoryTrait, 
-    err::defn::type::sys::code::Value, TCodeEnum>;
+    err::defn::type::sys::code::Value, const TCodeEnum &>;
 
 } //!func
 
