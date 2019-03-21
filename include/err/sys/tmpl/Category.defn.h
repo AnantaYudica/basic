@@ -81,9 +81,13 @@ public:
 public:
     CodeValueType DefaultCodeValue() const noexcept;
 public:
+    using tmpl::imp::Category<TCategoryTrait>::DefaultCode;
+public:
     CodeType DefaultCode() const noexcept;
 public:
     ConditionValueType DefaultConditionValue() const noexcept;
+public:
+    using tmpl::imp::Category<TCategoryTrait>::DefaultCondition;
 public:
     ConditionType DefaultCondition() const noexcept;
 public:
