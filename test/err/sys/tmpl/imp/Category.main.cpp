@@ -185,8 +185,6 @@ REGISTER_TEST(t1, new TestImpCategory<Case1, T1Var1, T1Var2>(t1_var1,
 
 int main()
 {
-    basic::err::sys::tmpl::Category<CategoryTrait1>::GetInstance().
-        DefaultCode(2);
     return RUN_TEST();
 }
 
