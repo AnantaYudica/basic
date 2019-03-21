@@ -64,13 +64,13 @@ public:
     virtual const CharType * Name() const noexcept = 0;
 public:
     virtual CodeType DefaultCode() const noexcept = 0;
-private:
+public:
     CodeType DefaultCode(const CodeValueType &) const noexcept;
 public:
     CodeType DefaultCode(const CodeSetValueType &) const noexcept;
 public:
     virtual ConditionType DefaultCondition() const noexcept = 0;
-private:
+public:
     ConditionType DefaultCondition(const CodeValueType &) 
         const noexcept;
 public:
