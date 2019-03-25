@@ -25,17 +25,34 @@ typedef basic::err::sys::Code CodeType;
 typedef basic::err::sys::Condition ConditionType;
 
 template<typename ... TArgs, typename T>
-auto HasDefaultCode(const T& t) -> 
+auto HasDefaultCode_(const basic::err::sys::tmpl::imp::Category<T>& t) -> 
     decltype(t.DefaultCode(std::declval<TArgs>()...), std::true_type());
 
 template<typename T, typename ... TArgs>
-std::false_type HasDefaultCode(...);
+std::false_type HasDefaultCode_(...);
+
+template<typename T, typename... TArgs>
+struct HasDefaultCode
+{
+    static constexpr bool Value = 
+        decltype(HasDefaultCode_<TArgs...>(std::declval<T>()))::value;
+};
+
+template<typename ... TArgs, typename T>
+auto HasDefaultCondition_(const  basic::err::sys::tmpl::imp::Category<T>& t) ->
+    decltype(t.DefaultCondition(std::declval<TArgs>()...), std::true_type());
+
+template<typename T, typename ... TArgs>
+std::false_type HasDefaultCondition_(...);
+
+template<typename T, typename... TArgs>
+struct HasDefaultCondition
+{
+    static constexpr bool Value = 
+        decltype(HasDefaultCondition_<TArgs...>(std::declval<T>()))::value;
+};
 
 enum class CodeEnum1
-{
-    value1 = 4
-};
-enum class ConditionEnum1
 {
     value1 = 4
 };
@@ -61,51 +78,146 @@ struct TestHasDefaultCodeWithCodeEnum {};
 struct TestHasDefaultCodeWithCodeValue {};
 struct TestHasDefaultConditionWithConditionEnum {};
 struct TestHasDefaultConditionWithConditionValue {};
+struct TestValueDefaultCodeWithCodeEnum {};
+struct TestValueDefaultCodeWithCodeValue {};
+struct TestValueDefaultConditionWithConditionEnum {};
+struct TestValueDefaultConditionWithConditionValue {};
 
-template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue,
-    typename TConditionEnum, typename TConditionValue>
+template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
 using VariableTestImpCategory = basic::test::Variable<
     TCategoryTrait,
     basic::err::sys::tmpl::Category<TCategoryTrait>,
+    CodeType,
+    ConditionType,
     TCodeEnum,
     TCodeValue,
-    TConditionEnum,
-    TConditionValue,
     basic::test::Value<TCodeEnum *>,
     basic::test::Value<TCodeValue *>,
-    basic::test::Value<TConditionEnum *>,
-    basic::test::Value<TConditionValue *>,
     basic::test::Value<bool>,
     basic::test::Value<bool>,
     basic::test::Value<bool>,
-    basic::test::Value<bool>>;
+    basic::test::Value<bool>,
+    basic::test::Value<CodeType *>,
+    basic::test::Value<ConditionType *>>;
 
 constexpr std::size_t ICategoryTraitType = 0;
 constexpr std::size_t ITmplCategoryType = 1;
-constexpr std::size_t ICodeEnumType = 2;
-constexpr std::size_t ICodeValueType = 3;
-constexpr std::size_t IConditionEnumType = 4;
-constexpr std::size_t IConditionValueType = 5;
+constexpr std::size_t ICodeType = 2;
+constexpr std::size_t IConditionType = 3;
+constexpr std::size_t ICodeEnumType = 4;
+constexpr std::size_t ICodeValueType = 5;
 constexpr std::size_t ICodeEnumValue = 6;
 constexpr std::size_t ICodeValueValue = 7;
-constexpr std::size_t IConditionEnumValue = 8;
-constexpr std::size_t IConditionValueValue = 9;
-constexpr std::size_t IHasCodeEnumValue = 10;
-constexpr std::size_t IHasCodeValueValue = 11;
-constexpr std::size_t IHasConditionEnumValue = 12;
-constexpr std::size_t IHasConditionValueValue = 13;
+constexpr std::size_t IHasDefaultCodeEnumValue = 8;
+constexpr std::size_t IHasDefaultCodeValueValue = 9;
+constexpr std::size_t IHasDefaultConditionEnumValue = 10;
+constexpr std::size_t IHasDefaultConditionValueValue = 11;
+constexpr std::size_t ICodeValue = 12;
+constexpr std::size_t IConditionValue = 13;
 
 typedef basic::test::msg::Argument<TestHasDefaultCodeWithCodeEnum,
     basic::test::msg::arg::type::Name<ITmplCategoryType>,
     basic::test::msg::arg::type::Name<ICodeEnumType>,
     basic::test::msg::arg::Value<ICodeEnumValue>,
-    basic::test::msg::arg::Value<IHasCodeEnumValue>> 
+    basic::test::msg::arg::Value<IHasDefaultCodeEnumValue>> 
         ArgTestHasDefaultCodeWithCodeEnum;
 
 typedef basic::test::msg::Base<TestHasDefaultCodeWithCodeEnum, char, 
     ArgTestHasDefaultCodeWithCodeEnum, ArgTestHasDefaultCodeWithCodeEnum, 
     ArgTestHasDefaultCodeWithCodeEnum> 
         MessageBaseTestHasDefaultCodeWithCodeEnum;
+
+typedef basic::test::msg::Argument<TestHasDefaultCodeWithCodeValue,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeValueType>,
+    basic::test::msg::arg::Value<ICodeValueValue>,
+    basic::test::msg::arg::Value<IHasDefaultCodeValueValue>> 
+        ArgTestHasDefaultCodeWithCodeValue;
+
+typedef basic::test::msg::Base<TestHasDefaultCodeWithCodeValue, char, 
+    ArgTestHasDefaultCodeWithCodeValue, ArgTestHasDefaultCodeWithCodeValue, 
+    ArgTestHasDefaultCodeWithCodeValue> 
+        MessageBaseTestHasDefaultCodeWithCodeValue;
+
+typedef basic::test::msg::Argument<TestHasDefaultConditionWithConditionEnum,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeEnumType>,
+    basic::test::msg::arg::Value<ICodeEnumValue>,
+    basic::test::msg::arg::Value<IHasDefaultConditionEnumValue>> 
+        ArgTestHasDefaultConditionWithConditionEnum;
+
+typedef basic::test::msg::Base<TestHasDefaultConditionWithConditionEnum, char, 
+    ArgTestHasDefaultConditionWithConditionEnum, 
+    ArgTestHasDefaultConditionWithConditionEnum, 
+    ArgTestHasDefaultConditionWithConditionEnum> 
+        MessageBaseTestHasDefaultConditionWithConditionEnum;
+
+typedef basic::test::msg::Argument<TestHasDefaultConditionWithConditionValue,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeValueType>,
+    basic::test::msg::arg::Value<ICodeValueValue>,
+    basic::test::msg::arg::Value<IHasDefaultConditionValueValue>> 
+        ArgTestHasDefaultConditionWithConditionValue;
+
+typedef basic::test::msg::Base<TestHasDefaultConditionWithConditionValue, char,
+    ArgTestHasDefaultConditionWithConditionValue, 
+    ArgTestHasDefaultConditionWithConditionValue, 
+    ArgTestHasDefaultConditionWithConditionValue> 
+        MessageBaseTestHasDefaultConditionWithConditionValue;
+
+typedef basic::test::msg::Argument<TestValueDefaultCodeWithCodeEnum,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeEnumType>,
+    basic::test::msg::arg::Value<ICodeEnumValue>,
+    basic::test::msg::arg::type::Name<ICodeType>,
+    basic::test::msg::arg::Value<ICodeValue>> 
+        ArgTestValueDefaultCodeWithCodeEnum;
+
+typedef basic::test::msg::Base<TestValueDefaultCodeWithCodeEnum, char,
+    ArgTestValueDefaultCodeWithCodeEnum, ArgTestValueDefaultCodeWithCodeEnum, 
+    ArgTestValueDefaultCodeWithCodeEnum> 
+        MessageBaseTestValueDefaultCodeWithCodeEnum;
+
+typedef basic::test::msg::Argument<TestValueDefaultCodeWithCodeValue,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeValueType>,
+    basic::test::msg::arg::Value<ICodeValueValue>,
+    basic::test::msg::arg::type::Name<ICodeType>,
+    basic::test::msg::arg::Value<ICodeValue>> 
+        ArgTestValueDefaultCodeWithCodeValue;
+
+typedef basic::test::msg::Base<TestValueDefaultCodeWithCodeValue, char,
+    ArgTestValueDefaultCodeWithCodeValue, ArgTestValueDefaultCodeWithCodeValue,
+    ArgTestValueDefaultCodeWithCodeValue> 
+        MessageBaseTestValueDefaultCodeWithCodeValue;
+
+typedef basic::test::msg::Argument<TestValueDefaultConditionWithConditionEnum,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeEnumType>,
+    basic::test::msg::arg::Value<ICodeEnumValue>,
+    basic::test::msg::arg::type::Name<IConditionType>,
+    basic::test::msg::arg::Value<IConditionValue>> 
+        ArgTestValueDefaultConditionWithConditionEnum;
+
+typedef basic::test::msg::Base<TestValueDefaultConditionWithConditionEnum, 
+    char, ArgTestValueDefaultConditionWithConditionEnum, 
+    ArgTestValueDefaultConditionWithConditionEnum,
+    ArgTestValueDefaultConditionWithConditionEnum> 
+        MessageBaseTestValueDefaultConditionWithConditionEnum;
+
+typedef basic::test::msg::Argument<TestValueDefaultConditionWithConditionValue,
+    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ICodeValueType>,
+    basic::test::msg::arg::Value<ICodeValueValue>,
+    basic::test::msg::arg::type::Name<IConditionType>,
+    basic::test::msg::arg::Value<IConditionValue>> 
+        ArgTestValueDefaultConditionWithConditionValue;
+
+typedef basic::test::msg::Base<TestValueDefaultConditionWithConditionValue, 
+    char, ArgTestValueDefaultConditionWithConditionValue, 
+    ArgTestValueDefaultConditionWithConditionValue,
+    ArgTestValueDefaultConditionWithConditionValue> 
+        MessageBaseTestValueDefaultConditionWithConditionValue;
 
 template<typename TCases, typename... TVariables>
 struct TestImpCategory :
@@ -115,7 +227,14 @@ struct TestImpCategory :
         TCases>,
     public basic::test::Base<TestImpCategory<TCases, TVariables...>, 
         TVariables...>,
-    public MessageBaseTestHasDefaultCodeWithCodeEnum
+    public MessageBaseTestHasDefaultCodeWithCodeEnum,
+    public MessageBaseTestHasDefaultCodeWithCodeValue,
+    public MessageBaseTestHasDefaultConditionWithConditionEnum,
+    public MessageBaseTestHasDefaultConditionWithConditionValue,
+    public MessageBaseTestValueDefaultCodeWithCodeEnum,
+    public MessageBaseTestValueDefaultCodeWithCodeValue,
+    public MessageBaseTestValueDefaultConditionWithConditionEnum,
+    public MessageBaseTestValueDefaultConditionWithConditionValue
 {
 public:
     using basic::test::Case<TestImpCategory<TCases, TVariables...>,
@@ -126,6 +245,27 @@ public:
     using MessageBaseTestHasDefaultCodeWithCodeEnum::Format;
     using MessageBaseTestHasDefaultCodeWithCodeEnum::SetFormat;
     using MessageBaseTestHasDefaultCodeWithCodeEnum::Argument;
+    using MessageBaseTestHasDefaultCodeWithCodeValue::Format;
+    using MessageBaseTestHasDefaultCodeWithCodeValue::SetFormat;
+    using MessageBaseTestHasDefaultCodeWithCodeValue::Argument;
+    using MessageBaseTestHasDefaultConditionWithConditionEnum::Format;
+    using MessageBaseTestHasDefaultConditionWithConditionEnum::SetFormat;
+    using MessageBaseTestHasDefaultConditionWithConditionEnum::Argument;
+    using MessageBaseTestHasDefaultConditionWithConditionValue::Format;
+    using MessageBaseTestHasDefaultConditionWithConditionValue::SetFormat;
+    using MessageBaseTestHasDefaultConditionWithConditionValue::Argument;
+    using MessageBaseTestValueDefaultCodeWithCodeEnum::Format;
+    using MessageBaseTestValueDefaultCodeWithCodeEnum::SetFormat;
+    using MessageBaseTestValueDefaultCodeWithCodeEnum::Argument;
+    using MessageBaseTestValueDefaultCodeWithCodeValue::Format;
+    using MessageBaseTestValueDefaultCodeWithCodeValue::SetFormat;
+    using MessageBaseTestValueDefaultCodeWithCodeValue::Argument;
+    using MessageBaseTestValueDefaultConditionWithConditionEnum::Format;
+    using MessageBaseTestValueDefaultConditionWithConditionEnum::SetFormat;
+    using MessageBaseTestValueDefaultConditionWithConditionEnum::Argument;
+    using MessageBaseTestValueDefaultConditionWithConditionValue::Format;
+    using MessageBaseTestValueDefaultConditionWithConditionValue::SetFormat;
+    using MessageBaseTestValueDefaultConditionWithConditionValue::Argument;
 public:
     TestImpCategory(TVariables & ... var) :
         basic::test::Message<BASIC_TEST, TestImpCategory<TCases, 
@@ -146,42 +286,198 @@ public:
             "function DefaultCode(%s{%s}) is %s\n");
         SetFormat(err, testHasDefaultCodeWithCodeEnum, "Test %s has member "
             "function DefaultCode(%s{%s}) is not %s\n");
+
+        TestHasDefaultCodeWithCodeValue testHasDefaultCodeWithCodeValue;
+        SetFormat(info, testHasDefaultCodeWithCodeValue, "Test %s has member "
+            "function DefaultCode(%s{%s}) is %s\n");
+        SetFormat(debug, testHasDefaultCodeWithCodeValue, "Test %s has member "
+            "function DefaultCode(%s{%s}) is %s\n");
+        SetFormat(err, testHasDefaultCodeWithCodeValue, "Test %s has member "
+            "function DefaultCode(%s{%s}) is not %s\n");
+
+        TestHasDefaultConditionWithConditionEnum 
+            testHasDefaultConditionWithConditionEnum;
+        SetFormat(info, testHasDefaultConditionWithConditionEnum, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is %s\n");
+        SetFormat(debug, testHasDefaultConditionWithConditionEnum, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is %s\n");
+        SetFormat(err, testHasDefaultConditionWithConditionEnum, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is not %s\n");
+
+        TestHasDefaultConditionWithConditionValue
+            testHasDefaultConditionWithConditionValue;
+        SetFormat(info, testHasDefaultConditionWithConditionValue, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is %s\n");
+        SetFormat(debug, testHasDefaultConditionWithConditionValue, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is %s\n");
+        SetFormat(err, testHasDefaultConditionWithConditionValue, "Test %s "
+            "has member function DefaultCondition(%s{%s}) is not %s\n");
+
+        TestValueDefaultCodeWithCodeEnum testValueDefaultCodeWithCodeEnum;
+        SetFormat(info, testValueDefaultCodeWithCodeEnum, "Test "
+            "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
+        SetFormat(debug, testValueDefaultCodeWithCodeEnum, "Test "
+            "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
+        SetFormat(err, testValueDefaultCodeWithCodeEnum, "Test "
+            "value %s::DefaultCode(%s{%s}) is not same with %s{%s}\n");
+        
+        TestValueDefaultCodeWithCodeValue testValueDefaultCodeWithCodeValue;
+        SetFormat(info, testValueDefaultCodeWithCodeValue, "Test "
+            "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
+        SetFormat(debug, testValueDefaultCodeWithCodeValue, "Test "
+            "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
+        SetFormat(err, testValueDefaultCodeWithCodeValue, "Test "
+            "value %s::DefaultCode(%s{%s}) is not same with %s{%s}\n");
+
+        TestValueDefaultConditionWithConditionEnum 
+            testValueDefaultConditionWithConditionEnum;
+        SetFormat(info, testValueDefaultConditionWithConditionEnum, "Test "
+            "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
+        SetFormat(debug, testValueDefaultConditionWithConditionEnum, "Test "
+            "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
+        SetFormat(err, testValueDefaultConditionWithConditionEnum, "Test "
+            "value %s::DefaultCondition(%s{%s}) is not same with %s{%s}\n");
+
+        TestValueDefaultConditionWithConditionValue
+            testValueDefaultConditionWithConditionValue;
+        SetFormat(info, testValueDefaultConditionWithConditionValue, "Test "
+            "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
+        SetFormat(debug, testValueDefaultConditionWithConditionValue, "Test "
+            "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
+        SetFormat(err, testValueDefaultConditionWithConditionValue, "Test "
+            "value %s::DefaultCondition(%s{%s}) is not same with %s{%s}\n");
     }
-    template<typename TCategoryTrait, typename TCodeEnum, 
-        typename TCodeValue, typename TConditionEnum, typename TConditionValue>
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
     bool Result(const TestHasDefaultCodeWithCodeEnum &, 
-        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue,
-            TConditionEnum, TConditionValue> & var)
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
     {
         bool has_default_code_enum = basic::test::var::
-            At<IHasCodeEnumValue>(var).Get().Get();
-        auto & tmpl_Category = basic::err::sys::tmpl::
-            Category<TCategoryTrait>::GetInstance();
-        constexpr bool result = decltype(HasDefaultCode<
-            const TCodeEnum&>(tmpl_Category))::value;
+            At<IHasDefaultCodeEnumValue>(var).Get().Get();
+        constexpr bool result = HasDefaultCode<
+            basic::err::sys::tmpl::Category<TCategoryTrait>,
+            const TCodeEnum &>::Value;
         return has_default_code_enum == result;
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestHasDefaultCodeWithCodeValue &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        bool has_default_code_value = basic::test::var::
+            At<IHasDefaultCodeValueValue>(var).Get().Get();
+        constexpr bool result = HasDefaultCode<
+            basic::err::sys::tmpl::Category<TCategoryTrait>,
+            const TCodeValue &>::Value;
+        return has_default_code_value == result;
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestHasDefaultConditionWithConditionEnum &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        bool has_default_cond_enum = basic::test::var::
+            At<IHasDefaultConditionEnumValue>(var).Get().Get();
+        constexpr bool result = HasDefaultCondition<
+            basic::err::sys::tmpl::Category<TCategoryTrait>,
+            const TCodeEnum &>::Value;
+        return has_default_cond_enum == result;
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestHasDefaultConditionWithConditionValue &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        bool has_default_cond_value = basic::test::var::
+            At<IHasDefaultConditionValueValue>(var).Get().Get();
+        constexpr bool result = HasDefaultCondition<
+            basic::err::sys::tmpl::Category<TCategoryTrait>,
+            const TCodeValue &>::Value;
+        return has_default_cond_value == result;
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestValueDefaultCodeWithCodeEnum &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        auto * code = basic::test::var::At<ICodeValue>(var).Get().Get();
+        auto * code_enum = basic::test::var::At<ICodeEnumValue>(var).
+            Get().Get();
+        auto result = basic::err::sys::tmpl::Category<TCategoryTrait>::
+            GetInstance().DefaultCode(*code_enum);
+        return code->Value() == result.Value();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestValueDefaultCodeWithCodeValue &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        auto * code = basic::test::var::At<ICodeValue>(var).Get().Get();
+        auto * code_value = basic::test::var::At<ICodeValueValue>(var).
+            Get().Get();
+        auto result = basic::err::sys::tmpl::Category<TCategoryTrait>::
+            GetInstance().DefaultCode(*code_value);
+        return code->Value() == result.Value();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestValueDefaultConditionWithConditionEnum &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        auto * cond = basic::test::var::At<IConditionValue>(var).Get().Get();
+        auto * code_enum = basic::test::var::At<ICodeEnumValue>(var).
+            Get().Get();
+        auto result = basic::err::sys::tmpl::Category<TCategoryTrait>::
+            GetInstance().DefaultCode(*code_enum);
+        return cond->Value() == result.Value();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestValueDefaultConditionWithConditionValue &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        auto * cond = basic::test::var::At<IConditionValue>(var).Get().Get();
+        auto * code_value = basic::test::var::At<ICodeValueValue>(var).
+            Get().Get();
+        auto result = basic::err::sys::tmpl::Category<TCategoryTrait>::
+            GetInstance().DefaultCode(*code_value);
+        return cond->Value() == result.Value();
     }
 };
 
-typedef basic::test::type::Parameter<TestHasDefaultCodeWithCodeEnum> Case1;
+typedef basic::test::type::Parameter<
+    TestHasDefaultCodeWithCodeEnum,
+    TestHasDefaultCodeWithCodeValue,
+    TestHasDefaultConditionWithConditionEnum,
+    TestHasDefaultConditionWithConditionValue,
+    TestValueDefaultCodeWithCodeEnum,
+    TestValueDefaultCodeWithCodeValue,
+    TestValueDefaultConditionWithConditionEnum,
+    TestValueDefaultConditionWithConditionValue> Case1;
+
+typedef basic::test::type::Parameter<
+    TestHasDefaultCodeWithCodeEnum,
+    TestHasDefaultCodeWithCodeValue,
+    TestHasDefaultConditionWithConditionEnum,
+    TestHasDefaultConditionWithConditionValue,
+    TestValueDefaultCodeWithCodeValue,
+    TestValueDefaultConditionWithConditionValue> Case2;
 
 typedef VariableTestImpCategory<CategoryTrait1, CodeEnum1,
-    CodeValueType, ConditionEnum1, ConditionValueType> T1Var1;
+    CodeValueType> T1Var1;
 typedef VariableTestImpCategory<CategoryTrait2, CodeEnum1,
-    CodeValueType, ConditionEnum1, ConditionValueType> T1Var2;
+    CodeValueType> T1Var2;
 
 CodeEnum1 code_enum1 = CodeEnum1::value1;
 CodeValueType code_value1 = 4;
-ConditionEnum1 cond_enum1 = ConditionEnum1::value1;
-ConditionValueType cond_value1 = 4;
+CodeType code1(code_value1, 
+    basic::err::sys::tmpl::Category<CategoryTrait1>::GetInstance());
+CodeType code2(code_value1, 
+    basic::err::sys::tmpl::Category<CategoryTrait2>::GetInstance());
+ConditionType cond1(code_value1, 
+    basic::err::sys::tmpl::Category<CategoryTrait1>::GetInstance());
+ConditionType cond2(code_value1, 
+    basic::err::sys::tmpl::Category<CategoryTrait2>::GetInstance());
 
-T1Var1 t1_var1{&code_enum1, &code_value1, &cond_enum1, &cond_value1,
-    true, true, true, true};
-T1Var2 t1_var2{&code_enum1, &code_value1, &cond_enum1, &cond_value1,
-    false, true, false, true};
+T1Var1 t1_var1{&code_enum1, &code_value1, true, true, true, true,
+    &code1, &cond1};
+T1Var2 t1_var2{&code_enum1, &code_value1, false, true, false, true,
+    &code2, &cond2};
 
-REGISTER_TEST(t1, new TestImpCategory<Case1, T1Var1, T1Var2>(t1_var1,
-    t1_var2));
+REGISTER_TEST(t1, new TestImpCategory<Case1, T1Var1>(t1_var1));
+REGISTER_TEST(t2, new TestImpCategory<Case2, T1Var2>(t1_var2));
 
 int main()
 {
@@ -192,7 +488,6 @@ BASIC_TEST_TYPE_NAME("CategoryTrait1", CategoryTrait1);
 BASIC_TEST_TYPE_NAME("CategoryTrait2", CategoryTrait2);
 
 BASIC_TEST_TYPE_NAME("CodeEnum1", CodeEnum1);
-BASIC_TEST_TYPE_NAME("ConditionEnum1", ConditionEnum1);
 
 BASIC_TEST_TYPE_NAME("basic::err::sys::Code", basic::err::sys::Code);
 BASIC_TEST_TYPE_NAME("basic::err::sys::Condition", 
@@ -285,3 +580,43 @@ struct basic::test::out::Argument<CodeEnum1 *>
 
 basic::test::CString<char> basic::test::out::
     Argument<CodeEnum1 *>::ms_cstr;
+
+template<>
+struct basic::test::out::Argument<basic::err::sys::Code *>
+{
+    static basic::test::CString<char> ms_cstr;
+    static const char * Value(basic::err::sys::Code * & code)
+    {
+        ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
+            "Value : %d", code->Value()));
+        return *ms_cstr;
+    }
+    static const char * Value(basic::err::sys::Code * && code)
+    {
+        ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
+            "Value : %d", code->Value()));
+        return *ms_cstr;
+    }
+};
+basic::test::CString<char> basic::test::out::
+    Argument<basic::err::sys::Code *>::ms_cstr;
+
+template<>
+struct basic::test::out::Argument<basic::err::sys::Condition *>
+{
+    static basic::test::CString<char> ms_cstr;
+    static const char * Value(basic::err::sys::Condition * & cond)
+    {
+        ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
+            "Value : %d", cond->Value()));
+        return *ms_cstr;
+    }
+    static const char * Value(basic::err::sys::Condition * && cond)
+    {
+        ms_cstr = std::move(basic::test::cstr::Format(BUFFER_FORMAT_CSTRING, 
+            "Value : %d", cond->Value()));
+        return *ms_cstr;
+    }
+};
+basic::test::CString<char> basic::test::out::
+    Argument<basic::err::sys::Condition *>::ms_cstr;
