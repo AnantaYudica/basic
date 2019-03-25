@@ -39,7 +39,7 @@ private:
     StringType m_message;
 public:
     template<typename TCodeEnum>
-    inline Code(const TCodeEnum & code) noexcept;
+    explicit inline Code(const TCodeEnum & code) noexcept;
     inline Code(const ValueType & code, 
         const CategoryType & categ) noexcept;
 public:
