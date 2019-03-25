@@ -39,7 +39,7 @@ typename Category<TCategoryTrait, true>::CodeType
 Category<TCategoryTrait, true>::
     DefaultCode(const CodeValueType & code) const noexcept
 {
-    return {code, *this};
+    return CodeType{code, *this};
 }
 
 template<typename TCategoryTrait>
@@ -47,7 +47,7 @@ typename Category<TCategoryTrait, true>::CodeType
 Category<TCategoryTrait, true>::
     DefaultCode(const CodeSetValueType & code) const noexcept
 {
-    return {code};
+    return CodeType{code};
 }
 
 template<typename TCategoryTrait>
@@ -55,7 +55,7 @@ typename Category<TCategoryTrait, true>::ConditionType
 Category<TCategoryTrait, true>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
-    return {code, *this};
+    return ConditionType{code, *this};
 }
 
 template<typename TCategoryTrait>
@@ -63,7 +63,8 @@ typename Category<TCategoryTrait, true>::ConditionType
 Category<TCategoryTrait, true>::
     DefaultCondition(const CodeSetValueType & code) const noexcept
 {
-    return {categ::ToCodeValue(this->GetCategoryTrait(), code), *this};
+    return ConditionType{categ::ToCodeValue(this->GetCategoryTrait(), code), 
+        *this};
 }
 
 } //!imp

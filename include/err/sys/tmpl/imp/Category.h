@@ -38,7 +38,7 @@ typename Category<TCategoryTrait, HasCodeEnum>::CodeType
 Category<TCategoryTrait, HasCodeEnum>::
     DefaultCode(const CodeValueType & code) const noexcept
 {
-    return {code, *this};
+    return CodeType{code, *this};
 }
 
 template<typename TCategoryTrait, bool HasCodeEnum>
@@ -46,7 +46,7 @@ typename Category<TCategoryTrait, HasCodeEnum>::ConditionType
 Category<TCategoryTrait, HasCodeEnum>::
     DefaultCondition(const CodeValueType & code) const noexcept
 {
-    return {code, *this};
+    return ConditionType{code, *this};
 }
 
 } //!imp
