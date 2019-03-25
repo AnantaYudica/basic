@@ -37,7 +37,7 @@ private:
     StringType m_message;
 public:
     template<typename TConditionEnum>
-    inline Condition(const TConditionEnum & cond) noexcept;
+    explicit inline Condition(const TConditionEnum & cond) noexcept;
     inline Condition(const ValueType & val, 
         const CategoryType & categ) noexcept;
 public:
