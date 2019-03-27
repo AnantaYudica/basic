@@ -74,6 +74,15 @@ struct CategoryTrait2
     }
 };
 
+struct TestAliasCharType {};
+struct TestAliasOutputType {};
+struct TestAliasValueType {};
+struct TestAliasCodeValueType {};
+struct TestAliasConditionValueType {};
+struct TestAliasStringType {};
+struct TestAliasCodeType {};
+struct TestAliasConditionType {};
+struct TestAliasCodeSetValueType {};
 struct TestHasDefaultCodeWithCodeEnum {};
 struct TestHasDefaultCodeWithCodeValue {};
 struct TestHasDefaultConditionWithConditionEnum {};
@@ -87,6 +96,16 @@ template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
 using VariableTestImpCategory = basic::test::Variable<
     TCategoryTrait,
     basic::err::sys::tmpl::Category<TCategoryTrait>,
+    basic::err::sys::tmpl::imp::Category<TCategoryTrait>,
+    basic::err::defn::type::Char,
+    basic::err::defn::type::Output,
+    basic::err::defn::type::sys::categ::Value,
+    basic::err::defn::type::sys::code::Value,
+    basic::err::defn::type::sys::cond::Value,
+    basic::err::msg::String,
+    basic::err::sys::Code,
+    basic::err::sys::Condition,
+    basic::err::sys::tmpl::categ::defn::type::code::set::Value<TCategoryTrait>,
     CodeType,
     ConditionType,
     TCodeEnum,
@@ -102,18 +121,109 @@ using VariableTestImpCategory = basic::test::Variable<
 
 constexpr std::size_t ICategoryTraitType = 0;
 constexpr std::size_t ITmplCategoryType = 1;
-constexpr std::size_t ICodeType = 2;
-constexpr std::size_t IConditionType = 3;
-constexpr std::size_t ICodeEnumType = 4;
-constexpr std::size_t ICodeValueType = 5;
-constexpr std::size_t ICodeEnumValue = 6;
-constexpr std::size_t ICodeValueValue = 7;
-constexpr std::size_t IHasDefaultCodeEnumValue = 8;
-constexpr std::size_t IHasDefaultCodeValueValue = 9;
-constexpr std::size_t IHasDefaultConditionEnumValue = 10;
-constexpr std::size_t IHasDefaultConditionValueValue = 11;
-constexpr std::size_t ICodeValue = 12;
-constexpr std::size_t IConditionValue = 13;
+constexpr std::size_t ITmplImpCategoryType = 2;
+constexpr std::size_t IAliasCharType = 3;
+constexpr std::size_t IAliasOutputType = 4;
+constexpr std::size_t IAliasValueType = 5;
+constexpr std::size_t IAliasCodeValueType = 6;
+constexpr std::size_t IAliasConditionValueType = 7;
+constexpr std::size_t IAliasStringType = 8;
+constexpr std::size_t IAliasCodeType = 9;
+constexpr std::size_t IAliasConditionType = 10;
+constexpr std::size_t IAliasCodeSetValueType = 11;
+constexpr std::size_t ICodeType = 12;
+constexpr std::size_t IConditionType = 13;
+constexpr std::size_t ICodeEnumType = 14;
+constexpr std::size_t ICodeValueType = 15;
+constexpr std::size_t ICodeEnumValue = 16;
+constexpr std::size_t ICodeValueValue = 17;
+constexpr std::size_t IHasDefaultCodeEnumValue = 18;
+constexpr std::size_t IHasDefaultCodeValueValue = 19;
+constexpr std::size_t IHasDefaultConditionEnumValue = 20;
+constexpr std::size_t IHasDefaultConditionValueValue = 21;
+constexpr std::size_t ICodeValue = 22;
+constexpr std::size_t IConditionValue = 23;
+
+typedef basic::test::msg::Argument<TestAliasCharType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasCharType>>
+        ArgTestAliasCharType;
+
+typedef basic::test::msg::Base<TestAliasCharType, char, 
+    ArgTestAliasCharType, ArgTestAliasCharType, 
+    ArgTestAliasCharType> MessageBaseTestAliasCharType;
+
+typedef basic::test::msg::Argument<TestAliasOutputType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasOutputType>>
+        ArgTestAliasOutputType;
+
+typedef basic::test::msg::Base<TestAliasOutputType, char, 
+    ArgTestAliasOutputType, ArgTestAliasOutputType, 
+    ArgTestAliasOutputType> MessageBaseTestAliasOutputType;
+
+typedef basic::test::msg::Argument<TestAliasValueType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasValueType>>
+        ArgTestAliasValueType;
+
+typedef basic::test::msg::Base<TestAliasValueType, char, 
+    ArgTestAliasValueType, ArgTestAliasValueType, 
+    ArgTestAliasValueType> MessageBaseTestAliasValueType;
+
+typedef basic::test::msg::Argument<TestAliasCodeValueType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasCodeValueType>>
+        ArgTestAliasCodeValueType;
+
+typedef basic::test::msg::Base<TestAliasCodeValueType, char, 
+    ArgTestAliasCodeValueType, ArgTestAliasCodeValueType, 
+    ArgTestAliasCodeValueType> MessageBaseTestAliasCodeValueType;
+
+typedef basic::test::msg::Argument<TestAliasConditionValueType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasConditionValueType>>
+        ArgTestAliasConditionValueType;
+
+typedef basic::test::msg::Base<TestAliasConditionValueType, char, 
+    ArgTestAliasConditionValueType, ArgTestAliasConditionValueType, 
+    ArgTestAliasConditionValueType> MessageBaseTestAliasConditionValueType;
+
+typedef basic::test::msg::Argument<TestAliasStringType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasStringType>>
+        ArgTestAliasStringType;
+
+typedef basic::test::msg::Base<TestAliasStringType, char, 
+    ArgTestAliasStringType, ArgTestAliasStringType, 
+    ArgTestAliasStringType> MessageBaseTestAliasStringType;
+
+typedef basic::test::msg::Argument<TestAliasCodeType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasCodeType>>
+        ArgTestAliasCodeType;
+
+typedef basic::test::msg::Base<TestAliasCodeType, char, 
+    ArgTestAliasCodeType, ArgTestAliasCodeType, 
+    ArgTestAliasCodeType> MessageBaseTestAliasCodeType;
+
+typedef basic::test::msg::Argument<TestAliasConditionType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasConditionType>>
+        ArgTestAliasConditionType;
+
+typedef basic::test::msg::Base<TestAliasConditionType, char, 
+    ArgTestAliasConditionType, ArgTestAliasConditionType, 
+    ArgTestAliasConditionType> MessageBaseTestAliasConditionType;
+
+typedef basic::test::msg::Argument<TestAliasCodeSetValueType,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IAliasCodeSetValueType>>
+        ArgTestAliasCodeSetValueType;
+
+typedef basic::test::msg::Base<TestAliasCodeSetValueType, char, 
+    ArgTestAliasCodeSetValueType, ArgTestAliasCodeSetValueType, 
+    ArgTestAliasCodeSetValueType> MessageBaseTestAliasCodeSetValueType;
 
 typedef basic::test::msg::Argument<TestHasDefaultCodeWithCodeEnum,
     basic::test::msg::arg::type::Name<ITmplCategoryType>,
@@ -227,6 +337,15 @@ struct TestImpCategory :
         TCases>,
     public basic::test::Base<TestImpCategory<TCases, TVariables...>, 
         TVariables...>,
+    public MessageBaseTestAliasCharType,
+    public MessageBaseTestAliasOutputType,
+    public MessageBaseTestAliasValueType,
+    public MessageBaseTestAliasCodeValueType,
+    public MessageBaseTestAliasConditionValueType,
+    public MessageBaseTestAliasStringType,
+    public MessageBaseTestAliasCodeType,
+    public MessageBaseTestAliasConditionType,
+    public MessageBaseTestAliasCodeSetValueType,
     public MessageBaseTestHasDefaultCodeWithCodeEnum,
     public MessageBaseTestHasDefaultCodeWithCodeValue,
     public MessageBaseTestHasDefaultConditionWithConditionEnum,
@@ -242,6 +361,33 @@ public:
     using basic::test::Base<TestImpCategory<TCases, TVariables...>, 
         TVariables...>::Run;
 public:
+    using MessageBaseTestAliasCharType::Format;
+    using MessageBaseTestAliasCharType::SetFormat;
+    using MessageBaseTestAliasCharType::Argument;
+    using MessageBaseTestAliasOutputType::Format;
+    using MessageBaseTestAliasOutputType::SetFormat;
+    using MessageBaseTestAliasOutputType::Argument;
+    using MessageBaseTestAliasValueType::Format;
+    using MessageBaseTestAliasValueType::SetFormat;
+    using MessageBaseTestAliasValueType::Argument;
+    using MessageBaseTestAliasCodeValueType::Format;
+    using MessageBaseTestAliasCodeValueType::SetFormat;
+    using MessageBaseTestAliasCodeValueType::Argument;
+    using MessageBaseTestAliasConditionValueType::Format;
+    using MessageBaseTestAliasConditionValueType::SetFormat;
+    using MessageBaseTestAliasConditionValueType::Argument;
+    using MessageBaseTestAliasStringType::Format;
+    using MessageBaseTestAliasStringType::SetFormat;
+    using MessageBaseTestAliasStringType::Argument;
+    using MessageBaseTestAliasCodeType::Format;
+    using MessageBaseTestAliasCodeType::SetFormat;
+    using MessageBaseTestAliasCodeType::Argument;
+    using MessageBaseTestAliasConditionType::Format;
+    using MessageBaseTestAliasConditionType::SetFormat;
+    using MessageBaseTestAliasConditionType::Argument;
+    using MessageBaseTestAliasCodeSetValueType::Format;
+    using MessageBaseTestAliasCodeSetValueType::SetFormat;
+    using MessageBaseTestAliasCodeSetValueType::Argument;
     using MessageBaseTestHasDefaultCodeWithCodeEnum::Format;
     using MessageBaseTestHasDefaultCodeWithCodeEnum::SetFormat;
     using MessageBaseTestHasDefaultCodeWithCodeEnum::Argument;
@@ -278,6 +424,78 @@ public:
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
         basic::test::msg::base::Error err;
+
+        TestAliasCharType testAliasCharType;
+        SetFormat(info, testAliasCharType, "Test alias type "
+            "%s::CharType is same with %s\n");
+        SetFormat(debug, testAliasCharType, "Test alias type "
+            "%s::CharType is same with %s\n");
+        SetFormat(err, testAliasCharType, "Error alias type "
+            "%s::CharType is not same with %s\n");
+
+        TestAliasOutputType testAliasOutputType;
+        SetFormat(info, testAliasOutputType, "Test alias type "
+            "%s::OutputType is same with %s\n");
+        SetFormat(debug, testAliasOutputType, "Test alias type "
+            "%s::OutputType is same with %s\n");
+        SetFormat(err, testAliasOutputType, "Error alias type "
+            "%s::OutputType is not same with %s\n");
+
+        TestAliasValueType testAliasValueType;
+        SetFormat(info, testAliasValueType, "Test alias type "
+            "%s::ValueType is same with %s\n");
+        SetFormat(debug, testAliasValueType, "Test alias type "
+            "%s::ValueType is same with %s\n");
+        SetFormat(err, testAliasValueType, "Error alias type "
+            "%s::ValueType is not same with %s\n");
+
+        TestAliasCodeValueType testAliasCodeValueType;
+        SetFormat(info, testAliasCodeValueType, "Test alias type "
+            "%s::CodeValueType is same with %s\n");
+        SetFormat(debug, testAliasCodeValueType, "Test alias type "
+            "%s::CodeValueType is same with %s\n");
+        SetFormat(err, testAliasCodeValueType, "Error alias type "
+            "%s::CodeValueType is not same with %s\n");
+
+        TestAliasConditionValueType testAliasConditionValueType;
+        SetFormat(info, testAliasConditionValueType, "Test alias type "
+            "%s::ConditionValueType is same with %s\n");
+        SetFormat(debug, testAliasConditionValueType, "Test alias type "
+            "%s::ConditionValueType is same with %s\n");
+        SetFormat(err, testAliasConditionValueType, "Error alias type "
+            "%s::ConditionValueType is not same with %s\n");
+
+        TestAliasStringType testAliasStringType;
+        SetFormat(info, testAliasStringType, "Test alias type "
+            "%s::StringType is same with %s\n");
+        SetFormat(debug, testAliasStringType, "Test alias type "
+            "%s::StringType is same with %s\n");
+        SetFormat(err, testAliasStringType, "Error alias type "
+            "%s::StringType is not same with %s\n");
+
+        TestAliasCodeType testAliasCodeType;
+        SetFormat(info, testAliasCodeType, "Test alias type "
+            "%s::CodeType is same with %s\n");
+        SetFormat(debug, testAliasCodeType, "Test alias type "
+            "%s::CodeType is same with %s\n");
+        SetFormat(err, testAliasCodeType, "Error alias type "
+            "%s::CodeType is not same with %s\n");
+
+        TestAliasConditionType testAliasConditionType;
+        SetFormat(info, testAliasConditionType, "Test alias type "
+            "%s::ConditionType is same with %s\n");
+        SetFormat(debug, testAliasConditionType, "Test alias type "
+            "%s::ConditionType is same with %s\n");
+        SetFormat(err, testAliasConditionType, "Error alias type "
+            "%s::ConditionType is not same with %s\n");
+
+        TestAliasCodeSetValueType testAliasCodeSetValueType;
+        SetFormat(info, testAliasCodeSetValueType, "Test alias type "
+            "%s::CodeSetValueType is same with %s\n");
+        SetFormat(debug, testAliasCodeSetValueType, "Test alias type "
+            "%s::CodeSetValueType is same with %s\n");
+        SetFormat(err, testAliasCodeSetValueType, "Error alias type "
+            "%s::CodeSetValueType is not same with %s\n");
 
         TestHasDefaultCodeWithCodeEnum testHasDefaultCodeWithCodeEnum;
         SetFormat(info, testHasDefaultCodeWithCodeEnum, "Test %s has member "
@@ -346,6 +564,105 @@ public:
             "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
         SetFormat(err, testValueDefaultConditionWithConditionValue, "Test "
             "value %s::DefaultCondition(%s{%s}) is not same with %s{%s}\n");
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasCharType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasCharType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type CharType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::CharType).hash_code() == 
+            typeid(CharType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasOutputType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasOutputType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type OutputType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::OutputType).hash_code() == 
+            typeid(OutputType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasValueType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasValueType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type ValueType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::ValueType).hash_code() == 
+            typeid(ValueType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasCodeValueType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasCodeValueType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type CodeValueType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::CodeValueType).hash_code() == 
+            typeid(CodeValueType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasConditionValueType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasConditionValueType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type ConditionValueType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::ConditionValueType).hash_code() == 
+            typeid(ConditionValueType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasStringType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasStringType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type StringType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::StringType).hash_code() == 
+            typeid(StringType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasCodeType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasCodeType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type CodeType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::CodeType).hash_code() == 
+            typeid(CodeType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasConditionType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasConditionType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type ConditionType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::ConditionType).hash_code() == 
+            typeid(ConditionType).hash_code();
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestAliasCodeSetValueType &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IAliasCodeSetValueType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type CodeSetValueType;
+        return typeid(typename basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>::CodeSetValueType).hash_code() == 
+            typeid(CodeSetValueType).hash_code();
     }
     template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
     bool Result(const TestHasDefaultCodeWithCodeEnum &, 
@@ -438,6 +755,15 @@ public:
 };
 
 typedef basic::test::type::Parameter<
+    TestAliasCharType,
+    TestAliasOutputType,
+    TestAliasValueType,
+    TestAliasCodeValueType,
+    TestAliasConditionValueType,
+    TestAliasStringType,
+    TestAliasCodeType,
+    TestAliasConditionType,
+    TestAliasCodeSetValueType,
     TestHasDefaultCodeWithCodeEnum,
     TestHasDefaultCodeWithCodeValue,
     TestHasDefaultConditionWithConditionEnum,
@@ -448,6 +774,15 @@ typedef basic::test::type::Parameter<
     TestValueDefaultConditionWithConditionValue> Case1;
 
 typedef basic::test::type::Parameter<
+    TestAliasCharType,
+    TestAliasOutputType,
+    TestAliasValueType,
+    TestAliasCodeValueType,
+    TestAliasConditionValueType,
+    TestAliasStringType,
+    TestAliasCodeType,
+    TestAliasConditionType,
+    TestAliasCodeSetValueType,
     TestHasDefaultCodeWithCodeEnum,
     TestHasDefaultCodeWithCodeValue,
     TestHasDefaultConditionWithConditionEnum,
@@ -505,12 +840,56 @@ BASIC_TEST_TYPE_NAME("unsigned long", unsigned long);
 BASIC_TEST_TYPE_NAME("long long", long long);
 BASIC_TEST_TYPE_NAME("unsigned long long", unsigned long long);
 
+BASIC_TEST_TYPE_NAME("basic::err::msg::String", 
+    basic::err::msg::String);
+
 template<typename TArg>
 struct basic::test::type::Name<basic::err::sys::tmpl::Category<TArg>>
 {
     static basic::test::CString<char> CStr()
     {
         static char _format[] = "basic::err::sys::tmpl::Category<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+template<typename TArg, bool B>
+struct basic::test::type::Name<basic::err::sys::tmpl::imp::Category<TArg, B>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::tmpl::imp::Category<%s, %s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size() + 5,
+            _format, *tArgCStr, (B?"true":"false"));
+    }
+};
+
+template<typename TArg1, typename TArg2>
+struct basic::test::type::Name<std::basic_ostream<TArg1, TArg2>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "std::basic_ostream<%s, %s>";
+        basic::test::CString<char> tArg1CStr = 
+            std::move(basic::test::type::Name<TArg1>::CStr());
+        basic::test::CString<char> tArg2CStr = 
+            std::move(basic::test::type::Name<TArg2>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 6 + 
+            tArg1CStr.Size() + tArg2CStr.Size(), _format, *tArg1CStr,
+            *tArg2CStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<std::char_traits<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "std::char_traits<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
         return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
