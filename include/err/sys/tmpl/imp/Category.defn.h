@@ -14,6 +14,7 @@
 #include "../../../defn/type/sys/cond/Value.h"
 #include "../../../msg/String.h"
 #include "../categ/has/mmbr/defn/type/CodeEnum.h"
+#include "../categ/defn/type/code/set/Value.h"
 
 namespace basic
 {
@@ -44,6 +45,9 @@ public:
 public:
     typedef sys::Code CodeType;
     typedef sys::Condition ConditionType;
+public:
+    typedef tmpl::categ::defn::type::code::set::
+        Value<TCategoryTrait> CodeSetValueType;
 protected:
     Category() noexcept;
 public:
