@@ -34,24 +34,50 @@ struct CategoryTrait2
 
 int CategoryTrait2::m_sig = 0;
 
+struct TestBaseOfCategoryBase {};
+struct TestBaseOfInterfaceExit {};
 struct TestValueSignal {};
 
 template<typename TCategoryTrait>
 using VariableTestExit = basic::test::Variable<
     TCategoryTrait,
+    basic::err::sys::tmpl::categ::Base<TCategoryTrait>,
+    basic::err::intf::Exit,
+    basic::err::sys::tmpl::imp::Exit<TCategoryTrait>,
     basic::err::sys::tmpl::Category<TCategoryTrait>,
     int,
     basic::test::Value<int>,
     basic::test::Value<int>>;
 
 constexpr std::size_t ICategoryTraitType = 0;
-constexpr std::size_t ITmplCategoryType = 1;
-constexpr std::size_t ISignalType = 2;
-constexpr std::size_t ISignalValue = 3;
-constexpr std::size_t ISignalCheckValue = 4;
+constexpr std::size_t ITmplCategoryBaseType = 1;
+constexpr std::size_t IInterfaceExitType = 2;
+constexpr std::size_t ITmplImpExitType = 3;
+constexpr std::size_t ITmplCategoryType = 4;
+constexpr std::size_t ISignalType = 5;
+constexpr std::size_t ISignalValue = 6;
+constexpr std::size_t ISignalCheckValue = 7;
+
+typedef basic::test::msg::Argument<TestBaseOfCategoryBase,
+    basic::test::msg::arg::type::Name<ITmplImpExitType>,
+    basic::test::msg::arg::type::Name<ITmplCategoryBaseType>>
+        ArgTestBaseOfCategoryBase;
+
+typedef basic::test::msg::Base<TestBaseOfCategoryBase, char, 
+    ArgTestBaseOfCategoryBase, ArgTestBaseOfCategoryBase, 
+    ArgTestBaseOfCategoryBase> MessageBaseTestBaseOfCategoryBase;
+
+typedef basic::test::msg::Argument<TestBaseOfInterfaceExit,
+    basic::test::msg::arg::type::Name<ITmplImpExitType>,
+    basic::test::msg::arg::type::Name<IInterfaceExitType>>
+        ArgTestBaseOfInterfaceExit;
+
+typedef basic::test::msg::Base<TestBaseOfInterfaceExit, char, 
+    ArgTestBaseOfInterfaceExit, ArgTestBaseOfInterfaceExit, 
+    ArgTestBaseOfInterfaceExit> MessageBaseTestBaseOfInterfaceExit;
 
 typedef basic::test::msg::Argument<TestValueSignal,
-    basic::test::msg::arg::type::Name<ITmplCategoryType>,
+    basic::test::msg::arg::type::Name<ITmplImpExitType>,
     basic::test::msg::arg::type::Name<ISignalType>,
     basic::test::msg::arg::Value<ISignalValue>,
     basic::test::msg::arg::Value<ISignalCheckValue>> 
@@ -69,6 +95,8 @@ struct TestImpExit :
         TCases>,
     public basic::test::Base<TestImpExit<TCases, TVariables...>, 
         TVariables...>,
+    public MessageBaseTestBaseOfCategoryBase,
+    public MessageBaseTestBaseOfInterfaceExit,
     public MessageBaseTestValueSignal
 {
 public:
@@ -77,6 +105,12 @@ public:
     using basic::test::Base<TestImpExit<TCases, TVariables...>, 
         TVariables...>::Run;
 public:
+    using MessageBaseTestBaseOfCategoryBase::Argument;
+    using MessageBaseTestBaseOfCategoryBase::Format;
+    using MessageBaseTestBaseOfCategoryBase::SetFormat;
+    using MessageBaseTestBaseOfInterfaceExit::Argument;
+    using MessageBaseTestBaseOfInterfaceExit::Format;
+    using MessageBaseTestBaseOfInterfaceExit::SetFormat;
     using MessageBaseTestValueSignal::Argument;
     using MessageBaseTestValueSignal::Format;
     using MessageBaseTestValueSignal::SetFormat;
@@ -93,6 +127,18 @@ public:
         basic::test::msg::base::Debug debug;
         basic::test::msg::base::Error err;
 
+        TestBaseOfCategoryBase testBaseOfCategoryBase;
+        SetFormat(info, testBaseOfCategoryBase, "Test %s is base of %s\n");
+        SetFormat(debug, testBaseOfCategoryBase, "Test %s is base of %s\n");
+        SetFormat(err, testBaseOfCategoryBase, 
+            "Error Test %s is not base of %s\n");
+
+        TestBaseOfInterfaceExit testBaseOfInterfaceExit;
+        SetFormat(info, testBaseOfInterfaceExit, "Test %s is base of %s\n");
+        SetFormat(debug, testBaseOfInterfaceExit, "Test %s is base of %s\n");
+        SetFormat(err, testBaseOfInterfaceExit, 
+            "Error Test %s is not base of %s\n");
+
         TestValueSignal testValueSignal;
         SetFormat(info, testValueSignal, "Test call %s::"
             "Cleanup(%s{%d}) and value signal is %d\n");
@@ -100,6 +146,24 @@ public:
             "Cleanup(%s{%d}) and value signal is %d\n");
         SetFormat(err, testValueSignal, "Error call %s::"
             "Cleanup(%s{%d}) and value signal is not %d\n");
+    }
+    template<typename TCategoryTrait>
+    bool Result(const TestBaseOfCategoryBase &, 
+        VariableTestExit<TCategoryTrait> & var)
+    {
+        typedef typename basic::test::var::Element<ITmplCategoryBaseType,
+            VariableTestExit<TCategoryTrait>>::Type BaseType;
+        return std::is_base_of<BaseType, basic::err::sys::tmpl::imp::
+            Exit<TCategoryTrait>>::value;
+    }
+    template<typename TCategoryTrait>
+    bool Result(const TestBaseOfInterfaceExit &, 
+        VariableTestExit<TCategoryTrait> & var)
+    {
+        typedef typename basic::test::var::Element<IInterfaceExitType,
+            VariableTestExit<TCategoryTrait>>::Type BaseType;
+        return std::is_base_of<BaseType, basic::err::sys::tmpl::imp::
+            Exit<TCategoryTrait>>::value;
     }
     template<typename TCategoryTrait>
     bool Result(const TestValueSignal &, 
@@ -121,6 +185,8 @@ public:
 };
 
 typedef basic::test::type::Parameter<
+    TestBaseOfCategoryBase,
+    TestBaseOfInterfaceExit,
     TestValueSignal> Case1;
 
 typedef VariableTestExit<CategoryTrait1> T1Var1;
@@ -154,6 +220,8 @@ BASIC_TEST_TYPE_NAME("unsigned long", unsigned long);
 BASIC_TEST_TYPE_NAME("long long", long long);
 BASIC_TEST_TYPE_NAME("unsigned long long", unsigned long long);
 
+BASIC_TEST_TYPE_NAME("basic::err::intf::Exit", basic::err::intf::Exit);
+
 template<typename TArg>
 struct basic::test::type::Name<basic::err::sys::tmpl::Category<TArg>>
 {
@@ -167,4 +235,29 @@ struct basic::test::type::Name<basic::err::sys::tmpl::Category<TArg>>
     }
 };
 
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::tmpl::categ::Base<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::tmpl::categ::Base<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg, bool B>
+struct basic::test::type::Name<basic::err::sys::tmpl::imp::Exit<TArg, B>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::tmpl::imp::Exit<%s, %s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + 
+            tArgCStr.Size() + 5, _format, *tArgCStr, (B?"true":"false"));
+    }
+};
 
