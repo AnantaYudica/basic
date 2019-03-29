@@ -83,6 +83,8 @@ struct TestAliasStringType {};
 struct TestAliasCodeType {};
 struct TestAliasConditionType {};
 struct TestAliasCodeSetValueType {};
+struct TestBaseOfCategoryBase {};
+struct TestBaseOfInterfaceCategory {};
 struct TestHasDefaultCodeWithCodeEnum {};
 struct TestHasDefaultCodeWithCodeValue {};
 struct TestHasDefaultConditionWithConditionEnum {};
@@ -95,6 +97,8 @@ struct TestValueDefaultConditionWithConditionValue {};
 template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
 using VariableTestImpCategory = basic::test::Variable<
     TCategoryTrait,
+    basic::err::sys::tmpl::categ::Base<TCategoryTrait>,
+    basic::err::sys::intf::Category,
     basic::err::sys::tmpl::Category<TCategoryTrait>,
     basic::err::sys::tmpl::imp::Category<TCategoryTrait>,
     basic::err::defn::type::Char,
@@ -120,29 +124,49 @@ using VariableTestImpCategory = basic::test::Variable<
     basic::test::Value<ConditionType *>>;
 
 constexpr std::size_t ICategoryTraitType = 0;
-constexpr std::size_t ITmplCategoryType = 1;
-constexpr std::size_t ITmplImpCategoryType = 2;
-constexpr std::size_t IAliasCharType = 3;
-constexpr std::size_t IAliasOutputType = 4;
-constexpr std::size_t IAliasValueType = 5;
-constexpr std::size_t IAliasCodeValueType = 6;
-constexpr std::size_t IAliasConditionValueType = 7;
-constexpr std::size_t IAliasStringType = 8;
-constexpr std::size_t IAliasCodeType = 9;
-constexpr std::size_t IAliasConditionType = 10;
-constexpr std::size_t IAliasCodeSetValueType = 11;
-constexpr std::size_t ICodeType = 12;
-constexpr std::size_t IConditionType = 13;
-constexpr std::size_t ICodeEnumType = 14;
-constexpr std::size_t ICodeValueType = 15;
-constexpr std::size_t ICodeEnumValue = 16;
-constexpr std::size_t ICodeValueValue = 17;
-constexpr std::size_t IHasDefaultCodeEnumValue = 18;
-constexpr std::size_t IHasDefaultCodeValueValue = 19;
-constexpr std::size_t IHasDefaultConditionEnumValue = 20;
-constexpr std::size_t IHasDefaultConditionValueValue = 21;
-constexpr std::size_t ICodeValue = 22;
-constexpr std::size_t IConditionValue = 23;
+constexpr std::size_t ITmplCategoryBaseType = 1;
+constexpr std::size_t IInterfaceCategoryType = 2;
+constexpr std::size_t ITmplCategoryType = 3;
+constexpr std::size_t ITmplImpCategoryType = 4;
+constexpr std::size_t IAliasCharType = 5;
+constexpr std::size_t IAliasOutputType = 6;
+constexpr std::size_t IAliasValueType = 7;
+constexpr std::size_t IAliasCodeValueType = 8;
+constexpr std::size_t IAliasConditionValueType = 9;
+constexpr std::size_t IAliasStringType = 10;
+constexpr std::size_t IAliasCodeType = 11;
+constexpr std::size_t IAliasConditionType = 12;
+constexpr std::size_t IAliasCodeSetValueType = 13;
+constexpr std::size_t ICodeType = 14;
+constexpr std::size_t IConditionType = 15;
+constexpr std::size_t ICodeEnumType = 16;
+constexpr std::size_t ICodeValueType = 17;
+constexpr std::size_t ICodeEnumValue = 18;
+constexpr std::size_t ICodeValueValue = 19;
+constexpr std::size_t IHasDefaultCodeEnumValue = 20;
+constexpr std::size_t IHasDefaultCodeValueValue = 21;
+constexpr std::size_t IHasDefaultConditionEnumValue = 22;
+constexpr std::size_t IHasDefaultConditionValueValue = 23;
+constexpr std::size_t ICodeValue = 24;
+constexpr std::size_t IConditionValue = 25;
+
+typedef basic::test::msg::Argument<TestBaseOfCategoryBase,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<ITmplCategoryBaseType>>
+        ArgTestBaseOfCategoryBase;
+
+typedef basic::test::msg::Base<TestBaseOfCategoryBase, char, 
+    ArgTestBaseOfCategoryBase, ArgTestBaseOfCategoryBase, 
+    ArgTestBaseOfCategoryBase> MessageBaseTestBaseOfCategoryBase;
+
+typedef basic::test::msg::Argument<TestBaseOfInterfaceCategory,
+    basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
+    basic::test::msg::arg::type::Name<IInterfaceCategoryType>>
+        ArgTestBaseOfInterfaceCategory;
+
+typedef basic::test::msg::Base<TestBaseOfInterfaceCategory, char, 
+    ArgTestBaseOfInterfaceCategory, ArgTestBaseOfInterfaceCategory, 
+    ArgTestBaseOfInterfaceCategory> MessageBaseTestBaseOfInterfaceCategory;
 
 typedef basic::test::msg::Argument<TestAliasCharType,
     basic::test::msg::arg::type::Name<ITmplImpCategoryType>,
@@ -337,6 +361,8 @@ struct TestImpCategory :
         TCases>,
     public basic::test::Base<TestImpCategory<TCases, TVariables...>, 
         TVariables...>,
+    public MessageBaseTestBaseOfCategoryBase,
+    public MessageBaseTestBaseOfInterfaceCategory,
     public MessageBaseTestAliasCharType,
     public MessageBaseTestAliasOutputType,
     public MessageBaseTestAliasValueType,
@@ -361,6 +387,12 @@ public:
     using basic::test::Base<TestImpCategory<TCases, TVariables...>, 
         TVariables...>::Run;
 public:
+    using MessageBaseTestBaseOfCategoryBase::Format;
+    using MessageBaseTestBaseOfCategoryBase::SetFormat;
+    using MessageBaseTestBaseOfCategoryBase::Argument;
+    using MessageBaseTestBaseOfInterfaceCategory::Format;
+    using MessageBaseTestBaseOfInterfaceCategory::SetFormat;
+    using MessageBaseTestBaseOfInterfaceCategory::Argument;
     using MessageBaseTestAliasCharType::Format;
     using MessageBaseTestAliasCharType::SetFormat;
     using MessageBaseTestAliasCharType::Argument;
@@ -424,6 +456,20 @@ public:
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
         basic::test::msg::base::Error err;
+
+        TestBaseOfCategoryBase testBaseOfCategoryBase;
+        SetFormat(info, testBaseOfCategoryBase, "Test %s is base of %s\n");
+        SetFormat(debug, testBaseOfCategoryBase, "Test %s is base of %s\n");
+        SetFormat(err, testBaseOfCategoryBase, 
+            "Error Test %s is not base of %s\n");
+
+        TestBaseOfInterfaceCategory testBaseOfInterfaceCategory;
+        SetFormat(info, testBaseOfInterfaceCategory, 
+            "Test %s is base of %s\n");
+        SetFormat(debug, testBaseOfInterfaceCategory, 
+            "Test %s is base of %s\n");
+        SetFormat(err, testBaseOfInterfaceCategory, 
+            "Error Test %s is not base of %s\n");
 
         TestAliasCharType testAliasCharType;
         SetFormat(info, testAliasCharType, "Test alias type "
@@ -502,7 +548,7 @@ public:
             "function DefaultCode(%s{%s}) is %s\n");
         SetFormat(debug, testHasDefaultCodeWithCodeEnum, "Test %s has member "
             "function DefaultCode(%s{%s}) is %s\n");
-        SetFormat(err, testHasDefaultCodeWithCodeEnum, "Test %s has member "
+        SetFormat(err, testHasDefaultCodeWithCodeEnum, "Error %s has member "
             "function DefaultCode(%s{%s}) is not %s\n");
 
         TestHasDefaultCodeWithCodeValue testHasDefaultCodeWithCodeValue;
@@ -510,7 +556,7 @@ public:
             "function DefaultCode(%s{%s}) is %s\n");
         SetFormat(debug, testHasDefaultCodeWithCodeValue, "Test %s has member "
             "function DefaultCode(%s{%s}) is %s\n");
-        SetFormat(err, testHasDefaultCodeWithCodeValue, "Test %s has member "
+        SetFormat(err, testHasDefaultCodeWithCodeValue, "Error %s has member "
             "function DefaultCode(%s{%s}) is not %s\n");
 
         TestHasDefaultConditionWithConditionEnum 
@@ -519,7 +565,7 @@ public:
             "has member function DefaultCondition(%s{%s}) is %s\n");
         SetFormat(debug, testHasDefaultConditionWithConditionEnum, "Test %s "
             "has member function DefaultCondition(%s{%s}) is %s\n");
-        SetFormat(err, testHasDefaultConditionWithConditionEnum, "Test %s "
+        SetFormat(err, testHasDefaultConditionWithConditionEnum, "Error %s "
             "has member function DefaultCondition(%s{%s}) is not %s\n");
 
         TestHasDefaultConditionWithConditionValue
@@ -528,7 +574,7 @@ public:
             "has member function DefaultCondition(%s{%s}) is %s\n");
         SetFormat(debug, testHasDefaultConditionWithConditionValue, "Test %s "
             "has member function DefaultCondition(%s{%s}) is %s\n");
-        SetFormat(err, testHasDefaultConditionWithConditionValue, "Test %s "
+        SetFormat(err, testHasDefaultConditionWithConditionValue, "Error %s "
             "has member function DefaultCondition(%s{%s}) is not %s\n");
 
         TestValueDefaultCodeWithCodeEnum testValueDefaultCodeWithCodeEnum;
@@ -536,7 +582,7 @@ public:
             "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
         SetFormat(debug, testValueDefaultCodeWithCodeEnum, "Test "
             "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
-        SetFormat(err, testValueDefaultCodeWithCodeEnum, "Test "
+        SetFormat(err, testValueDefaultCodeWithCodeEnum, "Error "
             "value %s::DefaultCode(%s{%s}) is not same with %s{%s}\n");
         
         TestValueDefaultCodeWithCodeValue testValueDefaultCodeWithCodeValue;
@@ -544,7 +590,7 @@ public:
             "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
         SetFormat(debug, testValueDefaultCodeWithCodeValue, "Test "
             "value %s::DefaultCode(%s{%s}) is same with %s{%s}\n");
-        SetFormat(err, testValueDefaultCodeWithCodeValue, "Test "
+        SetFormat(err, testValueDefaultCodeWithCodeValue, "Error "
             "value %s::DefaultCode(%s{%s}) is not same with %s{%s}\n");
 
         TestValueDefaultConditionWithConditionEnum 
@@ -553,7 +599,7 @@ public:
             "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
         SetFormat(debug, testValueDefaultConditionWithConditionEnum, "Test "
             "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
-        SetFormat(err, testValueDefaultConditionWithConditionEnum, "Test "
+        SetFormat(err, testValueDefaultConditionWithConditionEnum, "Error "
             "value %s::DefaultCondition(%s{%s}) is not same with %s{%s}\n");
 
         TestValueDefaultConditionWithConditionValue
@@ -562,8 +608,28 @@ public:
             "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
         SetFormat(debug, testValueDefaultConditionWithConditionValue, "Test "
             "value %s::DefaultCondition(%s{%s}) is same with %s{%s}\n");
-        SetFormat(err, testValueDefaultConditionWithConditionValue, "Test "
+        SetFormat(err, testValueDefaultConditionWithConditionValue, "Error "
             "value %s::DefaultCondition(%s{%s}) is not same with %s{%s}\n");
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestBaseOfCategoryBase &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<ITmplCategoryBaseType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type BaseType;
+        return std::is_base_of<BaseType, basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>>::value;
+    }
+    template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
+    bool Result(const TestBaseOfInterfaceCategory &, 
+        VariableTestImpCategory<TCategoryTrait, TCodeEnum, TCodeValue> & var)
+    {
+        typedef typename basic::test::var::Element<IInterfaceCategoryType,
+            VariableTestImpCategory<TCategoryTrait, TCodeEnum, 
+            TCodeValue>>::Type BaseType;
+        return std::is_base_of<BaseType, basic::err::sys::tmpl::imp::
+            Category<TCategoryTrait>>::value;
     }
     template<typename TCategoryTrait, typename TCodeEnum, typename TCodeValue>
     bool Result(const TestAliasCharType &, 
@@ -755,6 +821,8 @@ public:
 };
 
 typedef basic::test::type::Parameter<
+    TestBaseOfCategoryBase,
+    TestBaseOfInterfaceCategory,
     TestAliasCharType,
     TestAliasOutputType,
     TestAliasValueType,
@@ -774,6 +842,8 @@ typedef basic::test::type::Parameter<
     TestValueDefaultConditionWithConditionValue> Case1;
 
 typedef basic::test::type::Parameter<
+    TestBaseOfCategoryBase,
+    TestBaseOfInterfaceCategory,
     TestAliasCharType,
     TestAliasOutputType,
     TestAliasValueType,
@@ -842,6 +912,21 @@ BASIC_TEST_TYPE_NAME("unsigned long long", unsigned long long);
 
 BASIC_TEST_TYPE_NAME("basic::err::msg::String", 
     basic::err::msg::String);
+BASIC_TEST_TYPE_NAME("basic::err::sys::intf::Category",
+    basic::err::sys::intf::Category);
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::tmpl::categ::Base<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::tmpl::categ::Base<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
 
 template<typename TArg>
 struct basic::test::type::Name<basic::err::sys::tmpl::Category<TArg>>
@@ -855,6 +940,7 @@ struct basic::test::type::Name<basic::err::sys::tmpl::Category<TArg>>
             _format, *tArgCStr);
     }
 };
+
 template<typename TArg, bool B>
 struct basic::test::type::Name<basic::err::sys::tmpl::imp::Category<TArg, B>>
 {
