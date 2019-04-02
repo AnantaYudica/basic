@@ -162,14 +162,14 @@ template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeValueType & code, 
     const ConditionType & cond) const noexcept
 {
-    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond, *this);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeType & code,
     const ConditionValueType & cond) const noexcept
 {
-    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond, *this);
 }
 
 template<typename TCategoryTrait>
