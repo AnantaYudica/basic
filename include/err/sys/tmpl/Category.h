@@ -177,7 +177,7 @@ typename Category<TCategoryTrait>::StringType
 Category<TCategoryTrait>::Message(const CodeType & code) const noexcept
 {
     return categ::Message<categ::msg::tag::
-        Code>(this->GetCategoryTrait(), code);
+        Code>(this->GetCategoryTrait(), code, *this);
 }
 
 template<typename TCategoryTrait>
@@ -185,7 +185,7 @@ typename Category<TCategoryTrait>::StringType
 Category<TCategoryTrait>::Message(const ConditionType & cond) const noexcept
 {
     return categ::Message<categ::msg::tag::
-        Condition>(this->GetCategoryTrait(), cond);
+        Condition>(this->GetCategoryTrait(), cond, *this);
 }
 
 template<typename TCategoryTrait>
