@@ -138,8 +138,7 @@ typename Category<TCategoryTrait>::ConditionType
 Category<TCategoryTrait>::
     DefaultCondition(const CodeType & code) const noexcept
 {
-    return categ::DefaultCondition(this->GetCategoryTrait(), code.Value(),
-        *this);
+    return categ::DefaultCondition(this->GetCategoryTrait(), code, *this);
 }
 
 template<typename TCategoryTrait>
