@@ -18,7 +18,7 @@ struct Condition
     Condition() = delete;
     static err::defn::type::sys::cond::Value Value(const T & cond) noexcept
     {
-        return static_cast<const err::defn::type::sys::cond::Value &>(cond);
+        return static_cast<err::defn::type::sys::cond::Value>(cond);
     }
 };
 
