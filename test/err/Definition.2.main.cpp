@@ -32,6 +32,10 @@ typedef std::basic_iostream<char> BasicErrorOutputType;
 
 #define BASIC_ERR_OUTPUT_TYPE BasicErrorOutputType
 
+typedef int BasicErrorOutputValueType;
+
+#define BASIC_ERR_OUTPUT_VALUE_TYPE BasicErrorOutputValueType;
+
 struct RecordId
 {};
 
@@ -233,6 +237,15 @@ T11Var3 t11_var3{"basic::err::output::Operator",
 REGISTER_TEST(t11, new TestDefinition<Case2, 
     typename T11Var1::BaseType, typename T11Var2::BaseType,
     typename T11Var3::BaseType>(t11_var1, t11_var2, t11_var3));
+
+typedef VariableIsSameType<basic::err::defn::type::output::Value,
+    BasicErrorOutputValueType> T12Var1;
+
+T12Var1 t12_var1{"basic::err::defn::type::output::Value", 
+    "BasicErrorOutputValueType"};
+
+REGISTER_TEST(t12, new TestDefinition<Case1,
+    typename T12Var1::BaseType>(t12_var1));
 
 int main()
 {

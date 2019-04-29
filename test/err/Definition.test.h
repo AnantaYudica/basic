@@ -19,6 +19,7 @@
 #include "err/defn/type/sys/code/Value.h"
 #include "err/defn/type/sys/cond/Value.h"
 #include "err/defn/func/output/Operator.h"
+#include "err/defn/type/output/Value.h"
 
 #include <typeinfo>
 #include <utility>
