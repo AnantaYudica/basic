@@ -1572,18 +1572,27 @@ REGISTER_TEST(t4, new TestEquivalent<Case1, T4Var1_1, T4Var1_2, T4Var1_3,
         t4_var1_2, t4_var1_3, t4_var1_4, t4_var1_5, t4_var1_6, t4_var1_7, 
         t4_var1_8, t4_var1_9));
 
-CodeType code5_1{4, tmplCategory5};
-ConditionType cond5_1{4, tmplCategory5};
-CodeValueType code5_2{4};
-ConditionValueType cond5_2{4};
+CodeType code5_1_1{4, tmplCategory5};
+CodeType code5_1_2{8, tmplCategory5};
+ConditionType cond5_1_1{4, tmplCategory5};
+ConditionType cond5_1_2{8, tmplCategory5};
+CodeValueType code5_2_1{4};
+CodeValueType code5_2_2{8};
+ConditionValueType cond5_2_1{4};
+ConditionValueType cond5_2_2{8};
 
-T5Var1 t5_var1{&tmplCategory5, &code5_1, &cond5_1, &bool_f};
-T5Var2 t5_var2{&tmplCategory5, &code5_1, &cond5_2, &bool_f};
-T5Var3 t5_var3{&tmplCategory5, &code5_2, &cond5_1, &bool_f};
-T5Var4 t5_var4{&tmplCategory5, &code5_2, &cond5_2, &bool_f};
+T5Var1 t5_var1_1{&tmplCategory5, &code5_1_1, &cond5_1_2, &bool_f};
+T5Var1 t5_var1_2{&tmplCategory5, &code5_1_1, &cond5_1_1, &bool_t};
+T5Var2 t5_var2_1{&tmplCategory5, &code5_1_1, &cond5_2_2, &bool_f};
+T5Var2 t5_var2_2{&tmplCategory5, &code5_1_1, &cond5_2_1, &bool_t};
+T5Var3 t5_var3_1{&tmplCategory5, &code5_2_1, &cond5_1_2, &bool_f};
+T5Var3 t5_var3_2{&tmplCategory5, &code5_2_1, &cond5_1_1, &bool_t};
+T5Var4 t5_var4_1{&tmplCategory5, &code5_2_1, &cond5_2_2, &bool_f};
+T5Var4 t5_var4_2{&tmplCategory5, &code5_2_1, &cond5_2_1, &bool_t};
 
-REGISTER_TEST(t5, new TestEquivalent<Case1, T5Var1, T5Var2, T5Var3, 
-    T5Var4>(t5_var1, t5_var2, t5_var3, t5_var4));
+REGISTER_TEST(t5, new TestEquivalent<Case1, T5Var1, T5Var1, T5Var2,
+    T5Var2, T5Var3, T5Var3, T5Var4, T5Var4>(t5_var1_1, t5_var1_2,
+    t5_var2_1, t5_var2_2, t5_var3_1, t5_var3_2, t5_var4_1, t5_var4_2));
 
 CodeType code6_1_1{4, tmplCategory6_1};
 ConditionType cond6_1_1_1{5, tmplCategory6_1};
