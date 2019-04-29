@@ -99,7 +99,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const sys::Code & code, const sys::Condition & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code.Value() == cond.Value();
 }
 
 template<typename TCategoryTrait>
@@ -166,7 +166,7 @@ Equivalent(const TCategoryTrait& categ_trait, const sys::Code & code,
     const err::defn::type::sys::cond::Value & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code.Value() == cond;
 }
 
 template<typename TCategoryTrait>
@@ -237,7 +237,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const sys::Condition & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code == cond.Value();
 }
 
 template<typename TCategoryTrait>
@@ -308,7 +308,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const err::defn::type::sys::cond::Value & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code == cond;
 }
 
 template<typename TCategoryTrait>
@@ -568,7 +568,8 @@ Equivalent(const TCategoryTrait& categ_trait,
     const categ::defn::type::cond::set::Value<TCategoryTrait> & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return ToCodeValue(categ_trait, code) == 
+        ToConditionValue(categ_trait, cond);
 }
 
 template<typename TCategoryTrait>
@@ -706,7 +707,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const err::defn::type::sys::cond::Value & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return ToCodeValue(categ_trait, code) == cond;
 }
 
 template<typename TCategoryTrait>
@@ -845,7 +846,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const sys::Condition & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return ToCodeValue(categ_trait, code) == cond.Value();
 }
 
 template<typename TCategoryTrait>
@@ -981,7 +982,7 @@ Equivalent(const TCategoryTrait& categ_trait,
     const categ::defn::type::cond::set::Value<TCategoryTrait> & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code == ToConditionValue(categ_trait, cond);
 }
 
 template<typename TCategoryTrait>
@@ -1104,7 +1105,7 @@ Equivalent(const TCategoryTrait& categ_trait, const sys::Code & code,
     const categ::defn::type::cond::set::Value<TCategoryTrait> & cond,
     const tmpl::Category<TCategoryTrait> & categ_instance) noexcept
 {
-    return false;
+    return code.Value() == ToConditionValue(categ_trait, cond);
 }
 
 } //!categ
