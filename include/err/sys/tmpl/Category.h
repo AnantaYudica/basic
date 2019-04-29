@@ -7,6 +7,7 @@
 
 #include "imp/categ/HasCodeEnum.h"
 #include "../../defn/func/output/Operator.h"
+#include "../../defn/type/output/Value.h"
 #include "categ/defn/type/code/set/Value.h"
 #include "categ/defn/type/cond/set/Value.h"
 #include "categ/msg/tag/Code.h"
@@ -192,7 +193,7 @@ const err::intf::Output & Category<TCategoryTrait>::
     operator>>(OutputType & out) const noexcept
 {
     defn::func::output::Operator(out, "category ", this->Name(), 
-        ":", this->Value());
+        ":", static_cast<defn::type::output::Value>(this->Value()));
     return *this;
 }
 

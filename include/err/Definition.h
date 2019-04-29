@@ -1,6 +1,7 @@
 #ifndef BASIC_ERR_DEFINITION_H_
 #define BASIC_ERR_DEFINITION_H_
 
+#include <cstddef>
 #include <ostream>
 #include <iostream>
 #include <string>
@@ -36,6 +37,10 @@
     std::basic_ostream<BASIC_ERR_CHAR_TYPE,\
         BASIC_ERR_OUTPUT_CHARTRAIT_TYPE>
 #endif //!BASIC_ERR_OUTPUT_TYPE
+
+#ifndef BASIC_ERR_OUTPUT_VALUE_TYPE
+#define BASIC_ERR_OUTPUT_VALUE_TYPE std::size_t
+#endif //BASIC_ERR_OUTPUT_VALUE_TYPE
 
 #ifndef BASIC_ERR_ID_RECORD_TYPE
 #include "id/Record.h"
