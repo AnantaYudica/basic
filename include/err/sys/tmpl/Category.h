@@ -154,7 +154,7 @@ typename Category<TCategoryTrait>::ConditionValueType
 Category<TCategoryTrait>::
     ToConditionValue(const ConditionSetValueType & cond) const noexcept
 {
-    return Category::ToConditionValue(this->GetCategoryTrait(), cond);
+    return categ::ToConditionValue(this->GetCategoryTrait(), cond);
 }
 
 template<typename TCategoryTrait>
