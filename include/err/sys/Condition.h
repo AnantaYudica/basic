@@ -4,7 +4,7 @@
 #include "Condition.defn.h"
 
 #include "make/Category.h"
-#include "make/cond/Value.h"
+#include "make/Condition.h"
 #include "../defn/type/sys/cond/Value.h"
 #include "../defn/func/output/Operator.h"
 #include "cond/has/Enum.h"
@@ -21,8 +21,9 @@ namespace sys
 
 template<typename TConditionEnum>
 inline Condition::Condition(const TConditionEnum & cond) noexcept :
-    m_value(sys::make::cond::Value(cond)),
-    m_categ(const_cast<CategoryType *>(&sys::make::Category(cond))),
+    m_value(sys::make::Condition<TConditionEnum>::Value(cond)),
+    m_categ(const_cast<CategoryType *>(&sys::make::
+        Category<TConditionEnum>::GetInstance())),
     m_message(m_categ->Message(*this))
 {}
 
@@ -70,9 +71,9 @@ inline Condition & Condition::operator=(Condition && mov) noexcept
 template<typename TConditionEnum>
 inline Condition & Condition::operator=(const TConditionEnum & cond) noexcept
 {
-    this->m_value = sys::make::cond::Value(cond);
+    this->m_value = sys::make::Condition<TConditionEnum>::Value(cond);
     this->m_categ = const_cast<CategoryType *>(&sys::make::
-        Category(cond));
+        Category<TConditionEnum>::GetInstance());
     this->m_message = std::move(m_categ->Message(*this));
     return *this;
 }
@@ -147,8 +148,10 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator==(const basic::err::sys::Condition & cond_a, 
     const TConditionEnum & cond_b) noexcept
 {
-    return cond_a.Category() == basic::err::sys::make::Category(cond_b) &&
-        cond_a.Value() == basic::err::sys::make::cond::Value(cond_b);
+    return cond_a.Category() == basic::err::sys::make::
+        Category<TConditionEnum>::GetInstance() &&
+        cond_a.Value() == basic::err::sys::make::
+        Condition<TConditionEnum>::Value(cond_b);
 }
 
 inline bool operator==(const basic::err::defn::type::sys::cond::
@@ -163,7 +166,8 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator==(const basic::err::defn::type::sys::cond::
     Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return cond_a == basic::err::sys::make::cond::Value(cond_b);
+    return cond_a == basic::err::sys::make::
+        Condition<TConditionEnum>::Value(cond_b);
 }
 
 template<typename TConditionEnum>
@@ -172,8 +176,8 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator==(const TConditionEnum & cond_a, 
     const basic::err::sys::Condition & cond_b) noexcept
 {
-    return cond_b == basic::err::sys::make::cond::
-        Value(cond_a);
+    return cond_b == basic::err::sys::make::
+        Condition<TConditionEnum>::Value(cond_a);
 }
 
 template<typename TConditionEnum>
@@ -258,8 +262,10 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator<(const basic::err::sys::Condition & cond_a, 
     const TConditionEnum & cond_b) noexcept
 {
-    return cond_a.Category() == basic::err::sys::make::Category(cond_b) &&
-        cond_a.Value() < basic::err::sys::make::cond::Value(cond_b);
+    return cond_a.Category() == basic::err::sys::make::
+        Category<TConditionEnum>::GetInstance() &&
+        cond_a.Value() < basic::err::sys::make::
+        Condition<TConditionEnum>::Value(cond_b);
 }
 
 inline bool operator<(const basic::err::defn::type::sys::cond::
@@ -274,7 +280,8 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator<(const basic::err::defn::type::sys::cond::
     Value & cond_a, const TConditionEnum & cond_b) noexcept
 {
-    return cond_a < basic::err::sys::make::cond::Value(cond_b);
+    return cond_a < basic::err::sys::make::
+        Condition<TConditionEnum>::Value(cond_b);
 }
 
 template<typename TConditionEnum>
@@ -283,8 +290,10 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator<(const TConditionEnum & cond_a, 
     const basic::err::sys::Condition & cond_b) noexcept
 {
-    return basic::err::sys::make::Category(cond_a) == cond_b.Category() &&
-        basic::err::sys::make::cond::Value(cond_a) < cond_b.Value();
+    return basic::err::sys::make::Category<TConditionEnum>::
+        GetInstance(cond_a) == cond_b.Category() &&
+        basic::err::sys::make::Condition<TConditionEnum>::
+        Value(cond_a) < cond_b.Value();
 }
 
 template<typename TConditionEnum>
@@ -293,7 +302,8 @@ inline typename std::enable_if<basic::err::sys::cond::has::
 operator<( const TConditionEnum & cond_a, 
     const basic::err::defn::type::sys::cond::Value & cond_b) noexcept
 {
-    return basic::err::sys::make::cond::Value(cond_a) < cond_b;
+    return basic::err::sys::make::Condition<TConditionEnum>::
+        Value(cond_a) < cond_b;
 }
 
 inline bool operator>(const basic::err::sys::Condition & cond_a, 
@@ -349,6 +359,5 @@ operator>(const TConditionEnum & cond_a,
 {
     return cond_b < cond_a;
 }
-
 
 #endif //!BASIC_ERR_SYS_CONDITION_H_

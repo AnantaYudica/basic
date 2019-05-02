@@ -5,6 +5,9 @@
 
 #include "../../../Code.defn.h"
 #include "../../../Condition.defn.h"
+#include "../../categ/DefaultCode.h"
+#include "../../categ/DefaultCondition.h"
+
 #include "../../categ/ToCodeValue.h"
 
 #include <type_traits>
@@ -21,49 +24,35 @@ namespace tmpl
 namespace imp
 {
 
-template<typename TCategoryTrait>
-Category<TCategoryTrait, true>::Category() noexcept :
+template<typename TCategoryTrait, typename TDerive>
+Category<TCategoryTrait, TDerive, true>::Category() noexcept :
     tmpl::categ::Base<TCategoryTrait>(),
     intf::Category()
 {}
 
-template<typename TCategoryTrait>
-Category<TCategoryTrait, true>::
-    Category(Category<TCategoryTrait, true> && mov) noexcept :
+template<typename TCategoryTrait, typename TDerive>
+Category<TCategoryTrait, TDerive, true>::
+    Category(Category<TCategoryTrait, TDerive, true> && mov) noexcept :
         tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
         intf::Category(std::move(mov))
 {}
 
-template<typename TCategoryTrait>
-typename Category<TCategoryTrait, true>::CodeType 
-Category<TCategoryTrait, true>::
-    DefaultCode(const CodeValueType & code) const noexcept
-{
-    return {code, *this};
-}
-
-template<typename TCategoryTrait>
-typename Category<TCategoryTrait, true>::CodeType 
-Category<TCategoryTrait, true>::
+template<typename TCategoryTrait, typename TDerive>
+typename Category<TCategoryTrait, TDerive, true>::CodeType 
+Category<TCategoryTrait, TDerive, true>::
     DefaultCode(const CodeSetValueType & code) const noexcept
 {
-    return {code};
+    return categ::DefaultCode(this->GetCategoryTrait(), code, 
+        static_cast<const TDerive &>(*this));
 }
 
-template<typename TCategoryTrait>
-typename Category<TCategoryTrait, true>::ConditionType
-Category<TCategoryTrait, true>::
-    DefaultCondition(const CodeValueType & code) const noexcept
-{
-    return {code, *this};
-}
-
-template<typename TCategoryTrait>
-typename Category<TCategoryTrait, true>::ConditionType
-Category<TCategoryTrait, true>::
+template<typename TCategoryTrait, typename TDerive>
+typename Category<TCategoryTrait, TDerive, true>::ConditionType
+Category<TCategoryTrait, TDerive, true>::
     DefaultCondition(const CodeSetValueType & code) const noexcept
 {
-    return {categ::ToCodeValue(this->GetCategoryTrait(), code), *this};
+    return categ::DefaultCondition(this->GetCategoryTrait(), code, 
+        static_cast<const TDerive &>(*this));
 }
 
 } //!imp

@@ -32,7 +32,7 @@ namespace tmpl
 template<typename TCategoryTrait>
 class Category : 
     virtual public tmpl::categ::Base<TCategoryTrait>,
-    public tmpl::imp::Category<TCategoryTrait>,
+    public tmpl::imp::Category<TCategoryTrait, Category<TCategoryTrait>>,
     public tmpl::imp::Exit<TCategoryTrait>
 {
 public:
@@ -81,12 +81,19 @@ public:
 public:
     CodeValueType DefaultCodeValue() const noexcept;
 public:
+    using tmpl::imp::Category<TCategoryTrait, Category<TCategoryTrait>>::
+        DefaultCode;
+public:
     CodeType DefaultCode() const noexcept;
+    CodeType DefaultCode(const CodeValueType & code) const noexcept;
 public:
     ConditionValueType DefaultConditionValue() const noexcept;
 public:
-    ConditionType DefaultCondition() const noexcept;
+    using tmpl::imp::Category<TCategoryTrait, Category<TCategoryTrait>>::
+        DefaultCondition;
 public:
+    ConditionType DefaultCondition() const noexcept;
+    ConditionType DefaultCondition(const CodeValueType &) const noexcept;
     ConditionType DefaultCondition(const CodeType & code) const noexcept;
 public:
     CodeValueType ToCodeValue(const CodeSetValueType & code) const noexcept;

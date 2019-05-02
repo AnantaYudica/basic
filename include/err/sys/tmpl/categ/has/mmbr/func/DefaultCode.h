@@ -61,10 +61,9 @@ namespace mmbr
 namespace func
 {
 
-template<typename TCategoryTrait, typename TCode, 
-    typename TCategory>
+template<typename TCategoryTrait, typename TCode, typename... TArgs>
 using DefaultCode = _helper::_basic::_err::_sys::_tmpl::_categ::
-    _has::_mmbr::_func::_DefaultCode<TCategoryTrait, TCode, const TCategory &>;
+    _has::_mmbr::_func::_DefaultCode<TCategoryTrait, TCode, const TArgs & ...>;
 
 } //!func
 

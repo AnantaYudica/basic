@@ -7,6 +7,7 @@
 
 #include "imp/categ/HasCodeEnum.h"
 #include "../../defn/func/output/Operator.h"
+#include "../../defn/type/output/Value.h"
 #include "categ/defn/type/code/set/Value.h"
 #include "categ/defn/type/cond/set/Value.h"
 #include "categ/msg/tag/Code.h"
@@ -61,14 +62,15 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
     tmpl::categ::Base<TCategoryTrait>(),
-    tmpl::imp::Category<TCategoryTrait>(),
+    tmpl::imp::Category<TCategoryTrait, Category<TCategoryTrait>>(),
     tmpl::imp::Exit<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
     tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
-    tmpl::imp::Category<TCategoryTrait>(std::move(mov)),
+    tmpl::imp::Category<TCategoryTrait, 
+        Category<TCategoryTrait>>(std::move(mov)),
     tmpl::imp::Exit<TCategoryTrait>(std::move(mov))
 {}
 
@@ -119,6 +121,14 @@ Category<TCategoryTrait>::DefaultCode() const noexcept
 }
 
 template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::CodeType Category<TCategoryTrait>::
+    DefaultCode(const CodeValueType & code) const noexcept
+{
+    return categ::DefaultCode(this->GetCategoryTrait(), code,
+        *this);
+}
+
+template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionValueType 
 Category<TCategoryTrait>::DefaultConditionValue() const noexcept
 {
@@ -136,10 +146,17 @@ Category<TCategoryTrait>::DefaultCondition() const noexcept
 template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionType 
 Category<TCategoryTrait>::
+    DefaultCondition(const CodeValueType & code) const noexcept
+{
+    return categ::DefaultCondition(this->GetCategoryTrait(), code, *this);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::
     DefaultCondition(const CodeType & code) const noexcept
 {
-    return categ::DefaultCondition(this->GetCategoryTrait(), code.Value(),
-        *this);
+    return categ::DefaultCondition(this->GetCategoryTrait(), code, *this);
 }
 
 template<typename TCategoryTrait>
@@ -155,21 +172,21 @@ typename Category<TCategoryTrait>::ConditionValueType
 Category<TCategoryTrait>::
     ToConditionValue(const ConditionSetValueType & cond) const noexcept
 {
-    return Category::ToConditionValue(this->GetCategoryTrait(), cond);
+    return categ::ToConditionValue(this->GetCategoryTrait(), cond);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeValueType & code, 
     const ConditionType & cond) const noexcept
 {
-    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond, *this);
 }
 
 template<typename TCategoryTrait>
 bool Category<TCategoryTrait>::Equivalent(const CodeType & code,
     const ConditionValueType & cond) const noexcept
 {
-    return categ::Equivalent(this->GetCategoryTrait(), code, cond);
+    return categ::Equivalent(this->GetCategoryTrait(), code, cond, *this);
 }
 
 template<typename TCategoryTrait>
@@ -177,7 +194,7 @@ typename Category<TCategoryTrait>::StringType
 Category<TCategoryTrait>::Message(const CodeType & code) const noexcept
 {
     return categ::Message<categ::msg::tag::
-        Code>(this->GetCategoryTrait(), code);
+        Code>(this->GetCategoryTrait(), code, *this);
 }
 
 template<typename TCategoryTrait>
@@ -185,7 +202,7 @@ typename Category<TCategoryTrait>::StringType
 Category<TCategoryTrait>::Message(const ConditionType & cond) const noexcept
 {
     return categ::Message<categ::msg::tag::
-        Condition>(this->GetCategoryTrait(), cond);
+        Condition>(this->GetCategoryTrait(), cond, *this);
 }
 
 template<typename TCategoryTrait>
@@ -193,7 +210,7 @@ const err::intf::Output & Category<TCategoryTrait>::
     operator>>(OutputType & out) const noexcept
 {
     defn::func::output::Operator(out, "category ", this->Name(), 
-        ":", this->Value());
+        ":", static_cast<defn::type::output::Value>(this->Value()));
     return *this;
 }
 

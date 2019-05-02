@@ -4,7 +4,7 @@
 #include "Code.defn.h"
 
 #include "make/Category.h"
-#include "make/code/Value.h"
+#include "make/Code.h"
 #include "../defn/type/sys/code/Value.h"
 #include "../defn/func/output/Operator.h"
 #include "code/has/Enum.h"
@@ -21,8 +21,9 @@ namespace sys
 
 template<typename TCodeEnum>
 inline Code::Code(const TCodeEnum & code) noexcept :
-    m_value(sys::make::code::Value(code)),
-    m_categ(const_cast<CategoryType *>(&sys::make::Category(code))),
+    m_value(sys::make::Code<TCodeEnum>::Value(code)),
+    m_categ(const_cast<CategoryType *>(&sys::make::
+        Category<TCodeEnum>::GetInstance())),
     m_message(std::move(m_categ->Message(*this)))
 {}
 
@@ -70,9 +71,9 @@ inline Code & Code::operator=(Code && mov) noexcept
 template<typename TCodeEnum>
 inline Code & Code::operator=(const TCodeEnum & code) noexcept
 {
-    this->m_value = sys::make::code::Value(code);
+    this->m_value = sys::make::Code<TCodeEnum>::Value(code);
     this->m_categ = const_cast<CategoryType *>(&sys::make::
-        Category(code));
+        Category<TCodeEnum>::GetInstance());
     this->m_message = std::move(m_categ->Message(*this));
     return *this;
 }
@@ -151,8 +152,10 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator==(const basic::err::sys::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
-    return code_a.Category() == basic::err::sys::make::Category(code_b) &&
-        code_a.Value() == basic::err::sys::make::code::Value(code_b);
+    return code_a.Category() == basic::err::sys::make::
+        Category<TCodeEnum>::GetInstance() &&
+        code_a.Value() == basic::err::sys::make::
+        Code<TCodeEnum>::Value(code_b);
 }
 
 inline bool operator==(const basic::err::defn::type::sys::code::
@@ -167,7 +170,7 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator==(const basic::err::defn::type::sys::code::Value & code_a, 
     const TCodeEnum & code_b) noexcept
 {
-    return code_a == basic::err::sys::make::code::Value(code_b);
+    return code_a == basic::err::sys::make::Code<TCodeEnum>::Value(code_b);
 }
 
 template<typename TCodeEnum>
@@ -261,8 +264,9 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator<(const basic::err::sys::Code & code_a, 
     const TCodeEnum & code_b) noexcept
 {
-    return code_a.Category() == basic::err::sys::make::Category(code_b) &&
-        code_a.Value() < basic::err::sys::make::code::Value(code_b);
+    return code_a.Category() == basic::err::sys::make::
+        Category<TCodeEnum>::GetInstance() &&
+        code_a.Value() < basic::err::sys::make::Code<TCodeEnum>::Value(code_b);
 }
 
 inline bool operator<(const basic::err::defn::type::sys::code::
@@ -277,7 +281,7 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator<(const basic::err::defn::type::sys::code::Value & code_a, 
     const TCodeEnum & code_b) noexcept
 {
-    return code_a < basic::err::sys::make::code::Value(code_b);
+    return code_a < basic::err::sys::make::Code<TCodeEnum>::Value(code_b);
 }
 
 template<typename TCodeEnum>
@@ -286,8 +290,9 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator<(const TCodeEnum & code_a, 
     const basic::err::sys::Code & code_b) noexcept
 {
-    return basic::err::sys::make::Category(code_a) == code_b.Category() &&
-        basic::err::sys::make::code::Value(code_a) < code_b.Value();
+    return basic::err::sys::make::Category<TCodeEnum>::
+        GetInstance() == code_b.Category() &&
+        basic::err::sys::make::Code<TCodeEnum>::Value(code_a) < code_b.Value();
 }
 
 template<typename TCodeEnum>
@@ -296,7 +301,7 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator<(const TCodeEnum & code_a, 
     const basic::err::defn::type::sys::code::Value & code_b) noexcept
 {
-    return basic::err::sys::make::code::Value(code_a) < code_b;
+    return basic::err::sys::make::Code<TCodeEnum>::Value(code_a) < code_b;
 }
 
 inline bool operator>(const basic::err::sys::Code & code_a, 

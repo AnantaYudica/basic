@@ -16,21 +16,35 @@ namespace sys
 namespace make
 {
 
-template<typename TCodeEnum>
-inline const sys::Category & Category(const TCodeEnum &) noexcept
+template<typename T>
+struct Category
 {
-    return tmpl::Category<sys::categ::Default>::GetInstance();
-}
+    Category() = delete;
+    static const sys::Category & GetInstance() noexcept
+    {
+        return tmpl::Category<sys::categ::Default>::GetInstance();
+    }
+};
 
-inline const sys::Category & Category(const std::future_errc &) noexcept
+template<>
+struct Category<std::future_errc>
 {
-    return tmpl::Category<sys::categ::Future>::GetInstance();
-}
+    Category() = delete;
+    static const sys::Category & GetInstance() noexcept
+    {
+        return tmpl::Category<sys::categ::Future>::GetInstance();
+    }
+};
 
-inline const sys::Category & Category(const std::errc &) noexcept
+template<>
+struct Category<std::errc>
 {
-    return tmpl::Category<sys::categ::Generic>::GetInstance();
-}
+    Category() = delete;
+    static const sys::Category & GetInstance() noexcept
+    {
+        return tmpl::Category<sys::categ::Generic>::GetInstance();
+    }
+};
 
 } //!make
 

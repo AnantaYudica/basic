@@ -27,8 +27,8 @@ namespace tmpl
 namespace imp
 {
 
-template<typename TCategoryTrait>
-class Category<TCategoryTrait, true> :
+template<typename TCategoryTrait, typename TDerive>
+class Category<TCategoryTrait, TDerive, true> :
     virtual public tmpl::categ::Base<TCategoryTrait>,
     public intf::Category
 {
@@ -49,30 +49,30 @@ public:
 protected:
     Category() noexcept;
 public:
-    Category(const Category<TCategoryTrait, true> & cpy) noexcept = delete;
-    Category(Category<TCategoryTrait, true> && mov) noexcept;
+    Category(const Category<TCategoryTrait, TDerive, 
+        true> & cpy) noexcept = delete;
+    Category(Category<TCategoryTrait, TDerive, true> && mov) noexcept;
 public:
     virtual ~Category() noexcept = default;
 public:
-    Category<TCategoryTrait, true> & 
-    operator=(const Category<TCategoryTrait, true> & cpy) = delete;
-    Category<TCategoryTrait, true> & 
-    operator=(Category<TCategoryTrait, true> && mov) = delete;
+    Category<TCategoryTrait, TDerive, true> & 
+    operator=(const Category<TCategoryTrait, TDerive, true> & cpy) = delete;
+    Category<TCategoryTrait, TDerive, true> & 
+    operator=(Category<TCategoryTrait, TDerive, true> && mov) = delete;
 public:
     virtual ValueType Value() const noexcept = 0;
 public:
     virtual const CharType * Name() const noexcept = 0;
 public:
     virtual CodeType DefaultCode() const noexcept = 0;
-private:
-    CodeType DefaultCode(const CodeValueType &) const noexcept;
+    virtual CodeType DefaultCode(const CodeValueType &) const noexcept = 0;
 public:
     CodeType DefaultCode(const CodeSetValueType &) const noexcept;
 public:
     virtual ConditionType DefaultCondition() const noexcept = 0;
-private:
-    ConditionType DefaultCondition(const CodeValueType &) 
-        const noexcept;
+public:
+    virtual ConditionType DefaultCondition(const CodeValueType &) 
+        const noexcept = 0;
 public:
     ConditionType DefaultCondition(const CodeSetValueType &) 
         const noexcept;

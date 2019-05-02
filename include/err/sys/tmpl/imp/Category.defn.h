@@ -14,6 +14,7 @@
 #include "../../../defn/type/sys/cond/Value.h"
 #include "../../../msg/String.h"
 #include "../categ/has/mmbr/defn/type/CodeEnum.h"
+#include "../categ/defn/type/code/set/Value.h"
 
 namespace basic
 {
@@ -26,7 +27,7 @@ namespace tmpl
 namespace imp
 {
 
-template<typename TCategoryTrait, 
+template<typename TCategoryTrait, typename TDerive,
     bool HasCodeEnum = tmpl::categ::has::mmbr::defn::type::
         CodeEnum<TCategoryTrait>::Value>
 class Category :
@@ -44,30 +45,34 @@ public:
 public:
     typedef sys::Code CodeType;
     typedef sys::Condition ConditionType;
+public:
+    typedef tmpl::categ::defn::type::code::set::
+        Value<TCategoryTrait> CodeSetValueType;
 protected:
     Category() noexcept;
 public:
-    Category(const Category<TCategoryTrait, 
+    Category(const Category<TCategoryTrait, TDerive,
         HasCodeEnum> & cpy) noexcept = delete;
-    Category(Category<TCategoryTrait, HasCodeEnum> && mov) noexcept;
+    Category(Category<TCategoryTrait, TDerive, HasCodeEnum> && mov) noexcept;
 public:
     virtual ~Category() noexcept = default;
 public:
-    Category<TCategoryTrait, HasCodeEnum> & 
-    operator=(const Category<TCategoryTrait, HasCodeEnum> & cpy) = delete;
-    Category<TCategoryTrait, HasCodeEnum> & 
-    operator=(Category<TCategoryTrait, HasCodeEnum> && mov) = delete;
+    Category<TCategoryTrait, TDerive, HasCodeEnum> & 
+    operator=(const Category<TCategoryTrait, TDerive, 
+        HasCodeEnum> & cpy) = delete;
+    Category<TCategoryTrait, TDerive, HasCodeEnum> & 
+    operator=(Category<TCategoryTrait, TDerive, HasCodeEnum> && mov) = delete;
 public:
     virtual ValueType Value() const noexcept = 0;
 public:
     virtual const CharType * Name() const noexcept = 0;
 public:
     virtual CodeType DefaultCode() const noexcept = 0;
-    CodeType DefaultCode(const CodeValueType &) const noexcept;
+    virtual CodeType DefaultCode(const CodeValueType &) const noexcept = 0;
 public:
     virtual ConditionType DefaultCondition() const noexcept = 0;
-    ConditionType DefaultCondition(const CodeValueType &) 
-        const noexcept;
+    virtual ConditionType DefaultCondition(const CodeValueType &) 
+        const noexcept = 0;
     virtual ConditionType DefaultCondition(const CodeType &) 
         const noexcept = 0;
 public:

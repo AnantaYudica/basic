@@ -5,6 +5,8 @@
 
 #include "../../Code.defn.h"
 #include "../../Condition.defn.h"
+#include "../categ/DefaultCode.h"
+#include "../categ/DefaultCondition.h"
 
 #include <type_traits>
 #include <utility>
@@ -20,34 +22,18 @@ namespace tmpl
 namespace imp
 {
 
-template<typename TCategoryTrait, bool HasCodeEnum>
-Category<TCategoryTrait, HasCodeEnum>::Category() noexcept :
+template<typename TCategoryTrait, typename TDerive, bool HasCodeEnum>
+Category<TCategoryTrait, TDerive, HasCodeEnum>::Category() noexcept :
     tmpl::categ::Base<TCategoryTrait>(),
     intf::Category()
 {}
 
-template<typename TCategoryTrait, bool HasCodeEnum>
-Category<TCategoryTrait, HasCodeEnum>::
-    Category(Category<TCategoryTrait, HasCodeEnum> && mov) noexcept :
+template<typename TCategoryTrait, typename TDerive, bool HasCodeEnum>
+Category<TCategoryTrait, TDerive, HasCodeEnum>::
+    Category(Category<TCategoryTrait, TDerive, HasCodeEnum> && mov) noexcept :
         tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
         intf::Category(std::move(mov))
 {}
-
-template<typename TCategoryTrait, bool HasCodeEnum>
-typename Category<TCategoryTrait, HasCodeEnum>::CodeType 
-Category<TCategoryTrait, HasCodeEnum>::
-    DefaultCode(const CodeValueType & code) const noexcept
-{
-    return {code, *this};
-}
-
-template<typename TCategoryTrait, bool HasCodeEnum>
-typename Category<TCategoryTrait, HasCodeEnum>::ConditionType
-Category<TCategoryTrait, HasCodeEnum>::
-    DefaultCondition(const CodeValueType & code) const noexcept
-{
-    return {code, *this};
-}
 
 } //!imp
 
