@@ -62,14 +62,15 @@ const Category<TCategoryTrait> & Category<TCategoryTrait>::
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category() noexcept :
     tmpl::categ::Base<TCategoryTrait>(),
-    tmpl::imp::Category<TCategoryTrait>(),
+    tmpl::imp::Category<TCategoryTrait, Category<TCategoryTrait>>(),
     tmpl::imp::Exit<TCategoryTrait>()
 {}
 
 template<typename TCategoryTrait>
 Category<TCategoryTrait>::Category(Category<TCategoryTrait> && mov) noexcept :
     tmpl::categ::Base<TCategoryTrait>(std::move(mov)),
-    tmpl::imp::Category<TCategoryTrait>(std::move(mov)),
+    tmpl::imp::Category<TCategoryTrait, 
+        Category<TCategoryTrait>>(std::move(mov)),
     tmpl::imp::Exit<TCategoryTrait>(std::move(mov))
 {}
 
@@ -120,6 +121,14 @@ Category<TCategoryTrait>::DefaultCode() const noexcept
 }
 
 template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::CodeType Category<TCategoryTrait>::
+    DefaultCode(const CodeValueType & code) const noexcept
+{
+    return categ::DefaultCode(this->GetCategoryTrait(), code,
+        *this);
+}
+
+template<typename TCategoryTrait>
 typename Category<TCategoryTrait>::ConditionValueType 
 Category<TCategoryTrait>::DefaultConditionValue() const noexcept
 {
@@ -132,6 +141,14 @@ Category<TCategoryTrait>::DefaultCondition() const noexcept
 {
     return categ::DefaultCondition(this->GetCategoryTrait(),
         categ::DefaultCodeValue(this->GetCategoryTrait()), *this);
+}
+
+template<typename TCategoryTrait>
+typename Category<TCategoryTrait>::ConditionType 
+Category<TCategoryTrait>::
+    DefaultCondition(const CodeValueType & code) const noexcept
+{
+    return categ::DefaultCondition(this->GetCategoryTrait(), code, *this);
 }
 
 template<typename TCategoryTrait>
