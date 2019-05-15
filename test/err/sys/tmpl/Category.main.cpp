@@ -282,6 +282,15 @@ typedef basic::test::msg::Base<TestBaseOfImplementExit, char,
     ArgTestBaseOfImplementExit, ArgTestBaseOfImplementExit, 
     ArgTestBaseOfImplementExit> MessageBaseTestBaseOfImplementExit;
 
+typedef basic::test::msg::Argument<TestAliasTraitType,
+    basic::test::msg::arg::type::Name<ICategoryType>,
+    basic::test::msg::arg::type::Name<ICategoryTraitType>>
+        ArgTestAliasTraitType;
+
+typedef basic::test::msg::Base<TestAliasTraitType, char, 
+    ArgTestAliasTraitType, ArgTestAliasTraitType, 
+    ArgTestAliasTraitType> MessageBaseTestAliasTraitType;
+
 typedef basic::test::msg::Argument<TestAliasCharType,
     basic::test::msg::arg::type::Name<ICategoryType>,
     basic::test::msg::arg::type::Name<ICharType>>
@@ -546,6 +555,7 @@ struct TestCategory :
     public MessageBaseTestBaseOfCategoryBase,
     public MessageBaseTestBaseOfImplementCategory,
     public MessageBaseTestBaseOfImplementExit,
+    public MessageBaseTestAliasTraitType,
     public MessageBaseTestAliasCharType,
     public MessageBaseTestAliasOutputType,
     public MessageBaseTestAliasValueType,
@@ -590,6 +600,9 @@ public:
     using MessageBaseTestBaseOfImplementExit::Format;
     using MessageBaseTestBaseOfImplementExit::SetFormat;
     using MessageBaseTestBaseOfImplementExit::Argument;
+    using MessageBaseTestAliasTraitType::Format;
+    using MessageBaseTestAliasTraitType::SetFormat;
+    using MessageBaseTestAliasTraitType::Argument;
     using MessageBaseTestAliasCharType::Format;
     using MessageBaseTestAliasCharType::SetFormat;
     using MessageBaseTestAliasCharType::Argument;
@@ -706,6 +719,14 @@ public:
         SetFormat(debug, testBaseOfImplementExit, "Test %s is base of %s\n");
         SetFormat(err, testBaseOfImplementExit, 
             "Error Test %s is not base of %s\n");
+
+        TestAliasTraitType testAliasTraitType;
+        SetFormat(info, testAliasTraitType, "Test alias type "
+            "%s::CharType is same with %s\n");
+        SetFormat(debug, testAliasTraitType, "Test alias type "
+            "%s::CharType is same with %s\n");
+        SetFormat(err, testAliasTraitType, "Error alias type "
+            "%s::CharType is not same with %s\n");
 
         TestAliasCharType testAliasCharType;
         SetFormat(info, testAliasCharType, "Test alias type "
@@ -960,6 +981,17 @@ public:
             Type BaseType;
         return std::is_base_of<BaseType, basic::err::sys::tmpl::
             Category<TCategoryTrait>>::value;
+    }
+    template<typename TCategoryTrait, typename TOtherCategoryTrait>
+    bool Result(const TestAliasTraitType &, 
+        VariableTestCategory<TCategoryTrait, TOtherCategoryTrait> & var)
+    {
+        typedef typename basic::test::var::Element<ICategoryTraitType,
+            VariableTestCategory<TCategoryTrait, TOtherCategoryTrait>>::
+            Type TraitType;
+        return typeid(typename basic::err::sys::tmpl::
+            Category<TCategoryTrait>::TraitType).hash_code() == 
+            typeid(TraitType).hash_code();
     }
     template<typename TCategoryTrait, typename TOtherCategoryTrait>
     bool Result(const TestAliasCharType &, 
@@ -1256,6 +1288,7 @@ typedef basic::test::type::Parameter<
     TestBaseOfCategoryBase,
     TestBaseOfImplementCategory,
     TestBaseOfImplementExit,
+    TestAliasTraitType,
     TestAliasCharType,
     TestAliasOutputType,
     TestAliasValueType,
