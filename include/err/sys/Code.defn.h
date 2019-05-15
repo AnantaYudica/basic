@@ -53,7 +53,6 @@ public:
 public:
     template<typename TCodeEnum>
     inline Code & operator=(const TCodeEnum& code) noexcept;
-    inline Code & operator=(const CategoryType & code) noexcept;
 public:
     inline void Assign(const ValueType& code,
         const CategoryType & categ) noexcept;

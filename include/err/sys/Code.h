@@ -118,7 +118,7 @@ inline const err::intf::Output &
 Code::operator>>(OutputType & out) const noexcept
 {
     err::defn::func::output::Operator(out, "code ", this->m_value);
-    err::defn::func::output::Operator(out, "msg ", this->Message());
+    err::defn::func::output::Operator(out, " msg ", this->Message());
     return *this;
 }
 
@@ -188,7 +188,7 @@ inline typename std::enable_if<basic::err::sys::code::has::
 operator==(const TCodeEnum & code_a,
     const basic::err::defn::type::sys::code::Value & code_b) noexcept
 {
-    return code_a == code_b;
+    return code_b == code_a;
 }
 
 inline bool operator!=(const basic::err::sys::Code & code_a, 
