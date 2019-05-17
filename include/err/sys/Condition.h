@@ -113,8 +113,8 @@ Condition::Message() const noexcept
 inline const err::intf::Output & 
 Condition::operator>>(OutputType & out) const noexcept
 {
-    err::defn::func::output::Operator(out, "code ", this->m_value);
-    err::defn::func::output::Operator(out, "msg ", this->Message());
+    err::defn::func::output::Operator(out, "condition ", this->m_value);
+    err::defn::func::output::Operator(out, " msg ", this->Message());
     return *this;
 }
 
