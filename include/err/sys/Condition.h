@@ -113,8 +113,8 @@ Condition::Message() const noexcept
 inline const err::intf::Output & 
 Condition::operator>>(OutputType & out) const noexcept
 {
-    err::defn::func::output::Operator(out, "code ", this->m_value);
-    err::defn::func::output::Operator(out, "msg ", this->Message());
+    err::defn::func::output::Operator(out, "condition ", this->m_value);
+    err::defn::func::output::Operator(out, " msg ", this->Message());
     return *this;
 }
 
@@ -291,7 +291,7 @@ operator<(const TConditionEnum & cond_a,
     const basic::err::sys::Condition & cond_b) noexcept
 {
     return basic::err::sys::make::Category<TConditionEnum>::
-        GetInstance(cond_a) == cond_b.Category() &&
+        GetInstance() == cond_b.Category() &&
         basic::err::sys::make::Condition<TConditionEnum>::
         Value(cond_a) < cond_b.Value();
 }
