@@ -1171,27 +1171,27 @@ public:
 
         TestValueMakeCategoryVoid testValueMakeCategoryVoid;
         SetFormat(info, testValueMakeCategoryVoid, "Test value "
-            "%s::GetInstance() is same with %s\n");
-        SetFormat(debug, testValueMakeCategoryVoid, "Test value "
-            "%s::GetInstance() is same with %s\n");
-        SetFormat(err, testValueMakeCategoryVoid, "Error value "
             "%s::GetInstance() is not same with %s\n");
+        SetFormat(debug, testValueMakeCategoryVoid, "Test value "
+            "%s::GetInstance() is not same with %s\n");
+        SetFormat(err, testValueMakeCategoryVoid, "Error value "
+            "%s::GetInstance() is same with %s\n");
 
         TestValueMakeCategoryCodeEnum testValueMakeCategoryCodeEnum;
         SetFormat(info, testValueMakeCategoryCodeEnum, "Test value "
-            "%s::GetInstance() is not same with %s\n");
-        SetFormat(debug, testValueMakeCategoryCodeEnum, "Test value "
-            "%s::GetInstance() is not same with %s\n");
-        SetFormat(err, testValueMakeCategoryCodeEnum, "Error value "
             "%s::GetInstance() is same with %s\n");
+        SetFormat(debug, testValueMakeCategoryCodeEnum, "Test value "
+            "%s::GetInstance() is same with %s\n");
+        SetFormat(err, testValueMakeCategoryCodeEnum, "Error value "
+            "%s::GetInstance() is not same with %s\n");
 
         TestValueMakeCategoryConditionEnum testValueMakeCategoryConditionEnum;
         SetFormat(info, testValueMakeCategoryConditionEnum, "Test value "
-            "%s::GetInstance() is not same with %s\n");
-        SetFormat(debug, testValueMakeCategoryConditionEnum, "Test value "
-            "%s::GetInstance() is not same with %s\n");
-        SetFormat(err, testValueMakeCategoryConditionEnum, "Error value "
             "%s::GetInstance() is same with %s\n");
+        SetFormat(debug, testValueMakeCategoryConditionEnum, "Test value "
+            "%s::GetInstance() is same with %s\n");
+        SetFormat(err, testValueMakeCategoryConditionEnum, "Error value "
+            "%s::GetInstance() is not same with %s\n");
 
         TestValueMakeCode testValueMakeCode;
         SetFormat(info, testValueMakeCode, "Test value "
