@@ -33,6 +33,12 @@
 
 #include "err/sys/tmpl/categ/has/st/mmbr/func/Instance.h"
 
+#include "err/sys/code/has/Enum.h"
+#include "err/sys/cond/has/Enum.h"
+#include "err/sys/make/Category.h"
+#include "err/sys/make/Code.h"
+#include "err/sys/make/Condition.h"
+
 #include <system_error>
 #include <type_traits>
 #include <utility>
@@ -95,6 +101,13 @@ struct TestValueHasMmbrFuncToCodeValue {};
 struct TestValueHasMmbrFuncToConditionValue {};
 struct TestValueHasMmbrFuncValue {};
 struct TestValueHasStMmbrFuncInstance {};
+struct TestValueCodeHasEnum {};
+struct TestValueCondHasEnum {};
+struct TestValueMakeCategoryVoid {};
+struct TestValueMakeCategoryCodeEnum {};
+struct TestValueMakeCategoryConditionEnum {};
+struct TestValueMakeCode {};
+struct TestValueMakeCondition {};
 
 typedef basic::err::sys::categ::Future CategoryTraitType;
 typedef basic::err::sys::tmpl::Category<CategoryTraitType>
@@ -289,6 +302,22 @@ using VariableTestCategoryFuture = basic::test::Variable<
     HasMmbrFuncValueSeqValueType,
     HasStMmbrFuncInstanceParamTypeType,
     HasStMmbrFuncInstanceSeqValueType,
+    basic::err::sys::code::has::Enum<CodeEnumType>,
+    basic::err::sys::cond::has::Enum<ConditionEnumType>,
+    basic::test::Value<bool>,
+    basic::test::Value<bool>,
+    basic::err::sys::make::Category<void>,
+    basic::err::sys::make::Category<CodeEnumType>,
+    basic::err::sys::make::Category<ConditionEnumType>,
+    basic::err::sys::tmpl::Category<CategoryTraitType>,
+    basic::test::Value<const basic::err::sys::tmpl::Category<
+        CategoryTraitType> *>,
+    basic::test::Value<CodeEnumType>,
+    basic::test::Value<ConditionEnumType>,
+    basic::err::sys::make::Code<CodeEnumType>,
+    basic::err::sys::make::Condition<ConditionEnumType>,
+    basic::test::Value<CodeValueType>,
+    basic::test::Value<ConditionValueType>,
     basic::test::type::Function<basic::test::CString<char>(
         ConditionType * &&), &ConditionToString>,
     basic::test::type::Function<basic::test::CString<char>(
@@ -348,9 +377,24 @@ constexpr std::size_t IHasMmbrFuncValueParamType = 49;
 constexpr std::size_t IHasMmbrFuncValueSeqValue = 50;
 constexpr std::size_t IHasStMmbrFuncInstanceParamType = 51;
 constexpr std::size_t IHasStMmbrFuncInstanceSeqValue = 52;
-constexpr std::size_t IConditionToStringFunc = 53;
-constexpr std::size_t ICodeToStringFunc = 54;
-constexpr std::size_t IBoolToStringFunc = 55;
+constexpr std::size_t ICodeHasEnumType = 53;
+constexpr std::size_t ICondHasEnumType = 54;
+constexpr std::size_t ICodeHasEnumValue = 55;
+constexpr std::size_t ICondHasEnumValue = 56;
+constexpr std::size_t IMakeVoidCategoryType = 57;
+constexpr std::size_t IMakeCodeCategoryType = 58;
+constexpr std::size_t IMakeConditionCategoryType = 59;
+constexpr std::size_t ITmplCategoryType = 60;
+constexpr std::size_t IMakeCategoryValue = 61;
+constexpr std::size_t ICodeEnumValue = 62;
+constexpr std::size_t IConditionEnumValue = 63;
+constexpr std::size_t IMakeCodeType = 64;
+constexpr std::size_t IMakeConditionType = 65;
+constexpr std::size_t IMakeCodeValue = 66;
+constexpr std::size_t IMakeConditionValue = 67;
+constexpr std::size_t IConditionToStringFunc = 68;
+constexpr std::size_t ICodeToStringFunc = 69;
+constexpr std::size_t IBoolToStringFunc = 70;
 
 template<std::size_t I>
 using ArgTypeName = basic::test::msg::arg::type::Name<I>;
@@ -366,6 +410,8 @@ template<std::size_t I, std::size_t J>
 using ArgValSeqAt = basic::test::msg::arg::val::seq::At<I, J>;
 template<std::size_t I, std::size_t J>
 using ArgTypeValSeqAt = basic::test::msg::arg::type::val::seq::At<I, J>;
+template<std::size_t I>
+using ArgValue = basic::test::msg::arg::Value<I>;
 
 typedef basic::test::msg::Argument<TestAliasCodeEnumType,
     ArgTypeName<IFutureType>, ArgTypeName<ICodeEnumType>> 
@@ -657,6 +703,70 @@ typedef basic::test::msg::Base<TestValueHasStMmbrFuncInstance, char,
     ArgTestValueHasStMmbrFuncInstance> 
         MessageBaseTestValueHasStMmbrFuncInstance;
 
+typedef basic::test::msg::Argument<TestValueCodeHasEnum,
+    ArgTypeName<ICodeHasEnumType>,
+    ArgTypeFunction<IBoolToStringFunc,
+        ArgValue<ICodeHasEnumValue>>> ArgTestValueCodeHasEnum;
+
+typedef basic::test::msg::Base<TestValueCodeHasEnum, char,
+    ArgTestValueCodeHasEnum, ArgTestValueCodeHasEnum, 
+    ArgTestValueCodeHasEnum> MessageBaseTestValueCodeHasEnum;
+
+typedef basic::test::msg::Argument<TestValueCondHasEnum,
+    ArgTypeName<ICondHasEnumType>,
+    ArgTypeFunction<IBoolToStringFunc,
+        ArgValue<ICondHasEnumValue>>> ArgTestValueCondHasEnum;
+
+typedef basic::test::msg::Base<TestValueCondHasEnum, char,
+    ArgTestValueCondHasEnum, ArgTestValueCondHasEnum, 
+    ArgTestValueCondHasEnum> MessageBaseTestValueCondHasEnum;
+
+typedef basic::test::msg::Argument<TestValueMakeCategoryVoid,
+    ArgTypeName<IMakeVoidCategoryType>,
+    ArgTypeName<ITmplCategoryType>> ArgTestValueMakeCategoryVoid;
+
+typedef basic::test::msg::Base<TestValueMakeCategoryVoid, char,
+    ArgTestValueMakeCategoryVoid, ArgTestValueMakeCategoryVoid, 
+    ArgTestValueMakeCategoryVoid> MessageBaseTestValueMakeCategoryVoid;
+
+typedef basic::test::msg::Argument<TestValueMakeCategoryCodeEnum,
+    ArgTypeName<IMakeCodeCategoryType>,
+    ArgTypeName<ITmplCategoryType>> ArgTestValueMakeCategoryCodeEnum;
+
+typedef basic::test::msg::Base<TestValueMakeCategoryCodeEnum, char,
+    ArgTestValueMakeCategoryCodeEnum, ArgTestValueMakeCategoryCodeEnum, 
+    ArgTestValueMakeCategoryCodeEnum> MessageBaseTestValueMakeCategoryCodeEnum;
+
+typedef basic::test::msg::Argument<TestValueMakeCategoryConditionEnum,
+    ArgTypeName<IMakeConditionCategoryType>,
+    ArgTypeName<ITmplCategoryType>> ArgTestValueMakeCategoryConditionEnum;
+
+typedef basic::test::msg::Base<TestValueMakeCategoryConditionEnum, char,
+    ArgTestValueMakeCategoryConditionEnum, 
+    ArgTestValueMakeCategoryConditionEnum, 
+    ArgTestValueMakeCategoryConditionEnum> 
+        MessageBaseTestValueMakeCategoryConditionEnum;
+
+typedef basic::test::msg::Argument<TestValueMakeCode,
+    ArgTypeName<IMakeCodeType>,
+    ArgTypeName<ICodeEnumType>,
+    ArgValue<IMakeCodeValue>,
+    ArgTypeName<ICodeValueType>> ArgTestValueMakeCode;
+
+typedef basic::test::msg::Base<TestValueMakeCode, char,
+    ArgTestValueMakeCode, ArgTestValueMakeCode, 
+    ArgTestValueMakeCode> MessageBaseTestValueMakeCode;
+
+typedef basic::test::msg::Argument<TestValueMakeCondition,
+    ArgTypeName<IMakeConditionType>,
+    ArgTypeName<IConditionEnumType>,
+    ArgValue<IMakeConditionValue>,
+    ArgTypeName<IConditionValueType>> ArgTestValueMakeCondition;
+
+typedef basic::test::msg::Base<TestValueMakeCondition, char,
+    ArgTestValueMakeCondition, ArgTestValueMakeCondition, 
+    ArgTestValueMakeCondition> MessageBaseTestValueMakeCondition;
+
 template<typename TCases, typename... TVariables>
 struct TestCategoryFuture :
     public basic::test::Message<BASIC_TEST, TestCategoryFuture<TCases, 
@@ -691,7 +801,14 @@ struct TestCategoryFuture :
     public MessageBaseTestValueHasMmbrFuncToCodeValue,
     public MessageBaseTestValueHasMmbrFuncToConditionValue,
     public MessageBaseTestValueHasMmbrFuncValue,
-    public MessageBaseTestValueHasStMmbrFuncInstance
+    public MessageBaseTestValueHasStMmbrFuncInstance,
+    public MessageBaseTestValueCodeHasEnum,
+    public MessageBaseTestValueCondHasEnum,
+    public MessageBaseTestValueMakeCategoryVoid,
+    public MessageBaseTestValueMakeCategoryCodeEnum,
+    public MessageBaseTestValueMakeCategoryConditionEnum,
+    public MessageBaseTestValueMakeCode,
+    public MessageBaseTestValueMakeCondition
 {
 public:
     using basic::test::Case<TestCategoryFuture<TCases, TVariables...>,
@@ -779,6 +896,27 @@ public:
     using MessageBaseTestValueHasStMmbrFuncInstance::Format;
     using MessageBaseTestValueHasStMmbrFuncInstance::SetFormat;
     using MessageBaseTestValueHasStMmbrFuncInstance::Argument;
+    using MessageBaseTestValueCodeHasEnum::Format;
+    using MessageBaseTestValueCodeHasEnum::SetFormat;
+    using MessageBaseTestValueCodeHasEnum::Argument;
+    using MessageBaseTestValueCondHasEnum::Format;
+    using MessageBaseTestValueCondHasEnum::SetFormat;
+    using MessageBaseTestValueCondHasEnum::Argument;
+    using MessageBaseTestValueMakeCategoryVoid::Format;
+    using MessageBaseTestValueMakeCategoryVoid::SetFormat;
+    using MessageBaseTestValueMakeCategoryVoid::Argument;
+    using MessageBaseTestValueMakeCategoryCodeEnum::Format;
+    using MessageBaseTestValueMakeCategoryCodeEnum::SetFormat;
+    using MessageBaseTestValueMakeCategoryCodeEnum::Argument;
+    using MessageBaseTestValueMakeCategoryConditionEnum::Format;
+    using MessageBaseTestValueMakeCategoryConditionEnum::SetFormat;
+    using MessageBaseTestValueMakeCategoryConditionEnum::Argument;
+    using MessageBaseTestValueMakeCode::Format;
+    using MessageBaseTestValueMakeCode::SetFormat;
+    using MessageBaseTestValueMakeCode::Argument;
+    using MessageBaseTestValueMakeCondition::Format;
+    using MessageBaseTestValueMakeCondition::SetFormat;
+    using MessageBaseTestValueMakeCondition::Argument;
 public:
     TestCategoryFuture(TVariables & ... var) :
         basic::test::Message<BASIC_TEST, TestCategoryFuture<TCases, 
@@ -1014,6 +1152,62 @@ public:
             "%s::Value is same with %s\n");
         SetFormat(err, testValueHasStMmbrFuncInstance, "Error value "
             "%s::Value is not same with %s\n");
+
+        TestValueCodeHasEnum testValueCodeHasEnum;
+        SetFormat(info, testValueCodeHasEnum, "Test value "
+            "%s::Value is same with %s\n");
+        SetFormat(debug, testValueCodeHasEnum, "Test value "
+            "%s::Value is same with %s\n");
+        SetFormat(err, testValueCodeHasEnum, "Error value "
+            "%s::Value is not same with %s\n");
+
+        TestValueCondHasEnum testValueCondHasEnum;
+        SetFormat(info, testValueCondHasEnum, "Test value "
+            "%s::Value is same with %s\n");
+        SetFormat(debug, testValueCondHasEnum, "Test value "
+            "%s::Value is same with %s\n");
+        SetFormat(err, testValueCondHasEnum, "Error value "
+            "%s::Value is not same with %s\n");
+
+        TestValueMakeCategoryVoid testValueMakeCategoryVoid;
+        SetFormat(info, testValueMakeCategoryVoid, "Test value "
+            "%s::GetInstance() is same with %s\n");
+        SetFormat(debug, testValueMakeCategoryVoid, "Test value "
+            "%s::GetInstance() is same with %s\n");
+        SetFormat(err, testValueMakeCategoryVoid, "Error value "
+            "%s::GetInstance() is not same with %s\n");
+
+        TestValueMakeCategoryCodeEnum testValueMakeCategoryCodeEnum;
+        SetFormat(info, testValueMakeCategoryCodeEnum, "Test value "
+            "%s::GetInstance() is not same with %s\n");
+        SetFormat(debug, testValueMakeCategoryCodeEnum, "Test value "
+            "%s::GetInstance() is not same with %s\n");
+        SetFormat(err, testValueMakeCategoryCodeEnum, "Error value "
+            "%s::GetInstance() is same with %s\n");
+
+        TestValueMakeCategoryConditionEnum testValueMakeCategoryConditionEnum;
+        SetFormat(info, testValueMakeCategoryConditionEnum, "Test value "
+            "%s::GetInstance() is not same with %s\n");
+        SetFormat(debug, testValueMakeCategoryConditionEnum, "Test value "
+            "%s::GetInstance() is not same with %s\n");
+        SetFormat(err, testValueMakeCategoryConditionEnum, "Error value "
+            "%s::GetInstance() is same with %s\n");
+
+        TestValueMakeCode testValueMakeCode;
+        SetFormat(info, testValueMakeCode, "Test value "
+            "%s::Value(%s) is same with %d {%s}\n");
+        SetFormat(debug, testValueMakeCode, "Test value "
+            "%s::Value(%s) is same with %d {%s}\n");
+        SetFormat(err, testValueMakeCode, "Error value "
+            "%s::Value(%s) is not same with %d {%s}\n");
+
+        TestValueMakeCondition testValueMakeCondition;
+        SetFormat(info, testValueMakeCondition, "Test value "
+            "%s::Value(%s) is same with %d {%s}\n");
+        SetFormat(debug, testValueMakeCondition, "Test value "
+            "%s::Value(%s) is same with %d {%s}\n");
+        SetFormat(err, testValueMakeCondition, "Error value "
+            "%s::Value(%s) is not same with %d {%s}\n");
     }
     bool Result(const TestAliasCodeEnumType &, 
         VariableTestCategoryFuture & var)
@@ -1320,6 +1514,73 @@ public:
             IHasStMmbrFuncInstanceSeqValue>(var).Get().template At<I>();
         return ResultType::Value == result;
     }
+    bool Result(const TestValueCodeHasEnum &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<ICodeHasEnumType,
+            VariableTestCategoryFuture>::Type CodeHasEnumType;
+        auto & result = basic::test::var::At<ICodeHasEnumValue>(var).Get().
+            Get();
+        return CodeHasEnumType::Value == result;
+    }
+    bool Result(const TestValueCondHasEnum &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<ICondHasEnumType,
+            VariableTestCategoryFuture>::Type CondHasEnumType;
+        auto & result = basic::test::var::At<ICondHasEnumValue>(var).Get().
+            Get();
+        return CondHasEnumType::Value == result;
+    }
+    bool Result(const TestValueMakeCategoryVoid &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<IMakeVoidCategoryType,
+            VariableTestCategoryFuture>::Type VoidCategoryType;
+        auto * result = basic::test::var::At<IMakeCategoryValue>(var).Get().
+            Get();
+        return VoidCategoryType::GetInstance() != *result;
+    }
+    bool Result(const TestValueMakeCategoryCodeEnum &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<IMakeCodeCategoryType,
+            VariableTestCategoryFuture>::Type CodeCategoryType;
+        auto * result = basic::test::var::At<IMakeCategoryValue>(var).Get().
+            Get();
+        return CodeCategoryType::GetInstance() == *result;
+    }
+    bool Result(const TestValueMakeCategoryConditionEnum &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<IMakeConditionCategoryType,
+            VariableTestCategoryFuture>::Type ConditionCategoryType;
+        auto * result = basic::test::var::At<IMakeCategoryValue>(var).Get().
+            Get();
+        return ConditionCategoryType::GetInstance() == *result;
+    }
+    bool Result(const TestValueMakeCode &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<IMakeCodeType,
+            VariableTestCategoryFuture>::Type CodeType;
+        auto & code_enum = basic::test::var::At<ICodeEnumValue>(var).Get().
+            Get();
+        auto & result = basic::test::var::At<IMakeCodeValue>(var).Get().
+            Get();
+        return CodeType::Value(code_enum) == result;
+    }
+    bool Result(const TestValueMakeCondition &, 
+        VariableTestCategoryFuture & var)
+    {
+        typedef typename basic::test::var::Element<IMakeConditionType,
+            VariableTestCategoryFuture>::Type ConditionType;
+        auto & cond_enum = basic::test::var::At<IConditionEnumValue>(var).
+            Get().Get();
+        auto & result = basic::test::var::At<IMakeConditionValue>(var).Get().
+            Get();
+        return ConditionType::Value(cond_enum) == result;
+    }
 };
 
 typedef VariableTestCategoryFuture T1Var1;
@@ -1360,8 +1621,14 @@ typedef basic::test::type::Parameter<
     basic::test::type::Index<TestValueHasMmbrFuncToCodeValue, 0>,
     basic::test::type::Index<TestValueHasMmbrFuncToConditionValue, 0>,
     basic::test::type::Index<TestValueHasMmbrFuncValue, 0>,
-    basic::test::type::Index<TestValueHasStMmbrFuncInstance, 0>
-    > Case1;
+    basic::test::type::Index<TestValueHasStMmbrFuncInstance, 0>,
+    TestValueCodeHasEnum,
+    TestValueCondHasEnum,
+    TestValueMakeCategoryVoid,
+    TestValueMakeCategoryCodeEnum,
+    TestValueMakeCategoryConditionEnum,
+    TestValueMakeCode,
+    TestValueMakeCondition> Case1;
 
 CodeType code1_1{1, TmplCategoryType::GetInstance()};
 CodeValueType code_val1_1{1};
@@ -1401,7 +1668,15 @@ T1Var1 t1_var1{
     false, 
     false, 
     true,
-    true};
+    true,
+    true,
+    true,
+    &TmplCategoryType::GetInstance(),
+    std::future_errc::future_already_retrieved,
+    std::future_errc::promise_already_satisfied,
+    static_cast<CodeValueType>(std::future_errc::future_already_retrieved),
+    static_cast<ConditionValueType>(
+        std::future_errc::promise_already_satisfied)};
 
 REGISTER_TEST(t1, new TestCategoryFuture<Case1, T1Var1>(t1_var1));
 
@@ -1410,6 +1685,7 @@ int main()
     return RUN_TEST();
 }
 
+BASIC_TEST_TYPE_NAME("void", void);
 BASIC_TEST_TYPE_NAME("signed char", signed char);
 BASIC_TEST_TYPE_NAME("char", char);
 BASIC_TEST_TYPE_NAME("unsigned char", unsigned char);
@@ -1670,6 +1946,71 @@ struct basic::test::type::Name<basic::err::sys::tmpl::categ::has::
     {
         static char _format[] = "basic::err::sys::tmpl::categ::has::"
             "st::mmbr::func::Instance<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::code::has::Enum<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::code::has::Enum<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::cond::has::Enum<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::cond::has::Enum<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::make::Category<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::make::Category<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::make::Code<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::make::Code<%s>";
+        basic::test::CString<char> tArgCStr = 
+            std::move(basic::test::type::Name<TArg>::CStr());
+        return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
+            _format, *tArgCStr);
+    }
+};
+
+template<typename TArg>
+struct basic::test::type::Name<basic::err::sys::make::Condition<TArg>>
+{
+    static basic::test::CString<char> CStr()
+    {
+        static char _format[] = "basic::err::sys::make::Condition<%s>";
         basic::test::CString<char> tArgCStr = 
             std::move(basic::test::type::Name<TArg>::CStr());
         return basic::test::cstr::Format(sizeof(_format) - 3 + tArgCStr.Size(),
