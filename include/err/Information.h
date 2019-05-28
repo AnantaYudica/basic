@@ -117,8 +117,8 @@ inline const err::intf::Output & Information::
         if (!this->m_id.IsCatch())
             defn::func::output::Operator(out, "id ", this->m_id);
 #ifdef USING_BASIC_ERR_FILE_AND_LINE
-        defn::func::output::Operator(out, "file ", this->m_file);
-        defn::func::output::Operator(out, "line ", this->m_file);
+        defn::func::output::Operator(out, " file ", this->m_file);
+        defn::func::output::Operator(out, " line ", this->m_line);
 #endif //!USING_BASIC_ERR_FILE_AND_LINE
     }
     return *this;
