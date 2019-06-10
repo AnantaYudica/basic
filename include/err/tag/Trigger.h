@@ -51,7 +51,6 @@ public:
 public:
     virtual const CharType * Message() const noexcept;
 public:
-    const InfoType & Information() const noexcept;
     CodeValueType Code() const noexcept;
 protected:
     virtual const err::intf::Output & 
@@ -81,12 +80,6 @@ const typename Error<err::tag::Trigger>::CharType *
 Error<err::tag::Trigger>::Message() const noexcept
 {
     return "";
-}
-
-const typename Error<err::tag::Trigger>::InfoType & 
-    Error<err::tag::Trigger>::Information() const noexcept
-{
-    return *this;
 }
 
 typename Error<err::tag::Trigger>::CodeValueType

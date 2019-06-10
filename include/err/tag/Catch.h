@@ -104,9 +104,10 @@ template<typename TTrigger>
 const err::intf::Output & Error<err::tag::Catch<TTrigger>>::
     operator>>(OutputType & out) const noexcept
 {
-    err::defn::func::output::Operator(out, "in catch ");
+    if (!Identification().IsDefault())
+        err::defn::func::output::Operator(out, "in catch ");
     TriggerType::operator>>(out);
-    return out;
+    return *this;
 }
 
 } //!basic
