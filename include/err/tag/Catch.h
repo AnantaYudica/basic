@@ -106,7 +106,7 @@ const err::intf::Output & Error<err::tag::Catch<TTrigger>>::
 {
     err::defn::func::output::Operator(out, "in catch ");
     TriggerType::operator>>(out);
-    return out;
+    return *this;
 }
 
 } //!basic
