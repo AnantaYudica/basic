@@ -81,9 +81,5 @@ REGISTER_TEST(t7, new TestException<Case7, TVar<>>(t7var1));
 
 int main()
 {
-    basic::err::Exception e;
-    std::stringstream ss;
-    ss << dynamic_cast<basic::err::intf::Output&>(e);
-    INFO("%s\n", ss.str().c_str());
     return RUN_TEST();
 }
