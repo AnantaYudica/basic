@@ -137,6 +137,11 @@ int main()
     printf("Constructor Fill : \"%s\"\n", gbuffer);
     assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
     gbuffer[0] = '\0';
+    A a0_2;
+    paramVal0.Fill(a0_2);
+    printf("Constructor placement Fill : \"%s\"\n", gbuffer);
+    assert(strcmp(EMPTY_CSTR, gbuffer) == 0);
+    gbuffer[0] = '\0';
 
     ParamVal1 paramVal1(0);
     paramVal1.template At<0>() = VALUE1_CHAR;
@@ -154,6 +159,11 @@ int main()
     gbuffer[0] = '\0';
     A a1_1 = paramVal1.Fill<A>();
     printf("Constructor Fill : \"%s\"\n", gbuffer);
+    assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
+    gbuffer[0] = '\0';
+    A a1_2;
+    paramVal1.Fill(a1_2);
+    printf("Constructor placement Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR, gbuffer) == 0);
     gbuffer[0] = '\0';
 
@@ -176,6 +186,11 @@ int main()
     gbuffer[0] = '\0';
     A a2_1 = std::move(paramVal2.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
+    assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
+    gbuffer[0] = '\0';
+    A a2_2;
+    paramVal2.Fill(a2_2);
+    printf("Constructor placement Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR, gbuffer) == 0);
     gbuffer[0] = '\0';
 
@@ -205,6 +220,11 @@ int main()
     gbuffer[0] = '\0';
     A a3_1 = std::move(paramVal3.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
+    assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
+    gbuffer[0] = '\0';
+    A a3_2;
+    paramVal3.Fill(a3_2);
+    printf("Constructor placement Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR, gbuffer) == 0);
     gbuffer[0] = '\0';
 
@@ -239,6 +259,12 @@ int main()
     gbuffer[0] = '\0';
     A a4_1 = std::move(paramVal4.Fill<A>());
     printf("Constructor Fill : \"%s\"\n", gbuffer);
+    assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
+        VALUE4_CSTR, gbuffer) == 0);
+    gbuffer[0] = '\0';
+    A a4_2;
+    paramVal4.Fill(a4_2);
+    printf("Constructor placement Fill : \"%s\"\n", gbuffer);
     assert(strcmp(VALUE1_CSTR VALUE2_CSTR VALUE3_CSTR
         VALUE4_CSTR, gbuffer) == 0);
     gbuffer[0] = '\0';
