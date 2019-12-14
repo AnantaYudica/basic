@@ -28,7 +28,7 @@ struct TestValueIdGet {};
 
 #define BUFFER_FORMAT_CSTRING 256
 
-const char * ToString(const basic::err::Identification * && id)
+const char * ToString(basic::err::Identification * && id)
 {
     static char tmp[BUFFER_FORMAT_CSTRING];
     if (id->IsSystem())
@@ -65,7 +65,7 @@ using VariableTestException = basic::test::Variable<
     basic::test::Value<const TChar *>,
     basic::test::Value<TIdentification *>,
     basic::test::type::Function<
-        const char *(const basic::err::Identification * &&), &ToString>>;
+        const char *(basic::err::Identification * &&), &ToString>>;
 
 enum : std::size_t
 {
@@ -469,12 +469,14 @@ public:
         auto * compare = basic::test::var::At<IIdentificationValue>(var).Get().Get();
         typedef typename basic::test::var::Element<IExceptionType,
             basic::test::Variable<TArgs...>>::Type ExceptionType;
-        auto id = basic::err::id::Get(ExceptionType());
+        auto * instance = basic::test::var::At<IExceptionValue>(var).Get().Get();
+        auto id = basic::err::id::Get(*instance);
         return id.IsDefault() == compare->IsDefault() &&
             id.IsBad() == compare->IsBad() &&
             id.IsCatch() == compare->IsCatch() &&
             id.IsStandard() == compare->IsStandard() &&
-            id.IsSystem() == compare->IsSystem();
+            id.IsSystem() == compare->IsSystem() &&
+            id.Error().Code() == compare->Error().Code();
     }
 };
 
