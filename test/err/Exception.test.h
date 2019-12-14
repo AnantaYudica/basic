@@ -62,6 +62,7 @@ using VariableTestException = basic::test::Variable<
     basic::test::Value<TException *>,
     basic::test::Value<const TChar *>,
     basic::test::Value<const TChar *>,
+    basic::test::Value<const TChar *>,
     basic::test::Value<TIdentification *>,
     basic::test::type::Function<
         const char *(const basic::err::Identification * &&), &ToString>>;
@@ -79,6 +80,7 @@ enum : std::size_t
     IExceptionValue,
     IParameterValue,
     IOtherExceptionValue,
+    IExceptionNameValue,
     IMessageValue,
     IOutputValue,
     IIdentificationValue,
@@ -86,7 +88,7 @@ enum : std::size_t
 };
 
 typedef basic::test::msg::Argument<TestBaseOfT,
-    basic::test::msg::arg::type::Name<IExceptionType>,
+    basic::test::msg::arg::Value<IExceptionNameValue>,
     basic::test::msg::arg::type::Name<ISameOrBaseOfType>> ArgTestBaseOfT;
 
 typedef basic::test::msg::Base<TestBaseOfT, char, 
@@ -94,7 +96,7 @@ typedef basic::test::msg::Base<TestBaseOfT, char,
     ArgTestBaseOfT> MessageBaseTestBaseOfT;
 
 typedef basic::test::msg::Argument<TestSameOfT,
-    basic::test::msg::arg::type::Name<IExceptionType>,
+    basic::test::msg::arg::Value<IExceptionNameValue>,
     basic::test::msg::arg::type::Name<ISameOrBaseOfType>> ArgTestSameOfT;
 
 typedef basic::test::msg::Base<TestSameOfT, char, 
