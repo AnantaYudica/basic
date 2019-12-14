@@ -59,7 +59,12 @@ protected:
 };
 
 inline Function::Function() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::bad_function_id,
+        "unknown", static_cast<std::size_t>(-1))
+#else
     TriggerType(basic::defn::err::bad_function_id)
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
 {}
 
 #ifdef USING_BASIC_ERR_FILE_AND_LINE

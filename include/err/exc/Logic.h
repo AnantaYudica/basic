@@ -68,7 +68,12 @@ protected:
 };
 
 inline Logic::Logic() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::logic_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::logic_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     m_message("Logic Exception")
 {}
 

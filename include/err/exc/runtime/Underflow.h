@@ -63,7 +63,12 @@ protected:
 };
 
 inline Underflow::Underflow() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::runtime_underflow_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::runtime_underflow_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     exc::Runtime("Underflow Runtime Exception")
 {}
 

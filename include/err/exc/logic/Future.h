@@ -79,7 +79,12 @@ protected:
 };
 
 inline Future::Future(const CodeSetValueType & code) noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::logic_future_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::logic_future_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     exc::Logic("Future Logic Exception"),
     m_code(code),
     ErrorSystemType(err::id::System{m_code.Category().Value(), 

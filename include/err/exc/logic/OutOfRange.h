@@ -63,7 +63,12 @@ protected:
 };
 
 inline OutOfRange::OutOfRange() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::logic_outofrange_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::logic_outofrange_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     exc::Logic("Domain Logic Out of Range")
 {}
 
