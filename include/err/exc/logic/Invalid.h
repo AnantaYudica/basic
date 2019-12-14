@@ -128,16 +128,12 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-#ifdef USING_STANDARD_EXCEPTION
-
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const exc::logic::Invalid& e) noexcept
 {
     return Standard(basic::defn::err::logic_invalid_id);
 }
-
-#endif //!USING_STANDARD_EXCEPTION
 
 #endif //!USING_EXCEPTION
 

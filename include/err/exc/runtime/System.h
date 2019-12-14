@@ -222,6 +222,8 @@ typedef std::system_err System;
 namespace id
 {
 
+#ifdef USING_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::system_error & e)
@@ -236,6 +238,8 @@ Get(const std::system_error & e) noexcept
     return System(id::flag::Standard{}, 
         basic::defn::err::sys::system_category, e.code().value());
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 

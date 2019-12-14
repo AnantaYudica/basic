@@ -124,12 +124,16 @@ typedef std::overflow_error Overflow;
 namespace id
 {
 
+#ifdef USING_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::overflow_error & e)
 {
     return Standard(basic::defn::err::runtime_overflow_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 

@@ -126,12 +126,16 @@ typedef std::invalid_argument Invalid;
 namespace id
 {
 
+#ifdef USING_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type  
 Get(const std::invalid_argument& e) noexcept
 {
     return Standard(basic::defn::err::logic_invalid_argument_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 

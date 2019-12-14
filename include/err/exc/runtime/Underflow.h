@@ -124,12 +124,16 @@ typedef std::underflow_error Underflow;
 namespace id
 {
 
+#ifdef USING_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const std::underflow_error & e)
 {
     return Standard(basic::defn::err::runtime_underflow_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 

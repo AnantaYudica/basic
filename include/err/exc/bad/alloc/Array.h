@@ -121,16 +121,12 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-#ifdef USING_STANDARD_EXCEPTION
-
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type 
 Get(const err::exc::bad::alloc::Array & e) noexcept
 {
     return Standard(basic::defn::err::bad_allocation_array_id);
 }
-
-#endif //!USING_STANDARD_EXCEPTION
 
 #endif //!USING_EXCEPTION
 

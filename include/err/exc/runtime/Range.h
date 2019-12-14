@@ -124,12 +124,16 @@ typedef std::range_error Range;
 namespace id
 {
 
+#ifdef USING_EXCEPTION
+
 template<typename TTagError = tag::Trigger>
 inline typename enable_if::tag::Trigger<TTagError>::Type
 Get(const std::range_error & e)
 {
     return Standard(basic::defn::err::runtime_range_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 
