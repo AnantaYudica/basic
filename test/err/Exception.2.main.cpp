@@ -8,6 +8,8 @@ BASIC_TEST_CONSTRUCT;
 
 BASIC_TEST_TYPE_NAME("basic::err::Exception", basic::err::Exception);
 
+const char * exception_name = "basic::err::Exception";
+
 using Case1 = basic::test::type::Parameter<TestBaseOfT>;
 using Case2 = basic::test::type::Parameter<TestSameOfT>;
 using Case3 = basic::test::type::Parameter<TestAliasTriggerType,
@@ -42,18 +44,18 @@ using TVar = VariableTestException<basic::err::Exception,
     TArgs...>;
 
 T1_2Var<basic::Error<basic::err::tag::Trigger>> t1var1{nullptr, 
-    nullptr, nullptr, nullptr, nullptr};
+    nullptr, exception_name, nullptr, nullptr, nullptr};
 
 REGISTER_TEST(t1, new TestException<Case1, 
     T1_2Var<basic::Error<basic::err::tag::Trigger>>>(t1var1));
 
-T1_2Var<basic::err::Exception> t2var1{nullptr, 
-    nullptr, nullptr, nullptr, nullptr};
+T1_2Var<basic::err::Exception> t2var1{nullptr, nullptr, exception_name, 
+    nullptr, nullptr, nullptr};
 
 REGISTER_TEST(t2, new TestException<Case2, 
     T1_2Var<basic::err::Exception>>(t2var1));
 
-TVar<> t3var1{nullptr, nullptr, nullptr, nullptr, nullptr};
+TVar<> t3var1{nullptr, nullptr, exception_name, nullptr, nullptr, nullptr};
 
 REGISTER_TEST(t3, new TestException<Case3, TVar<>>(t3var1));
 
@@ -64,23 +66,27 @@ std::size_t line = 4;
 const char * output4_var1 = "Exception id 0x000001 file test file line 4";
 
 TVar<const char *, std::size_t> t4var1{&e4_var1, file, line, 
-    nullptr, msg4_var1, output4_var1, nullptr};
+    nullptr, exception_name, msg4_var1, output4_var1, nullptr};
 
-REGISTER_TEST(t4, new TestException<Case4, TVar<const char *, std::size_t>>(t4var1));
+REGISTER_TEST(t4, new TestException<Case4, TVar<const char *, 
+    std::size_t>>(t4var1));
 
 basic::err::Exception e5_var1("", 0);
 
-TVar<> t5var1{&e5_var1, &e4_var1, msg4_var1, output4_var1, nullptr};
+TVar<> t5var1{&e5_var1, &e4_var1, exception_name, msg4_var1, 
+    output4_var1, nullptr};
 
 REGISTER_TEST(t5, new TestException<Case5, TVar<>>(t5var1));
 
 basic::err::Exception e6_var1("", 0);
 
-TVar<> t6var1{&e6_var1, &e5_var1, msg4_var1, output4_var1, nullptr};
+TVar<> t6var1{&e6_var1, &e5_var1, exception_name, msg4_var1, 
+    output4_var1, nullptr};
 
 REGISTER_TEST(t6, new TestException<Case6, TVar<>>(t6var1));
 
-TVar<> t7var1{&e5_var1, nullptr, msg4_var1, output4_var1, nullptr};
+TVar<> t7var1{&e5_var1, nullptr, exception_name, msg4_var1, 
+    output4_var1, nullptr};
 
 REGISTER_TEST(t7, new TestException<Case7, TVar<>>(t7var1));
 
