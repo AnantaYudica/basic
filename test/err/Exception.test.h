@@ -58,7 +58,7 @@ using VariableTestException = basic::test::Variable<
     TIntfOutput,
     basic::test::type::Parameter<TArgs ...>,
     basic::test::Value<TException *>,
-    basic::test::val::Parameter<TArgs *...>,
+    basic::test::val::Parameter<TArgs &...>,
     basic::test::Value<TException *>,
     basic::test::Value<const TChar *>,
     basic::test::Value<const TChar *>,
@@ -418,9 +418,8 @@ public:
             basic::test::Variable<TArgs...>>::Type ExceptionType;
         auto * instance = basic::test::var::At<IExceptionValue>(var).Get().Get();
         if (!instance) return false;
-        auto constr = basic::test::var::At<IParameterValue>(var).Get().
-            template Fill<ExceptionType>();
-        new (instance) ExceptionType(constr);
+        basic::test::var::At<IParameterValue>(var).Get().
+            template Fill(*instance);
         return true;
     }
     template<typename... TArgs>
