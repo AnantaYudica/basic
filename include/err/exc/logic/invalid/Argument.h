@@ -11,6 +11,7 @@
 #include "../../../../defn/err/Identification.h"
 
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -128,9 +129,11 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type  
-Get(const std::invalid_argument& e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, std::invalid_argument>::value>::Type  
+Get(const TException & e) noexcept
 {
     return Standard(basic::defn::err::logic_invalid_argument_id);
 }

@@ -18,6 +18,7 @@
 #include "../../../defn/err/sys/Category.h"
 
 #include <future>
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -153,16 +154,20 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::future_error & e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, std::future_error>::value>::Type 
+Get(const TException & e) noexcept
 {
     return Standard(basic::defn::err::logic_future_id);
 }
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::System<TTagError>::Type 
-Get(const std::future_error & e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::System<TTagError,
+    std::is_same<TException, std::future_error>::value>::Type 
+Get(const TException & e) noexcept
 {
     return System(id::flag::Standard{}, 
         basic::defn::err::sys::future_category, e.code().value());

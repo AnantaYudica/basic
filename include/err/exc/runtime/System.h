@@ -15,6 +15,7 @@
 #include "../../../defn/err/sys/Category.h"
 
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -224,16 +225,20 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type
-Get(const std::system_error & e)
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, std::system_error>::value>::Type
+Get(const TException & e)
 {
     return Standard(basic::defn::err::runtime_system_id);
 }
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::System<TTagError>::Type 
-Get(const std::system_error & e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::System<TTagError,
+    std::is_same<TException, std::system_error>::value>::Type 
+Get(const TException & e) noexcept
 {
     return System(id::flag::Standard{}, 
         basic::defn::err::sys::system_category, e.code().value());

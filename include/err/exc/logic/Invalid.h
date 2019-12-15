@@ -10,6 +10,7 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../../defn/err/Identification.h"
 
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -128,9 +129,11 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type  
-Get(const exc::logic::Invalid& e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, basic::err::exc::logic::Invalid>::value>::Type  
+Get(const TException & e) noexcept
 {
     return Standard(basic::defn::err::logic_invalid_id);
 }
