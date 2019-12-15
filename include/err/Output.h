@@ -6,23 +6,28 @@
 #include "intf/Output.h"
 #include "Message.h"
 
+#include <type_traits>
+
 namespace basic
 {
 namespace err
 {
 
-defn::type::Output& Output(defn::type::Output & out,
-    const intf::Output & val)
+template<typename T>
+typename std::enable_if<std::is_base_of<basic::err::intf::Output, T>::value, 
+    basic::err::defn::type::Output>::type & 
+        Output(basic::err::defn::type::Output & out, const T & val)
 {
     val >> out;
     return out;
 }
 
 template<typename T>
-defn::type::Output& Output(defn::type::Output & out,
-    const T & val)
+typename std::enable_if<!std::is_base_of<basic::err::intf::Output, T>::value, 
+    basic::err::defn::type::Output>::type & 
+        Output(basic::err::defn::type::Output & out, const T & val)
 {
-    defn::func::output::Operator(out, Message(val));
+    basic::err::defn::func::output::Operator(out, Message(val));
     return out;
 }
 

@@ -11,6 +11,7 @@
 #include "../../../defn/err/Identification.h"
 
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -63,7 +64,12 @@ protected:
 };
 
 inline Underflow::Underflow() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::runtime_underflow_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::runtime_underflow_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     exc::Runtime("Underflow Runtime Exception")
 {}
 
@@ -119,12 +125,18 @@ typedef std::underflow_error Underflow;
 namespace id
 {
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::underflow_error & e)
+#ifdef USING_EXCEPTION
+
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, std::underflow_error>::value>::Type 
+Get(const TException & e)
 {
     return Standard(basic::defn::err::runtime_underflow_id);
 }
+
+#endif //!USING_EXCEPTION
 
 } //!id
 

@@ -11,6 +11,7 @@
 #include "../../../defn/err/Identification.h"
 
 #include <typeinfo>
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -60,7 +61,12 @@ protected:
 };
 
 inline Cast::Cast() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::bad_cast_id,
+        "unknown", static_cast<std::size_t>(-1))
+#else
     TriggerType(basic::defn::err::bad_cast_id)
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
 {}
 
 #ifdef USING_BASIC_ERR_FILE_AND_LINE
@@ -110,9 +116,11 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type 
-Get(const std::bad_cast & e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, std::bad_cast>::value>::Type 
+Get(const TException & e) noexcept
 {
     return Standard(basic::defn::err::bad_cast_id);
 }

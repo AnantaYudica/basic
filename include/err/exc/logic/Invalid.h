@@ -10,6 +10,7 @@
 #include "../../defn/func/output/Operator.h"
 #include "../../../defn/err/Identification.h"
 
+#include <type_traits>
 #include <utility>
 
 namespace basic
@@ -62,7 +63,12 @@ protected:
 };
 
 inline Invalid::Invalid() noexcept :
+#ifdef USING_BASIC_ERR_FILE_AND_LINE
+    TriggerType(basic::defn::err::logic_invalid_id,
+        "unknown", static_cast<std::size_t>(-1)),
+#else
     TriggerType(basic::defn::err::logic_invalid_id),
+#endif //!USING_BASIC_ERR_FILE_AND_LINE
     exc::Logic("Domain Logic Invalid")
 {}
 
@@ -123,16 +129,14 @@ namespace id
 
 #ifdef USING_EXCEPTION
 
-#ifdef USING_STANDARD_EXCEPTION
-
-template<typename TTagError = tag::Trigger>
-inline typename enable_if::tag::Trigger<TTagError>::Type  
-Get(const exc::logic::Invalid& e) noexcept
+template<typename TTagError = tag::Trigger,
+    typename TException>
+inline typename enable_if::tag::Trigger<TTagError,
+    std::is_same<TException, basic::err::exc::logic::Invalid>::value>::Type  
+Get(const TException & e) noexcept
 {
     return Standard(basic::defn::err::logic_invalid_id);
 }
-
-#endif //!USING_STANDARD_EXCEPTION
 
 #endif //!USING_EXCEPTION
 
