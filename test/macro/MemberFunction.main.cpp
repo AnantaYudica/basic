@@ -171,14 +171,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
 
         CaseATTa case_alias_type_and_target;
         SetFormat(info, case_alias_type_and_target, 
             "test compare between %s::type and %s\n");
         SetFormat(debug, case_alias_type_and_target,
             "test compare between %s::type and %s\n");
-        SetFormat(error, case_alias_type_and_target,
+        SetFormat(err, case_alias_type_and_target,
             "error %s::type is not same with %s\n");
 
         CaseATTTa case_alias_type_tmpl_and_target;
@@ -186,7 +186,7 @@ public:
             "test compare between %s::template type<%s> and %s\n");
         SetFormat(debug, case_alias_type_tmpl_and_target,
             "test compare between %s::template type<%s> and %s\n");
-        SetFormat(error, case_alias_type_tmpl_and_target,
+        SetFormat(err, case_alias_type_tmpl_and_target,
             "error %s::template type<%s> is not same with %s\n");
 
         CaseAT case_alias_type;
@@ -194,7 +194,7 @@ public:
             "test compare between %s::type and %s::Type\n");
         SetFormat(debug, case_alias_type,
             "test compare between %s::type and %s::Type\n");
-        SetFormat(error, case_alias_type,
+        SetFormat(err, case_alias_type,
             "error %s::type is not same with %s::Type\n");
 
         CaseATT case_alias_tmpl_type;
@@ -204,7 +204,7 @@ public:
         SetFormat(debug, case_alias_tmpl_type,
             "test compare between %s::template type<%s> "
             "and %s::template type<%s>\n");
-        SetFormat(error, case_alias_tmpl_type,
+        SetFormat(err, case_alias_tmpl_type,
             "error %s::template type<%s> is not same "
             "with %s::template type<%s>\n");
 
@@ -213,7 +213,7 @@ public:
             "test compare between %s::pointer() and %p\n");
         SetFormat(debug, case_pointer_and_target,
             "test compare between %s::pointer() and %p\n");
-        SetFormat(error, case_pointer_and_target,
+        SetFormat(err, case_pointer_and_target,
             "error %s::pointer() is not same with %p\n");
 
         CasePTTa case_pointer_tmpl_and_target;
@@ -221,7 +221,7 @@ public:
             "test compare between %s::template pointer<%s>() and %p\n");
         SetFormat(debug, case_pointer_tmpl_and_target,
             "test compare between %s::template pointer<%s>() and %p\n");
-        SetFormat(error, case_pointer_tmpl_and_target,
+        SetFormat(err, case_pointer_tmpl_and_target,
             "error %s::template pointer<%s>() is not same with %p\n");
 
         CaseP case_pointer;
@@ -229,7 +229,7 @@ public:
             "test compare between %s::pointer() and %s::Pointer()\n");
         SetFormat(debug, case_pointer,
             "test compare between %s::pointer() and %s::Pointer()\n");
-        SetFormat(error, case_pointer,
+        SetFormat(err, case_pointer,
             "error %s::pointer() is not same with %s::Pointer()\n");
 
         CasePT case_pointer_tmpl;
@@ -239,7 +239,7 @@ public:
         SetFormat(debug, case_pointer_tmpl,
             "test compare between %s::template pointer<%s>() "
             "and %s::template Pointer<%s>()\n");
-        SetFormat(error, case_pointer_tmpl,
+        SetFormat(err, case_pointer_tmpl,
             "error %s::template pointer<%s>() is "
             "not same with %s::template Pointer<%s>()\n");
 
@@ -381,7 +381,7 @@ BASIC_TEST_TYPE_NAME("void(B<void>::*)()", void(B<void>::*)());
 struct C
 {
     template<typename T>
-    B<T> Foo4() {}
+    B<T> Foo4() { return {}; }
 };
 
 BASIC_TEST_TYPE_NAME("C", C);

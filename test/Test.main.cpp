@@ -74,7 +74,7 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         TestA1 testa1;
         TestA2 testa2;
         TestA3 testa3;
@@ -83,19 +83,19 @@ public:
         SetFormat(debug, testa1, {formatTestA1, 
             formatTestA1.Size() + 10, "type %d"});
         SetFormat(info, testa1, std::move(formatTestA1));
-        SetFormat(error, testa1, "Error TestA1 msg %d\n");
+        SetFormat(err, testa1, "Error TestA1 msg %d\n");
 
         basic::test::msg::Format<char> formatTestA2("Test TestA2 : %s\n");
         SetFormat(debug, testa2, {formatTestA2, 
             formatTestA2.Size() + 10, "type %d"});
         SetFormat(info, testa2, std::move(formatTestA2));
-        SetFormat(error, testa2, "Error TestA2 msg %d\n");
+        SetFormat(err, testa2, "Error TestA2 msg %d\n");
 
         basic::test::msg::Format<char> formatTestA3("Test TestA3 : %s\n");
         SetFormat(debug, testa3, {formatTestA3, 
             formatTestA3.Size() + 10, "type %d"});
         SetFormat(info, testa3, std::move(formatTestA3));
-        SetFormat(error, testa3, "Error TestA3 msg %d\n");
+        SetFormat(err, testa3, "Error TestA3 msg %d\n");
     }
 public:
     template<typename T1, typename T2, T2 T2Value, typename T3>

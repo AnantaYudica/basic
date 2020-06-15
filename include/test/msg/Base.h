@@ -41,7 +41,7 @@ class Base
 private:
     msg::Format<TChar> m_infoFormat;
     msg::Format<TChar> m_debugFormat;
-    msg::Format<TChar> m_errorFormat;
+    msg::Format<TChar> m_errFormat;
 protected:
     Base();
 public:
@@ -102,7 +102,7 @@ void Base<TCaseId, TChar, TArgInfo, TArgDebug, TArgError>::
     SetFormat(const base::Error&, const TCaseId&, 
         const msg::Format<TChar>& format)
 {
-    m_errorFormat = format;
+    m_errFormat = format;
 }
 
 template<typename TCaseId, typename TChar, typename TArgInfo, 
@@ -126,7 +126,7 @@ template<typename TCaseId, typename TChar, typename TArgInfo,
 void Base<TCaseId, TChar, TArgInfo, TArgDebug, TArgError>::
     SetFormat(const base::Error&, const TCaseId&, msg::Format<TChar>&& format)
 {
-    m_errorFormat = std::move(format);
+    m_errFormat = std::move(format);
 }
 
 template<typename TCaseId, typename TChar, typename TArgInfo, 
@@ -150,7 +150,7 @@ template<typename TCaseId, typename TChar, typename TArgInfo,
 const msg::Format<TChar>& Base<TCaseId, TChar, TArgInfo, TArgDebug, 
     TArgError>::Format(const base::Error&, const TCaseId&) const
 {
-    return m_errorFormat;
+    return m_errFormat;
 }
 
 template<typename TCaseId, typename TChar, typename TArgInfo, 

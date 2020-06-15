@@ -174,14 +174,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
 
         CaseATTa case_alias_type_and_target;
         SetFormat(info, case_alias_type_and_target,
             "Test compare between %s::type and %s\n");
         SetFormat(debug, case_alias_type_and_target,
             "Test compare between %s::type and %s\n");
-        SetFormat(error, case_alias_type_and_target,
+        SetFormat(err, case_alias_type_and_target,
             "error %s::type is not same with %s\n");
 
         CaseATTTa case_alias_type_tmpl_and_target;
@@ -189,7 +189,7 @@ public:
             "Test compare between %s::template type<%s> and %s\n");
         SetFormat(debug, case_alias_type_tmpl_and_target,
             "Test compare between %s::template type<%s> and %s\n");
-        SetFormat(error, case_alias_type_tmpl_and_target,
+        SetFormat(err, case_alias_type_tmpl_and_target,
             "error %s::template type<%s> is not same with %s\n");
         
         CaseNAT case_no_alias_type;
@@ -197,7 +197,7 @@ public:
             "test there is no type alias member of %s\n");
         SetFormat(debug, case_no_alias_type,
             "test there is no type alias member of %s\n");
-        SetFormat(error, case_no_alias_type,
+        SetFormat(err, case_no_alias_type,
             "error %s has type alias member\n");
 
         CaseNATT case_no_alias_type_tmpl;
@@ -205,7 +205,7 @@ public:
             "test there is no type template alias member of %s\n");
         SetFormat(debug, case_no_alias_type_tmpl,
             "test there is no type template alias member of %s\n");
-        SetFormat(error, case_no_alias_type_tmpl,
+        SetFormat(err, case_no_alias_type_tmpl,
             "error %s has type template alias member\n");
 
         CaseAT case_alias_type;
@@ -213,7 +213,7 @@ public:
             "Test compare between %s::type and %s::Type\n");
         SetFormat(debug, case_alias_type,
             "Test compare between %s::type and %s::Type\n");
-        SetFormat(error, case_alias_type,
+        SetFormat(err, case_alias_type,
             "error %s::type is not same with %s::Type\n");
 
         CaseATT case_alias_type_tmpl;
@@ -223,7 +223,7 @@ public:
         SetFormat(debug, case_alias_type_tmpl,
             "Test compare between %s::template type<%s> and "
             "%s::template Type<%s>\n");
-        SetFormat(error, case_alias_type_tmpl,
+        SetFormat(err, case_alias_type_tmpl,
             "error %s::template type<%s> is not same with "
             "%s::template Type<%s>\n");
     }

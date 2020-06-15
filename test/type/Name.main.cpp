@@ -64,14 +64,14 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseTSTa case_ToString_and_target;
         SetFormat(info, case_ToString_and_target, 
             "test compare between %s::ToString() and \"%s\"\n");
         SetFormat(debug, case_ToString_and_target, 
             "test compare between %s::ToString() and \"%s\"\n");
-        SetFormat(error, case_ToString_and_target,
+        SetFormat(err, case_ToString_and_target,
             "error %s::ToString() is not same with \"%s\"\n");
     }
 

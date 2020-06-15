@@ -144,7 +144,7 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
 
         CaseIsId case_is_identification;
         SetFormat(info, case_is_identification, 
@@ -155,7 +155,7 @@ public:
             "test compare between { basic::type::IsIdentification<"
             "%s>::value or between basic::type::IsIdentification<"
             "%s>::Value } and %s\n");
-        SetFormat(error, case_is_identification,
+        SetFormat(err, case_is_identification,
             "error { basic::type::IsIdentification<%s>::value or "
             "basic::type::IsIdentification<%s>::Value } "
             "is not same with %s\n");
@@ -169,7 +169,7 @@ public:
             "test compare between { basic::type::Validation<"
             "%s, %s>::value or basic::type::Validation<"
             "%s, %s>::Value } and %s\n");
-        SetFormat(error, case_valid_id_val,
+        SetFormat(err, case_valid_id_val,
             "error { basic::type::Validation<%s, %s>::value or "
             "basic::type::Validation<%s, %s>::Value }"
             "is not same with %s\n");
@@ -181,7 +181,7 @@ public:
         SetFormat(debug, case_valid_id_has_type,
             "test type definition basic::type::Validation<%s, %s> has "
             "a members { type and Type }\n");
-        SetFormat(error, case_valid_id_has_type,
+        SetFormat(err, case_valid_id_has_type,
             "error basic::type::Validation<%s, %s> has no members "
             "{ type and Type }\n");
 
@@ -192,7 +192,7 @@ public:
         SetFormat(debug, case_valid_id_type,
             "test compare between { basic::type::Validation<%s, %s>::type or "
             "between basic::type::Validation<%s, %s>::Type } and %s\n");
-        SetFormat(error, case_valid_id_type,
+        SetFormat(err, case_valid_id_type,
             "error compare between { basic::type::Validation<%s, %s>::type or "
             "between basic::type::Validation<%s, %s>::Type } "
             "is not same with %s\n");

@@ -109,7 +109,7 @@ public:
     {
         basic::test::msg::base::Info info;
         basic::test::msg::base::Debug debug;
-        basic::test::msg::base::Error error;
+        basic::test::msg::base::Error err;
         
         CaseHMFFoo1 case_has_member_function_Foo1;
         SetFormat(info, case_has_member_function_Foo1, 
@@ -118,7 +118,7 @@ public:
         SetFormat(debug, case_has_member_function_Foo1, 
             "test compare between delctype(%s::template "
             "HasMemberFunctionFoo1<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_member_function_Foo1,
+        SetFormat(err, case_has_member_function_Foo1,
             "error delctype(%s::template HasMemberFunctionFoo1<%s>(0))::value "
             "is not same with %s\n");
 
@@ -129,7 +129,7 @@ public:
         SetFormat(debug, case_has_static_member_function_Foo2,
             "test compare between delctype(%s::template "
             "HasStaticMemberFunctionFoo2<%s>(0))::value and %s\n");
-        SetFormat(error, case_has_static_member_function_Foo2,
+        SetFormat(err, case_has_static_member_function_Foo2,
             "error delctype(%s::template HasStaticMemberFunctionFoo2<%s>(0))::"
             "value is not same with %s\n");
     }

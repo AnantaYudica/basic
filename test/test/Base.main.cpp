@@ -1,42 +1,63 @@
 #include "test/Base.h"
 
-#include <iostream>
+#include <cstdio>
+#include <cassert>
 
-template<typename T1, typename T2>
-class Variable1
+struct Variable1 
 {
-public:
+    bool m_isRunCase1;
+    Variable1() :
+        m_isRunCase1(false)
+    {}
 };
 
-class Case1
+struct Case1 
 {
-public:
-    template<typename T1, typename T2>
-    void Run(Variable1<T1, T2>&)
+    void Run(Variable1& var)
     {
-        std::cout << "Case1 Run" << std::endl;
+        var.m_isRunCase1 = true;
     }
 };
 
-template<typename... TVariable>
+
+template<typename TCase, typename... TVariable>
 class TestA :
-    public basic::test::Base<Case1, TVariable...>
+    public basic::test::Base<TCase, TVariable...>
 {
 private:
-    Case1 m_case;
+    TCase m_case;
 public:
     TestA(TVariable&... vars) :
-        basic::test::Base<Case1, TVariable...>(m_case, vars...)
+        basic::test::Base<TCase, TVariable...>(m_case, vars...)
     {}
     ~TestA() {}
 };
 
 int main()
 {
-    Variable1<int, int> var1_1;
-    Variable1<char, char> var1_2;
-    Variable1<short, char> var1_3;
-    TestA<Variable1<int, int>, Variable1<char, char>,
-        Variable1<short, char>> a1(var1_1, var1_2, var1_3);
-    a1.Run();
+    TestA<Case1> testa0;
+    testa0.Run();
+
+    Variable1 var1_1;
+    TestA<Case1, Variable1> testa1(var1_1);
+    testa1.Run();
+    assert(var1_1.m_isRunCase1);
+
+    Variable1 var2_1;
+    Variable1 var2_2;
+    TestA<Case1, Variable1, Variable1> testa2(var2_1,
+        var2_2);
+    testa2.Run();
+    assert(var2_1.m_isRunCase1);
+    assert(var2_2.m_isRunCase1);
+
+    Variable1 var3_1;
+    Variable1 var3_2;
+    Variable1 var3_3;
+    TestA<Case1, Variable1, Variable1, Variable1> testa3(var3_1,
+        var3_2, var3_3);
+    testa3.Run();
+    assert(var3_1.m_isRunCase1);
+    assert(var3_2.m_isRunCase1);
+    assert(var3_3.m_isRunCase1);
 }

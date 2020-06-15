@@ -39,6 +39,8 @@ protected:
             TValues&&... values);
     template<typename TRet, typename... TValues>
     TRet&& FillerConstruct(TValues&&... values);
+    template<typename TDerived, typename... TValues>
+    void FillerConstruct(TDerived & placement, TValues&&... values);
 public:
     template<typename TRet, typename TFunc>
     TRet Fill(TFunc func);
@@ -46,6 +48,8 @@ public:
     TRet Fill(TFuncMmbr func_mmbr, TDerived derived);
     template<typename TDerived>
     TDerived&& Fill();
+    template<typename TDerived>
+    void Fill(TDerived & placement);
 };
 
 template<typename TArg, typename... TArgs>
@@ -72,6 +76,8 @@ protected:
         TValues&&... values);
     template<typename TRet, typename... TValues>
     TRet&& FillerConstruct(TValues&&... values);
+    template<typename TDerived, typename... TValues>
+    void FillerConstruct(TDerived & placement, TValues&&... values);
 public:
     template<typename TRet, typename TFunc>
     TRet Fill(TFunc func);
@@ -79,6 +85,8 @@ public:
     TRet Fill(TFuncMmbr func_mmbr, TDerived derived);
     template<typename TDerived>
     TDerived&& Fill();
+    template<typename TDerived>
+    void Fill(TDerived & placement);
 public:
     template<std::size_t I>
     typename std::enable_if<I == 0, typename test::type::param::Element<I, 
@@ -157,6 +165,14 @@ TRet&& Parameter<TArgs...>::FillerConstruct(TValues&&... values)
 }
 
 template<typename... TArgs>
+template<typename TDerived, typename... TValues>
+void Parameter<TArgs...>::FillerConstruct(TDerived & placement,
+    TValues&&... values)
+{
+    new (&placement) TDerived(std::forward<TValues>(values)...);
+}
+
+template<typename... TArgs>
 template<typename TRet, typename TFunc>
 TRet Parameter<TArgs...>::Fill(TFunc func)
 {
@@ -175,6 +191,13 @@ template<typename TDerived>
 TDerived&& Parameter<TArgs...>::Fill()
 {
     return std::move(FillerConstruct<TDerived>());
+}
+
+template<typename... TArgs>
+template<typename TDerived>
+void Parameter<TArgs...>::Fill(TDerived & placement)
+{
+    FillerConstruct(placement);
 }
 
 template<typename TArg, typename... TArgs>
@@ -250,6 +273,15 @@ TRet&& Parameter<TArg, TArgs...>::
 }
 
 template<typename TArg, typename... TArgs>
+template<typename TDerived, typename... TValues>
+void Parameter<TArg, TArgs...>::
+    FillerConstruct(TDerived & placement, TValues&&... values)
+{
+    Parameter<TArgs...>::FillerConstruct(placement, 
+        std::forward<TValues>(values)..., std::forward<TArg>(m_value));
+}
+
+template<typename TArg, typename... TArgs>
 template<typename TRet, typename TFunc>
 TRet Parameter<TArg, TArgs...>::Fill(TFunc func)
 {
@@ -269,6 +301,13 @@ template<typename TDerived>
 TDerived&& Parameter<TArg, TArgs...>::Fill()
 {
     return std::move(FillerConstruct<TDerived>());
+}
+
+template<typename TArg, typename... TArgs>
+template<typename TDerived>
+void Parameter<TArg, TArgs...>::Fill(TDerived & placement)
+{
+    FillerConstruct(placement);
 }
 
 template<typename TArg, typename... TArgs>
