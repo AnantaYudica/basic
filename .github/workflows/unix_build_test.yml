@@ -1,0 +1,74 @@
+
+name: Unix Build Test
+
+on:
+  push:
+    branches: [ beta ]
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [GNU, Clang]
+        platform: [x32, x64]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: beta
+        submodules: true
+
+    - name: Create build directory
+      run: mkdir .build
+    
+    - name: Install Multi-architecture
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
+        sudo apt install gcc-multilib g++-multilib
+      shell: bash
+      if: ${{ matrix.platform == 'x32' }}
+
+    - name: Generate project
+      run: |
+        export CC=/usr/bin/gcc-7
+        export CXX=/usr/bin/g++-7
+        cmake ../cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=-m32
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'GNU' && matrix.platform == 'x32' }}
+
+    - name: Generate project
+      run: |
+        export CC=/usr/bin/gcc-7
+        export CXX=/usr/bin/g++-7
+        cmake ../cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'GNU' && matrix.platform == 'x64' }}
+
+    - name: Generate project
+      run: |
+        export CC=/usr/bin/clang-9
+        export CXX=/usr/bin/clang++-9
+        cmake ../cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=-m32 
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'Clang' && matrix.platform == 'x32' }}
+
+    - name: Generate project
+      run: |
+        export CC=/usr/bin/clang-9
+        export CXX=/usr/bin/clang++-9
+        cmake ../cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'Clang' && matrix.platform == 'x64' }}
+
+    - name: Build
+      run: make
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'GNU' || matrix.compiler == 'Clang'}}
+
+    - name: Test
+      run: make test
+      working-directory: ./.build
+      if: ${{ matrix.compiler == 'GNU' || matrix.compiler == 'Clang'}}
+
+
