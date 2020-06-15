@@ -67,7 +67,9 @@ jobs:
       if: ${{ matrix.compiler == 'GNU' || matrix.compiler == 'Clang'}}
 
     - name: Test
-      run: make test
+      run: |
+        export CTEST_OUTPUT_ON_FAILURE=1
+        make test
       working-directory: ./.build
       if: ${{ matrix.compiler == 'GNU' || matrix.compiler == 'Clang'}}
 
