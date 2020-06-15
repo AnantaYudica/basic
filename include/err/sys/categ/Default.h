@@ -94,14 +94,10 @@ template<typename TCondition>
 inline bool Default::Equivalent(const CodeValueType& code, 
     const TCondition& cond) const noexcept
 {
-#if defined(__CYGWIN32__)
-    const auto def_cond = std::system_category().default_error_condition(code);
     return std::system_category().equivalent(code, 
-        std::error_condition(cond.Value(), def_cond.category())); 
-#else
-    return std::system_category().equivalent(code, 
-        std::error_condition(cond.Value(), std::system_category()));
-#endif
+        std::error_condition(cond.Value(), std::system_category())) || 
+        std::system_category().equivalent(code, 
+        std::error_condition(cond.Value(), std::generic_category())) ;
 }
     
 template<typename TValue>
