@@ -31,6 +31,8 @@
 *.out
 *.app
 
-.build
-.build32
+# Build
+.build*
+
+# VS Code
 .vscode
